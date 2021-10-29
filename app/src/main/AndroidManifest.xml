@@ -11,7 +11,8 @@
         android:theme="@style/Theme.NaTour">
         <activity
             android:name=".presentation.WelcomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/NoActionBar"/>
         <activity
             android:name=".presentation.SplashActivity"
             android:exported="true">

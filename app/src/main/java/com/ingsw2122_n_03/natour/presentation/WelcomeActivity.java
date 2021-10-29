@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import com.ingsw2122_n_03.natour.R;
 
+import java.util.Objects;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     @Override
