@@ -1,10 +1,12 @@
-package com.ingsw2122_n_03.natour;
+package com.ingsw2122_n_03.natour.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.ingsw2122_n_03.natour.R;
+
+public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
