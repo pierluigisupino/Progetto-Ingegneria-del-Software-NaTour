@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">NaTour</string>
+    <string name="welcome_page_text_1">Welcome to</string>
+    <string name="welcome_page_text_2">Explore the places you love\nin a way never done before</string>
+    <string name="welcome_page_text_3">Join for free</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="welcome_page_image_description">Welcome page image</string>
+    <string name="welcome_page_text_4">Or continue with</string>
 </resources>

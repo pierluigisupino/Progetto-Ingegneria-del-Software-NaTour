@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="NoActionBar" parent="Theme.NaTour">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">#FFFFFFFF</item>
