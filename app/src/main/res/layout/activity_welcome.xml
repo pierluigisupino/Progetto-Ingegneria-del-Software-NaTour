@@ -106,7 +106,8 @@
         app:layout_constraintGuide_percent="0.56"/>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/welcome_page_image"
+        android:contentDescription="@string/welcome_page_image_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1.28"
@@ -117,7 +118,7 @@
         app:srcCompat="@drawable/ic_welcome_screen" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/welcome_textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/euclid_circular_regular"
@@ -128,7 +129,7 @@
         app:layout_constraintTop_toTopOf="@+id/imageGuideline" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/welcome_textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/euclid_circular_bold"
@@ -136,10 +137,10 @@
         android:textColor="#FF000000"
         android:textSize="38sp"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome_textView1" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/welcome_textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/euclid_circular_regular"
@@ -147,10 +148,10 @@
         android:textColor="#FF000000"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome_textView2" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/welcome_textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/euclid_circular_regular"
@@ -159,7 +160,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/textGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome_textView3" />
 
     <Button
         android:id="@+id/registerButton"
@@ -201,7 +202,8 @@
         app:layout_constraintStart_toStartOf="@+id/leftGuideline" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/google_floatingActionButton"
+        android:contentDescription="@string/login_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
@@ -217,7 +219,8 @@
         app:srcCompat="@drawable/ic_google" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton2"
+        android:id="@+id/facebook_floatingActionButton"
+        android:contentDescription="@string/login_facebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
