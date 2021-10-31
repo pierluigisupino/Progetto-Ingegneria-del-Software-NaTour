@@ -2,6 +2,7 @@
 <resources>
     <color name="primary">#FF567DF4</color>
     <color name="primary_light">#1A567DF4</color>
+    <color name="ripple">#FF7D6FE0</color>
     <color name="green">#FF34DEDE</color>
     <color name="light_green">#FFF0FFFF</color>
     <color name="green_body">#FF23B0B0</color>
