@@ -91,20 +91,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.95"/>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/fabLeftGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.41"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/fabRightGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.56"/>
-
     <ImageView
         android:id="@+id/welcome_page_image"
         android:contentDescription="@string/welcome_page_image_description"
@@ -200,29 +186,31 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/google_floatingActionButton"
-        android:contentDescription="@string/login_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
         android:clickable="true"
+        android:contentDescription="@string/login_google"
         android:focusable="true"
-        app:tint="@null"
         app:layout_constraintBottom_toTopOf="@+id/fabBottomGuideline"
-        app:layout_constraintEnd_toStartOf="@+id/fabLeftGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/buttonLeftGuideline"
         app:layout_constraintTop_toTopOf="@+id/fabTopGuideline"
         app:rippleColor="@color/primary_light"
-        app:srcCompat="@drawable/ic_google" />
+        app:srcCompat="@drawable/ic_google"
+        app:tint="@null" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/facebook_floatingActionButton"
-        android:contentDescription="@string/login_facebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
         android:clickable="true"
+        android:contentDescription="@string/login_facebook"
         android:focusable="true"
-        app:tint="@null"
         app:layout_constraintBottom_toTopOf="@+id/fabBottomGuideline"
-        app:layout_constraintStart_toStartOf="@+id/fabRightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/buttonRightGuideline"
         app:layout_constraintTop_toTopOf="@+id/fabTopGuideline"
         app:rippleColor="@color/primary_light"
-        app:srcCompat="@drawable/ic_facebook" />
+        app:srcCompat="@drawable/ic_facebook"
+        app:tint="@null" />
 </androidx.constraintlayout.widget.ConstraintLayout>
