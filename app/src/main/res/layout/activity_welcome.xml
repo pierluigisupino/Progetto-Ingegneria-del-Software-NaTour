@@ -158,7 +158,8 @@
         android:textColor="#FF000000"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/textGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline" />
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
         android:id="@+id/registerButton"
