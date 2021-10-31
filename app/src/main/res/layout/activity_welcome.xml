@@ -8,159 +8,219 @@
     tools:context=".presentation.WelcomeActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/topGuideLine"
+        android:id="@+id/topGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.01" />
+        app:layout_constraintGuide_percent="0.01"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/middleGuideLine"
+        android:id="@+id/leftGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.08"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuideLine"
+        android:id="@+id/rightGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.06" />
+        app:layout_constraintGuide_percent="0.92"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuideLine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.94" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/imageGuideLine"
+        android:id="@+id/imageGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.32"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottomGuideLine"
+        android:id="@+id/textGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="0.59"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/buttonLeftGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.47"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/buttonRightGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.52"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/buttonTopGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.67"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/buttonBottomGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/dividerGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.83"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fabTopGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.88"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fabBottomGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fabLeftGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.41"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fabRightGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.56"/>
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/imageView3"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1.28"
-        app:layout_constraintBottom_toTopOf="@+id/imageGuideLine"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
-        app:layout_constraintEnd_toEndOf="@+id/rightGuideLine"
-        app:layout_constraintTop_toTopOf="@+id/topGuideLine"
-        app:srcCompat="@drawable/ic_welcome_screen"
-        android:contentDescription="@string/welcome_page_image_description" />
+        app:layout_constraintBottom_toTopOf="@+id/imageGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="@+id/topGuideline"
+        app:srcCompat="@drawable/ic_welcome_screen" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/euclid_circular_regular"
-        android:textSize="20sp"
-        android:text="@string/welcome_page_text_1"
-        android:textColor="#FF000000"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
-        app:layout_constraintTop_toTopOf="@+id/imageGuideLine" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/textGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="@+id/imageGuideline">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/euclid_circular_bold"
-        android:textSize="38sp"
-        android:textColor="#FF000000"
-        android:text="@string/app_name"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/euclid_circular_regular"
+            android:textSize="20sp"
+            android:text="@string/welcome_page_text_1"
+            android:textColor="#FF000000"
+            app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
+            app:layout_constraintTop_toTopOf="@+id/imageGuideLine" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/euclid_circular_regular"
-        android:textSize="20sp"
-        android:textColor="#FF000000"
-        android:text="@string/welcome_page_text_2"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/euclid_circular_bold"
+            android:textSize="38sp"
+            android:textColor="#FF000000"
+            android:text="@string/app_name"
+            app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:fontFamily="@font/euclid_circular_regular"
-        android:textSize="20sp"
-        android:textColor="#FF000000"
-        android:text="@string/welcome_page_text_3"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/euclid_circular_regular"
+            android:textSize="20sp"
+            android:textColor="#FF000000"
+            android:text="@string/welcome_page_text_2"
+            app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:fontFamily="@font/euclid_circular_regular"
+            android:textSize="20sp"
+            android:textColor="#FF000000"
+            android:text="@string/welcome_page_text_3"
+            app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="0dp"
         android:background="@drawable/button_light_background"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:textSize="16sp"
-        android:textColor="@color/primary"
         android:text="@string/register"
-        app:layout_constraintEnd_toStartOf="@+id/middleGuideLine"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        android:textColor="@color/primary"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBottomGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/buttonLeftGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="@+id/buttonTopGuideline" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="60dp"
+        android:layout_height="0dp"
         android:background="@drawable/button_dark_background"
-        android:fontFamily="@font/euclid_circular_semi_bold"
-        android:textSize="16sp"
-        android:textColor="#FFFFFFFF"
-        android:text="@string/login"
         android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuideLine"
-        app:layout_constraintStart_toStartOf="@+id/middleGuideLine"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        android:fontFamily="@font/euclid_circular_semi_bold"
+        android:text="@string/login"
+        android:textColor="#FFFFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBottomGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/buttonRightGuideline"
+        app:layout_constraintTop_toTopOf="@+id/buttonTopGuideline" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="47dp"
-        android:layout_marginBottom="35dp"
         android:text="@string/welcome_page_text_4"
-        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuideLine"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideLine"
-        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+        app:layout_constraintBottom_toTopOf="@+id/dividerGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
         android:backgroundTint="@android:color/white"
         android:clickable="true"
         android:focusable="true"
         app:borderWidth="0dp"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@+id/bottomGuideLine"
-        app:layout_constraintEnd_toStartOf="@+id/middleGuideLine"
+        app:layout_constraintBottom_toTopOf="@+id/fabBottomGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/fabLeftGuideline"
+        app:layout_constraintTop_toTopOf="@+id/fabTopGuideline"
         app:rippleColor="@color/primary"
         app:srcCompat="@drawable/ic_google" />
 
@@ -168,15 +228,13 @@
         android:id="@+id/floatingActionButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:backgroundTint="@android:color/white"
         android:clickable="true"
         android:focusable="true"
         app:borderWidth="0dp"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@+id/bottomGuideLine"
-        app:layout_constraintStart_toStartOf="@+id/middleGuideLine"
+        app:layout_constraintBottom_toTopOf="@+id/fabBottomGuideline"
+        app:layout_constraintStart_toStartOf="@+id/fabRightGuideline"
+        app:layout_constraintTop_toTopOf="@+id/fabTopGuideline"
         app:rippleColor="@color/primary"
         app:srcCompat="@drawable/ic_facebook" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
