@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NaTour</string>
+    <string name="welcome_page_text_1">Benvenuto in</string>
+    <string name="welcome_page_text_2">Esplora i posti che ami</string>
+    <string name="welcome_page_text_3">Iscriviti gratis</string>
+    <string name="register">Registrati</string>
+    <string name="login">Accedi</string>
+    <string name="welcome_page_image_description">Imagine pagina di benvenuto</string>
+    <string name="welcome_page_text_4">O continua con</string>
+    <string name="login_google">accedi con Google</string>
+    <string name="login_facebook">accedi con Facebook</string>
+</resources>
