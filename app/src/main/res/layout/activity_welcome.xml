@@ -165,7 +165,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/button_dark_background"
-        android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"
+        android:drawableEnd="@drawable/ic_arrow_right"
         android:fontFamily="@font/euclid_circular_semi_bold"
         android:text="@string/login"
         android:textColor="@android:color/white"
