@@ -6,4 +6,9 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/black</item>
     </style>
+
+    <style name="NoActionBar" parent="Theme.NaTour">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
