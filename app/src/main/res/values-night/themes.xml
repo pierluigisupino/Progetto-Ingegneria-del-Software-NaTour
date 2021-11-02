@@ -11,4 +11,13 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="MyActionBar" parent="Theme.NaTour">
+        <item name="android:textColorPrimary">@color/primary</item>
+        <item name="titleTextColor">@color/primary</item>
+        <item name="android:textColorSecondary">@color/primary</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">38sp</item>
+        <item name="android:fontFamily">@font/euclid_circular_bold</item>
+    </style>
 </resources>
