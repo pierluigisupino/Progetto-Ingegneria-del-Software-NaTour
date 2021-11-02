@@ -10,4 +10,7 @@
     <string name="welcome_page_text_4">O continua con</string>
     <string name="login_google">accedi con Google</string>
     <string name="login_facebook">accedi con Facebook</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="forgot_password"><u>Password dimenticata?</u></string>
 </resources>

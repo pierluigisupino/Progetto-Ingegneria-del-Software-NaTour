@@ -9,4 +9,7 @@
     <string name="welcome_page_text_4">Or continue with</string>
     <string name="login_google">signing with Google</string>
     <string name="login_facebook">signing with Facebook</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="forgot_password"><u>Forgot password?</u></string>
 </resources>
