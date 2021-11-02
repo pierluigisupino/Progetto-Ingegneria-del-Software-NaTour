@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NaTour</string>
+    <string name="splash_image_description">Immagine di splash screen</string>
     <string name="welcome_page_text_1">Benvenuto in</string>
     <string name="welcome_page_text_2">Esplora i posti che ami</string>
     <string name="welcome_page_text_3">Iscriviti gratis</string>

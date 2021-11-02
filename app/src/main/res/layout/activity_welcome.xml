@@ -181,12 +181,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/euclid_circular_light"
-        android:textColor="@color/primary"
         android:text="@string/welcome_page_text_4"
+        android:textColor="@color/primary"
         app:layout_constraintBottom_toTopOf="@+id/dividerGuideline"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline" />
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        tools:ignore="TextContrastCheck" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/google_floatingActionButton"
