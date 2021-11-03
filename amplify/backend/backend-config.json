@@ -1,6 +1,6 @@
 {
   "auth": {
-    "natour2caa751a": {
+    "natour3ae3993d": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
