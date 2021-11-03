@@ -10,9 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
         <activity
-            android:name=".presentation.LoginActivity"
+            android:name=".presentation.ErrorActivity"
             android:exported="false"
             android:theme="@style/NoActionBar"/>
+        <activity
+            android:name=".presentation.LoginActivity"
+            android:exported="false"
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".presentation.WelcomeActivity"
             android:exported="false"

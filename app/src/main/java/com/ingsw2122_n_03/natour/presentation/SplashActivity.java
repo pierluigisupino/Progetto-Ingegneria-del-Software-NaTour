@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
+import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.application.Controller;
 
 import java.util.Objects;
 
@@ -17,17 +21,27 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        Controller controller = Controller.getInstance();
+
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        //SIMULATING SETUP
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        try {
+            Amplify.addPlugin(new AWSCognitoAuthPlugin());
+            Amplify.configure(getApplicationContext());
+
+            if(controller.getUser()){
+                finish();
+                Log.e("NaTour", "Navigating to MainPage");
+                //TO BE IMPLEMENTED
+            }else{
                 finish();
                 Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
                 startActivity(intent);
             }
-        }, 1000);
+        } catch (AmplifyException e) {
+            finish();
+            Intent intent = new Intent(SplashActivity.this, ErrorActivity.class);
+            startActivity(intent);
+        }
     }
 }
