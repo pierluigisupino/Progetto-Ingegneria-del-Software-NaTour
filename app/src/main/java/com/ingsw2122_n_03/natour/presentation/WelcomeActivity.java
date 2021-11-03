@@ -22,7 +22,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         Button loginButton = (Button) findViewById(R.id.loginButton);
         FloatingActionButton loginWithGoogle = (FloatingActionButton) findViewById(R.id.loginWithGoogle);
-        FloatingActionButton loginWithFacebook = (FloatingActionButton) findViewById(R.id.loginWithFacebook);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,13 +35,6 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 controller.loginWithGoogle(WelcomeActivity.this);
-            }
-        });
-
-        loginWithFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                controller.loginWithFacebook(WelcomeActivity.this);
             }
         });
     }
