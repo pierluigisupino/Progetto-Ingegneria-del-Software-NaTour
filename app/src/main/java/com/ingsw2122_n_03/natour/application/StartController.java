@@ -7,8 +7,6 @@ import android.view.View;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
-import com.amazonaws.mobile.client.SignInUIOptions;
-import com.amazonaws.mobile.client.UserStateDetails;
 import com.amazonaws.mobile.client.results.SignUpResult;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.auth.AuthProvider;
@@ -19,30 +17,35 @@ import com.amplifyframework.core.Amplify;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 
+import com.ingsw2122_n_03.natour.presentation.LoginActivity;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
+import com.ingsw2122_n_03.natour.presentation.RegisterActivity;
 import com.ingsw2122_n_03.natour.presentation.VerifyAccount;
 import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.Objects;
+//gestisce routine di avvio dell'app, ma anche la connessione ad Amplify e le sue funzionalità (fare altra classe)
+public class StartController {
 
-public class Controller {
+    private static StartController instance = null;
 
-    private static Controller instance = null;
+    private StartController() {}
 
-    private Controller() {}
 
-    public static Controller getInstance(){
+    public static StartController getInstance(){
         if(instance == null){
-            instance = new Controller();
+            instance = new StartController();
         }
         return instance;
     }
+
 
     public void goToActivity(BaseActivity source, Class<?> destination){
         Intent intent = new Intent(source, destination);
         source.startActivity(intent);
     }
+
 
     public void goToActivityAndFinish(BaseActivity source, Class<?> destination){
         Intent intent = new Intent(source, destination);
@@ -50,13 +53,12 @@ public class Controller {
         source.finish();
     }
 
+
     public void configureAmplify(BaseActivity callingActivity){
         try {
-
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
             start(callingActivity);
-
         }catch (Amplify.AlreadyConfiguredException e){
             start(callingActivity);
         }catch ( AmplifyException e){
@@ -64,20 +66,21 @@ public class Controller {
         }
     }
 
-    public void start(BaseActivity callingActivity){
 
+    public void start(BaseActivity callingActivity){
         if(getUser(callingActivity)){
-            callingActivity.finish();
-            Intent intent = new Intent(callingActivity, MainActivity.class);
-            callingActivity.startActivity(intent);
+            goToActivityAndFinish(callingActivity, MainActivity.class);
         }else{
             goToActivityAndFinish(callingActivity, WelcomeActivity.class);
         }
     }
 
+
     public boolean getUser(BaseActivity callingActivity) {
+        //Andrebbe modificato, amplify conosce il current user del cellulare?
         return Amplify.Auth.getCurrentUser() != null;
     }
+
 
     public void login(BaseActivity callingActivity, String username, String password, LinearProgressIndicator progressBar){
 
@@ -103,6 +106,7 @@ public class Controller {
         );
     }
 
+
     public void signUp(BaseActivity callingActivity, String username, String email, String password, LinearProgressIndicator progressBar){
 
         AuthSignUpOptions options = AuthSignUpOptions.builder()
@@ -124,6 +128,7 @@ public class Controller {
         );
     }
 
+
     public void confirmSignUp(BaseActivity callingActivity, String username, String confirmationCode){
         Amplify.Auth.confirmSignUp(
                 username,
@@ -133,6 +138,7 @@ public class Controller {
         );
 
     }
+
 
     public void  sendVerificationCode(String username){
         AWSMobileClient.getInstance().resendSignUp(username, new Callback<SignUpResult>() {
@@ -151,6 +157,7 @@ public class Controller {
         });
     }
 
+
     public void loginWithGoogle(BaseActivity callingActivity){
         Amplify.Auth.signInWithSocialWebUI(AuthProvider.google(), callingActivity,
                 result -> Log.i("NaTour", result.toString()),
@@ -160,6 +167,7 @@ public class Controller {
                 }
         );
     }
+
 
     public void signOut(Activity callingActivity){
         Amplify.Auth.signOut(

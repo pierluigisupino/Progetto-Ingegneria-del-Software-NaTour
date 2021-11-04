@@ -7,24 +7,29 @@ import android.view.View;
 import android.widget.Button;
 
 import com.ingsw2122_n_03.natour.R;
-import com.ingsw2122_n_03.natour.application.Controller;
+import com.ingsw2122_n_03.natour.application.StartController;
 
 public class MainActivity extends AppCompatActivity {
 
+    private StartController startController;
+    private Button signOutButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Controller controller = Controller.getInstance();
+        startController = StartController.getInstance();
 
-        Button signOutButton = findViewById(R.id.signOutButton);
+        signOutButton = findViewById(R.id.signOutButton);
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controller.signOut(MainActivity.this);
+                startController.signOut(MainActivity.this);
             }
         });
+
     }
 }
