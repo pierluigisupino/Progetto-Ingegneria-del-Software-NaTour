@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                controller.start(SplashActivity.this);
+                controller.configureAmplify(SplashActivity.this);
             }
         }, 800);
     }

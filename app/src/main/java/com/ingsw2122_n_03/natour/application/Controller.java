@@ -36,23 +36,31 @@ public class Controller {
         return instance;
     }
 
-    public void start(Activity callingActivity){
+    public void configureAmplify(Activity callingActivity){
         try {
+
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
+            start(callingActivity);
 
-            if(getUser(callingActivity)){
-                callingActivity.finish();
-                Intent intent = new Intent(callingActivity, MainActivity.class);
-                callingActivity.startActivity(intent);
-            }else{
-                callingActivity.finish();
-                Intent intent = new Intent(callingActivity, WelcomeActivity.class);
-                callingActivity.startActivity(intent);
-            }
-        } catch (AmplifyException e) {
+        }catch (Amplify.AlreadyConfiguredException e){
+            start(callingActivity);
+        }catch ( AmplifyException e){
             callingActivity.finish();
             Intent intent = new Intent(callingActivity, ErrorActivity.class);
+            callingActivity.startActivity(intent);
+        }
+    }
+
+    public void start(Activity callingActivity){
+
+        if(getUser(callingActivity)){
+            callingActivity.finish();
+            Intent intent = new Intent(callingActivity, MainActivity.class);
+            callingActivity.startActivity(intent);
+        }else{
+            callingActivity.finish();
+            Intent intent = new Intent(callingActivity, WelcomeActivity.class);
             callingActivity.startActivity(intent);
         }
     }
