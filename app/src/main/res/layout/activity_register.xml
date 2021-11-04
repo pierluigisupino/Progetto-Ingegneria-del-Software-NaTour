@@ -81,7 +81,7 @@
         app:endIconMode="clear_text"
         app:endIconTint="@color/primary"
         app:errorIconDrawable="@drawable/ic_error"
-        app:layout_constraintTop_toTopOf="@+id/emailGuideline"
+        app:layout_constraintTop_toTopOf="@+id/usernameGuideline"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:startIconDrawable="@drawable/ic_profile"
@@ -112,7 +112,7 @@
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
-        app:layout_constraintTop_toTopOf="@+id/usernameGuideline"
+        app:layout_constraintTop_toTopOf="@+id/emailGuideline"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline">
 
