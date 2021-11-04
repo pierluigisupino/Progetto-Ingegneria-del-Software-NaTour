@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import com.amplifyframework.AmplifyException;
@@ -25,23 +26,12 @@ public class SplashActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        try {
-            Amplify.addPlugin(new AWSCognitoAuthPlugin());
-            Amplify.configure(getApplicationContext());
-
-            if(controller.getUser()){
-                finish();
-                Log.e("NaTour", "Navigating to MainPage");
-                //TO BE IMPLEMENTED
-            }else{
-                finish();
-                Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
-                startActivity(intent);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.start(SplashActivity.this);
             }
-        } catch (AmplifyException e) {
-            finish();
-            Intent intent = new Intent(SplashActivity.this, ErrorActivity.class);
-            startActivity(intent);
-        }
+        }, 800);
     }
 }

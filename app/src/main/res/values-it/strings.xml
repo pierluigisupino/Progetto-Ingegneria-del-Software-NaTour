@@ -5,7 +5,6 @@
     <string name="welcome_page_text_1">Benvenuto in</string>
     <string name="welcome_page_text_2">Esplora i posti che ami</string>
     <string name="welcome_page_text_3">Iscriviti gratis</string>
-    <string name="register">Registrati</string>
     <string name="login">Accedi</string>
     <string name="welcome_page_image_description">Imagine pagina di benvenuto</string>
     <string name="welcome_page_text_4">O continua con</string>
@@ -14,4 +13,11 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="forgot_password"><u>Password dimenticata?</u></string>
+    <string name="register">Registrati</string>
+    <string name="exit">Esci</string>
+    <string name="email">Email</string>
+    <string name="verify">Verifica</string>
+    <string name="verification_code">Codice di verifica</string>
+    <string name="resend_verification_code"><u>reinvia codice di verifica</u></string>
+    <string name="enter_the_confirmation_code_send_to_nyour_email">Inserisci il codice di verifica\n inviato alla tua email</string>
 </resources>

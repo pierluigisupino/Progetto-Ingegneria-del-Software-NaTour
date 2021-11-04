@@ -4,7 +4,6 @@
     <string name="welcome_page_text_1">Welcome to</string>
     <string name="welcome_page_text_2">Explore the places you love\nin a way never done before</string>
     <string name="welcome_page_text_3">Join for free</string>
-    <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="welcome_page_image_description">Welcome page image</string>
     <string name="welcome_page_text_4">Or continue with</string>
@@ -13,5 +12,11 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="forgot_password"><u>Forgot password?</u></string>
+    <string name="register">Register</string>
     <string name="exit">Exit</string>
+    <string name="email">Email</string>
+    <string name="verify">Verify</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="resend_verification_code"><u>resend verification code</u></string>
+    <string name="enter_the_confirmation_code_send_to_nyour_email">Enter the confirmation code send to\nyour email</string>
 </resources>

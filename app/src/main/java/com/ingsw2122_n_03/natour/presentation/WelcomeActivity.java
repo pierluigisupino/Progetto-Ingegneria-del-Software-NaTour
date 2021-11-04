@@ -20,8 +20,17 @@ public class WelcomeActivity extends AppCompatActivity {
 
         Controller controller = Controller.getInstance();
 
+        Button registerButton = (Button) findViewById(R.id.registerButton);
         Button loginButton = (Button) findViewById(R.id.loginButton);
         FloatingActionButton loginWithGoogle = (FloatingActionButton) findViewById(R.id.loginWithGoogle);
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WelcomeActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

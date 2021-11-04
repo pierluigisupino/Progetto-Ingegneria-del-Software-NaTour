@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.LoginActivity">
+    tools:context=".presentation.VerifyAccount">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar"
         style="@style/MyActionBar"
-        app:title="@string/login"
+        app:title="Verify"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,53 +32,45 @@
         app:layout_constraintGuide_percent="0.92"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/usernameBottomGuideline"
+        android:id="@+id/usernameGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.27" />
+        app:layout_constraintGuide_percent="0.20"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/passwordBottomGuideline"
+        android:id="@+id/verificationCodeGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.35"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/forgotPasswordGuideline"
+        android:id="@+id/verifyButtonGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.46" />
+        app:layout_constraintGuide_percent="0.55"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/loginTopGuideline"
+        android:id="@+id/imageGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.56"/>
+        app:layout_constraintGuide_percent="0.75"/>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/loginBottomGuideline"
+    <TextView
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.63"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/imageTopGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.68"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/imageBottomGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.99"/>
+        android:fontFamily="@font/euclid_circular_semi_bold"
+        android:text="@string/enter_the_confirmation_code_send_to_nyour_email"
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/topAppBar" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameTextField"
@@ -86,19 +78,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/username"
-        app:startIconDrawable="@drawable/ic_profile"
-        app:startIconTint="@color/primary"
-        app:endIconMode="clear_text"
-        app:endIconDrawable="@drawable/ic_cancel"
-        app:endIconTint="@color/primary"
-        app:errorIconDrawable="@drawable/ic_error"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/usernameBottomGuideline"
+        app:endIconDrawable="@drawable/ic_cancel"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/primary"
+        app:errorIconDrawable="@drawable/ic_error"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline">
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="@id/usernameGuideline"
+        app:startIconDrawable="@drawable/ic_profile"
+        app:startIconTint="@color/primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username"
@@ -109,74 +101,75 @@
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordTextField"
+        android:id="@+id/verificationCodeTextField"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/password"
-        app:startIconDrawable="@drawable/ic_password"
-        app:startIconTint="@color/primary"
-        app:endIconMode="password_toggle"
-        app:endIconTint="@color/primary"
+        android:hint="@string/verification_code"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/passwordBottomGuideline"
+        app:endIconDrawable="@drawable/ic_cancel"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/primary"
+        app:errorIconDrawable="@drawable/ic_error"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline">
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="@id/verificationCodeGuideline"
+        app:startIconDrawable="@drawable/ic_profile"
+        app:startIconTint="@color/primary">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
+            android:id="@+id/verificationCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
+            android:inputType="text"
+            android:maxLines="1"
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/welcome_textView4"
+        android:id="@+id/resendCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/euclid_circular_regular"
-        android:text="@string/forgot_password"
+        android:text="@string/resend_verification_code"
         android:textColor="@color/primary"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/forgotPasswordGuideline"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/verificationCodeTextField"
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/verifyButton"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/button_dark_background"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="@string/login"
+        android:text="@string/verify"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/loginBottomGuideline"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toTopOf="@+id/loginTopGuideline"
+        app:layout_constraintTop_toTopOf="@id/verifyButtonGuideline"
         tools:ignore="DuplicateSpeakableTextCheck" />
 
     <ImageView
-        android:id="@+id/login_page_image"
+        android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:contentDescription="@string/welcome_page_image_description"
+        app:layout_constraintDimensionRatio="1.50"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1.46"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageTopGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/imageBottomGuideline"
-        app:srcCompat="@drawable/ic_login_screen" />
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="@+id/imageGuideline"
+        app:srcCompat="@drawable/ic_forgot_password_screen" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
