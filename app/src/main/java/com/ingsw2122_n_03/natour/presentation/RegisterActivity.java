@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
@@ -53,15 +54,13 @@ public class RegisterActivity extends BaseActivity {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
-                controller.signUp(RegisterActivity.this, username, email, password);
+                controller.signUp(RegisterActivity.this, username, email, password, progressBar);
             }
         });
     }
 
     @Override
     public void onSuccess(String snackbarMessage) {
-        progressBar.setVisibility(View.INVISIBLE);
-
         Snackbar.make(layout, snackbarMessage, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.success))
                 .show();
@@ -69,8 +68,6 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     public void onFail(String snackbarMessage) {
-        progressBar.setVisibility(View.INVISIBLE);
-
         Snackbar.make(layout, snackbarMessage, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.error))
                 .show();

@@ -49,15 +49,13 @@ public class LoginActivity extends BaseActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
-                controller.login(LoginActivity.this, username, password);
+                controller.login(LoginActivity.this, username, password, progressBar);
             }
         });
     }
 
     @Override
     public void onSuccess(String snackbarMessage) {
-        progressBar.setVisibility(View.INVISIBLE);
-
         Snackbar.make(layout, snackbarMessage, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.success))
                 .show();
@@ -65,8 +63,6 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void onFail(String snackbarMessage) {
-        progressBar.setVisibility(View.INVISIBLE);
-
         Snackbar.make(layout, snackbarMessage, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.error))
                 .show();

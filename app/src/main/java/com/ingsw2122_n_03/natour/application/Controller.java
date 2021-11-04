@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.application;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
@@ -15,6 +16,7 @@ import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
@@ -77,7 +79,7 @@ public class Controller {
         return Amplify.Auth.getCurrentUser() != null;
     }
 
-    public void login(BaseActivity callingActivity, String username, String password){
+    public void login(BaseActivity callingActivity, String username, String password, LinearProgressIndicator progressBar){
 
         Amplify.Auth.signIn(
                 username,
@@ -97,9 +99,11 @@ public class Controller {
                     callingActivity.onFail("Error while login");
                 }
         );
+
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
-    public void signUp(BaseActivity callingActivity, String username, String email, String password){
+    public void signUp(BaseActivity callingActivity, String username, String email, String password, LinearProgressIndicator progressBar){
 
         AuthSignUpOptions options = AuthSignUpOptions.builder()
                 .userAttribute(AuthUserAttributeKey.email(), email)
@@ -116,6 +120,8 @@ public class Controller {
                     callingActivity.onFail("Error whle signup");
                 }
         );
+
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     public void confirmSignUp(BaseActivity callingActivity, String username, String confirmationCode){
