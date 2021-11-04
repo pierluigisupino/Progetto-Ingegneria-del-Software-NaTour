@@ -108,9 +108,13 @@ public class Controller {
         Amplify.Auth.signUp(username, password, options,
                 result -> {
                     Log.i("NaTour", "Result: " + result.toString());
+                    callingActivity.onSuccess("Signup success");
                     goToActivity(callingActivity, VerifyAccount.class);
                 },
-                error -> Log.e("NaTour", "Sign up failed", error)
+                error -> {
+                    Log.e("NaTour", "Sign up failed", error);
+                    callingActivity.onFail("Signup fail");
+                }
         );
     }
 

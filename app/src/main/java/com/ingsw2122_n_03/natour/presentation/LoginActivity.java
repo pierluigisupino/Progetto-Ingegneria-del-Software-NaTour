@@ -1,6 +1,8 @@
 package com.ingsw2122_n_03.natour.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.Button;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.Controller;
@@ -15,6 +18,7 @@ import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class LoginActivity extends BaseActivity {
 
+    private ConstraintLayout layout;
     private LinearProgressIndicator progressBar;
 
     @Override
@@ -24,6 +28,7 @@ public class LoginActivity extends BaseActivity {
 
         Controller controller = Controller.getInstance();
 
+        layout = (ConstraintLayout) findViewById(R.id.layout);
         MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
         TextInputEditText usernameEditText = findViewById(R.id.username);
         TextInputEditText passwordEditText = findViewById(R.id.password);
@@ -52,12 +57,18 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onSuccess(String snackbarMessage) {
         progressBar.setVisibility(View.INVISIBLE);
-        //SHOW SNACKBAR
+
+        Snackbar.make(layout, snackbarMessage, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.success))
+                .show();
     }
 
     @Override
     public void onFail(String snackbarMessage) {
         progressBar.setVisibility(View.INVISIBLE);
-        //SHOW SNACKBAR
+
+        Snackbar.make(layout, snackbarMessage, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.error))
+                .show();
     }
 }
