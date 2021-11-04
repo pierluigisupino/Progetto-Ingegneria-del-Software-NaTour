@@ -78,12 +78,14 @@ public class Controller {
     }
 
     public void login(BaseActivity callingActivity, String username, String password){
+
         Amplify.Auth.signIn(
                 username,
                 password,
                 result -> {
                     Log.i("NaTour", result.isSignInComplete() ? "Sign in succeeded" : "Sign in not complete");
                     goToActivityAndFinish(callingActivity, MainActivity.class);
+                    callingActivity.onSuccess("Logged");
                 },
                 error -> {
                     Log.e("NaTour", error.getMessage());
@@ -91,6 +93,8 @@ public class Controller {
                     if(Objects.requireNonNull(error.getMessage()).contains("User not confirmed in the system")){
                         goToActivity(callingActivity, VerifyAccount.class);
                     }
+
+                    callingActivity.onFail("Error while login");
                 }
         );
     }

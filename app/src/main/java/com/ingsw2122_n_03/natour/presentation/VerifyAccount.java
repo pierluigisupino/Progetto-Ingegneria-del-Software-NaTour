@@ -59,12 +59,12 @@ public class VerifyAccount extends BaseActivity {
     }
 
     @Override
-    public void onSuccess() {
+    public void onSuccess(String snackbarMessage) {
         //SHOW SNACKBAR
     }
 
     @Override
-    public void onFail() {
+    public void onFail(String snackbarMessage) {
         //SHOW SNACKBAR
     }
 }
