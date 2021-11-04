@@ -113,7 +113,7 @@ public class Controller {
                 },
                 error -> {
                     Log.e("NaTour", "Sign up failed", error);
-                    callingActivity.onFail("Signup fail");
+                    callingActivity.onFail("Error whle signup");
                 }
         );
     }
