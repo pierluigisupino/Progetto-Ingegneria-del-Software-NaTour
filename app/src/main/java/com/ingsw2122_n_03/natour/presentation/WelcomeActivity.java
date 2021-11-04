@@ -10,8 +10,9 @@ import android.widget.Button;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.Controller;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,5 +47,15 @@ public class WelcomeActivity extends AppCompatActivity {
                 controller.loginWithGoogle(WelcomeActivity.this);
             }
         });
+    }
+
+    @Override
+    public void onSuccess() {
+        //SHOW SNACKBAR
+    }
+
+    @Override
+    public void onFail() {
+        //SHOW SNACKBAR
     }
 }

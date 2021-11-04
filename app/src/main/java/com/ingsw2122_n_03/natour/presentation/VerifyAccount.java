@@ -6,6 +6,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.Controller;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
-public class VerifyAccount extends AppCompatActivity {
+public class VerifyAccount extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,5 +56,15 @@ public class VerifyAccount extends AppCompatActivity {
                 controller.confirmSignUp(VerifyAccount.this, username, verificationCode);
             }
         });
+    }
+
+    @Override
+    public void onSuccess() {
+        //SHOW SNACKBAR
+    }
+
+    @Override
+    public void onFail() {
+        //SHOW SNACKBAR
     }
 }

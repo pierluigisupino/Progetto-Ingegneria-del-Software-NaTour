@@ -12,10 +12,11 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.Controller;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.Objects;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,5 +34,15 @@ public class SplashActivity extends AppCompatActivity {
                 controller.configureAmplify(SplashActivity.this);
             }
         }, 800);
+    }
+
+    @Override
+    public void onSuccess() {
+        //SHOW SNACKBAR
+    }
+
+    @Override
+    public void onFail() {
+        //SHOW SNACKBAR
     }
 }

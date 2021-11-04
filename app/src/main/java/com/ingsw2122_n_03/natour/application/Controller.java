@@ -20,6 +20,7 @@ import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.VerifyAccount;
 import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.Objects;
 
@@ -36,7 +37,18 @@ public class Controller {
         return instance;
     }
 
-    public void configureAmplify(Activity callingActivity){
+    public void goToActivity(BaseActivity source, Class<?> destination){
+        Intent intent = new Intent(source, destination);
+        source.startActivity(intent);
+    }
+
+    public void goToActivityAndFinish(BaseActivity source, Class<?> destination){
+        Intent intent = new Intent(source, destination);
+        source.startActivity(intent);
+        source.finish();
+    }
+
+    public void configureAmplify(BaseActivity callingActivity){
         try {
 
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
@@ -46,51 +58,44 @@ public class Controller {
         }catch (Amplify.AlreadyConfiguredException e){
             start(callingActivity);
         }catch ( AmplifyException e){
-            callingActivity.finish();
-            Intent intent = new Intent(callingActivity, ErrorActivity.class);
-            callingActivity.startActivity(intent);
+            goToActivityAndFinish(callingActivity, ErrorActivity.class);
         }
     }
 
-    public void start(Activity callingActivity){
+    public void start(BaseActivity callingActivity){
 
         if(getUser(callingActivity)){
             callingActivity.finish();
             Intent intent = new Intent(callingActivity, MainActivity.class);
             callingActivity.startActivity(intent);
         }else{
-            callingActivity.finish();
-            Intent intent = new Intent(callingActivity, WelcomeActivity.class);
-            callingActivity.startActivity(intent);
+            goToActivityAndFinish(callingActivity, WelcomeActivity.class);
         }
     }
 
-    public boolean getUser(Activity callingActivity) {
+    public boolean getUser(BaseActivity callingActivity) {
         return Amplify.Auth.getCurrentUser() != null;
     }
 
-    public void login(Activity callingActivity, String username, String password){
+    public void login(BaseActivity callingActivity, String username, String password){
         Amplify.Auth.signIn(
                 username,
                 password,
                 result -> {
                     Log.i("NaTour", result.isSignInComplete() ? "Sign in succeeded" : "Sign in not complete");
-                    Intent intent = new Intent(callingActivity, MainActivity.class);
-                    callingActivity.startActivity(intent);
-                    callingActivity.finish();
+                    goToActivityAndFinish(callingActivity, MainActivity.class);
                 },
                 error -> {
                     Log.e("NaTour", error.getMessage());
 
                     if(Objects.requireNonNull(error.getMessage()).contains("User not confirmed in the system")){
-                        Intent intent = new Intent(callingActivity, VerifyAccount.class);
-                        callingActivity.startActivity(intent);
+                        goToActivity(callingActivity, VerifyAccount.class);
                     }
                 }
         );
     }
 
-    public void signUp(Activity callingActivity, String username, String email, String password){
+    public void signUp(BaseActivity callingActivity, String username, String email, String password){
 
         AuthSignUpOptions options = AuthSignUpOptions.builder()
                 .userAttribute(AuthUserAttributeKey.email(), email)
@@ -99,14 +104,13 @@ public class Controller {
         Amplify.Auth.signUp(username, password, options,
                 result -> {
                     Log.i("NaTour", "Result: " + result.toString());
-                    Intent intent = new Intent(callingActivity, VerifyAccount.class);
-                    callingActivity.startActivity(intent);
+                    goToActivity(callingActivity, VerifyAccount.class);
                 },
                 error -> Log.e("NaTour", "Sign up failed", error)
         );
     }
 
-    public void confirmSignUp(Activity callingActivity, String username, String confirmationCode){
+    public void confirmSignUp(BaseActivity callingActivity, String username, String confirmationCode){
         Amplify.Auth.confirmSignUp(
                 username,
                 confirmationCode,
@@ -133,13 +137,12 @@ public class Controller {
         });
     }
 
-    public void loginWithGoogle(Activity callingActivity){
+    public void loginWithGoogle(BaseActivity callingActivity){
         Amplify.Auth.signInWithSocialWebUI(AuthProvider.google(), callingActivity,
                 result -> Log.i("NaTour", result.toString()),
                 error -> {
                     Log.e("NaTour", error.toString());
-                    Intent intent = new Intent(callingActivity, ErrorActivity.class);
-                    callingActivity.startActivity(intent);
+                    goToActivity(callingActivity, ErrorActivity.class);
                 }
         );
     }

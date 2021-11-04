@@ -10,8 +10,9 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.Controller;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,5 +42,15 @@ public class LoginActivity extends AppCompatActivity {
                 controller.login(LoginActivity.this, username, password);
             }
         });
+    }
+
+    @Override
+    public void onSuccess() {
+        //SHOW SNACKBAR
+    }
+
+    @Override
+    public void onFail() {
+        //SHOW SNACKBAR
     }
 }
