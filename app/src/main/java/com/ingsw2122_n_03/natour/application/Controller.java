@@ -85,11 +85,13 @@ public class Controller {
                 username,
                 password,
                 result -> {
+                    progressBar.setVisibility(View.INVISIBLE);
                     Log.i("NaTour", result.isSignInComplete() ? "Sign in succeeded" : "Sign in not complete");
                     goToActivityAndFinish(callingActivity, MainActivity.class);
                     callingActivity.onSuccess("Logged");
                 },
                 error -> {
+                    progressBar.setVisibility(View.INVISIBLE);
                     Log.e("NaTour", error.getMessage());
 
                     if(Objects.requireNonNull(error.getMessage()).contains("User not confirmed in the system")){
@@ -99,8 +101,6 @@ public class Controller {
                     callingActivity.onFail("Error while login");
                 }
         );
-
-        progressBar.setVisibility(View.INVISIBLE);
     }
 
     public void signUp(BaseActivity callingActivity, String username, String email, String password, LinearProgressIndicator progressBar){
@@ -111,17 +111,17 @@ public class Controller {
 
         Amplify.Auth.signUp(username, password, options,
                 result -> {
+                    progressBar.setVisibility(View.INVISIBLE);
                     Log.i("NaTour", "Result: " + result.toString());
                     callingActivity.onSuccess("Signup success");
                     goToActivity(callingActivity, VerifyAccount.class);
                 },
                 error -> {
+                    progressBar.setVisibility(View.INVISIBLE);
                     Log.e("NaTour", "Sign up failed", error);
                     callingActivity.onFail("Error whle signup");
                 }
         );
-
-        progressBar.setVisibility(View.INVISIBLE);
     }
 
     public void confirmSignUp(BaseActivity callingActivity, String username, String confirmationCode){
