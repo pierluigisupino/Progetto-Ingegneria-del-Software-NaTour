@@ -16,17 +16,11 @@ import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public final class AmplifyAuthImplementation implements AuthInterface {
 
-
-    private AuthController controller;
-
-    protected AmplifyAuthImplementation() {
-
-    }
-
+    protected AmplifyAuthImplementation() {}
 
     @Override
     public void configureAuth(BaseActivity callingActivity) {
-        controller = AuthController.getInstance();
+        AuthController controller = AuthController.getInstance();
         try {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
@@ -46,6 +40,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     @Override
     public void login(String username, String password) {
 
+        AuthController controller = AuthController.getInstance();
         Amplify.Auth.signIn(
                 username,
                 password,
@@ -62,11 +57,10 @@ public final class AmplifyAuthImplementation implements AuthInterface {
 
     @Override
     public void signUp(String username, String email, String password) {
-
+        AuthController controller = AuthController.getInstance();
         AuthSignUpOptions options = AuthSignUpOptions.builder()
                 .userAttribute(AuthUserAttributeKey.email(), email)
                 .build();
-
         Amplify.Auth.signUp(username, password, options,
                 result -> {
                     Log.i("NaTour", "Result: " + result.toString());
@@ -99,7 +93,6 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                         + " at " +
                         signUpResult.getUserCodeDeliveryDetails().getDestination());
             }
-
             @Override
             public void onError(Exception e) {
                 Log.e("NaTour", e.toString());
@@ -109,6 +102,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
 
     @Override
     public void loginWithGoogle(BaseActivity callingActivity) {
+        AuthController controller = AuthController.getInstance();
         Amplify.Auth.signInWithSocialWebUI(AuthProvider.google(), callingActivity,
                 result -> Log.i("NaTour", result.toString()),
                 error -> {
@@ -118,7 +112,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         );
     }
 
-    @Override //TO DO
+    @Override
     public void signOut() {
         Amplify.Auth.signOut(
                 () -> {

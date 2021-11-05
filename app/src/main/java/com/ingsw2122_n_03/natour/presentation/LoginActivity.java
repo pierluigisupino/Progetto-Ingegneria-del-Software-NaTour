@@ -1,11 +1,11 @@
 package com.ingsw2122_n_03.natour.presentation;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -13,7 +13,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
-import com.ingsw2122_n_03.natour.application.Controller;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class LoginActivity extends BaseActivity {

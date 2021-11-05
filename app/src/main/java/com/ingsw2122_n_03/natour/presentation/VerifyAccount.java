@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.chaos.view.PinView;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;

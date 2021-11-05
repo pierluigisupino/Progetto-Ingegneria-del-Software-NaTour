@@ -1,14 +1,13 @@
 package com.ingsw2122_n_03.natour.presentation;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
-import com.ingsw2122_n_03.natour.application.Controller;
 
 public class MainActivity extends AppCompatActivity {
 

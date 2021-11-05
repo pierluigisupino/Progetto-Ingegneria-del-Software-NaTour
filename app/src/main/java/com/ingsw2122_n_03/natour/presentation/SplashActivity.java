@@ -5,7 +5,6 @@ import android.os.Handler;
 
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
-import com.ingsw2122_n_03.natour.application.Controller;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.Objects;

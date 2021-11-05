@@ -1,8 +1,5 @@
 package com.ingsw2122_n_03.natour.infastructure;
 
-import android.app.Activity;
-
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public interface AuthInterface {

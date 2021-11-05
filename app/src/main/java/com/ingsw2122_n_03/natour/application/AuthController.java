@@ -1,9 +1,7 @@
 package com.ingsw2122_n_03.natour.application;
 
 import android.app.Activity;
-import android.util.Log;
 
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.LoginActivity;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
@@ -94,15 +92,14 @@ public class AuthController extends Controller {
         callingActivity.onFail("Error while signup");
     }
 
-
     public void confirmSignUp(BaseActivity callingActivity, String username, String confirmationCode){
-
-
+        authInterface.confirmSignUp(username, confirmationCode);
     }
 
     public void sendVerificationCode(String username){
-
+        authInterface.sendVerificationCode(username);
     }
+
 
     public void loginWithGoogle(BaseActivity callingActivity){
         this.callingActivity = callingActivity;
@@ -115,7 +112,8 @@ public class AuthController extends Controller {
 
 
     public void signOut(Activity callingActivity){
-
+        authInterface.signOut();
+        goToActivityAndFinish(callingActivity, WelcomeActivity.class);
     }
 
 }
