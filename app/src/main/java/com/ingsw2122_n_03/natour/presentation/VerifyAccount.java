@@ -3,7 +3,7 @@ package com.ingsw2122_n_03.natour.presentation;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ingsw2122_n_03.natour.R;
-import com.ingsw2122_n_03.natour.application.StartController;
+import com.ingsw2122_n_03.natour.application.Controller;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class VerifyAccount extends BaseActivity {
 
-    private StartController startController;
+    private Controller startController;
 
     private MaterialToolbar materialToolbar;
     private TextInputEditText verificationCodeEditText;
@@ -25,7 +25,7 @@ public class VerifyAccount extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_account);
 
-        startController = StartController.getInstance();
+        startController = Controller.getInstance();
 
         materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
         //Perche mettere anche username??

@@ -1,18 +1,17 @@
 package com.ingsw2122_n_03.natour.presentation;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.R;
-import com.ingsw2122_n_03.natour.application.StartController;
+import com.ingsw2122_n_03.natour.application.Controller;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class WelcomeActivity extends BaseActivity {
 
-    private StartController startController;
+    private Controller startController;
 
     private Button registerButton;
     private Button loginButton;
@@ -24,7 +23,7 @@ public class WelcomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        startController = StartController.getInstance();
+        startController = Controller.getInstance();
 
         registerButton = (Button) findViewById(R.id.registerButton);
         loginButton = (Button) findViewById(R.id.loginButton);

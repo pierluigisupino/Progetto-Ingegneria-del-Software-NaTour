@@ -17,25 +17,23 @@ import com.amplifyframework.core.Amplify;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 
-import com.ingsw2122_n_03.natour.presentation.LoginActivity;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
-import com.ingsw2122_n_03.natour.presentation.RegisterActivity;
 import com.ingsw2122_n_03.natour.presentation.VerifyAccount;
 import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.HashMap;
 import java.util.Objects;
-//gestisce routine di avvio dell'app, ma anche la connessione ad Amplify e le sue funzionalità (fare altra classe)
-public class StartController {
 
-    private static StartController instance = null;
+public class Controller {
 
-    private StartController() {}
+    private static Controller instance = null;
 
-    public static StartController getInstance(){
+    private Controller() {}
+
+    public static Controller getInstance(){
         if(instance == null){
-            instance = new StartController();
+            instance = new Controller();
         }
         return instance;
     }
@@ -147,7 +145,7 @@ public class StartController {
 
     }
 
-    public void  sendVerificationCode(String username){
+    public void sendVerificationCode(String username){
         AWSMobileClient.getInstance().resendSignUp(username, new Callback<SignUpResult>() {
             @Override
             public void onResult(SignUpResult signUpResult) {

@@ -12,13 +12,13 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ingsw2122_n_03.natour.R;
-import com.ingsw2122_n_03.natour.application.StartController;
+import com.ingsw2122_n_03.natour.application.Controller;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 
 public class RegisterActivity extends BaseActivity {
 
-    private StartController startController;
+    private Controller startController;
 
     private ConstraintLayout layout;
     private LinearProgressIndicator progressBar;
@@ -34,7 +34,7 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        startController = StartController.getInstance();
+        startController = Controller.getInstance();
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
         materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
