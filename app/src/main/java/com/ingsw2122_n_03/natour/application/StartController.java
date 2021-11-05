@@ -33,14 +33,12 @@ public class StartController {
 
     private StartController() {}
 
-
     public static StartController getInstance(){
         if(instance == null){
             instance = new StartController();
         }
         return instance;
     }
-
 
     public void goToActivity(BaseActivity source, Class<?> destination){
         Intent intent = new Intent(source, destination);
@@ -74,34 +72,25 @@ public class StartController {
         source.finish();
     }
 
-
     public void configureAmplify(BaseActivity callingActivity){
         try {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
-            start(callingActivity);
+            checkUserLogged(callingActivity);
         }catch (Amplify.AlreadyConfiguredException e){
-            start(callingActivity);
+            checkUserLogged(callingActivity);
         }catch ( AmplifyException e){
             goToActivityAndFinish(callingActivity, ErrorActivity.class);
         }
     }
 
-
-    public void start(BaseActivity callingActivity){
-        if(getUser(callingActivity)){
+    public void checkUserLogged(BaseActivity callingActivity){
+        if(Amplify.Auth.getCurrentUser() != null){
             goToActivityAndFinish(callingActivity, MainActivity.class);
         }else{
             goToActivityAndFinish(callingActivity, WelcomeActivity.class);
         }
     }
-
-
-    public boolean getUser(BaseActivity callingActivity) {
-        //Andrebbe modificato, amplify conosce il current user del cellulare?
-        return Amplify.Auth.getCurrentUser() != null;
-    }
-
 
     public void login(BaseActivity callingActivity, String username, String password, LinearProgressIndicator progressBar){
 
@@ -127,7 +116,6 @@ public class StartController {
         );
     }
 
-
     public void signUp(BaseActivity callingActivity, String username, String email, String password, LinearProgressIndicator progressBar){
 
         AuthSignUpOptions options = AuthSignUpOptions.builder()
@@ -144,11 +132,10 @@ public class StartController {
                 error -> {
                     progressBar.setVisibility(View.INVISIBLE);
                     Log.e("NaTour", "Sign up failed", error);
-                    callingActivity.onFail("Error whle signup");
+                    callingActivity.onFail("Error while signup");
                 }
         );
     }
-
 
     public void confirmSignUp(BaseActivity callingActivity, String username, String confirmationCode){
         Amplify.Auth.confirmSignUp(
@@ -159,7 +146,6 @@ public class StartController {
         );
 
     }
-
 
     public void  sendVerificationCode(String username){
         AWSMobileClient.getInstance().resendSignUp(username, new Callback<SignUpResult>() {
@@ -178,7 +164,6 @@ public class StartController {
         });
     }
 
-
     public void loginWithGoogle(BaseActivity callingActivity){
         Amplify.Auth.signInWithSocialWebUI(AuthProvider.google(), callingActivity,
                 result -> Log.i("NaTour", result.toString()),
@@ -188,7 +173,6 @@ public class StartController {
                 }
         );
     }
-
 
     public void signOut(Activity callingActivity){
         Amplify.Auth.signOut(
