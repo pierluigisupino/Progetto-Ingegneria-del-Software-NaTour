@@ -12,6 +12,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
@@ -24,9 +25,16 @@ public class RegisterActivity extends BaseActivity {
     private ConstraintLayout layout;
     private LinearProgressIndicator progressBar;
     private MaterialToolbar materialToolbar;
-    private TextInputEditText usernameEditText;
-    private TextInputEditText emailEditText;
-    private TextInputEditText passwordEditText;
+
+    private TextInputLayout usernameTextInputLayout;
+    private TextInputEditText usernameTextInputEditText;
+
+    private TextInputLayout emailTextInputLayout;
+    private TextInputEditText emailTextInputEditText;
+
+    private TextInputLayout passwordTextInputLayout;
+    private TextInputEditText passwordTextInputEditText;
+
     private Button registerButton;
 
     @Override
@@ -39,12 +47,18 @@ public class RegisterActivity extends BaseActivity {
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
         materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
-        usernameEditText = findViewById(R.id.username);
-        emailEditText = findViewById(R.id.email);
-        passwordEditText = findViewById(R.id.password);
+
+        usernameTextInputLayout = findViewById(R.id.usernameTextInputLayout);
+        usernameTextInputEditText = findViewById(R.id.usernameTextInputEditText);
+
+        emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
+        emailTextInputEditText = findViewById(R.id.emailTextInputEditText);
+
+        passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
+        passwordTextInputEditText = findViewById(R.id.passwordTextInputEditText);
+
         registerButton = findViewById(R.id.registerButton);
         progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
-
 
         materialToolbar.setNavigationOnClickListener(new View.OnClickListener(){
             @Override
@@ -57,9 +71,9 @@ public class RegisterActivity extends BaseActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = usernameEditText.getText().toString();
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+                String username = usernameTextInputEditText.getText().toString();
+                String email = emailTextInputEditText.getText().toString();
+                String password = passwordTextInputEditText.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
                 if(areInputValid(username, email, password)) {
                     authController.signUp(RegisterActivity.this, username, email, password);
@@ -86,34 +100,39 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private boolean areInputValid(String username, String email, String password) {
+
+        boolean isValid = true;
+
         if(username == null || username.isEmpty()) {
-            onFail("Please, insert a username!");
-            return false;
+            usernameTextInputLayout.setError("Please, insert a username!");
+            isValid = false;
         }
-        if(username.length() < 4) {
-            onFail("Username must contain at least 4 letters!");
-            return false;
+        if(username != null && username.length() < 4) {
+            usernameTextInputLayout.setError("Username must contain at least 4 letters!");
+            isValid = false;
         }
-        if(username.length() > 20) {
-            onFail("Username must contain up to 20 letters!");
-            return false;
+        if(username != null && username.length() > 20) {
+            usernameTextInputLayout.setError("Username must contain up to 20 letters!");
+            isValid = false;
         }
         if(email == null || email.isEmpty()) {
-            onFail("Please, insert an e-mail address!");
-            return false;
+            emailTextInputLayout.setError("Please, insert an e-mail address!");
+            isValid = false;
         }
-        if(! Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            onFail("Please Check your e-mail address!");
-            return false;
+        if(email != null && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailTextInputLayout.setError("Please Check your e-mail address!");
+            isValid = false;
         }
         if(password == null || password.isEmpty()) {
-            onFail("Please, insert a password!");
-            return false;
+            passwordTextInputLayout.setError("Please, insert a password!");
+            isValid = false;
         }
-        if(password.length() < 6) {
-            onFail("Password must contain at least 6 letters!");
-            return false;
+        if(password != null && password.length() < 6) {
+            passwordTextInputLayout.setError("Password must contain at least 6 letters!");
+            isValid = false;
         }
-        return true;
+
+        progressBar.setVisibility(View.INVISIBLE);
+        return isValid;
     }
 }
