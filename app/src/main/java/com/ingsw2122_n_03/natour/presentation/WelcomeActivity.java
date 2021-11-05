@@ -33,14 +33,14 @@ public class WelcomeActivity extends BaseActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authController.goToActivity(WelcomeActivity.this, RegisterActivity.class);
+                authController.onRegisterButtonPressed(WelcomeActivity.this);
             }
         });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authController.goToActivity(WelcomeActivity.this, LoginActivity.class);
+                authController.onLoginButtonPressed(WelcomeActivity.this);
             }
         });
 

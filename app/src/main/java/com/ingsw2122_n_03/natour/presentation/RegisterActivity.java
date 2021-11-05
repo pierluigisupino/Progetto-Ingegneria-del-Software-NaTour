@@ -62,7 +62,7 @@ public class RegisterActivity extends BaseActivity {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
-                authController.signUp(RegisterActivity.this, username, email, password, progressBar);
+                authController.signUp(RegisterActivity.this, username, email, password);
             }
         });
 

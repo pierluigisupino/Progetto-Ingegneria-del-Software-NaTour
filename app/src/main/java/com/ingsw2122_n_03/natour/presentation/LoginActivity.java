@@ -56,7 +56,7 @@ public class LoginActivity extends BaseActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
-                authController.login(LoginActivity.this, username, password, progressBar);
+                authController.login(LoginActivity.this, username, password);
             }
         });
 

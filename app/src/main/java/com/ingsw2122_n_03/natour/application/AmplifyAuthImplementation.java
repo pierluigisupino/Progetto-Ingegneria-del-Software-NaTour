@@ -1,41 +1,32 @@
 package com.ingsw2122_n_03.natour.application;
 
-import android.app.Activity;
 import android.util.Log;
-import android.view.View;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.results.SignUpResult;
 import com.amplifyframework.AmplifyException;
-import com.amplifyframework.auth.AuthException;
 import com.amplifyframework.auth.AuthProvider;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
-import com.amplifyframework.auth.result.AuthSignInResult;
 import com.amplifyframework.core.Amplify;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-import java.util.Objects;
-
 public final class AmplifyAuthImplementation implements AuthInterface {
 
-    private static AmplifyAuthImplementation instance = null;
 
-    private AmplifyAuthImplementation() {}
+    private AuthController controller;
 
-    public static AmplifyAuthImplementation getInstance(){
-        if(instance == null){
-            instance = new AmplifyAuthImplementation();
-        }
-        return instance;
+    protected AmplifyAuthImplementation() {
+
     }
 
+
     @Override
-    public void configure(BaseActivity callingActivity) {
+    public void configureAuth(BaseActivity callingActivity) {
+        controller = AuthController.getInstance();
         try {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
@@ -43,7 +34,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
            Log.i("NaTour", "Amplify already Configured");
         }catch (AmplifyException e){
             Log.e("NaTour", "Amplify Configuration Failed");
-            //throw mia eccezione -> goToActivityAndFinish(callingActivity, ErrorActivity.class);
+            //throw my exception (action)-> goToActivityAndFinish(callingActivity, ErrorActivity.class);
         }
     }
 
@@ -58,28 +49,32 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         Amplify.Auth.signIn(
                 username,
                 password,
-                this::successAuthenticationHandle,
-                this::errorAuthenticationHandle
+                result -> {
+                    Log.i("NaTour", result.isSignInComplete() ? "Sign in succeeded" : "Sign in not complete");
+                    controller.onLoginSuccess();
+                },
+                error -> {
+                    Log.e("NaTour", error.getMessage());
+                    controller.onLoginFailure(error.getMessage());
+                }
         );
     }
 
     @Override
     public void signUp(String username, String email, String password) {
+
         AuthSignUpOptions options = AuthSignUpOptions.builder()
                 .userAttribute(AuthUserAttributeKey.email(), email)
                 .build();
 
         Amplify.Auth.signUp(username, password, options,
                 result -> {
-                   // progressBar.setVisibility(View.INVISIBLE);
                     Log.i("NaTour", "Result: " + result.toString());
-                    //callingActivity.onSuccess("Signup success");
-                    //goToActivity(callingActivity, VerifyAccount.class);
+                    controller.onSignUpSuccess();
                 },
                 error -> {
-                    //progressBar.setVisibility(View.INVISIBLE);
                     Log.e("NaTour", "Sign up failed", error);
-                    //callingActivity.onFail("Error while signup");
+                    controller.onSignUpFailure();
                 }
         );
     }
@@ -118,12 +113,12 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 result -> Log.i("NaTour", result.toString()),
                 error -> {
                     Log.e("NaTour", error.toString());
-                    //goToActivity(callingActivity, ErrorActivity.class);
+                    controller.onLoginWithGoogleFailure();
                 }
         );
     }
 
-    @Override
+    @Override //TO DO
     public void signOut() {
         Amplify.Auth.signOut(
                 () -> {
@@ -131,14 +126,6 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 },
                 error -> Log.e("NaTour", error.toString())
         );
-    }
-
-    private void successAuthenticationHandle(AuthSignInResult result){
-        Log.e("NaTour", result.toString());
-    }
-
-    private void errorAuthenticationHandle(AuthException error) {
-        Log.e("NaTour", error.toString());
     }
 
 }

@@ -1,29 +1,39 @@
 package com.ingsw2122_n_03.natour.application;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
+import com.ingsw2122_n_03.natour.presentation.LoginActivity;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
+import com.ingsw2122_n_03.natour.presentation.RegisterActivity;
+import com.ingsw2122_n_03.natour.presentation.VerifyAccount;
 import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
+
+import java.util.Objects;
 
 public class AuthController extends Controller {
 
     private static AuthController instance = null;
-    private AuthInterface authInterface = AmplifyAuthImplementation.getInstance();
+    private AuthInterface authInterface;
+    private BaseActivity callingActivity;
 
-    private AuthController() {}
+    private AuthController() {
+        authInterface = new AmplifyAuthImplementation();
+    }
 
-    public static AuthController getInstance(){
+    public static AuthController getInstance() {
         if(instance == null){
             instance = new AuthController();
         }
         return instance;
     }
 
-    public void setUp(BaseActivity callingActivity){
-        authInterface.configure(callingActivity);
+
+    public void setUp(BaseActivity callingActivity) {
+        authInterface.configureAuth(callingActivity);
         if(authInterface.checkUserLogged()) {
             goToActivityAndFinish(callingActivity, MainActivity.class);
         }else{
@@ -32,15 +42,47 @@ public class AuthController extends Controller {
     }
 
 
-    public void login(BaseActivity callingActivity, String username, String password, LinearProgressIndicator progressBar){
+    public void onLoginButtonPressed(BaseActivity callingActivity) {
+        goToActivity(callingActivity, RegisterActivity.class);
+    }
+
+    public void login(BaseActivity callingActivity, String username, String password) {
+        this.callingActivity = callingActivity;
         authInterface.login(username, password);
-
     }
 
-    public void signUp(BaseActivity callingActivity, String username, String email, String password, LinearProgressIndicator progressBar){
-
-
+    public void onLoginSuccess() {
+        callingActivity.onSuccess("Logged"); //togliamo per success?
+        goToActivityAndFinish(callingActivity, MainActivity.class);
     }
+
+    public void onLoginFailure(String msg) {
+        if(Objects.requireNonNull(msg).contains("User not confirmed in the system")) {
+            goToActivity(callingActivity, VerifyAccount.class);
+        }else {
+            callingActivity.onFail("Error while login");
+        }
+    }
+
+
+    public void onRegisterButtonPressed(BaseActivity callingActivity) {
+        goToActivity(callingActivity, LoginActivity.class);
+    }
+
+    public void signUp(BaseActivity callingActivity, String username, String email, String password) {
+        this.callingActivity = callingActivity;
+        authInterface.signUp(username, email, password);
+    }
+
+    public void onSignUpSuccess() {
+        callingActivity.onSuccess("Signup success");
+        goToActivity(callingActivity, VerifyAccount.class);
+    }
+
+    public void onSignUpFailure() {
+        callingActivity.onFail("Error while signup");
+    }
+
 
     public void confirmSignUp(BaseActivity callingActivity, String username, String confirmationCode){
 
@@ -52,8 +94,14 @@ public class AuthController extends Controller {
     }
 
     public void loginWithGoogle(BaseActivity callingActivity){
-
+        this.callingActivity = callingActivity;
+        authInterface.loginWithGoogle(callingActivity);
     }
+
+    public void onLoginWithGoogleFailure() {
+        callingActivity.onFail("Error while signup");
+    }
+
 
     public void signOut(Activity callingActivity){
 
