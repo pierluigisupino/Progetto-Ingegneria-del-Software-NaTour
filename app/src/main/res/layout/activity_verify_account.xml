@@ -102,34 +102,23 @@
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/verificationCodeTextField"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+    <com.chaos.view.PinView
+        android:id="@+id/verificationCode"
+        style="@style/PinWidget.PinView"
+        android:hint="Hint."
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/verification_code"
-        app:boxCornerRadiusBottomEnd="15dp"
-        app:boxCornerRadiusBottomStart="15dp"
-        app:boxCornerRadiusTopEnd="15dp"
-        app:boxCornerRadiusTopStart="15dp"
-        app:endIconDrawable="@drawable/ic_cancel"
-        app:endIconMode="clear_text"
-        app:endIconTint="@color/primary"
-        app:errorIconDrawable="@drawable/ic_error"
+        android:layout_gravity="center"
+        android:cursorVisible="true"
+        android:inputType="number"
+        app:hideLineWhenFilled="false"
+        app:lineColor="@color/primary"
+        app:itemCount="6"
+        app:itemRadius="10dp"
+        app:lineWidth="2dp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toTopOf="@id/verificationCodeGuideline"
-        app:startIconDrawable="@drawable/ic_profile"
-        app:startIconTint="@color/primary">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/verificationCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLines="1"
-            tools:ignore="TextContrastCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toTopOf="@id/verificationCodeGuideline"/>
 
     <TextView
         android:id="@+id/resendCode"
@@ -144,7 +133,7 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/verificationCodeTextField"
+        app:layout_constraintTop_toBottomOf="@+id/verificationCode"
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
     <Button

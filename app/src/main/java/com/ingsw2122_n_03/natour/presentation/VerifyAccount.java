@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation;
 
+import com.chaos.view.PinView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ingsw2122_n_03.natour.R;
@@ -16,7 +17,7 @@ public class VerifyAccount extends BaseActivity {
     private Controller startController;
 
     private MaterialToolbar materialToolbar;
-    private TextInputEditText verificationCodeEditText;
+    private PinView verificationCodePinView;
     private TextView resendCodeTextView;
     private Button verifyButton;
 
@@ -28,9 +29,9 @@ public class VerifyAccount extends BaseActivity {
         startController = Controller.getInstance();
 
         materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
-        //Perche mettere anche username??
+
         TextInputEditText usernameEditText = (TextInputEditText) findViewById(R.id.username);
-        verificationCodeEditText = (TextInputEditText) findViewById(R.id.verificationCode);
+        verificationCodePinView = (PinView) findViewById(R.id.verificationCode);
         resendCodeTextView = (TextView) findViewById(R.id.resendCode);
         verifyButton = (Button) findViewById(R.id.verifyButton);
 
@@ -56,7 +57,7 @@ public class VerifyAccount extends BaseActivity {
             public void onClick(View view) {
                 //DA FARE CHECK INPUT
                 String username = usernameEditText.getText().toString();
-                String verificationCode = verificationCodeEditText.getText().toString();
+                String verificationCode = verificationCodePinView.getText().toString();
                 startController.confirmSignUp(VerifyAccount.this, username, verificationCode);
             }
         });
