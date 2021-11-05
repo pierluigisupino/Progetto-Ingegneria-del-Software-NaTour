@@ -21,12 +21,12 @@ public class BackendController implements BackendInterface {
 
     @Override
     public void setUp() {
-        //CONFIGURA AMPLIFY
+        //CONFIGURA AMPLIFY O ALTRO BACK END, UNICA FUNZIONE DA MODIFICARE, LO STESSO PER LE ALTRE
     }
 
     @Override
     public void checkUserLogged(BaseActivity callingActivity) {
-        
+
     }
 
     @Override
