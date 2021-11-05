@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,11 +17,7 @@ public class VerifyAccount extends BaseActivity {
 
     private AuthController authController;
 
-    private MaterialToolbar materialToolbar;
-    private TextInputEditText usernameEditText;
     private PinView verificationCodePinView;
-    private TextView resendCodeTextView;
-    private Button verifyButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +25,15 @@ public class VerifyAccount extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_account);
 
+        Intent intent = getIntent();
+        String username = intent.getExtras().getString("username");
+
         authController = AuthController.getInstance();
 
-        materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
-        usernameEditText = (TextInputEditText) findViewById(R.id.username);
+        MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
         verificationCodePinView = (PinView) findViewById(R.id.verificationCode);
-        resendCodeTextView = (TextView) findViewById(R.id.resendCode);
-        verifyButton = (Button) findViewById(R.id.verifyButton);
+        TextView resendCodeTextView = (TextView) findViewById(R.id.resendCode);
+        Button verifyButton = (Button) findViewById(R.id.verifyButton);
 
         materialToolbar.setNavigationOnClickListener(new View.OnClickListener(){
             @Override
@@ -46,8 +45,7 @@ public class VerifyAccount extends BaseActivity {
         resendCodeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //DA FARE CHECK INPUT
-                String username = usernameEditText.getText().toString();
+                //DA FARE CHECK INPUT SU USERNAME
                 authController.sendVerificationCode(username);
             }
         });
@@ -56,7 +54,6 @@ public class VerifyAccount extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //DA FARE CHECK INPUT
-                String username = usernameEditText.getText().toString();
                 String verificationCode = verificationCodePinView.getText().toString();
                 authController.confirmSignUp(VerifyAccount.this, username, verificationCode);
             }

@@ -51,11 +51,11 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 password,
                 result -> {
                     Log.i("NaTour", result.isSignInComplete() ? "Sign in succeeded" : "Sign in not complete");
-                    controller.onLoginSuccess();
+                    controller.onLoginSuccess(username);
                 },
                 error -> {
                     Log.e("NaTour", error.getMessage());
-                    controller.onLoginFailure(error.getMessage());
+                    controller.onLoginFailure(error.getMessage(), username);
                 }
         );
     }
@@ -70,7 +70,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         Amplify.Auth.signUp(username, password, options,
                 result -> {
                     Log.i("NaTour", "Result: " + result.toString());
-                    controller.onSignUpSuccess();
+                    controller.onSignUpSuccess(username);
                 },
                 error -> {
                     Log.e("NaTour", "Sign up failed", error);

@@ -12,6 +12,7 @@ import com.ingsw2122_n_03.natour.presentation.VerifyAccount;
 import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class AuthController extends Controller {
@@ -51,14 +52,19 @@ public class AuthController extends Controller {
         authInterface.login(username, password);
     }
 
-    public void onLoginSuccess() {
-        callingActivity.onSuccess("Logged"); //togliamo per success?
+    public void onLoginSuccess(String username) {
+        callingActivity.onSuccess("Logged");
         goToActivityAndFinish(callingActivity, MainActivity.class);
     }
 
-    public void onLoginFailure(String msg) {
+    public void onLoginFailure(String msg, String username) {
         if(Objects.requireNonNull(msg).contains("User not confirmed in the system")) {
-            goToActivity(callingActivity, VerifyAccount.class);
+
+            HashMap<String, String> extras = new HashMap<String, String>() {{
+                put("username", username);
+            }};
+
+            goToActivity(callingActivity, VerifyAccount.class, extras);
         }else {
             callingActivity.onFail("Error while login");
         }
@@ -74,9 +80,14 @@ public class AuthController extends Controller {
         authInterface.signUp(username, email, password);
     }
 
-    public void onSignUpSuccess() {
+    public void onSignUpSuccess(String username) {
         callingActivity.onSuccess("Signup success");
-        goToActivity(callingActivity, VerifyAccount.class);
+
+        HashMap<String, String> extras = new HashMap<String, String>() {{
+            put("username", username);
+        }};
+
+        goToActivity(callingActivity, VerifyAccount.class, extras);
     }
 
     public void onSignUpFailure() {
