@@ -6,12 +6,13 @@ import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.application.Controller;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class WelcomeActivity extends BaseActivity {
 
-    private Controller startController;
+    private AuthController authController;
 
     private Button registerButton;
     private Button loginButton;
@@ -23,7 +24,7 @@ public class WelcomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        startController = Controller.getInstance();
+        authController = AuthController.getInstance();
 
         registerButton = (Button) findViewById(R.id.registerButton);
         loginButton = (Button) findViewById(R.id.loginButton);
@@ -32,21 +33,21 @@ public class WelcomeActivity extends BaseActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startController.goToActivity(WelcomeActivity.this, RegisterActivity.class);
+                authController.goToActivity(WelcomeActivity.this, RegisterActivity.class);
             }
         });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startController.goToActivity(WelcomeActivity.this, LoginActivity.class);
+                authController.goToActivity(WelcomeActivity.this, LoginActivity.class);
             }
         });
 
         googleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startController.loginWithGoogle(WelcomeActivity.this);
+                authController.loginWithGoogle(WelcomeActivity.this);
             }
         });
 

@@ -7,11 +7,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.application.Controller;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Controller startController;
+    private AuthController authController;
     private Button signOutButton;
 
     @Override
@@ -20,14 +21,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startController = Controller.getInstance();
+        authController = AuthController.getInstance();
 
         signOutButton = findViewById(R.id.signOutButton);
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startController.signOut(MainActivity.this);
+                authController.signOut(MainActivity.this);
             }
         });
 

@@ -12,12 +12,13 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.application.Controller;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class LoginActivity extends BaseActivity {
 
-    private Controller startController;
+    private AuthController authController;
 
     private ConstraintLayout layout;
     private LinearProgressIndicator progressBar;
@@ -32,7 +33,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        startController = Controller.getInstance();
+        authController = AuthController.getInstance();
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
         materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
@@ -55,7 +56,7 @@ public class LoginActivity extends BaseActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
-                startController.login(LoginActivity.this, username, password, progressBar);
+                authController.login(LoginActivity.this, username, password, progressBar);
             }
         });
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.application.Controller;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
@@ -11,14 +12,14 @@ import java.util.Objects;
 
 public class SplashActivity extends BaseActivity {
 
-    private Controller startController;
+    private AuthController authController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        startController = Controller.getInstance();
+        authController = AuthController.getInstance();
 
         Objects.requireNonNull(getSupportActionBar()).hide();
 
@@ -26,7 +27,7 @@ public class SplashActivity extends BaseActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startController.configureAmplify(SplashActivity.this);
+                authController.setUp(SplashActivity.this);
             }
         }, 800);
     }
