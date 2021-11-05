@@ -8,10 +8,12 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.results.SignUpResult;
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.auth.AuthException;
 import com.amplifyframework.auth.AuthProvider;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
+import com.amplifyframework.auth.result.AuthSignInResult;
 import com.amplifyframework.core.Amplify;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
@@ -56,22 +58,8 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         Amplify.Auth.signIn(
                 username,
                 password,
-                result -> {
-                    Log.i("NaTour", result.isSignInComplete() ? "Sign in succeeded" : "Sign in not complete");
-
-                    // progressBar.setVisibility(View.INVISIBLE);
-                    // goToActivityAndFinish(callingActivity, MainActivity.class);
-                    // callingActivity.onSuccess("Logged");
-
-                },
-                error -> {
-                    Log.e("NaTour", error.getMessage());
-                    //progressBar.setVisibility(View.INVISIBLE);
-                   // if(Objects.requireNonNull(error.getMessage()).contains("User not confirmed in the system")){
-                        //goToActivity(callingActivity, VerifyAccount.class);
-                  //  }
-                    //callingActivity.onFail("Error while login");
-                }
+                this::successAuthenticationHandle,
+                this::errorAuthenticationHandle
         );
     }
 
@@ -143,6 +131,14 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 },
                 error -> Log.e("NaTour", error.toString())
         );
+    }
+
+    private void successAuthenticationHandle(AuthSignInResult result){
+        Log.e("NaTour", result.toString());
+    }
+
+    private void errorAuthenticationHandle(AuthException error) {
+        Log.e("NaTour", error.toString());
     }
 
 }
