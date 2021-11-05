@@ -1,6 +1,8 @@
 package com.ingsw2122_n_03.natour.presentation;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
+
+import java.util.Objects;
 
 
 public class RegisterActivity extends BaseActivity {
@@ -36,6 +40,8 @@ public class RegisterActivity extends BaseActivity {
     private TextInputEditText passwordTextInputEditText;
 
     private Button registerButton;
+
+    private boolean isFirstSubmit = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +73,65 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
+        usernameTextInputEditText.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!isFirstSubmit) isUsernameValid(usernameTextInputEditText.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        emailTextInputEditText.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!isFirstSubmit) isEmailValid(emailTextInputEditText.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+       passwordTextInputEditText.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!isFirstSubmit) isPasswordValid(passwordTextInputEditText.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isFirstSubmit = false;
                 String username = usernameTextInputEditText.getText().toString();
                 String email = emailTextInputEditText.getText().toString();
                 String password = passwordTextInputEditText.getText().toString();
@@ -100,39 +161,42 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private boolean areInputValid(String username, String email, String password) {
+        return isUsernameValid(username) & isEmailValid(email) & isPasswordValid(password);
+    }
 
-        boolean isValid = true;
-
+    private boolean isUsernameValid(String username){
         if(username == null || username.isEmpty()) {
             usernameTextInputLayout.setError("Please, insert a username!");
-            isValid = false;
-        }
-        if(username != null && username.length() < 4) {
+            return false;
+        }else if(username.length() < 4) {
             usernameTextInputLayout.setError("Username must contain at least 4 letters!");
-            isValid = false;
+            return false;
         }
-        if(username != null && username.length() > 20) {
-            usernameTextInputLayout.setError("Username must contain up to 20 letters!");
-            isValid = false;
-        }
+        usernameTextInputLayout.setError(null);
+        return true;
+    }
+
+    private boolean isEmailValid(String email){
         if(email == null || email.isEmpty()) {
             emailTextInputLayout.setError("Please, insert an e-mail address!");
-            isValid = false;
-        }
-        if(email != null && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            return false;
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailTextInputLayout.setError("Please Check your e-mail address!");
-            isValid = false;
+            return false;
         }
+        emailTextInputLayout.setError(null);
+        return true;
+    }
+
+    private boolean isPasswordValid(String password){
         if(password == null || password.isEmpty()) {
             passwordTextInputLayout.setError("Please, insert a password!");
-            isValid = false;
+            return false;
+        }else if(password.length() < 8) {
+            passwordTextInputLayout.setError("Password must contain at least 8 letters!");
+            return false;
         }
-        if(password != null && password.length() < 6) {
-            passwordTextInputLayout.setError("Password must contain at least 6 letters!");
-            isValid = false;
-        }
-
-        progressBar.setVisibility(View.INVISIBLE);
-        return isValid;
+        passwordTextInputLayout.setError(null);
+        return true;
     }
 }
