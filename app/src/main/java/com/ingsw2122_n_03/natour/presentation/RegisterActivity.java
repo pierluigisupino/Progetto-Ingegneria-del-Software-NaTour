@@ -161,7 +161,9 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private boolean areInputValid(String username, String email, String password) {
-        return isUsernameValid(username) & isEmailValid(email) & isPasswordValid(password);
+        boolean isValid = isUsernameValid(username) & isEmailValid(email) & isPasswordValid(password);
+        progressBar.setVisibility(View.INVISIBLE);
+        return isValid;
     }
 
     private boolean isUsernameValid(String username){
