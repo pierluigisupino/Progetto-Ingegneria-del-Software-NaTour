@@ -70,6 +70,7 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     public void onSuccess(String msg) {
+        progressBar.setVisibility(View.INVISIBLE);
         Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.success))
                 .show();
@@ -77,6 +78,7 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     public void onFail(String msg) {
+        progressBar.setVisibility(View.INVISIBLE);
         Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.error))
                 .show();

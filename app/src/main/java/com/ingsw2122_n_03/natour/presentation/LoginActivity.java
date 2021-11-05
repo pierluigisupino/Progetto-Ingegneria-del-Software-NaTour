@@ -64,6 +64,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void onSuccess(String msg) {
+        progressBar.setVisibility(View.INVISIBLE);
         Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.success))
                 .show();
@@ -71,6 +72,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void onFail(String msg) {
+        progressBar.setVisibility(View.INVISIBLE);
         Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.error))
                 .show();
