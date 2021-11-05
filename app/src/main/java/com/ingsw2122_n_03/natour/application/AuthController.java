@@ -44,7 +44,7 @@ public class AuthController extends Controller {
 
 
     public void onLoginButtonPressed(BaseActivity callingActivity) {
-        goToActivity(callingActivity, RegisterActivity.class);
+        goToActivity(callingActivity, LoginActivity.class);
     }
 
     public void login(BaseActivity callingActivity, String username, String password) {
@@ -72,7 +72,7 @@ public class AuthController extends Controller {
 
 
     public void onRegisterButtonPressed(BaseActivity callingActivity) {
-        goToActivity(callingActivity, LoginActivity.class);
+        goToActivity(callingActivity, RegisterActivity.class);
     }
 
     public void signUp(BaseActivity callingActivity, String username, String email, String password) {
