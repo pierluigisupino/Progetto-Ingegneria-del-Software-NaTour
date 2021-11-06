@@ -16,7 +16,7 @@ import java.util.Objects;
 public class AuthController extends Controller {
 
     private static AuthController instance = null;
-    private AuthInterface authInterface;
+    private final AuthInterface authInterface;
     private BaseActivity callingActivity;
 
     private AuthController() {
