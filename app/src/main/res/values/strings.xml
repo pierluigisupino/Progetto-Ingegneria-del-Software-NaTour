@@ -40,13 +40,13 @@
     <string name="verification_code_sent">Verification code sent</string>
 
     <!--ERRORS-->
-    <string name="username_warning">Please, insert an username.</string>
-    <string name="email_warning">"Please, insert an e-mail.</string>
-    <string name="password_warning">Please, Insert a password.</string>
+    <string name="username_warning">Insert an username.</string>
+    <string name="email_warning">"Insert an e-mail.</string>
+    <string name="password_warning">Insert a password.</string>
 
-    <string name="username_length_error">Username must contain at least 4 letters!</string>
-    <string name="mail_error">Please Check your e-mail address!</string>
-    <string name="password_length_error">Password must contain at least 8 letters!</string>
+    <string name="username_length_error">At least 4 letters</string>
+    <string name="mail_error">Check your e-mail address</string>
+    <string name="password_length_error">At least 8 characters</string>
 
     <string name="email_taken_error">Email address already in use</string>
     <string name="wrong_credential_error">Wrong credentials</string>
