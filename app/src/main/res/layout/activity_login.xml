@@ -69,7 +69,7 @@
         app:layout_constraintGuide_percent="0.99"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/usernameTextField"
+        android:id="@+id/usernameTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
         app:layout_constraintStart_toStartOf="@+id/leftGuideline">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username"
+            android:id="@+id/usernameTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -103,7 +103,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordTextField"
+        android:id="@+id/passwordTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
         app:startIconTint="@color/primary">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
+            android:id="@+id/passwordTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -136,7 +136,7 @@
         android:id="@+id/welcome_textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/euclid_circular_regular"
@@ -144,7 +144,7 @@
         android:textColor="@color/primary"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextField"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout"
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
     <Button

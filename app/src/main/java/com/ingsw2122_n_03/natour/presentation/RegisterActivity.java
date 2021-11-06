@@ -133,10 +133,13 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 isFirstSubmit = false;
+
                 String username = usernameTextInputEditText.getText().toString();
                 String email = emailTextInputEditText.getText().toString();
                 String password = passwordTextInputEditText.getText().toString();
+
                 progressBar.setVisibility(View.VISIBLE);
+
                 if(areInputValid(username, email, password)) {
                     authController.signUp(username, email, password);
                 }
