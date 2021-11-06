@@ -34,39 +34,25 @@
         app:layout_constraintGuide_percent="0.92"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/usernameBottomGuideline"
+        android:id="@+id/usernameGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.27" />
+        app:layout_constraintGuide_percent="0.16" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/passwordBottomGuideline"
+        android:id="@+id/passwordGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/forgotPasswordGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.46" />
+        app:layout_constraintGuide_percent="0.30" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/loginTopGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.56"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/loginBottomGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.63"/>
+        app:layout_constraintGuide_percent="0.48"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/imageTopGuideline"
@@ -102,7 +88,7 @@
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/usernameBottomGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/usernameGuideline"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline">
 
@@ -122,21 +108,21 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/password"
-        app:startIconDrawable="@drawable/ic_password"
-        app:startIconTint="@color/primary"
-        app:endIconMode="password_toggle"
-        app:endIconTint="@color/primary"
-        app:errorEnabled="true"
-        app:errorTextColor="@color/error"
-        app:errorIconTint="@color/error"
-        app:boxStrokeErrorColor="@color/error"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/passwordBottomGuideline"
+        app:boxStrokeErrorColor="@color/error"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/primary"
+        app:errorEnabled="true"
+        app:errorIconTint="@color/error"
+        app:errorTextColor="@color/error"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline">
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/passwordGuideline"
+        app:startIconDrawable="@drawable/ic_password"
+        app:startIconTint="@color/primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
@@ -150,27 +136,27 @@
         android:id="@+id/welcome_textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/euclid_circular_regular"
         android:text="@string/forgot_password"
         android:textColor="@color/primary"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/forgotPasswordGuideline"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTextField"
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/button_dark_background"
         android:fontFamily="@font/euclid_circular_semi_bold"
         android:text="@string/login"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/loginBottomGuideline"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toTopOf="@+id/loginTopGuideline"
@@ -182,12 +168,12 @@
         android:layout_height="0dp"
         android:contentDescription="@string/welcome_page_image_description"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1.46"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageTopGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/imageBottomGuideline"
         app:layout_constraintBottom_toTopOf="@id/progressBar"
+        app:layout_constraintDimensionRatio="1.46"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/imageBottomGuideline"
+        app:layout_constraintTop_toTopOf="@+id/imageTopGuideline"
         app:srcCompat="@drawable/ic_login_screen" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
