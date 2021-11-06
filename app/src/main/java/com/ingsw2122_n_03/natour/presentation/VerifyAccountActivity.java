@@ -29,6 +29,7 @@ public class VerifyAccountActivity extends BaseActivity {
         String password = intent.getExtras().getString("password");
 
         authController = AuthController.getInstance();
+        authController.setVerifyAccountActivity(VerifyAccountActivity.this);
 
         MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
         verificationCodePinView = (PinView) findViewById(R.id.verificationCode);

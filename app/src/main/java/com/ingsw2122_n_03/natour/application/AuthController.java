@@ -3,21 +3,28 @@ package com.ingsw2122_n_03.natour.application;
 import android.app.Activity;
 
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
+import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.LoginActivity;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.RegisterActivity;
+import com.ingsw2122_n_03.natour.presentation.SplashActivity;
 import com.ingsw2122_n_03.natour.presentation.VerifyAccountActivity;
 import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
-import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class AuthController extends Controller {
 
     private static AuthController instance = null;
     private final AuthInterface authInterface;
-    private BaseActivity callingActivity;
+
+    private ErrorActivity errorActivity;
+    private LoginActivity loginActivity;
+    private MainActivity mainActivity;
+    private RegisterActivity registerActivity;
+    private SplashActivity splashActivity;
+    private VerifyAccountActivity verifyAccountActivity;
+    private WelcomeActivity welcomeActivity;
 
     private AuthController() {
         authInterface = new AmplifyAuthImplementation();
@@ -31,66 +38,96 @@ public class AuthController extends Controller {
     }
 
 
-    public void setUp(BaseActivity callingActivity) {
-        authInterface.configureAuth(callingActivity);
+    public void setErrorActivity(ErrorActivity errorActivity) {
+        this.errorActivity = errorActivity;
+    }
+
+    public void setLoginActivity(LoginActivity loginActivity) {
+        this.loginActivity = loginActivity;
+    }
+
+    public void setMainActivity(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+    }
+
+    public void setRegisterActivity(RegisterActivity registerActivity) {
+        this.registerActivity = registerActivity;
+    }
+
+    public void setSplashActivity(SplashActivity splashActivity) {
+        this.splashActivity = splashActivity;
+    }
+
+    public void setVerifyAccountActivity(VerifyAccountActivity verifyAccountActivity) {
+        this.verifyAccountActivity = verifyAccountActivity;
+    }
+
+    public void setWelcomeActivity(WelcomeActivity welcomeActivity) {
+        this.welcomeActivity = welcomeActivity;
+    }
+
+
+    public void setUp() {
+        authInterface.configureAuth(splashActivity);
         if(authInterface.checkUserLogged()) {
-            goToActivityAndFinish(callingActivity, MainActivity.class);
+            goToActivityAndFinish(splashActivity, MainActivity.class);
         }else{
-            goToActivityAndFinish(callingActivity, WelcomeActivity.class);
+            goToActivityAndFinish(splashActivity, WelcomeActivity.class);
         }
     }
 
-
-    public void onLoginButtonPressed(BaseActivity callingActivity) {
-        goToActivity(callingActivity, LoginActivity.class);
+    public void onSetUpFailure() {
+        goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
 
-    public void login(BaseActivity callingActivity, String username, String password) {
-        this.callingActivity = callingActivity;
+
+    public void onLoginButtonPressed() {
+        goToActivity(welcomeActivity, LoginActivity.class);
+    }
+
+    public void login(String username, String password) {
         authInterface.login(username, password);
     }
 
     public void onLoginSuccess(String username) {
-        callingActivity.onSuccess("Logged");
-        goToActivityAndFinish(callingActivity, MainActivity.class);
+        loginActivity.onSuccess("Logged");
+        welcomeActivity.finish();
+        goToActivityAndFinish(loginActivity, MainActivity.class);
     }
 
-    public void onLoginFailure(String msg, String username) {
-        if(Objects.requireNonNull(msg).contains("User not confirmed in the system")) {
+    public void onLoginFailure() {
+        loginActivity.onFail("Error while login");
+    }
 
-            HashMap<String, String> extras = new HashMap<String, String>() {{
-                put("username", username);
-            }};
-
-            goToActivity(callingActivity, VerifyAccountActivity.class, extras);
-        }
-
-        callingActivity.onFail("Error while login");
+    public void onLoginAuthentication(String username) {
+        HashMap<String, String> extras = new HashMap<String, String>() {{
+            put("username", username);
+        }};
+        goToActivity(loginActivity, VerifyAccountActivity.class, extras);
     }
 
 
-    public void onRegisterButtonPressed(BaseActivity callingActivity) {
-        goToActivity(callingActivity, RegisterActivity.class);
+    public void onRegisterButtonPressed() {
+        goToActivity(welcomeActivity, RegisterActivity.class);
     }
 
-    public void signUp(BaseActivity callingActivity, String username, String email, String password) {
-        this.callingActivity = callingActivity;
+    public void signUp(String username, String email, String password) {
         authInterface.signUp(username, email, password);
     }
 
     public void onSignUpSuccess(String username, String password) {
-        callingActivity.onSuccess("Signup success");
+        registerActivity.onSuccess("Signup success");
 
         HashMap<String, String> extras = new HashMap<String, String>() {{
             put("username", username);
             put("password", password);
         }};
 
-        goToActivityAndFinish(callingActivity, VerifyAccountActivity.class, extras);
+        goToActivityAndFinish(registerActivity, VerifyAccountActivity.class, extras);
     }
 
     public void onSignUpFailure(String msg) {
-        callingActivity.onFail(msg);
+        registerActivity.onFail(msg);
     }
 
     public void confirmSignUp(String username, String password, String confirmationCode){
@@ -102,13 +139,12 @@ public class AuthController extends Controller {
     }
 
 
-    public void loginWithGoogle(BaseActivity callingActivity){
-        this.callingActivity = callingActivity;
-        authInterface.loginWithGoogle(callingActivity);
+    public void loginWithGoogle(){
+        authInterface.loginWithGoogle(welcomeActivity);
     }
 
     public void onLoginWithGoogleFailure() {
-        callingActivity.onFail("Error while signup");
+        welcomeActivity.onFail("Error while signup");
     }
 
 

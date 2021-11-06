@@ -12,9 +12,10 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
-import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
+import com.ingsw2122_n_03.natour.presentation.VerifyAccountActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public final class AmplifyAuthImplementation implements AuthInterface {
@@ -31,7 +32,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
            Log.i("NaTour", "Amplify already Configured");
         }catch (AmplifyException e){
             Log.e("NaTour", "Amplify Configuration Failed");
-            controller.goToActivityAndFinish(callingActivity, ErrorActivity.class);
+            controller.onSetUpFailure();
         }
     }
 
@@ -52,8 +53,11 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                     controller.onLoginSuccess(username);
                 },
                 error -> {
-                    Log.e("NaTour", error.getMessage());
-                    controller.onLoginFailure(error.getMessage(), username);
+                    if(Objects.requireNonNull(error.getMessage()).contains("User not confirmed in the system")) {
+                        controller.onLoginAuthentication(username);
+                    }else {
+                        controller.onLoginFailure();
+                    }
                 }
         );
     }

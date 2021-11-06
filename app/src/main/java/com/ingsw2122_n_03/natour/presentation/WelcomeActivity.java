@@ -24,6 +24,7 @@ public class WelcomeActivity extends BaseActivity {
         setContentView(R.layout.activity_welcome);
 
         authController = AuthController.getInstance();
+        authController.setWelcomeActivity(WelcomeActivity.this);
 
         registerButton = (Button) findViewById(R.id.registerButton);
         loginButton = (Button) findViewById(R.id.loginButton);
@@ -32,21 +33,21 @@ public class WelcomeActivity extends BaseActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authController.onRegisterButtonPressed(WelcomeActivity.this);
+                authController.onRegisterButtonPressed();
             }
         });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authController.onLoginButtonPressed(WelcomeActivity.this);
+                authController.onLoginButtonPressed();
             }
         });
 
         googleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authController.loginWithGoogle(WelcomeActivity.this);
+                authController.loginWithGoogle();
             }
         });
 

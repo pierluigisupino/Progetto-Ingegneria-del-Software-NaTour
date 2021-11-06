@@ -33,6 +33,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         authController = AuthController.getInstance();
+        authController.setLoginActivity(LoginActivity.this);
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
         materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
@@ -55,7 +56,7 @@ public class LoginActivity extends BaseActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
-                authController.login(LoginActivity.this, username, password);
+                authController.login(username, password);
             }
         });
 
@@ -76,4 +77,5 @@ public class LoginActivity extends BaseActivity {
                 .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.error))
                 .show();
     }
+
 }

@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         authController = AuthController.getInstance();
+        authController.setMainActivity(MainActivity.this);
 
         signOutButton = findViewById(R.id.signOutButton);
 

@@ -50,6 +50,7 @@ public class RegisterActivity extends BaseActivity {
         setContentView(R.layout.activity_register);
 
         authController = AuthController.getInstance();
+        authController.setRegisterActivity(RegisterActivity.this);
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
         materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
@@ -137,7 +138,7 @@ public class RegisterActivity extends BaseActivity {
                 String password = passwordTextInputEditText.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
                 if(areInputValid(username, email, password)) {
-                    authController.signUp(RegisterActivity.this, username, email, password);
+                    authController.signUp(username, email, password);
                 }
             }
         });

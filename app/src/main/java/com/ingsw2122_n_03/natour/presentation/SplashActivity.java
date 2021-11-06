@@ -19,6 +19,7 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
 
         authController = AuthController.getInstance();
+        authController.setSplashActivity(SplashActivity.this);
 
         Objects.requireNonNull(getSupportActionBar()).hide();
 
@@ -26,7 +27,7 @@ public class SplashActivity extends BaseActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                authController.setUp(SplashActivity.this);
+                authController.setUp();
             }
         }, 800);
     }
