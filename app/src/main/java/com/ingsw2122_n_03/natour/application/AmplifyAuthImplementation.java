@@ -12,6 +12,7 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
+import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public final class AmplifyAuthImplementation implements AuthInterface {
@@ -28,7 +29,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
            Log.i("NaTour", "Amplify already Configured");
         }catch (AmplifyException e){
             Log.e("NaTour", "Amplify Configuration Failed");
-            //throw my exception (action)-> goToActivityAndFinish(callingActivity, ErrorActivity.class);
+            controller.goToActivityAndFinish(callingActivity, ErrorActivity.class);
         }
     }
 
