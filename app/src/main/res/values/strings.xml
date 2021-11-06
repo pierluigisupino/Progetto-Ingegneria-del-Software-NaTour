@@ -1,35 +1,63 @@
 <resources>
+
+    <!--APP-->
     <string name="app_name">NaTour</string>
-    <string name="splash_image_description">Splash Image </string>
-    <string name="welcome_page_text_1">Welcome to</string>
-    <string name="welcome_page_text_2">Explore the places you love\nin a way never done before</string>
-    <string name="welcome_page_text_3">Join for free</string>
-    <string name="login">Login</string>
-    <string name="welcome_page_image_description">Welcome page image</string>
-    <string name="welcome_page_text_4">Or continue with</string>
-    <string name="login_google">signing with Google</string>
-    <string name="login_facebook">signing with Facebook</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
+
+    <!--WELCOME ACTIVITY-->
+    <string name="welcome_text">Welcome to</string>
+    <string name="app_description">Explore the places you love\nin a way never done before</string>
+    <string name="action">Join for free</string>
+    <string name="divider_text">Or continue with</string>
+    <string name="register_button_text">Sign Up</string>
+    <string name="login_button_text">Log In</string>
+
+    <!--LOGIN ACTIVITY-->
+    <string name="login_activity_title">Login</string>
     <string name="forgot_password"><u>Forgot password?</u></string>
-    <string name="register">Register</string>
+
+    <!--REGISTER ACTIVITY-->
+    <string name="register_activity_title">Register</string>
+
+    <!--GENERICS-->
+    <string name="username_place_holder">Username</string>
+    <string name="email_place_holder">Email</string>
+    <string name="password_place_holder">Password</string>
+
+    <!--ERROR ACTIVITY-->
     <string name="exit">Exit</string>
-    <string name="email">Email</string>
-    <string name="verify">Verify</string>
+
+    <!--VERIFY ACTIVITY-->
+    <string name="verify_text">Enter the confirmation code send to</string>
+    <string name="verify_button_text">Verify</string>
     <string name="verification_code">Verification Code</string>
     <string name="resend_verification_code"><u>resend verification code</u></string>
-    <string name="enter_the_confirmation_code_send_to_your_email">Enter the confirmation code send to\nyour email</string>
-    <string name="insert_password">Please, Insert a password.</string>
-    <string name="insert_mail">"Please, insert an e-mail.</string>
-    <string name="insert_username">Please, insert an username.</string>
-    <string name="password_length">Password must contain at least 8 letters!</string>
-    <string name="check_mail">Please Check your e-mail address!</string>
-    <string name="username_length">Username must contain at least 4 letters!</string>
-    <string name="login_success">Logged In</string>
-    <string name="user_not_confirmed">User not confirmed</string>
-    <string name="wrong_credential">Wrong Credential</string>
-    <string name="login_generic_error">Error while Login</string>
-    <string name="username_already_used">Please, choose another username</string>
-    <string name="signup_generic_error">Error while Signup</string>
 
+    <!--SUCCESSES-->
+    <string name="login_success">Logged In</string>
+    <string name="logout_success">Logged Out</string>
+    <string name="signup_success">Signed Up</string>
+    <string name="verify_success">Verified</string>
+    <string name="verification_code_sent">Verification code sent</string>
+
+    <!--ERRORS-->
+    <string name="username_warning">Please, insert an username.</string>
+    <string name="email_warning">"Please, insert an e-mail.</string>
+    <string name="password_warning">Please, Insert a password.</string>
+
+    <string name="username_length_error">Username must contain at least 4 letters!</string>
+    <string name="mail_error">Please Check your e-mail address!</string>
+    <string name="password_length_error">Password must contain at least 8 letters!</string>
+
+    <string name="email_taken_error">Email address already in use</string>
+    <string name="wrong_credential_error">Wrong Credential</string>
+
+    <string name="wrong_verification_code_error">Wrong verification code</string>
+    <string name="user_not_confirmed_error">User not confirmed</string>
+    <string name="too_many_requests_error">Too many requests.</string>
+
+    <string name="generic_error">Something went wrong, try again later.</string>
+
+    <!--IMAGES DESCRIPTION-->
+    <string name="splash_image_description">Splash Image </string>
+    <string name="welcome_page_image_description">Welcome page image</string>
 </resources>

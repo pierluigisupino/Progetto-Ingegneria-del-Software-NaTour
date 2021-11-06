@@ -1,7 +1,5 @@
 package com.ingsw2122_n_03.natour.application;
 
-import android.util.Log;
-
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.results.SignUpResult;
@@ -11,7 +9,6 @@ import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.core.Resources;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
@@ -19,18 +16,20 @@ import java.util.Objects;
 
 public final class AmplifyAuthImplementation implements AuthInterface {
 
-    protected AmplifyAuthImplementation() {}
+    private final AuthController controller;
+
+    public AmplifyAuthImplementation(AuthController controller){
+        this.controller = controller;
+    }
 
     @Override
     public void configureAuth(BaseActivity callingActivity) {
-        AuthController controller = AuthController.getInstance();
         try {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
-        }catch (Amplify.AlreadyConfiguredException e){
-           Log.i("NaTour", "Amplify already Configured");
+        }catch (Amplify.AlreadyConfiguredException ignored){
+
         }catch (AmplifyException e){
-            Log.e("NaTour", "Amplify Configuration Failed");
             controller.onSetUpFailure();
         }
     }
@@ -41,22 +40,21 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     }
 
     @Override
-    public void login(String username, String password) {
+    public void signIn(String email, String password) {
 
-        AuthController controller = AuthController.getInstance();
         Amplify.Auth.signIn(
-                username,
+                email,
                 password,
-                result -> {
-                    Log.i("NaTour", result.isSignInComplete() ? "Sign in succeeded" : "Sign in not complete");
-                    controller.onLoginSuccess(username);
-                },
+                result -> controller.onLoginSuccess(),
                 error -> {
-                    Log.e("NaTour", error.toString());
-                    if(Objects.requireNonNull(error.getMessage()).contains("User not confirmed in the system")) {
-                        controller.onLoginAuthentication(username);
-                    }else if(Objects.requireNonNull(error.getMessage()).contains("Failed since user is not authorized") |
-                            Objects.requireNonNull(error.getMessage()).contains("User not found in the system")){
+
+                    String messageError = Objects.requireNonNull(error.getMessage());
+
+                    if(messageError.contains("User not confirmed in the system")) {
+                        controller.onLoginAuthentication(email, password);
+                    }else if(messageError.contains("Failed since user is not authorized")){
+                        controller.onLoginFailure(0);
+                    }else if(messageError.contains("User not found in the system")){
                         controller.onLoginFailure(0);
                     }else {
                         controller.onLoginFailure(1);
@@ -67,18 +65,18 @@ public final class AmplifyAuthImplementation implements AuthInterface {
 
     @Override
     public void signUp(String username, String email, String password) {
-        AuthController controller = AuthController.getInstance();
+
         AuthSignUpOptions options = AuthSignUpOptions.builder()
-                .userAttribute(AuthUserAttributeKey.email(), email)
+                .userAttribute(AuthUserAttributeKey.name(), username)
                 .build();
-        Amplify.Auth.signUp(username, password, options,
-                result -> {
-                    Log.i("NaTour", "Result: " + result.toString());
-                    controller.onSignUpSuccess(username, password);
-                },
+
+        Amplify.Auth.signUp(email, password, options,
+                result -> controller.onSignUpSuccess(email, password),
                 error -> {
-                    Log.e("NaTour", "Sign up failed", error);
-                    if(Objects.requireNonNull(error.getMessage()).contains("Username already exists in the system")) {
+
+                    String messageError = Objects.requireNonNull(error.getMessage());
+
+                    if(messageError.contains("Username already exists in the system")) {
                         controller.onSignUpFailure(0);
                     }else {
                         controller.onSignUpFailure(1);
@@ -88,55 +86,63 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     }
 
     @Override
-    public void confirmSignUp(String username, String password, String confirmationCode) {
+    public void confirmSignUp(String email, String password, String confirmationCode) {
         Amplify.Auth.confirmSignUp(
-                username,
+                email,
                 confirmationCode,
                 result -> {
-                    Log.i("NaTour", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
-
+                    controller.onConfirmSignUpSuccess();
                     if(result.isSignUpComplete()){
-                        login(username, password);
+                        signIn(email, password);
                     }
                 },
-                error -> Log.e("NaTour", error.toString())
+                error -> {
+
+                    String messageError = Objects.requireNonNull(error.getMessage());
+
+                    if(messageError.contains("Confirmation code entered is not correct")) {
+                        controller.onConfirmSignUpFailure(0);
+                    }
+                }
         );
     }
 
     @Override
-    public void sendVerificationCode(String username) {
-        AWSMobileClient.getInstance().resendSignUp(username, new Callback<SignUpResult>() {
+    public void sendVerificationCode(String email) {
+        AWSMobileClient.getInstance().resendSignUp(email, new Callback<SignUpResult>() {
+
             @Override
             public void onResult(SignUpResult signUpResult) {
-                Log.i("NaTour", "A verification code has been sent via" +
-                        signUpResult.getUserCodeDeliveryDetails().getDeliveryMedium()
-                        + " at " +
-                        signUpResult.getUserCodeDeliveryDetails().getDestination());
+                controller.onSendVerificationCodeSuccess();
             }
+
             @Override
             public void onError(Exception e) {
-                Log.e("NaTour", e.toString());
+
+                String messageError = Objects.requireNonNull(e.getMessage());
+
+                if(messageError.contains("Attempt limit exceeded")) {
+                    controller.onSendVerificationCodeFailure(0);
+                }else {
+                    controller.onSendVerificationCodeFailure(1);
+                }
             }
         });
     }
 
     @Override
     public void loginWithGoogle(BaseActivity callingActivity) {
-        AuthController controller = AuthController.getInstance();
         Amplify.Auth.signInWithSocialWebUI(AuthProvider.google(), callingActivity,
-                result -> Log.i("NaTour", result.toString()),
-                error -> {
-                    Log.e("NaTour", error.toString());
-                    controller.onLoginWithGoogleFailure();
-                }
+                result -> controller.onLoginWithGoogleSuccess(),
+                error -> controller.onLoginWithGoogleFailure()
         );
     }
 
     @Override
     public void signOut() {
         Amplify.Auth.signOut(
-                () -> Log.i("NaTour", "Signed out successfully"),
-                error -> Log.e("NaTour", error.toString())
+                controller::onSignOutSuccess,
+                error -> controller.onSignOutFailure()
         );
     }
 

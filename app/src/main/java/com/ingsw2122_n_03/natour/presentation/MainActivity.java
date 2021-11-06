@@ -4,15 +4,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private AuthController authController;
-    private Button signOutButton;
+    private ConstraintLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +26,26 @@ public class MainActivity extends AppCompatActivity {
         authController = AuthController.getInstance();
         authController.setMainActivity(MainActivity.this);
 
-        signOutButton = findViewById(R.id.signOutButton);
+        layout = (ConstraintLayout) findViewById(R.id.layout);
 
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                authController.signOut(MainActivity.this);
-            }
-        });
+        Button signOutButton = (Button) findViewById(R.id.signOutButton);
 
+        signOutButton.setOnClickListener(view -> authController.signOut(MainActivity.this));
+
+    }
+
+    public void onSuccess(String msg) {
+
+        runOnUiThread(() -> Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(MainActivity.this, R.color.success))
+                .show());
+    }
+
+    @Override
+    public void onFail(String msg) {
+
+        runOnUiThread(() -> Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(MainActivity.this, R.color.error))
+                .show());
     }
 }

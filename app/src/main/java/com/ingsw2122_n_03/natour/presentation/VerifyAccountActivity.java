@@ -8,8 +8,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+
 import com.chaos.view.PinView;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
@@ -18,7 +23,10 @@ public class VerifyAccountActivity extends BaseActivity {
 
     private AuthController authController;
 
+    private ConstraintLayout layout;
     private PinView verificationCodePinView;
+
+    private LinearProgressIndicator progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,53 +35,62 @@ public class VerifyAccountActivity extends BaseActivity {
         setContentView(R.layout.activity_verify_account);
 
         Intent intent = getIntent();
-        String username = intent.getExtras().getString("username");
+        String email = intent.getExtras().getString("email");
         String password = intent.getExtras().getString("password");
 
         authController = AuthController.getInstance();
         authController.setVerifyAccountActivity(VerifyAccountActivity.this);
 
+        layout = (ConstraintLayout) findViewById(R.id.layout);
         MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
+
+        TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
+        emailTextView.setText(email);
+
         verificationCodePinView = (PinView) findViewById(R.id.verificationCode);
+
         TextView resendCodeTextView = (TextView) findViewById(R.id.resendCode);
+
         Button verifyButton = (Button) findViewById(R.id.verifyButton);
 
-        materialToolbar.setNavigationOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
+        progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
+
+        materialToolbar.setNavigationOnClickListener(view -> finish());
+
+        resendCodeTextView.setOnClickListener(view -> {
+            progressBar.setVisibility(View.VISIBLE);
+            authController.sendVerificationCode(email);
         });
 
-        resendCodeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //DA FARE CHECK INPUT SU USERNAME
-                authController.sendVerificationCode(username);
-            }
-        });
+        verifyButton.setOnClickListener(view -> {
 
-        verifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(verifyButton.getWindowToken(), 0);
 
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(verifyButton.getWindowToken(), 0);
+            progressBar.setVisibility(View.VISIBLE);
 
-                //DA FARE CHECK INPUT
-                String verificationCode = verificationCodePinView.getText().toString();
-                authController.confirmSignUp(username, password, verificationCode);
-            }
+            String verificationCode = verificationCodePinView.getText().toString();
+            authController.confirmSignUp(email, password, verificationCode);
         });
     }
 
     @Override
     public void onSuccess(String msg) {
-        //SHOW SNACKBAR
+        runOnUiThread(() -> {
+            progressBar.setVisibility(View.INVISIBLE);
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(VerifyAccountActivity.this, R.color.success))
+                    .show();
+        });
     }
 
     @Override
     public void onFail(String msg) {
-        //SHOW SNACKBAR
+        runOnUiThread(() -> {
+            progressBar.setVisibility(View.INVISIBLE);
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(VerifyAccountActivity.this, R.color.error))
+                    .show();
+        });
     }
 }

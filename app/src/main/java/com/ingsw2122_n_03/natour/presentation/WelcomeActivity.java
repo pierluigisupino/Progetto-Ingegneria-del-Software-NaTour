@@ -13,10 +13,6 @@ public class WelcomeActivity extends BaseActivity {
 
     private AuthController authController;
 
-    private Button registerButton;
-    private Button loginButton;
-    private FloatingActionButton googleLoginButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -26,40 +22,21 @@ public class WelcomeActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setWelcomeActivity(WelcomeActivity.this);
 
-        registerButton = (Button) findViewById(R.id.registerButton);
-        loginButton = (Button) findViewById(R.id.loginButton);
-        googleLoginButton = (FloatingActionButton) findViewById(R.id.loginWithGoogle);
+        Button registerButton = (Button) findViewById(R.id.registerButton);
+        Button loginButton = (Button) findViewById(R.id.loginButton);
+        FloatingActionButton googleLoginButton = (FloatingActionButton) findViewById(R.id.loginWithGoogle);
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                authController.onRegisterButtonPressed();
-            }
-        });
+        registerButton.setOnClickListener(v -> authController.onRegisterButtonPressed());
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                authController.onLoginButtonPressed();
-            }
-        });
+        loginButton.setOnClickListener(v -> authController.onLoginButtonPressed());
 
-        googleLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                authController.loginWithGoogle();
-            }
-        });
+        googleLoginButton.setOnClickListener(v -> authController.loginWithGoogle());
 
     }
 
     @Override
-    public void onSuccess(String msg) {
-        //SHOW SNACKBAR
-    }
+    public void onSuccess(String msg) { }
 
     @Override
-    public void onFail(String msg) {
-        //SHOW SNACKBAR
-    }
+    public void onFail(String msg) { }
 }

@@ -8,10 +8,10 @@ public interface AuthInterface {
 
      void configureAuth(BaseActivity callingActivity);
      boolean checkUserLogged();
-     void login(String username, String password);
+     void signIn(String email, String password);
      void signUp(String username, String email, String password);
-     void confirmSignUp(String username, String password, String confirmationCode);
-     void sendVerificationCode(String username);
+     void confirmSignUp(String email, String password, String confirmationCode);
+     void sendVerificationCode(String email);
      void loginWithGoogle(BaseActivity callingActivity);
      void signOut();
 

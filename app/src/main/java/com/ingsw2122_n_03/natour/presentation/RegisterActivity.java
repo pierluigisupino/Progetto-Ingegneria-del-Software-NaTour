@@ -28,7 +28,6 @@ public class RegisterActivity extends BaseActivity {
 
     private ConstraintLayout layout;
     private LinearProgressIndicator progressBar;
-    private MaterialToolbar materialToolbar;
 
     private TextInputLayout usernameTextInputLayout;
     private TextInputEditText usernameTextInputEditText;
@@ -53,26 +52,21 @@ public class RegisterActivity extends BaseActivity {
         authController.setRegisterActivity(RegisterActivity.this);
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
-        materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
+        MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
 
-        usernameTextInputLayout = findViewById(R.id.usernameTextInputLayout);
-        usernameTextInputEditText = findViewById(R.id.usernameTextInputEditText);
+        usernameTextInputLayout = (TextInputLayout) findViewById(R.id.usernameTextInputLayout);
+        usernameTextInputEditText = (TextInputEditText) findViewById(R.id.usernameTextInputEditText);
 
-        emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
-        emailTextInputEditText = findViewById(R.id.emailTextInputEditText);
+        emailTextInputLayout = (TextInputLayout) findViewById(R.id.emailTextInputLayout);
+        emailTextInputEditText = (TextInputEditText) findViewById(R.id.emailTextInputEditText);
 
-        passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
-        passwordTextInputEditText = findViewById(R.id.passwordTextInputEditText);
+        passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordTextInputLayout);
+        passwordTextInputEditText = (TextInputEditText) findViewById(R.id.passwordTextInputEditText);
 
-        registerButton = findViewById(R.id.registerButton);
+        registerButton = (Button) findViewById(R.id.registerButton);
         progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
 
-        materialToolbar.setNavigationOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        materialToolbar.setNavigationOnClickListener(view -> finish());
 
         usernameTextInputEditText.addTextChangedListener(new TextWatcher(){
 
@@ -129,23 +123,20 @@ public class RegisterActivity extends BaseActivity {
         });
 
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        registerButton.setOnClickListener(view -> {
 
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(registerButton.getWindowToken(), 0);
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(registerButton.getWindowToken(), 0);
 
-                isFirstSubmit = false;
+            isFirstSubmit = false;
 
-                String username = usernameTextInputEditText.getText().toString();
-                String email = emailTextInputEditText.getText().toString();
-                String password = passwordTextInputEditText.getText().toString();
+            String username = usernameTextInputEditText.getText().toString();
+            String email = emailTextInputEditText.getText().toString();
+            String password = passwordTextInputEditText.getText().toString();
 
-                if(areInputValid(username, email, password)) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    authController.signUp(username, email, password);
-                }
+            if(areInputValid(username, email, password)) {
+                progressBar.setVisibility(View.VISIBLE);
+                authController.signUp(username, email, password);
             }
         });
 
@@ -154,42 +145,35 @@ public class RegisterActivity extends BaseActivity {
     @Override
     public void onSuccess(String msg) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
-                Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                        .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.success))
-                        .show();
-            }
+        runOnUiThread(() -> {
+            progressBar.setVisibility(View.INVISIBLE);
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.success))
+                    .show();
         });
     }
 
     @Override
     public void onFail(String msg) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
-                Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                        .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.error))
-                        .show();
-            }
+        runOnUiThread(() -> {
+            progressBar.setVisibility(View.INVISIBLE);
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.error))
+                    .show();
         });
     }
 
     private boolean areInputValid(String username, String email, String password) {
-        boolean isValid = isUsernameValid(username) & isEmailValid(email) & isPasswordValid(password);
-        return isValid;
+        return isUsernameValid(username) & isEmailValid(email) & isPasswordValid(password);
     }
 
     private boolean isUsernameValid(String username){
         if(username == null || username.isEmpty()) {
-            usernameTextInputLayout.setError(getString(R.string.insert_username));
+            usernameTextInputLayout.setError(getString(R.string.username_warning));
             return false;
         }else if(username.length() < 4) {
-            usernameTextInputLayout.setError(getString(R.string.username_length));
+            usernameTextInputLayout.setError(getString(R.string.username_length_error));
             return false;
         }
         usernameTextInputLayout.setError(null);
@@ -198,10 +182,10 @@ public class RegisterActivity extends BaseActivity {
 
     private boolean isEmailValid(String email){
         if(email == null || email.isEmpty()) {
-            emailTextInputLayout.setError(getString(R.string.insert_mail));
+            emailTextInputLayout.setError(getString(R.string.email_warning));
             return false;
         }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailTextInputLayout.setError(getString(R.string.check_mail));
+            emailTextInputLayout.setError(getString(R.string.mail_error));
             return false;
         }
         emailTextInputLayout.setError(null);
@@ -210,10 +194,10 @@ public class RegisterActivity extends BaseActivity {
 
     private boolean isPasswordValid(String password){
         if(password == null || password.isEmpty()) {
-            passwordTextInputLayout.setError(getString(R.string.insert_password));
+            passwordTextInputLayout.setError(getString(R.string.password_warning));
             return false;
         }else if(password.length() < 8) {
-            passwordTextInputLayout.setError(getString(R.string.password_length));
+            passwordTextInputLayout.setError(getString(R.string.password_length_error));
             return false;
         }
         passwordTextInputLayout.setError(null);

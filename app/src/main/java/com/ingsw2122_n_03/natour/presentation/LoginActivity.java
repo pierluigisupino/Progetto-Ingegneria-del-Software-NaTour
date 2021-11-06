@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -26,16 +25,15 @@ public class LoginActivity extends BaseActivity {
     private AuthController authController;
 
     private ConstraintLayout layout;
-    private LinearProgressIndicator progressBar;
-    private MaterialToolbar materialToolbar;
 
-    private TextInputLayout usernameTextInputLayout;
-    private TextInputEditText usernameTextInputEditText;
+    private TextInputLayout  emailTextInputLayout;
+    private TextInputEditText  emailTextInputEditText;
 
     private TextInputLayout passwordTextInputLayout;
     private TextInputEditText passwordTextInputEditText;
 
     private Button loginButton;
+    private LinearProgressIndicator progressBar;
 
     private boolean isFirstSubmit = true;
 
@@ -49,25 +47,20 @@ public class LoginActivity extends BaseActivity {
         authController.setLoginActivity(LoginActivity.this);
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
-        materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
+        MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
 
-        usernameTextInputLayout = findViewById(R.id.usernameTextInputLayout);
-        usernameTextInputEditText = findViewById(R.id.usernameTextInputEditText);
+        emailTextInputLayout = (TextInputLayout) findViewById(R.id.emailTextInputLayout);
+        emailTextInputEditText = (TextInputEditText) findViewById(R.id.emailTextInputEditText);
 
-        passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
-        passwordTextInputEditText = findViewById(R.id.passwordTextInputEditText);
+        passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordTextInputLayout);
+        passwordTextInputEditText = (TextInputEditText) findViewById(R.id.passwordTextInputEditText);
 
-        loginButton = findViewById(R.id.loginButton);
-        progressBar = findViewById(R.id.progressBar);
+        loginButton = (Button) findViewById(R.id.loginButton);
+        progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
 
-        materialToolbar.setNavigationOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        materialToolbar.setNavigationOnClickListener(view -> finish());
 
-        usernameTextInputEditText.addTextChangedListener(new TextWatcher(){
+        emailTextInputEditText.addTextChangedListener(new TextWatcher(){
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -76,7 +69,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isUsernameValid(usernameTextInputEditText.getText().toString());
+                if(!isFirstSubmit) isEmailValid(emailTextInputEditText.getText().toString());
             }
 
             @Override
@@ -103,22 +96,19 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        loginButton.setOnClickListener(view -> {
 
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(loginButton.getWindowToken(), 0);
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(loginButton.getWindowToken(), 0);
 
-                isFirstSubmit = false;
+            isFirstSubmit = false;
 
-                String username = usernameTextInputEditText.getText().toString();
-                String password = passwordTextInputEditText.getText().toString();
+            String email =  emailTextInputEditText.getText().toString();
+            String password = passwordTextInputEditText.getText().toString();
 
-                if(areInputValid(username, password)) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    authController.login(username, password);
-                }
+            if(areInputValid(email, password)) {
+                progressBar.setVisibility(View.VISIBLE);
+                authController.login(email, password);
             }
         });
 
@@ -127,49 +117,42 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onSuccess(String msg) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
-                Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                        .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.success))
-                        .show();
-            }
+        runOnUiThread(() -> {
+            progressBar.setVisibility(View.INVISIBLE);
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.success))
+                    .show();
         });
     }
 
     @Override
     public void onFail(String msg) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
-                Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                        .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.error))
-                        .show();
-            }
+        runOnUiThread(() -> {
+            progressBar.setVisibility(View.INVISIBLE);
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.error))
+                    .show();
         });
     }
 
     private boolean areInputValid(String username, String password) {
-        boolean isValid = isUsernameValid(username) & isPasswordValid(password);
-        return isValid;
+        return isEmailValid(username) & isPasswordValid(password);
     }
 
-    private boolean isUsernameValid(String username){
+    private boolean isEmailValid(String username){
         if(username == null || username.isEmpty()) {
-            usernameTextInputLayout.setError(getString(R.string.insert_username));
+            emailTextInputLayout.setError(getString(R.string.username_warning));
             return false;
         }
 
-        usernameTextInputLayout.setError(null);
+        emailTextInputLayout.setError(null);
         return true;
     }
 
     private boolean isPasswordValid(String password){
         if(password == null || password.isEmpty()) {
-            passwordTextInputLayout.setError(getString(R.string.insert_password));
+            passwordTextInputLayout.setError(getString(R.string.password_warning));
             return false;
         }
 

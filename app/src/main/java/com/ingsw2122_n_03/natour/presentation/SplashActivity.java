@@ -7,8 +7,6 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-import java.util.Objects;
-
 public class SplashActivity extends BaseActivity {
 
     private AuthController authController;
@@ -21,24 +19,13 @@ public class SplashActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setSplashActivity(SplashActivity.this);
 
-        Objects.requireNonNull(getSupportActionBar()).hide();
-
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                authController.setUp();
-            }
-        }, 800);
+        handler.postDelayed(() -> authController.setUp(), 800);
     }
 
     @Override
-    public void onSuccess(String msg) {
-        //SHOW SNACKBAR
-    }
+    public void onSuccess(String msg) { }
 
     @Override
-    public void onFail(String msg) {
-        //SHOW SNACKBAR
-    }
+    public void onFail(String msg) { }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -37,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.20"/>
+        app:layout_constraintGuide_percent="0.18"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verificationCodeGuideline"
@@ -51,20 +52,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45"/>
+        app:layout_constraintGuide_percent="0.50"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/imageGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.70"/>
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="@string/enter_the_confirmation_code_send_to_your_email"
+        android:text="@string/verify_text"
         android:textAlignment="center"
         android:textColor="@color/primary"
         android:textSize="19sp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/textGuideline" />
+
+    <TextView
+        android:id="@+id/emailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/euclid_circular_semi_bold"
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="19sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <com.chaos.view.PinView
         android:id="@+id/verificationCode"
@@ -87,7 +107,7 @@
         android:id="@+id/resendCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="25dp"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/euclid_circular_regular"
@@ -105,7 +125,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_dark_background"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="@string/verify"
+        android:text="@string/verify_button_text"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"
@@ -118,10 +138,22 @@
         android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/progressBar"
         app:layout_constraintDimensionRatio="1.50"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="@+id/imageGuideline"
         app:srcCompat="@drawable/ic_forgot_password_screen" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressBar"
+        android:scaleY="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

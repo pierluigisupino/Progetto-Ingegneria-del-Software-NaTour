@@ -1,35 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--APP-->
     <string name="app_name">NaTour</string>
-    <string name="splash_image_description">Immagine di splash screen</string>
-    <string name="welcome_page_text_1">Benvenuto in</string>
-    <string name="welcome_page_text_2">Esplora i posti che ami</string>
-    <string name="welcome_page_text_3">Iscriviti gratis</string>
-    <string name="login">Accedi</string>
-    <string name="welcome_page_image_description">Imagine pagina di benvenuto</string>
-    <string name="welcome_page_text_4">O continua con</string>
-    <string name="login_google">accedi con Google</string>
-    <string name="login_facebook">accedi con Facebook</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
+
+    <!--WELCOME ACTIVITY-->
+    <string name="welcome_text">Benvenuto in</string>
+    <string name="app_description">Esplora i posti che ami</string>
+    <string name="action">Iscriviti gratis</string>
+    <string name="divider_text">continua con</string>
+    <string name="register_button_text">Registrati</string>
+    <string name="login_button_text">Accedi</string>
+
+    <!--LOGIN ACTIVITY-->
+    <string name="login_activity_title">Accedi</string>
     <string name="forgot_password"><u>Password dimenticata?</u></string>
-    <string name="register">Registrati</string>
+
+    <!--REGISTER ACTIVITY-->
+    <string name="register_activity_title">Registarti</string>
+
+    <!--GENERICS-->
+    <string name="username_place_holder">Username</string>
+    <string name="email_place_holder">Email</string>
+    <string name="password_place_holder">Password</string>
+
+    <!--ERROR ACTIVITY-->
     <string name="exit">Esci</string>
-    <string name="email">Email</string>
-    <string name="verify">Verifica</string>
+
+    <!--VERIFY ACTIVITY-->
+    <string name="verify_text">Inserisci il codice di verifica inviato a</string>
+    <string name="verify_button_text">Verifica</string>
     <string name="verification_code">Codice di verifica</string>
     <string name="resend_verification_code"><u>reinvia codice di verifica</u></string>
-    <string name="enter_the_confirmation_code_send_to_your_email">Inserisci il codice di verifica\n inviato alla tua email</string>
-    <string name="insert_password">Inserisci una password.</string>
-    <string name="insert_mail">"Inserisci un indirizzo e-mail.</string>
-    <string name="insert_username">Inserisci uno username.</string>
-    <string name="password_length">La password deve essere lunga almeno 8 caratteri!</string>
-    <string name="check_mail">Controlla l\'indirizzo e-mail!</string>
-    <string name="username_length">Lo username deve essere lungo almeno 4 caratteri!</string>
-    <string name="login_success">Accesso Effettuato</string>
-    <string name="user_not_confirmed">Utente non Confermato</string>
-    <string name="wrong_credential">Credenziali Sbagliate</string>
-    <string name="login_generic_error">Errore durante il Login</string>
-    <string name="username_already_used">Username non disponibile, inseriscine un altro</string>
-    <string name="signup_generic_error">Errore durante la Registrazione</string>
+
+    <!--SUCCESSES-->
+    <string name="login_success">Benvenuto</string>
+    <string name="logout_success">Disconnesso</string>
+    <string name="signup_success">Registrato</string>
+    <string name="verify_success">Verificato</string>
+    <string name="verification_code_sent">Codice di verifica inviato</string>
+
+    <!--ERRORS-->
+    <string name="username_warning">Inserisci un username</string>
+    <string name="email_warning">"Inserisci una e-mail.</string>
+    <string name="password_warning">Inserisci una password</string>
+
+    <string name="username_length_error">Almeno 4 caratteri</string>
+    <string name="mail_error">Controlla l\'indirizzo e-mail</string>
+    <string name="password_length_error">Almeno 8 caratteri</string>
+
+    <string name="email_taken_error">Indirizzo email gia\' in uso</string>
+    <string name="wrong_credential_error">Credenziali errate</string>
+
+    <string name="wrong_verification_code_error">Codice di verifica errato</string>
+    <string name="user_not_confirmed_error">Account non confermato</string>
+    <string name="too_many_requests_error">Troppe richieste</string>
+
+    <string name="generic_error">Something went wrong, try again later.</string>
+
+    <!--IMAGES DESCRIPTION-->
+    <string name="splash_image_description">Splash Image </string>
+    <string name="welcome_page_image_description">Welcome page image</string>
 </resources>
