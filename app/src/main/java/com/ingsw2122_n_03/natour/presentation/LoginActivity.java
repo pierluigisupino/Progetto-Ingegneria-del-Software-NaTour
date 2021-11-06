@@ -159,7 +159,7 @@ public class LoginActivity extends BaseActivity {
 
     private boolean isUsernameValid(String username){
         if(username == null || username.isEmpty()) {
-            usernameTextInputLayout.setError("Please, insert a username!");
+            usernameTextInputLayout.setError(getString(R.string.insert_username));
             return false;
         }
 
@@ -169,7 +169,7 @@ public class LoginActivity extends BaseActivity {
 
     private boolean isPasswordValid(String password){
         if(password == null || password.isEmpty()) {
-            passwordTextInputLayout.setError("Please, insert a password!");
+            passwordTextInputLayout.setError(getString(R.string.insert_password));
             return false;
         }
 

@@ -2,6 +2,7 @@ package com.ingsw2122_n_03.natour.application;
 
 import android.app.Activity;
 
+import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.LoginActivity;
@@ -90,13 +91,18 @@ public class AuthController extends Controller {
     }
 
     public void onLoginSuccess(String username) {
-        loginActivity.onSuccess("Logged");
+        loginActivity.onSuccess(loginActivity.getResources().getString(R.string.login_success));
         welcomeActivity.finish();
+        if(verifyAccountActivity != null) { verifyAccountActivity.finish(); }
         goToActivityAndFinish(loginActivity, MainActivity.class);
     }
 
-    public void onLoginFailure(String msg) {
-        loginActivity.onFail(msg);
+    public void onLoginFailure(int i) {
+        if(i == 0) {
+            loginActivity.onFail(loginActivity.getResources().getString(R.string.wrong_credential));
+        }else {
+            loginActivity.onFail(loginActivity.getResources().getString(R.string.login_generic_error));
+        }
     }
 
     public void onLoginAuthentication(String username) {
@@ -126,8 +132,12 @@ public class AuthController extends Controller {
         goToActivityAndFinish(registerActivity, VerifyAccountActivity.class, extras);
     }
 
-    public void onSignUpFailure(String msg) {
-        registerActivity.onFail(msg);
+    public void onSignUpFailure(int i) {
+        if(i == 0) {
+            registerActivity.onFail(registerActivity.getResources().getString(R.string.username_already_used));
+        }else {
+            registerActivity.onFail(registerActivity.getResources().getString(R.string.signup_generic_error));
+        }
     }
 
     public void confirmSignUp(String username, String password, String confirmationCode){

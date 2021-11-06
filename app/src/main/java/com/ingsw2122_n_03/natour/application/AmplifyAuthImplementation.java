@@ -11,6 +11,7 @@ import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.core.Resources;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
@@ -56,9 +57,9 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                         controller.onLoginAuthentication(username);
                     }else if(Objects.requireNonNull(error.getMessage()).contains("Failed since user is not authorized") |
                             Objects.requireNonNull(error.getMessage()).contains("User not found in the system")){
-                        controller.onLoginFailure("Wrong credentials");
+                        controller.onLoginFailure(0);
                     }else {
-                        controller.onLoginFailure("Error while login");
+                        controller.onLoginFailure(1);
                     }
                 }
         );
@@ -78,9 +79,9 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 error -> {
                     Log.e("NaTour", "Sign up failed", error);
                     if(Objects.requireNonNull(error.getMessage()).contains("Username already exists in the system")) {
-                        controller.onSignUpFailure("Please, choose another username");
+                        controller.onSignUpFailure(0);
                     }else {
-                        controller.onSignUpFailure("Error while signup");
+                        controller.onSignUpFailure(1);
                     }
                 }
         );
