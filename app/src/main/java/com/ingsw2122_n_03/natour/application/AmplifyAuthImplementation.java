@@ -56,7 +56,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                     Log.e("NaTour", error.toString());
                     if(Objects.requireNonNull(error.getMessage()).contains("User not confirmed in the system")) {
                         controller.onLoginAuthentication(username);
-                    }else if(Objects.requireNonNull(error.getMessage()).contains("Failed since user is not authorized") ||
+                    }else if(Objects.requireNonNull(error.getMessage()).contains("Failed since user is not authorized") |
                             Objects.requireNonNull(error.getMessage()).contains("User not found in the system")){
                         controller.onLoginFailure("Wrong credentials");
                     }else {
