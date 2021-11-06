@@ -21,8 +21,6 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-import java.util.Objects;
-
 
 public class RegisterActivity extends BaseActivity {
 
@@ -188,10 +186,10 @@ public class RegisterActivity extends BaseActivity {
 
     private boolean isUsernameValid(String username){
         if(username == null || username.isEmpty()) {
-            usernameTextInputLayout.setError("Please, insert a username!");
+            usernameTextInputLayout.setError(getString(R.string.insert_username));
             return false;
         }else if(username.length() < 4) {
-            usernameTextInputLayout.setError("Username must contain at least 4 letters!");
+            usernameTextInputLayout.setError(getString(R.string.username_length));
             return false;
         }
         usernameTextInputLayout.setError(null);
@@ -200,10 +198,10 @@ public class RegisterActivity extends BaseActivity {
 
     private boolean isEmailValid(String email){
         if(email == null || email.isEmpty()) {
-            emailTextInputLayout.setError("Please, insert an e-mail address!");
+            emailTextInputLayout.setError(getString(R.string.insert_mail));
             return false;
         }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailTextInputLayout.setError("Please Check your e-mail address!");
+            emailTextInputLayout.setError(getString(R.string.check_mail));
             return false;
         }
         emailTextInputLayout.setError(null);
@@ -212,10 +210,10 @@ public class RegisterActivity extends BaseActivity {
 
     private boolean isPasswordValid(String password){
         if(password == null || password.isEmpty()) {
-            passwordTextInputLayout.setError("Please, insert a password!");
+            passwordTextInputLayout.setError(getString(R.string.insert_password));
             return false;
         }else if(password.length() < 8) {
-            passwordTextInputLayout.setError("Password must contain at least 8 letters!");
+            passwordTextInputLayout.setError(getString(R.string.password_length));
             return false;
         }
         passwordTextInputLayout.setError(null);

@@ -18,5 +18,18 @@
     <string name="verify">Verify</string>
     <string name="verification_code">Verification Code</string>
     <string name="resend_verification_code"><u>resend verification code</u></string>
-    <string name="enter_the_confirmation_code_send_to_nyour_email">Enter the confirmation code send to\nyour email</string>
+    <string name="enter_the_confirmation_code_send_to_your_email">Enter the confirmation code send to\nyour email</string>
+    <string name="insert_password">Please, Insert a password.</string>
+    <string name="insert_mail">"Please, insert an e-mail.</string>
+    <string name="insert_username">Please, insert an username.</string>
+    <string name="password_length">Password must contain at least 8 letters!</string>
+    <string name="check_mail">Please Check your e-mail address!</string>
+    <string name="username_length">Username must contain at least 4 letters!</string>
+    <string name="login_success">Logged In</string>
+    <string name="user_not_confirmed">User not confirmed</string>
+    <string name="wrong_credential">Wrong Credential</string>
+    <string name="login_generic_error">Error while Login</string>
+    <string name="username_already_used">Please, choose another username</string>
+    <string name="signup_generic_error">Error while Signup</string>
+
 </resources>

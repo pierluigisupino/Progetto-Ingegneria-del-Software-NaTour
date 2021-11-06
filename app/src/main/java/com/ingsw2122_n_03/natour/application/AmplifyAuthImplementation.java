@@ -12,10 +12,8 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
-import com.ingsw2122_n_03.natour.presentation.VerifyAccountActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public final class AmplifyAuthImplementation implements AuthInterface {
@@ -136,9 +134,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     @Override
     public void signOut() {
         Amplify.Auth.signOut(
-                () -> {
-                    Log.i("NaTour", "Signed out successfully");
-                },
+                () -> Log.i("NaTour", "Signed out successfully"),
                 error -> Log.e("NaTour", error.toString())
         );
     }

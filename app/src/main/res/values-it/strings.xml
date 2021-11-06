@@ -19,5 +19,17 @@
     <string name="verify">Verifica</string>
     <string name="verification_code">Codice di verifica</string>
     <string name="resend_verification_code"><u>reinvia codice di verifica</u></string>
-    <string name="enter_the_confirmation_code_send_to_nyour_email">Inserisci il codice di verifica\n inviato alla tua email</string>
+    <string name="enter_the_confirmation_code_send_to_your_email">Inserisci il codice di verifica\n inviato alla tua email</string>
+    <string name="insert_password">Inserisci una password.</string>
+    <string name="insert_mail">"Inserisci un indirizzo e-mail.</string>
+    <string name="insert_username">Inserisci uno username.</string>
+    <string name="password_length">La password deve essere lunga almeno 8 caratteri!</string>
+    <string name="check_mail">Controlla l\'indirizzo e-mail!</string>
+    <string name="username_length">Lo username deve essere lungo almeno 4 caratteri!</string>
+    <string name="login_success">Accesso Effettuato</string>
+    <string name="user_not_confirmed">Utente non Confermato</string>
+    <string name="wrong_credential">Credenziali Sbagliate</string>
+    <string name="login_generic_error">Errore durante il Login</string>
+    <string name="username_already_used">Username non disponibile, inseriscine un altro</string>
+    <string name="signup_generic_error">Errore durante la Registrazione</string>
 </resources>
