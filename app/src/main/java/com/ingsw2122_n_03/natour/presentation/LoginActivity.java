@@ -115,9 +115,8 @@ public class LoginActivity extends BaseActivity {
                 String username = usernameTextInputEditText.getText().toString();
                 String password = passwordTextInputEditText.getText().toString();
 
-                progressBar.setVisibility(View.VISIBLE);
-
                 if(areInputValid(username, password)) {
+                    progressBar.setVisibility(View.VISIBLE);
                     authController.login(username, password);
                 }
             }
@@ -143,7 +142,6 @@ public class LoginActivity extends BaseActivity {
 
     private boolean areInputValid(String username, String password) {
         boolean isValid = isUsernameValid(username) & isPasswordValid(password);
-        progressBar.setVisibility(View.INVISIBLE);
         return isValid;
     }
 

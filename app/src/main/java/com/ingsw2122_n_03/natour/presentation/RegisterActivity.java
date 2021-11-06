@@ -144,9 +144,8 @@ public class RegisterActivity extends BaseActivity {
                 String email = emailTextInputEditText.getText().toString();
                 String password = passwordTextInputEditText.getText().toString();
 
-                progressBar.setVisibility(View.VISIBLE);
-
                 if(areInputValid(username, email, password)) {
+                    progressBar.setVisibility(View.VISIBLE);
                     authController.signUp(username, email, password);
                 }
             }
@@ -172,7 +171,6 @@ public class RegisterActivity extends BaseActivity {
 
     private boolean areInputValid(String username, String email, String password) {
         boolean isValid = isUsernameValid(username) & isEmailValid(email) & isPasswordValid(password);
-        progressBar.setVisibility(View.INVISIBLE);
         return isValid;
     }
 
