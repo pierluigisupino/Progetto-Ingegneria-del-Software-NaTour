@@ -69,7 +69,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 },
                 error -> {
                     Log.e("NaTour", "Sign up failed", error);
-                    controller.onSignUpFailure();
+                    controller.onSignUpFailure(error.getMessage());
                 }
         );
     }

@@ -63,9 +63,9 @@ public class AuthController extends Controller {
             }};
 
             goToActivity(callingActivity, VerifyAccountActivity.class, extras);
-        }else {
-            callingActivity.onFail("Error while login");
         }
+
+        callingActivity.onFail("Error while login");
     }
 
 
@@ -89,8 +89,12 @@ public class AuthController extends Controller {
         goToActivityAndFinish(callingActivity, VerifyAccountActivity.class, extras);
     }
 
-    public void onSignUpFailure() {
-        callingActivity.onFail("Error while signup");
+    public void onSignUpFailure(String msg) {
+        if(Objects.requireNonNull(msg).contains("Username already exists in the system")) {
+            callingActivity.onFail("Username already taken");
+        }else {
+            callingActivity.onFail("Error while signup");
+        }
     }
 
     public void confirmSignUp(String username, String password, String confirmationCode){
