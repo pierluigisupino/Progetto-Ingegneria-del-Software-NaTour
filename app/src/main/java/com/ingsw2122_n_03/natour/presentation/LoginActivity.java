@@ -1,10 +1,12 @@
 package com.ingsw2122_n_03.natour.presentation;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -104,6 +106,10 @@ public class LoginActivity extends BaseActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(loginButton.getWindowToken(), 0);
+
                 isFirstSubmit = false;
 
                 String username = usernameTextInputEditText.getText().toString();

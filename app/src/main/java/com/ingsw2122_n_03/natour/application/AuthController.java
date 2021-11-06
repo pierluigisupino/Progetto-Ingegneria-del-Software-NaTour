@@ -95,8 +95,8 @@ public class AuthController extends Controller {
         goToActivityAndFinish(loginActivity, MainActivity.class);
     }
 
-    public void onLoginFailure() {
-        loginActivity.onFail("Error while login");
+    public void onLoginFailure(String msg) {
+        loginActivity.onFail(msg);
     }
 
     public void onLoginAuthentication(String username) {
