@@ -20,46 +20,66 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
+
+        <!--MAIN ACTIVITY-->
         <activity
             android:name=".presentation.MainActivity"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="myapp" />
+                <data android:scheme="mainpage" />
             </intent-filter>
         </activity>
+
+        <!--VERIFY ACCOUNT ACTIVITY-->
         <activity
-            android:name=".presentation.VerifyAccount"
+            android:name=".presentation.VerifyAccountActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
+
+        <!--REGISTER ACTIVITY-->
         <activity
             android:name=".presentation.RegisterActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
+
+        <!--ERROR ACTIVITY-->
         <activity
             android:name=".presentation.ErrorActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
+
+        <!--LOGIN ACTIVITY-->
         <activity
             android:name=".presentation.LoginActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
+
+        <!--WELCOME ACTIVITY-->
         <activity
             android:name=".presentation.WelcomeActivity"
-            android:exported="false"
-            android:theme="@style/NoActionBar" />
+            android:exported="true"
+            android:theme="@style/NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="welcomepage" />
+            </intent-filter>
+        </activity>
+
+        <!--SPLASH ACTIVITY-->
         <activity
             android:name=".presentation.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

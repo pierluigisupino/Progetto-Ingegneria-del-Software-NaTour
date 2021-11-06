@@ -6,7 +6,7 @@ import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.LoginActivity;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.RegisterActivity;
-import com.ingsw2122_n_03.natour.presentation.VerifyAccount;
+import com.ingsw2122_n_03.natour.presentation.VerifyAccountActivity;
 import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
@@ -62,7 +62,7 @@ public class AuthController extends Controller {
                 put("username", username);
             }};
 
-            goToActivity(callingActivity, VerifyAccount.class, extras);
+            goToActivity(callingActivity, VerifyAccountActivity.class, extras);
         }else {
             callingActivity.onFail("Error while login");
         }
@@ -85,7 +85,7 @@ public class AuthController extends Controller {
             put("username", username);
         }};
 
-        goToActivity(callingActivity, VerifyAccount.class, extras);
+        goToActivity(callingActivity, VerifyAccountActivity.class, extras);
     }
 
     public void onSignUpFailure() {

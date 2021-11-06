@@ -12,7 +12,7 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-public class VerifyAccount extends BaseActivity {
+public class VerifyAccountActivity extends BaseActivity {
 
     private AuthController authController;
 
@@ -54,7 +54,7 @@ public class VerifyAccount extends BaseActivity {
             public void onClick(View view) {
                 //DA FARE CHECK INPUT
                 String verificationCode = verificationCodePinView.getText().toString();
-                authController.confirmSignUp(VerifyAccount.this, username, verificationCode);
+                authController.confirmSignUp(VerifyAccountActivity.this, username, verificationCode);
             }
         });
     }
