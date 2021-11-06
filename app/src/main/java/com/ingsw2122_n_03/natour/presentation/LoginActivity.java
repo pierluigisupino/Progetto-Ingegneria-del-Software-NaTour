@@ -126,18 +126,30 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void onSuccess(String msg) {
-        progressBar.setVisibility(View.INVISIBLE);
-        Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.success))
-                .show();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+                Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.success))
+                        .show();
+            }
+        });
     }
 
     @Override
     public void onFail(String msg) {
-        progressBar.setVisibility(View.INVISIBLE);
-        Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.error))
-                .show();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+                Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.error))
+                        .show();
+            }
+        });
     }
 
     private boolean areInputValid(String username, String password) {

@@ -6,5 +6,4 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract void onSuccess(String snackbarMessage);
     public abstract void onFail(String snackbarMessage);
-
 }

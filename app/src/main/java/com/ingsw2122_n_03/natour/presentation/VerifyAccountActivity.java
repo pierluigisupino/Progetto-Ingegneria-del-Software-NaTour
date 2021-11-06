@@ -38,6 +38,13 @@ public class VerifyAccountActivity extends BaseActivity {
         TextView resendCodeTextView = (TextView) findViewById(R.id.resendCode);
         Button verifyButton = (Button) findViewById(R.id.verifyButton);
 
+        materialToolbar.setNavigationOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         resendCodeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
