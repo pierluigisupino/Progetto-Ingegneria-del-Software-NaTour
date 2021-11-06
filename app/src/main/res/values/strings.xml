@@ -49,7 +49,7 @@
     <string name="password_length_error">Password must contain at least 8 letters!</string>
 
     <string name="email_taken_error">Email address already in use</string>
-    <string name="wrong_credential_error">Wrong Credential</string>
+    <string name="wrong_credential_error">Wrong credentials</string>
 
     <string name="wrong_verification_code_error">Wrong verification code</string>
     <string name="user_not_confirmed_error">User not confirmed</string>
