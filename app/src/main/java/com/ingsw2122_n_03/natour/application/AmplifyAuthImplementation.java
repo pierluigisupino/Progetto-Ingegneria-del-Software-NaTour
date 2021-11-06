@@ -15,6 +15,8 @@ import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
+import java.util.Objects;
+
 public final class AmplifyAuthImplementation implements AuthInterface {
 
     protected AmplifyAuthImplementation() {}
@@ -69,7 +71,11 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 },
                 error -> {
                     Log.e("NaTour", "Sign up failed", error);
-                    controller.onSignUpFailure(error.getMessage());
+                    if(Objects.requireNonNull(error.getMessage()).contains("Username already exists in the system")) {
+                        controller.onSignUpFailure("Please, choose another username");
+                    }else {
+                        controller.onSignUpFailure("Error while signup");
+                    }
                 }
         );
     }

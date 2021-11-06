@@ -90,11 +90,7 @@ public class AuthController extends Controller {
     }
 
     public void onSignUpFailure(String msg) {
-        if(Objects.requireNonNull(msg).contains("Username already exists in the system")) {
-            callingActivity.onFail("Username already taken");
-        }else {
-            callingActivity.onFail("Error while signup");
-        }
+        callingActivity.onFail(msg);
     }
 
     public void confirmSignUp(String username, String password, String confirmationCode){
