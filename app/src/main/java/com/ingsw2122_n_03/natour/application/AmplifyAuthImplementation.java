@@ -65,7 +65,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         Amplify.Auth.signUp(username, password, options,
                 result -> {
                     Log.i("NaTour", "Result: " + result.toString());
-                    controller.onSignUpSuccess(username);
+                    controller.onSignUpSuccess(username, password);
                 },
                 error -> {
                     Log.e("NaTour", "Sign up failed", error);
@@ -75,11 +75,17 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     }
 
     @Override
-    public void confirmSignUp(String username, String confirmationCode) {
+    public void confirmSignUp(String username, String password, String confirmationCode) {
         Amplify.Auth.confirmSignUp(
                 username,
                 confirmationCode,
-                result -> Log.i("NaTour", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete"),
+                result -> {
+                    Log.i("NaTour", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
+
+                    if(result.isSignUpComplete()){
+                        login(username, password);
+                    }
+                },
                 error -> Log.e("NaTour", error.toString())
         );
     }

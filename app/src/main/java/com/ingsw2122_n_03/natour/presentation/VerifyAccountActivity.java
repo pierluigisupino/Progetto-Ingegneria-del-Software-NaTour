@@ -26,6 +26,7 @@ public class VerifyAccountActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String username = intent.getExtras().getString("username");
+        String password = intent.getExtras().getString("password");
 
         authController = AuthController.getInstance();
 
@@ -33,13 +34,6 @@ public class VerifyAccountActivity extends BaseActivity {
         verificationCodePinView = (PinView) findViewById(R.id.verificationCode);
         TextView resendCodeTextView = (TextView) findViewById(R.id.resendCode);
         Button verifyButton = (Button) findViewById(R.id.verifyButton);
-
-        materialToolbar.setNavigationOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         resendCodeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +48,7 @@ public class VerifyAccountActivity extends BaseActivity {
             public void onClick(View view) {
                 //DA FARE CHECK INPUT
                 String verificationCode = verificationCodePinView.getText().toString();
-                authController.confirmSignUp(VerifyAccountActivity.this, username, verificationCode);
+                authController.confirmSignUp(username, password, verificationCode);
             }
         });
     }

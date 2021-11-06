@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure;
 
+import androidx.annotation.Nullable;
+
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public interface AuthInterface {
@@ -8,7 +10,7 @@ public interface AuthInterface {
      boolean checkUserLogged();
      void login(String username, String password);
      void signUp(String username, String email, String password);
-     void confirmSignUp(String username, String confirmationCode);
+     void confirmSignUp(String username, String password, String confirmationCode);
      void sendVerificationCode(String username);
      void loginWithGoogle(BaseActivity callingActivity);
      void signOut();

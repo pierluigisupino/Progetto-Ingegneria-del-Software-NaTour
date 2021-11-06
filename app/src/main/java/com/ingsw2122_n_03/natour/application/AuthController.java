@@ -78,22 +78,23 @@ public class AuthController extends Controller {
         authInterface.signUp(username, email, password);
     }
 
-    public void onSignUpSuccess(String username) {
+    public void onSignUpSuccess(String username, String password) {
         callingActivity.onSuccess("Signup success");
 
         HashMap<String, String> extras = new HashMap<String, String>() {{
             put("username", username);
+            put("password", password);
         }};
 
-        goToActivity(callingActivity, VerifyAccountActivity.class, extras);
+        goToActivityAndFinish(callingActivity, VerifyAccountActivity.class, extras);
     }
 
     public void onSignUpFailure() {
         callingActivity.onFail("Error while signup");
     }
 
-    public void confirmSignUp(BaseActivity callingActivity, String username, String confirmationCode){
-        authInterface.confirmSignUp(username, confirmationCode);
+    public void confirmSignUp(String username, String password, String confirmationCode){
+        authInterface.confirmSignUp(username, password, confirmationCode);
     }
 
     public void sendVerificationCode(String username){
