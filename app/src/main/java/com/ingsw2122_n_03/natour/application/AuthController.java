@@ -177,7 +177,7 @@ public final class AuthController extends Controller {
         this.errorActivity = errorActivity;
     }
 
-    public void setLoginActivity(SignInActivity signInActivity) {
+    public void setSignInActivity(SignInActivity signInActivity) {
         this.signInActivity = signInActivity;
     }
 

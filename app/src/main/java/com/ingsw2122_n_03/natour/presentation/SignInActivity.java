@@ -32,7 +32,7 @@ public class SignInActivity extends BaseActivity {
     private TextInputLayout passwordTextInputLayout;
     private TextInputEditText passwordTextInputEditText;
 
-    private Button loginButton;
+    private Button signInButton;
     private LinearProgressIndicator progressBar;
 
     private boolean isFirstSubmit = true;
@@ -44,7 +44,7 @@ public class SignInActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_in);
 
         authController = AuthController.getInstance();
-        authController.setLoginActivity(SignInActivity.this);
+        authController.setSignInActivity(SignInActivity.this);
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
         MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
@@ -55,7 +55,7 @@ public class SignInActivity extends BaseActivity {
         passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordTextInputLayout);
         passwordTextInputEditText = (TextInputEditText) findViewById(R.id.passwordTextInputEditText);
 
-        loginButton = (Button) findViewById(R.id.loginButton);
+        signInButton = (Button) findViewById(R.id.sign_in_button);
         progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
@@ -96,10 +96,10 @@ public class SignInActivity extends BaseActivity {
             }
         });
 
-        loginButton.setOnClickListener(view -> {
+        signInButton.setOnClickListener(view -> {
 
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(loginButton.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(signInButton.getWindowToken(), 0);
 
             isFirstSubmit = false;
 

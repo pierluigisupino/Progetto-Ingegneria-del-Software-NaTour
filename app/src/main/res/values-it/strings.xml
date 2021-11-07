@@ -8,8 +8,8 @@
     <string name="app_description">Esplora i posti che ami</string>
     <string name="action">Iscriviti gratis</string>
     <string name="divider_text">continua con</string>
-    <string name="register_button_text">Registrati</string>
-    <string name="login_button_text">Accedi</string>
+    <string name="sign_up_button_text">Registrati</string>
+    <string name="sign_in_button_text">Accedi</string>
 
     <!--LOGIN ACTIVITY-->
     <string name="login_activity_title">Accedi</string>

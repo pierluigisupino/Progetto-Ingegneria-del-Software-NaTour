@@ -149,12 +149,12 @@
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/sign_in_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_dark_background"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="@string/login_button_text"
+        android:text="@string/sign_in_button_text"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"

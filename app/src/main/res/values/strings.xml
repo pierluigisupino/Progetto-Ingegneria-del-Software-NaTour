@@ -8,15 +8,15 @@
     <string name="app_description">Explore the places you love\nin a way never done before</string>
     <string name="action">Join for free</string>
     <string name="divider_text">continue with</string>
-    <string name="register_button_text">Sign Up</string>
-    <string name="login_button_text">Log In</string>
+    <string name="sign_up_button_text">Sign Up</string>
+    <string name="sign_in_button_text">Sign in</string>
 
     <!--LOGIN ACTIVITY-->
-    <string name="login_activity_title">Login</string>
+    <string name="login_activity_title">Sign In</string>
     <string name="forgot_password"><u>Forgot password?</u></string>
 
     <!--REGISTER ACTIVITY-->
-    <string name="register_activity_title">Register</string>
+    <string name="register_activity_title">Sign Up</string>
 
     <!--GENERICS-->
     <string name="username_place_holder">Username</string>
