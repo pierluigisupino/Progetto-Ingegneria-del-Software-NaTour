@@ -61,10 +61,16 @@ public final class AuthController extends Controller {
     }
 
     public void onLoginSuccess() {
-        loginActivity.onSuccess(loginActivity.getResources().getString(R.string.login_success));
-        welcomeActivity.finish();
-        if(verifyAccountActivity != null) { verifyAccountActivity.finish(); }
-        goToActivityAndFinish(loginActivity, MainActivity.class);
+        if(loginActivity != null){
+            loginActivity.onSuccess(loginActivity.getResources().getString(R.string.login_success));
+            goToActivityAndFinish(loginActivity, MainActivity.class);
+        }
+
+        if(verifyAccountActivity != null) {
+            goToActivityAndFinish(verifyAccountActivity, MainActivity.class);
+        }
+
+        if(welcomeActivity != null) welcomeActivity.finish();
     }
 
     public void onLoginFailure(int errorCode) {
