@@ -168,7 +168,7 @@ public final class AuthController extends Controller {
     }
 
     public void onSignOutSuccess(){
-        mainActivity.onFail(welcomeActivity.getResources().getString(R.string.login_success));
+        mainActivity.onFail(welcomeActivity.getResources().getString(R.string.logout_success));
     }
 
     public void onSignOutFailure() {
