@@ -18,13 +18,20 @@
     <!--REGISTER ACTIVITY-->
     <string name="register_activity_title">Sign Up</string>
 
+    <!--FORGOT PASSWORD ACTIVITY-->
+    <string name="forgot_password_activity_title">Reset</string>
+    <string name="forgot_password_activity_text">We got you covered\nenter your email below</string>
+
     <!--RESET PASSWORD ACTIVITY-->
     <string name="reset_password_activity_title">Reset</string>
+    <string name="reset_password_text">Enter your new password and the\nverification code sent to</string>
+    <string name="reset_password_button_text">Reset password</string>
 
     <!--GENERICS-->
     <string name="username_place_holder">Name</string>
     <string name="email_place_holder">Email</string>
     <string name="password_place_holder">Password</string>
+    <string name="continue_button_text">Continue</string>
 
     <!--ERROR ACTIVITY-->
     <string name="exit">Exit</string>
@@ -51,6 +58,7 @@
     <string name="mail_error">Check your e-mail address</string>
     <string name="password_length_error">At least 8 characters</string>
 
+    <string name="account_error">Account doesn\'t exists</string>
     <string name="email_taken_error">Email address already in use</string>
     <string name="wrong_credential_error">Wrong credentials</string>
 

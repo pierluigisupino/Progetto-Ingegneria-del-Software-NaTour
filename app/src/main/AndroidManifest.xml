@@ -49,7 +49,7 @@
 
         <!-- RESET PASSWORD ACTIVITY -->
         <activity
-            android:name=".presentation.ResetPasswordActivity"
+            android:name=".presentation.ForgotPasswordActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
 

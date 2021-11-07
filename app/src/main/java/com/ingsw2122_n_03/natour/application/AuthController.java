@@ -6,6 +6,7 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
 import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyAuthImplementation;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
+import com.ingsw2122_n_03.natour.presentation.ForgotPasswordActivity;
 import com.ingsw2122_n_03.natour.presentation.ResetPasswordActivity;
 import com.ingsw2122_n_03.natour.presentation.SignInActivity;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
@@ -27,6 +28,7 @@ public final class AuthController extends Controller {
     private SignUpActivity signUpActivity;
     private SignInActivity signInActivity;
     private VerifyAccountActivity verifyAccountActivity;
+    private ForgotPasswordActivity forgotPasswordActivity;
     private ResetPasswordActivity resetPasswordActivity;
     private MainActivity mainActivity;
 
@@ -166,12 +168,24 @@ public final class AuthController extends Controller {
         authInterface.resetPassword(username);
     }
 
-    public void onResetPasswordSuccess(){
+    public void onResetPasswordSuccess(String email){
+        forgotPasswordActivity.onSuccess(forgotPasswordActivity.getResources().getString(R.string.verification_code_sent));
 
+        HashMap<String, String> extras = new HashMap<String, String>() {{
+            put("email", email);
+        }};
+
+        goToActivity(forgotPasswordActivity, ResetPasswordActivity.class, extras);
     }
 
-    public void onResetPasswordFailure(){
-
+    public void onResetPasswordFailure(int errorCode){
+        if(errorCode == 0){
+            forgotPasswordActivity.onFail(forgotPasswordActivity.getResources().getString(R.string.account_error));
+        }else if(errorCode == 1){
+            forgotPasswordActivity.onFail(forgotPasswordActivity.getResources().getString(R.string.too_many_requests_error));
+        }else{
+            forgotPasswordActivity.onFail(forgotPasswordActivity.getResources().getString(R.string.generic_error));
+        }
     }
 
     public void confirmResetPassword(String newPassword, String confirmationCode){
@@ -225,6 +239,10 @@ public final class AuthController extends Controller {
 
     public void setWelcomeActivity(WelcomeActivity welcomeActivity) {
         this.welcomeActivity = welcomeActivity;
+    }
+
+    public void setForgotPasswordActivity(ForgotPasswordActivity forgotPasswordActivity){
+        this.forgotPasswordActivity = forgotPasswordActivity;
     }
 
     public void setResetPasswordActivity(ResetPasswordActivity resetPasswordActivity){

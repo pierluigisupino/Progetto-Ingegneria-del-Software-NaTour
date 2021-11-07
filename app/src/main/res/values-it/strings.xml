@@ -18,13 +18,20 @@
     <!--REGISTER ACTIVITY-->
     <string name="register_activity_title">Registarti</string>
 
+    <!--FORGOT PASSWORD ACTIVITY-->
+    <string name="forgot_password_activity_title">Reset</string>
+    <string name="forgot_password_activity_text">Ci pensiamo noi\ninserisci la tua mail</string>
+
     <!--RESET PASSWORD ACTIVITY-->
     <string name="reset_password_activity_title">Reset</string>
+    <string name="reset_password_text">Inserisci la tua nuova password e\nil codice di verifica inviato a</string>
+    <string name="reset_password_button_text">Resetta la password</string>
 
     <!--GENERICS-->
-    <string name="username_place_holder">Nome</string>
+    <string name="username_place_holder">Name</string>
     <string name="email_place_holder">Email</string>
     <string name="password_place_holder">Password</string>
+    <string name="continue_button_text">Continua</string>
 
     <!--ERROR ACTIVITY-->
     <string name="exit">Esci</string>
@@ -51,6 +58,7 @@
     <string name="mail_error">Controlla l\'indirizzo e-mail</string>
     <string name="password_length_error">Almeno 8 caratteri</string>
 
+    <string name="account_error">L\'account non esiste</string>
     <string name="email_taken_error">Indirizzo email gia\' in uso</string>
     <string name="wrong_credential_error">Credenziali errate</string>
 

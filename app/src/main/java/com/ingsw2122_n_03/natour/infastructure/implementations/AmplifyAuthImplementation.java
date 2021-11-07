@@ -141,14 +141,29 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         );
     }
 
-    public void resetPassword(String username){
+    public void resetPassword(String email){
 
         Amplify.Auth.resetPassword(
-                username,
-                result -> Log.i("NaTour", result.toString()),
-                error -> Log.e("NaTour", error.toString())
-        );
+                email,
+                result -> {
+                    Log.e("NaTour", result.toString());
+                    controller.onResetPasswordSuccess(email);
+                },
+                error -> {
 
+                    Log.e("NaTour", error.toString());
+
+                    String messageError = Objects.requireNonNull(error.getMessage());
+
+                    if(messageError.contains("User not found in the system")) {
+                        controller.onResetPasswordFailure(0);
+                    }else if(messageError.contains("Number of allowed operation has exceeded")){
+                        controller.onResetPasswordFailure(1);
+                    }else {
+                        controller.onResetPasswordFailure(2);
+                    }
+                }
+        );
     }
 
     public void confirmResetPassword(String newPassword, String confirmationCode){

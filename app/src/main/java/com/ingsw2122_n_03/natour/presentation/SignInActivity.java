@@ -102,7 +102,7 @@ public class SignInActivity extends BaseActivity {
         });
 
         forgotPasswordButton.setOnClickListener(view -> {
-            authController.goToActivity(SignInActivity.this, ResetPasswordActivity.class);
+            authController.goToActivity(SignInActivity.this, ForgotPasswordActivity.class);
         });
 
         signInButton.setOnClickListener(view -> {
