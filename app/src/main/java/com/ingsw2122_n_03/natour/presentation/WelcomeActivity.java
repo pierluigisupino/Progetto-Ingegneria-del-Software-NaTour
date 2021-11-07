@@ -31,7 +31,6 @@ public class WelcomeActivity extends BaseActivity {
         signInButton.setOnClickListener(v -> authController.onSignInButtonPressed());
 
         signInWithGoogle.setOnClickListener(v -> authController.loginWithGoogle());
-
     }
 
     @Override

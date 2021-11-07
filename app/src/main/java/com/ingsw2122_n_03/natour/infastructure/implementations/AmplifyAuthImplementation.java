@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.util.Log;
+
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.results.SignUpResult;
@@ -136,6 +138,25 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         Amplify.Auth.signInWithSocialWebUI(AuthProvider.google(), callingActivity,
                 result -> controller.onLoginWithGoogleSuccess(),
                 error -> controller.onLoginWithGoogleFailure()
+        );
+    }
+
+    public void resetPassword(String username){
+
+        Amplify.Auth.resetPassword(
+                username,
+                result -> Log.i("NaTour", result.toString()),
+                error -> Log.e("NaTour", error.toString())
+        );
+
+    }
+
+    public void confirmResetPassword(String newPassword, String confirmationCode){
+        Amplify.Auth.confirmResetPassword(
+                newPassword,
+                confirmationCode,
+                () -> Log.i("NaTour", "New password confirmed"),
+                error -> Log.e("NaTour", error.toString())
         );
     }
 

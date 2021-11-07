@@ -162,6 +162,29 @@ public final class AuthController extends Controller {
         welcomeActivity.onFail(welcomeActivity.getResources().getString(R.string.generic_error));
     }
 
+    public void resetPassword(String username){
+        authInterface.resetPassword(username);
+    }
+
+    public void onResetPasswordSuccess(){
+
+    }
+
+    public void onResetPasswordFailure(){
+
+    }
+
+    public void confirmResetPassword(String newPassword, String confirmationCode){
+        authInterface.confirmResetPassword(newPassword, confirmationCode);
+    }
+
+    public void onConfirmResetPasswordSuccess(){
+
+    }
+
+    public void onConfirmResetPasswordFailure(){
+
+    }
 
     public void signOut(Activity callingActivity){
         authInterface.signOut();

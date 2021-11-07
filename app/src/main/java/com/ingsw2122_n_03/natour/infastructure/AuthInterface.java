@@ -13,6 +13,9 @@ public interface AuthInterface {
      void confirmSignUp(String email, String password, String confirmationCode);
      void sendVerificationCode(String email);
      void loginWithGoogle(BaseActivity callingActivity);
+     void resetPassword(String username);
+     void confirmResetPassword(String newPassword, String confirmationCode);
      void signOut();
+
 
 }
