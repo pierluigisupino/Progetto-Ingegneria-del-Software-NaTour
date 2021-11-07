@@ -51,7 +51,6 @@ public final class AuthController extends Controller {
         goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
 
-
     public void onSignInButtonPressed() {
         goToActivity(welcomeActivity, SignInActivity.class);
     }
@@ -88,7 +87,6 @@ public final class AuthController extends Controller {
         }};
         goToActivity(signInActivity, VerifyAccountActivity.class, extras);
     }
-
 
     public void onRegisterButtonPressed() {
         goToActivity(welcomeActivity, SignUpActivity.class);
