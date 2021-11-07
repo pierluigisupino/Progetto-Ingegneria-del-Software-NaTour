@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
+import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyAuthImplementation;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.SignInActivity;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;

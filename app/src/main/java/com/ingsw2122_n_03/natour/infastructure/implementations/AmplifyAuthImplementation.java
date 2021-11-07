@@ -1,4 +1,4 @@
-package com.ingsw2122_n_03.natour.application;
+package com.ingsw2122_n_03.natour.infastructure.implementations;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
@@ -9,6 +9,7 @@ import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
+import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.infastructure.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
