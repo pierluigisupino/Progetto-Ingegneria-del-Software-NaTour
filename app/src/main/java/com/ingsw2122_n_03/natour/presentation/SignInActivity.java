@@ -20,7 +20,7 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-public class LoginActivity extends BaseActivity {
+public class SignInActivity extends BaseActivity {
 
     private AuthController authController;
 
@@ -41,10 +41,10 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sign_in);
 
         authController = AuthController.getInstance();
-        authController.setLoginActivity(LoginActivity.this);
+        authController.setLoginActivity(SignInActivity.this);
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
         MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity {
 
             if(areInputValid(email, password)) {
                 progressBar.setVisibility(View.VISIBLE);
-                authController.login(email, password);
+                authController.signIn(email, password);
             }
         });
 
@@ -120,7 +120,7 @@ public class LoginActivity extends BaseActivity {
         runOnUiThread(() -> {
             progressBar.setVisibility(View.INVISIBLE);
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.success))
+                    .setBackgroundTint(ContextCompat.getColor(SignInActivity.this, R.color.success))
                     .show();
         });
     }
@@ -131,7 +131,7 @@ public class LoginActivity extends BaseActivity {
         runOnUiThread(() -> {
             progressBar.setVisibility(View.INVISIBLE);
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(LoginActivity.this, R.color.error))
+                    .setBackgroundTint(ContextCompat.getColor(SignInActivity.this, R.color.error))
                     .show();
         });
     }

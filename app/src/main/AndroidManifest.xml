@@ -41,7 +41,7 @@
 
         <!--REGISTER ACTIVITY-->
         <activity
-            android:name=".presentation.RegisterActivity"
+            android:name=".presentation.SignUpActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
 
@@ -53,7 +53,7 @@
 
         <!--LOGIN ACTIVITY-->
         <activity
-            android:name=".presentation.LoginActivity"
+            android:name=".presentation.SignInActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
 

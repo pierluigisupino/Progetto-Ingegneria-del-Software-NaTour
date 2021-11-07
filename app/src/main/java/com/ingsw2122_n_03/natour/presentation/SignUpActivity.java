@@ -22,7 +22,7 @@ import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 
-public class RegisterActivity extends BaseActivity {
+public class SignUpActivity extends BaseActivity {
 
     private AuthController authController;
 
@@ -46,10 +46,10 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_sign_up);
 
         authController = AuthController.getInstance();
-        authController.setRegisterActivity(RegisterActivity.this);
+        authController.setRegisterActivity(SignUpActivity.this);
 
         layout = (ConstraintLayout) findViewById(R.id.layout);
         MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
@@ -148,7 +148,7 @@ public class RegisterActivity extends BaseActivity {
         runOnUiThread(() -> {
             progressBar.setVisibility(View.INVISIBLE);
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.success))
+                    .setBackgroundTint(ContextCompat.getColor(SignUpActivity.this, R.color.success))
                     .show();
         });
     }
@@ -159,7 +159,7 @@ public class RegisterActivity extends BaseActivity {
         runOnUiThread(() -> {
             progressBar.setVisibility(View.INVISIBLE);
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(RegisterActivity.this, R.color.error))
+                    .setBackgroundTint(ContextCompat.getColor(SignUpActivity.this, R.color.error))
                     .show();
         });
     }

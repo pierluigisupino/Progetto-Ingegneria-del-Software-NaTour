@@ -45,7 +45,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         Amplify.Auth.signIn(
                 email,
                 password,
-                result -> controller.onLoginSuccess(),
+                result -> controller.onSignInSuccess(),
                 error -> {
 
                     String messageError = Objects.requireNonNull(error.getMessage());
