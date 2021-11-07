@@ -19,7 +19,7 @@
     <string name="register_activity_title">Registarti</string>
 
     <!--GENERICS-->
-    <string name="username_place_holder">Username</string>
+    <string name="username_place_holder">Nome</string>
     <string name="email_place_holder">Email</string>
     <string name="password_place_holder">Password</string>
 
