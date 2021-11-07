@@ -21,66 +21,76 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
 
-        <!--MAIN ACTIVITY-->
+        <!-- MAIN ACTIVITY -->
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="mainpage" />
             </intent-filter>
         </activity>
 
-        <!--VERIFY ACCOUNT ACTIVITY-->
+        <!-- VERIFY ACCOUNT ACTIVITY -->
         <activity
             android:name=".presentation.VerifyAccountActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
 
-        <!--REGISTER ACTIVITY-->
+        <!-- REGISTER ACTIVITY -->
         <activity
             android:name=".presentation.SignUpActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
 
-        <!--ERROR ACTIVITY-->
+        <!-- RESET PASSWORD ACTIVITY -->
         <activity
-            android:name=".presentation.ErrorActivity"
+            android:name=".presentation.ResetPasswordActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
 
-        <!--LOGIN ACTIVITY-->
+        <!-- LOGIN ACTIVITY -->
         <activity
             android:name=".presentation.SignInActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
 
-        <!--WELCOME ACTIVITY-->
+        <!-- WELCOME ACTIVITY -->
         <activity
             android:name=".presentation.WelcomeActivity"
             android:exported="true"
-            android:theme="@style/NoActionBar" >
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="welcomepage" />
             </intent-filter>
         </activity>
 
-        <!--SPLASH ACTIVITY-->
+        <!-- SPLASH ACTIVITY -->
         <activity
             android:name=".presentation.SplashActivity"
             android:exported="true"
             android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <!-- ERROR ACTIVITY -->
+        <activity
+            android:name=".presentation.ErrorActivity"
+            android:exported="false"
+            android:theme="@style/NoActionBar" />
     </application>
 
 </manifest>

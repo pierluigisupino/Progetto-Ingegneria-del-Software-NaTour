@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -32,6 +33,8 @@ public class SignInActivity extends BaseActivity {
     private TextInputLayout passwordTextInputLayout;
     private TextInputEditText passwordTextInputEditText;
 
+    private TextView forgotPasswordButton;
+
     private Button signInButton;
     private LinearProgressIndicator progressBar;
 
@@ -54,6 +57,8 @@ public class SignInActivity extends BaseActivity {
 
         passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordTextInputLayout);
         passwordTextInputEditText = (TextInputEditText) findViewById(R.id.passwordTextInputEditText);
+
+        forgotPasswordButton = (TextView) findViewById(R.id.forgot_password_button);
 
         signInButton = (Button) findViewById(R.id.sign_in_button);
         progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
@@ -94,6 +99,10 @@ public class SignInActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
 
             }
+        });
+
+        forgotPasswordButton.setOnClickListener(view -> {
+            authController.goToActivity(SignInActivity.this, ResetPasswordActivity.class);
         });
 
         signInButton.setOnClickListener(view -> {

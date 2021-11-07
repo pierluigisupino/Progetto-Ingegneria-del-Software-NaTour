@@ -18,6 +18,9 @@
     <!--REGISTER ACTIVITY-->
     <string name="register_activity_title">Registarti</string>
 
+    <!--RESET PASSWORD ACTIVITY-->
+    <string name="reset_password_activity_title">Reset</string>
+
     <!--GENERICS-->
     <string name="username_place_holder">Nome</string>
     <string name="email_place_holder">Email</string>
