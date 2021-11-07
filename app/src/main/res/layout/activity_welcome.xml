@@ -146,7 +146,7 @@
         app:layout_constraintTop_toBottomOf="@+id/welcome_textView3" />
 
     <Button
-        android:id="@+id/registerButton"
+        android:id="@+id/sign_up_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/button_light_background"
@@ -161,7 +161,7 @@
         app:layout_constraintTop_toTopOf="@+id/buttonTopGuideline" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/sign_in_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/button_dark_background"
@@ -190,7 +190,7 @@
         tools:ignore="TextContrastCheck" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/loginWithGoogle"
+        android:id="@+id/sign_in_with_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"

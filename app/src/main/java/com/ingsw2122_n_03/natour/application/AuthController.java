@@ -52,7 +52,7 @@ public final class AuthController extends Controller {
     }
 
 
-    public void onLoginButtonPressed() {
+    public void onSignInButtonPressed() {
         goToActivity(welcomeActivity, SignInActivity.class);
     }
 
