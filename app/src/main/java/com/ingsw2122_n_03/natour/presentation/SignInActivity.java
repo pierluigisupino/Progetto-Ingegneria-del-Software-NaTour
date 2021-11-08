@@ -33,8 +33,6 @@ public class SignInActivity extends BaseActivity {
     private TextInputLayout passwordTextInputLayout;
     private TextInputEditText passwordTextInputEditText;
 
-    private TextView forgotPasswordButton;
-
     private Button signInButton;
     private LinearProgressIndicator progressBar;
 
@@ -58,7 +56,7 @@ public class SignInActivity extends BaseActivity {
         passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
         passwordTextInputEditText = findViewById(R.id.passwordTextInputEditText);
 
-        forgotPasswordButton = findViewById(R.id.forgot_password_button);
+        TextView forgotPasswordButton = findViewById(R.id.forgot_password_button);
 
         signInButton = findViewById(R.id.sign_in_button);
         progressBar = findViewById(R.id.progressBar);
