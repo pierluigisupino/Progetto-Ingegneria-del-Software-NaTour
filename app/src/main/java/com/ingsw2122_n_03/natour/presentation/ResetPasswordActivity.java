@@ -90,8 +90,8 @@ public class ResetPasswordActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            String newPassword = newPasswordTextInputEditText.getText().toString();
-            String verificationCode = verificationCodePinView.getText().toString();
+            String newPassword = getText(newPasswordTextInputEditText);
+            String verificationCode = getText(verificationCodePinView);
 
             if(areInputValid(newPassword, verificationCode)) {
 

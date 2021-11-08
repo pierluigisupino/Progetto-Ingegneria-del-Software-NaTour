@@ -67,7 +67,7 @@ public class VerifyAccountActivity extends BaseActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(verifyButton.getWindowToken(), 0);
 
-            String verificationCode = verificationCodePinView.getText().toString();
+            String verificationCode = getText(verificationCodePinView);
 
             if(isVerificationCodeValid(verificationCode)) {
                 progressBar.setVisibility(View.VISIBLE);

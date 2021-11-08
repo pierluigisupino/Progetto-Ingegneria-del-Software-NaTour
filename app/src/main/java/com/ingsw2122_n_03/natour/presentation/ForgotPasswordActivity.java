@@ -78,7 +78,7 @@ public class ForgotPasswordActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            String email = emailTextInputEditText.getText().toString();
+            String email = getText(emailTextInputEditText);
 
             if(isEmailValid(email)) {
                 progressBar.setVisibility(View.VISIBLE);

@@ -112,8 +112,8 @@ public class SignInActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            String email =  emailTextInputEditText.getText().toString();
-            String password = passwordTextInputEditText.getText().toString();
+            String email =  getText(emailTextInputEditText);
+            String password = getText(passwordTextInputEditText);
 
             if(areInputValid(email, password)) {
                 progressBar.setVisibility(View.VISIBLE);

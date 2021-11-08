@@ -130,9 +130,9 @@ public class SignUpActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            String username = usernameTextInputEditText.getText().toString();
-            String email = emailTextInputEditText.getText().toString();
-            String password = passwordTextInputEditText.getText().toString();
+            String username = getText(usernameTextInputEditText);
+            String email =  getText(emailTextInputEditText);
+            String password = getText(passwordTextInputEditText);
 
             if(areInputValid(username, email, password)) {
                 progressBar.setVisibility(View.VISIBLE);
