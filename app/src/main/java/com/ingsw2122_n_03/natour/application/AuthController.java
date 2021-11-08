@@ -44,11 +44,12 @@ public final class AuthController extends Controller {
     }
 
     public void setUp() {
-        authInterface.configureAuth(splashActivity);
-        if(authInterface.checkUserLogged()) {
-            goToActivityAndFinish(splashActivity, MainActivity.class);
-        }else{
-            goToActivityAndFinish(splashActivity, WelcomeActivity.class);
+        if(authInterface.configureAuth(splashActivity)) {
+            if (authInterface.checkUserLogged()) {
+                goToActivityAndFinish(splashActivity, MainActivity.class);
+            } else {
+                goToActivityAndFinish(splashActivity, WelcomeActivity.class);
+            }
         }
     }
 

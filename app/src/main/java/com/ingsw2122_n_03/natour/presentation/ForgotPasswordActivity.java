@@ -33,7 +33,7 @@ public class ForgotPasswordActivity extends BaseActivity {
     private Button continueButton;
     private LinearProgressIndicator progressBar;
 
-    private boolean isFirstSubmit;
+    private boolean isFirstSubmit = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

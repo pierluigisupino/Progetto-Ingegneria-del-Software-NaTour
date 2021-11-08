@@ -26,14 +26,16 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     }
 
     @Override
-    public void configureAuth(BaseActivity callingActivity) {
+    public boolean configureAuth(BaseActivity callingActivity) {
         try {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
+            return true;
         }catch (Amplify.AlreadyConfiguredException ignored){
-
+            return true;
         }catch (AmplifyException e){
             controller.onSetUpFailure();
+            return false;
         }
     }
 

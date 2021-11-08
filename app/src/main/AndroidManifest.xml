@@ -47,9 +47,15 @@
             android:exported="false"
             android:theme="@style/NoActionBar" />
 
-        <!-- RESET PASSWORD ACTIVITY -->
+        <!-- FORGOT PASSWORD ACTIVITY -->
         <activity
             android:name=".presentation.ForgotPasswordActivity"
+            android:exported="false"
+            android:theme="@style/NoActionBar" />
+
+        <!-- RESET PASSWORD ACTIVITY -->
+        <activity
+            android:name=".presentation.ResetPasswordActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
 

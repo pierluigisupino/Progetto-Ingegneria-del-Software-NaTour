@@ -6,7 +6,7 @@ import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public interface AuthInterface {
 
-     void configureAuth(BaseActivity callingActivity);
+     boolean configureAuth(BaseActivity callingActivity);
      boolean checkUserLogged();
      void signIn(String email, String password);
      void signUp(String username, String email, String password);
