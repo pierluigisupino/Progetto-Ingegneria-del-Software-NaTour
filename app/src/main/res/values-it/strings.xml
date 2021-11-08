@@ -56,6 +56,8 @@
     <string name="username_warning">Inserisci un username</string>
     <string name="email_warning">"Inserisci una e-mail.</string>
     <string name="password_warning">Inserisci una password</string>
+    <string name="verification_code_warning">Inserisci il codice di verifica.</string>
+    <string name="verification_code_warning_1">Completa il codice di verifica.</string>
 
     <string name="username_length_error">Almeno 4 caratteri</string>
     <string name="mail_error">Controlla l\'indirizzo e-mail</string>

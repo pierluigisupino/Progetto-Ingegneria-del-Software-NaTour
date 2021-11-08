@@ -69,8 +69,10 @@ public class VerifyAccountActivity extends BaseActivity {
 
             progressBar.setVisibility(View.VISIBLE);
 
-            String verificationCode = verificationCodePinView.getText().toString();
-            authController.confirmSignUp(email, password, verificationCode);
+            if(isVerificationCodeValid()) {
+                String verificationCode = String.valueOf(verificationCodePinView.getText());
+                authController.confirmSignUp(email, password, verificationCode);
+            }
         });
     }
 
@@ -92,5 +94,17 @@ public class VerifyAccountActivity extends BaseActivity {
                     .setBackgroundTint(ContextCompat.getColor(VerifyAccountActivity.this, R.color.error))
                     .show();
         });
+    }
+
+    private boolean isVerificationCodeValid(){
+        if(verificationCodePinView.getText() == null) {
+            onFail(getString(R.string.verification_code_warning));
+            return false;
+        }else if(verificationCodePinView.getText().length() < 6) {
+            onFail(getString(R.string.verification_code_warning_1));
+            return false;
+        }
+
+        return true;
     }
 }
