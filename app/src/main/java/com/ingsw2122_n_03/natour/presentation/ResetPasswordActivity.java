@@ -74,7 +74,7 @@ public class ResetPasswordActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isPasswordValid();
+                if(!isFirstSubmit) isPasswordValid(newPasswordTextInputEditText.getText().toString());
             }
 
             @Override
@@ -90,9 +90,10 @@ public class ResetPasswordActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            if(areInputValid()) {
-                String newPassword = String.valueOf(newPasswordTextInputEditText.getText());
-                String verificationCode = String.valueOf(verificationCodePinView.getText());
+            String newPassword = newPasswordTextInputEditText.getText().toString();
+            String verificationCode = verificationCodePinView.getText().toString();
+
+            if(areInputValid(newPassword, verificationCode)) {
 
                 progressBar.setVisibility(View.VISIBLE);
                 authController.confirmResetPassword(newPassword, verificationCode);
@@ -122,27 +123,25 @@ public class ResetPasswordActivity extends BaseActivity {
         });
     }
 
-    private boolean areInputValid() {
-        return isPasswordValid() & isVerificationCodeValid();
+    private boolean areInputValid(String newPassword, String verificationCode) {
+        return isPasswordValid(newPassword) & isVerificationCodeValid(verificationCode);
     }
 
-    private boolean isPasswordValid(){
-        if(newPasswordTextInputEditText.getText() == null) {
-            newPasswordTextInputEditText.setError(getString(R.string.password_warning));
-            return false;
-        }else if(newPasswordTextInputEditText.getText().length() < 8) {
-            newPasswordTextInputEditText.setError(getString(R.string.password_length_error));
+    private boolean isPasswordValid(String password){
+        if(password == null || password.isEmpty()) {
+            newPasswordTextInputLayout.setError(getString(R.string.password_warning));
             return false;
         }
-        newPasswordTextInputEditText.setError(null);
+
+        newPasswordTextInputLayout.setError(null);
         return true;
     }
 
-    private boolean isVerificationCodeValid(){
-        if(verificationCodePinView.getText() == null) {
+    private boolean isVerificationCodeValid(String verificationCode){
+        if(verificationCode == null || verificationCode.isEmpty()) {
             onFail(getString(R.string.verification_code_warning));
             return false;
-        }else if(verificationCodePinView.getText().length() < 6) {
+        }else if(verificationCode.length() < 6) {
             onFail(getString(R.string.verification_code_warning_1));
             return false;
         }

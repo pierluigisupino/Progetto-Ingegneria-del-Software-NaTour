@@ -62,7 +62,7 @@ public class ForgotPasswordActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isEmailValid();
+                if(!isFirstSubmit) isEmailValid(emailTextInputEditText.getText().toString());
             }
 
             @Override
@@ -78,8 +78,9 @@ public class ForgotPasswordActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            if(isEmailValid()) {
-                String email = String.valueOf(emailTextInputEditText.getText());
+            String email = emailTextInputEditText.getText().toString();
+
+            if(isEmailValid(email)) {
                 progressBar.setVisibility(View.VISIBLE);
                 authController.resetPassword(email);
             }
@@ -87,14 +88,12 @@ public class ForgotPasswordActivity extends BaseActivity {
 
     }
 
-    private boolean isEmailValid(){
-        if(emailTextInputEditText.getText() == null) {
-            emailTextInputLayout.setError(getString(R.string.email_warning));
-            return false;
-        }else if(!Patterns.EMAIL_ADDRESS.matcher(emailTextInputEditText.getText()).matches()) {
-            emailTextInputLayout.setError(getString(R.string.mail_error));
+    private boolean isEmailValid(String username){
+        if(username == null || username.isEmpty()) {
+            emailTextInputLayout.setError(getString(R.string.username_warning));
             return false;
         }
+
         emailTextInputLayout.setError(null);
         return true;
     }
