@@ -5,7 +5,7 @@
 
     <!--WELCOME ACTIVITY-->
     <string name="welcome_text">Benvenuto in</string>
-    <string name="app_description">Esplora i posti che ami come mai prima d\'ora</string>
+    <string name="app_description">Esplora i posti che ami\ncome mai prima d\'ora</string>
     <string name="action">Iscriviti gratis</string>
     <string name="divider_text">continua con</string>
     <string name="sign_up_button_text">Registrati</string>
