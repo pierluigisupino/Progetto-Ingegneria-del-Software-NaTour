@@ -22,15 +22,15 @@ public class WelcomeActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setWelcomeActivity(WelcomeActivity.this);
 
-        Button signUpButton = (Button) findViewById(R.id.sign_up_button);
-        Button signInButton = (Button) findViewById(R.id.sign_in_button);
-        FloatingActionButton signInWithGoogle = (FloatingActionButton) findViewById(R.id.sign_in_with_google);
+        Button signUpButton = findViewById(R.id.sign_up_button);
+        Button signInButton = findViewById(R.id.sign_in_button);
+        FloatingActionButton signInWithGoogle = findViewById(R.id.sign_in_with_google);
 
-        signUpButton.setOnClickListener(v -> authController.goToActivity(WelcomeActivity.this, SignUpActivity.class));
+        signUpButton.setOnClickListener(view -> authController.goToActivity(WelcomeActivity.this, SignUpActivity.class));
 
-        signInButton.setOnClickListener(v -> authController.goToActivity(WelcomeActivity.this, SignInActivity.class));
+        signInButton.setOnClickListener(view -> authController.goToActivity(WelcomeActivity.this, SignInActivity.class));
 
-        signInWithGoogle.setOnClickListener(v -> authController.loginWithGoogle());
+        signInWithGoogle.setOnClickListener(view -> authController.loginWithGoogle());
     }
 
     @Override
