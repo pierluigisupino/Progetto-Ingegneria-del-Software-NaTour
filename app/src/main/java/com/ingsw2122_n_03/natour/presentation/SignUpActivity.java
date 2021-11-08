@@ -133,11 +133,11 @@ public class SignUpActivity extends BaseActivity {
             isFirstSubmit = false;
 
             if(areInputValid()) {
-                String username = String.valueOf(usernameEditText.getText());
+                String name = String.valueOf(usernameEditText.getText());
                 String email =  String.valueOf(emailEditText.getText());
                 String password = String.valueOf(passwordEditText.getText());
                 progressBar.setVisibility(View.VISIBLE);
-                authController.signUp(username, email, password);
+                authController.signUp(name, email, password);
             }
         });
 

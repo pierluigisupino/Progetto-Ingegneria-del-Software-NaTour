@@ -68,9 +68,8 @@ public class VerifyAccountActivity extends BaseActivity {
             imm.hideSoftInputFromWindow(verifyButton.getWindowToken(), 0);
 
             if(isVerificationCodeValid()) {
-                String verificationCode = String.valueOf(verificationCodePinView.getText());
                 progressBar.setVisibility(View.VISIBLE);
-                authController.confirmSignUp(email, password, verificationCode);
+                authController.confirmSignUp(email, password, String.valueOf(verificationCodePinView.getText()));
             }
         });
     }

@@ -24,7 +24,7 @@
 
     <!--RESET PASSWORD ACTIVITY-->
     <string name="reset_password_activity_title">Reset</string>
-    <string name="reset_password_text_1">Enter your new password</string>
+    <string name="reset_password_text_1">Enter a new password</string>
     <string name="reset_password_text_2">Enter the verification code sent to</string>
     <string name="new_password">New password</string>
     <string name="reset_password_button_text">Reset password</string>
@@ -56,7 +56,7 @@
     <string name="username_warning">Insert an username.</string>
     <string name="email_warning">"Insert an e-mail.</string>
     <string name="password_warning">Insert a password.</string>
-    <string name="verification_code_warning">Insert a verification code.</string>
+    <string name="verification_code_warning">Insert the verification code.</string>
     <string name="verification_code_warning_1">Complete the verification code.</string>
 
     <string name="username_length_error">At least 4 letters</string>

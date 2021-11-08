@@ -5,7 +5,7 @@
 
     <!--WELCOME ACTIVITY-->
     <string name="welcome_text">Benvenuto in</string>
-    <string name="app_description">Esplora i posti che ami</string>
+    <string name="app_description">Esplora i posti che ami come mai prima d\'ora</string>
     <string name="action">Iscriviti gratis</string>
     <string name="divider_text">continua con</string>
     <string name="sign_up_button_text">Registrati</string>
@@ -24,13 +24,13 @@
 
     <!--RESET PASSWORD ACTIVITY-->
     <string name="reset_password_activity_title">Reset</string>
-    <string name="reset_password_text_1">Inserisci la tua nuova password</string>
+    <string name="reset_password_text_1">Inserisci una nuova password</string>
     <string name="reset_password_text_2">Inserisci il codice di verifica\ninviato a</string>
     <string name="new_password">Nuova password</string>
     <string name="reset_password_button_text">Resetta la password</string>
 
     <!--GENERICS-->
-    <string name="username_place_holder">Name</string>
+    <string name="username_place_holder">Nome</string>
     <string name="email_place_holder">Email</string>
     <string name="password_place_holder">Password</string>
     <string name="continue_button_text">Continua</string>
@@ -53,7 +53,7 @@
     <string name="password_changed_success">Password cambiata</string>
 
     <!--ERRORS-->
-    <string name="username_warning">Inserisci un username</string>
+    <string name="username_warning">Inserisci uno username</string>
     <string name="email_warning">"Inserisci una e-mail.</string>
     <string name="password_warning">Inserisci una password</string>
     <string name="verification_code_warning">Inserisci il codice di verifica.</string>

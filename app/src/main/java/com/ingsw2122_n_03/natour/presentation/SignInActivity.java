@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -20,6 +21,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
+
+import java.util.Objects;
 
 public class SignInActivity extends BaseActivity {
 
@@ -110,7 +113,7 @@ public class SignInActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            if(areInputValid()) {
+            if(isEmailValid() & isPasswordValid()) {
                 String email = String.valueOf(emailEditText.getText());
                 String password = String.valueOf(passwordEditText.getText());
                 progressBar.setVisibility(View.VISIBLE);
@@ -142,16 +145,14 @@ public class SignInActivity extends BaseActivity {
         });
     }
 
-    private boolean areInputValid() {
-        return isEmailValid() & isPasswordValid();
-    }
-
     private boolean isEmailValid(){
         if(emailEditText.getText() == null || emailEditText.getText().length() == 0) {
             emailTextInputLayout.setError(getString(R.string.email_warning));
             return false;
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(Objects.requireNonNull(emailEditText.getText())).matches()) {
+            emailTextInputLayout.setError(getString(R.string.mail_error));
+            return false;
         }
-
         emailTextInputLayout.setError(null);
         return true;
     }
@@ -160,8 +161,10 @@ public class SignInActivity extends BaseActivity {
         if(passwordEditText.getText() == null || passwordEditText.getText().length() == 0) {
             passwordTextInputLayout.setError(getString(R.string.password_warning));
             return false;
+        }else if(passwordEditText.getText().length() < 8) {
+            passwordTextInputLayout.setError(getString(R.string.password_length_error));
+            return false;
         }
-
         passwordTextInputLayout.setError(null);
         return true;
     }
