@@ -129,8 +129,7 @@ public class ResetPasswordActivity extends BaseActivity {
         if(newPasswordEditText.getText() == null || newPasswordEditText.getText().length() == 0) {
             newPasswordTextInputLayout.setError(getString(R.string.password_warning));
             return false;
-        }
-        if(newPasswordEditText.getText().length() < 8) {
+        }else if(newPasswordEditText.getText().length() < 8) {
             newPasswordTextInputLayout.setError(getString(R.string.password_length_error));
             return false;
         }
