@@ -196,8 +196,12 @@ public final class AuthController extends Controller {
         goToActivityAndFinish(resetPasswordActivity, SignInActivity.class);
     }
 
-    public void onConfirmResetPasswordFailure(){
-        resetPasswordActivity.onFail(resetPasswordActivity.getResources().getString(R.string.generic_error));
+    public void onConfirmResetPasswordFailure(int errorCode){
+        if(errorCode == 0) {
+            resetPasswordActivity.onFail(resetPasswordActivity.getResources().getString(R.string.wrong_verification_code_error));
+        }else{
+            resetPasswordActivity.onFail(resetPasswordActivity.getResources().getString(R.string.generic_error));
+        }
     }
 
     public void signOut(Activity callingActivity){

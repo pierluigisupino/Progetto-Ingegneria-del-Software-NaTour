@@ -172,8 +172,14 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 confirmationCode,
                 controller::onConfirmResetPasswordSuccess,
                 error -> {
-                    Log.e("NaTour", error.toString());
-                    controller.onConfirmResetPasswordFailure();
+
+                    String messageError = Objects.requireNonNull(error.getMessage());
+
+                    if(messageError.contains("Confirmation code entered is not correct")) {
+                        controller.onConfirmResetPasswordFailure(0);
+                    }else{
+                        controller.onConfirmResetPasswordFailure(1);
+                    }
                 }
         );
     }

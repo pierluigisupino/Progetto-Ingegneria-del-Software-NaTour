@@ -90,12 +90,11 @@ public class ResetPasswordActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            progressBar.setVisibility(View.VISIBLE);
-
             String newPassword = newPasswordTextInputEditText.getText().toString();
             String verificationCode = verificationCodePinView.getText().toString();
 
             if(isPasswordValid(newPassword)) {
+                progressBar.setVisibility(View.VISIBLE);
                 authController.confirmResetPassword(newPassword, verificationCode);
             }
         });
