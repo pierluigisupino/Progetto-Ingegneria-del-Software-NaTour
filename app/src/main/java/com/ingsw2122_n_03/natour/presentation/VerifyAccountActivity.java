@@ -77,7 +77,6 @@ public class VerifyAccountActivity extends BaseActivity {
     @Override
     public void onSuccess(String msg) {
         runOnUiThread(() -> {
-            progressBar.setVisibility(View.INVISIBLE);
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                     .setBackgroundTint(ContextCompat.getColor(VerifyAccountActivity.this, R.color.success))
                     .show();
