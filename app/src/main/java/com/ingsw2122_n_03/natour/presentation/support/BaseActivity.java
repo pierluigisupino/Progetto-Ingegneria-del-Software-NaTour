@@ -12,11 +12,4 @@ public abstract class BaseActivity extends AppCompatActivity {
     public abstract void onSuccess(String msg);
     public abstract void onFail(String msg);
 
-    public String getText(TextInputEditText textInputEditText) {
-        return Objects.requireNonNull(textInputEditText.getText()).toString();
-    }
-
-    public String getText(PinView pinView) {
-        return Objects.requireNonNull(pinView.getText()).toString();
-    }
 }

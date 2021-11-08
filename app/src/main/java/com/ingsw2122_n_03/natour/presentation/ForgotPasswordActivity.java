@@ -21,13 +21,15 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
+import java.util.Objects;
+
 public class ForgotPasswordActivity extends BaseActivity {
 
     private AuthController authController;
     private ConstraintLayout layout;
 
     private TextInputLayout emailTextInputLayout;
-    private TextInputEditText emailTextInputEditText;
+    private TextInputEditText emailEditText;
 
     private Button continueButton;
     private LinearProgressIndicator progressBar;
@@ -46,14 +48,14 @@ public class ForgotPasswordActivity extends BaseActivity {
         MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
 
         emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
-        emailTextInputEditText = findViewById(R.id.emailTextInputEditText);
+        emailEditText = findViewById(R.id.emailTextInputEditText);
 
         continueButton = findViewById(R.id.continue_button);
         progressBar = findViewById(R.id.progressBar);
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
 
-        emailTextInputEditText.addTextChangedListener(new TextWatcher(){
+        emailEditText.addTextChangedListener(new TextWatcher(){
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -62,7 +64,7 @@ public class ForgotPasswordActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isEmailValid(emailTextInputEditText.getText().toString());
+                if(!isFirstSubmit) isEmailValid();
             }
 
             @Override
@@ -78,22 +80,22 @@ public class ForgotPasswordActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            String email = getText(emailTextInputEditText);
-
-            if(isEmailValid(email)) {
+            if(isEmailValid()) {
                 progressBar.setVisibility(View.VISIBLE);
-                authController.resetPassword(email);
+                authController.resetPassword(String.valueOf(emailEditText.getText()));
             }
         });
 
     }
 
-    private boolean isEmailValid(String username){
-        if(username == null || username.isEmpty()) {
-            emailTextInputLayout.setError(getString(R.string.username_warning));
+    private boolean isEmailValid(){
+        if(emailEditText.getText() == null || emailEditText.getText().length() == 0) {
+            emailTextInputLayout.setError(getString(R.string.email_warning));
+            return false;
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(Objects.requireNonNull(emailEditText.getText())).matches()) {
+            emailTextInputLayout.setError(getString(R.string.mail_error));
             return false;
         }
-
         emailTextInputLayout.setError(null);
         return true;
     }

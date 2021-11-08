@@ -29,7 +29,7 @@ public class ResetPasswordActivity extends BaseActivity {
     private ConstraintLayout layout;
 
     private TextInputLayout newPasswordTextInputLayout;
-    private TextInputEditText newPasswordTextInputEditText;
+    private TextInputEditText newPasswordEditText;
 
     private PinView verificationCodePinView;
 
@@ -53,7 +53,7 @@ public class ResetPasswordActivity extends BaseActivity {
         MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
 
         newPasswordTextInputLayout = findViewById(R.id.newPasswordTextInputLayout);
-        newPasswordTextInputEditText = findViewById(R.id.newPasswordTextInputEditText);
+        newPasswordEditText = findViewById(R.id.newPasswordTextInputEditText);
 
         TextView emailTextView = findViewById(R.id.emailTextView);
         emailTextView.setText(email);
@@ -65,7 +65,7 @@ public class ResetPasswordActivity extends BaseActivity {
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
 
-        newPasswordTextInputEditText.addTextChangedListener(new TextWatcher(){
+        newPasswordEditText.addTextChangedListener(new TextWatcher(){
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -74,7 +74,7 @@ public class ResetPasswordActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isPasswordValid(newPasswordTextInputEditText.getText().toString());
+                if(!isFirstSubmit) isPasswordValid();
             }
 
             @Override
@@ -90,11 +90,9 @@ public class ResetPasswordActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            String newPassword = getText(newPasswordTextInputEditText);
-            String verificationCode = getText(verificationCodePinView);
-
-            if(areInputValid(newPassword, verificationCode)) {
-
+            if(areInputValid()) {
+                String newPassword = String.valueOf(newPasswordEditText.getText());
+                String verificationCode = String.valueOf(verificationCodePinView.getText());
                 progressBar.setVisibility(View.VISIBLE);
                 authController.confirmResetPassword(newPassword, verificationCode);
             }
@@ -123,25 +121,28 @@ public class ResetPasswordActivity extends BaseActivity {
         });
     }
 
-    private boolean areInputValid(String newPassword, String verificationCode) {
-        return isPasswordValid(newPassword) & isVerificationCodeValid(verificationCode);
+    private boolean areInputValid() {
+        return isPasswordValid() & isVerificationCodeValid();
     }
 
-    private boolean isPasswordValid(String password){
-        if(password == null || password.isEmpty()) {
+    private boolean isPasswordValid(){
+        if(newPasswordEditText.getText() == null || newPasswordEditText.getText().length() == 0) {
             newPasswordTextInputLayout.setError(getString(R.string.password_warning));
             return false;
         }
-
+        if(newPasswordEditText.getText().length() < 8) {
+            newPasswordTextInputLayout.setError(getString(R.string.password_length_error));
+            return false;
+        }
         newPasswordTextInputLayout.setError(null);
         return true;
     }
 
-    private boolean isVerificationCodeValid(String verificationCode){
-        if(verificationCode == null || verificationCode.isEmpty()) {
+    private boolean isVerificationCodeValid(){
+        if(verificationCodePinView.getText() == null || verificationCodePinView.getText().length() == 0) {
             onFail(getString(R.string.verification_code_warning));
             return false;
-        }else if(verificationCode.length() < 6) {
+        }else if(verificationCodePinView.getText().length() < 6) {
             onFail(getString(R.string.verification_code_warning_1));
             return false;
         }

@@ -67,9 +67,8 @@ public class VerifyAccountActivity extends BaseActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(verifyButton.getWindowToken(), 0);
 
-            String verificationCode = getText(verificationCodePinView);
-
-            if(isVerificationCodeValid(verificationCode)) {
+            if(isVerificationCodeValid()) {
+                String verificationCode = String.valueOf(verificationCodePinView.getText());
                 progressBar.setVisibility(View.VISIBLE);
                 authController.confirmSignUp(email, password, verificationCode);
             }
@@ -96,11 +95,11 @@ public class VerifyAccountActivity extends BaseActivity {
         });
     }
 
-    private boolean isVerificationCodeValid(String verificationCode){
-        if(verificationCode == null || verificationCode.isEmpty()) {
+    private boolean isVerificationCodeValid(){
+        if(verificationCodePinView.getText() == null || verificationCodePinView.getText().length() == 0) {
             onFail(getString(R.string.verification_code_warning));
             return false;
-        }else if(verificationCode.length() < 6) {
+        }else if(verificationCodePinView.getText().length() < 6) {
             onFail(getString(R.string.verification_code_warning_1));
             return false;
         }

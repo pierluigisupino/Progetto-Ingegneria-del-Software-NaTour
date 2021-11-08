@@ -1,7 +1,5 @@
 package com.ingsw2122_n_03.natour.infastructure;
 
-import androidx.annotation.Nullable;
-
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public interface AuthInterface {
