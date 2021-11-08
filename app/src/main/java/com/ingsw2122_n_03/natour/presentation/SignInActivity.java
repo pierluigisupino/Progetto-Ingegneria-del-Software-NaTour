@@ -28,12 +28,10 @@ public class SignInActivity extends BaseActivity {
     private ConstraintLayout layout;
 
     private TextInputLayout  emailTextInputLayout;
-    private TextInputEditText  emailTextInputEditText;
+    private TextInputEditText emailEditText;
 
     private TextInputLayout passwordTextInputLayout;
-    private TextInputEditText passwordTextInputEditText;
-
-    private TextView forgotPasswordButton;
+    private TextInputEditText passwordEditText;
 
     private Button signInButton;
     private LinearProgressIndicator progressBar;
@@ -53,19 +51,19 @@ public class SignInActivity extends BaseActivity {
         MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
 
         emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
-        emailTextInputEditText = findViewById(R.id.emailTextInputEditText);
+        emailEditText = findViewById(R.id.emailTextInputEditText);
 
         passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
-        passwordTextInputEditText = findViewById(R.id.passwordTextInputEditText);
+        passwordEditText = findViewById(R.id.passwordTextInputEditText);
 
-        forgotPasswordButton = findViewById(R.id.forgot_password_button);
+        TextView forgotPasswordButton = findViewById(R.id.forgot_password_button);
 
         signInButton = findViewById(R.id.sign_in_button);
         progressBar = findViewById(R.id.progressBar);
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
 
-        emailTextInputEditText.addTextChangedListener(new TextWatcher(){
+        emailEditText.addTextChangedListener(new TextWatcher(){
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -74,7 +72,7 @@ public class SignInActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isEmailValid(emailTextInputEditText.getText().toString());
+                if(!isFirstSubmit) isEmailValid();
             }
 
             @Override
@@ -83,7 +81,7 @@ public class SignInActivity extends BaseActivity {
             }
         });
 
-        passwordTextInputEditText.addTextChangedListener(new TextWatcher(){
+        passwordEditText.addTextChangedListener(new TextWatcher(){
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -92,7 +90,7 @@ public class SignInActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isPasswordValid(passwordTextInputEditText.getText().toString());
+                if(!isFirstSubmit) isPasswordValid();
             }
 
             @Override
@@ -112,11 +110,10 @@ public class SignInActivity extends BaseActivity {
 
             isFirstSubmit = false;
 
-            String email =  emailTextInputEditText.getText().toString();
-            String password = passwordTextInputEditText.getText().toString();
-
-            if(areInputValid(email, password)) {
+            if(isEmailValid() & isPasswordValid()) {
                 progressBar.setVisibility(View.VISIBLE);
+                String email = String.valueOf(emailEditText.getText());
+                String password = String.valueOf(passwordEditText.getText());
                 authController.signIn(email, password);
             }
         });
@@ -145,26 +142,21 @@ public class SignInActivity extends BaseActivity {
         });
     }
 
-    private boolean areInputValid(String username, String password) {
-        return isEmailValid(username) & isPasswordValid(password);
-    }
 
-    private boolean isEmailValid(String username){
-        if(username == null || username.isEmpty()) {
-            emailTextInputLayout.setError(getString(R.string.username_warning));
+    private boolean isEmailValid(){
+        if(emailEditText.getText() == null) {
+            emailTextInputLayout.setError(getString(R.string.email_warning));
             return false;
         }
-
         emailTextInputLayout.setError(null);
         return true;
     }
 
-    private boolean isPasswordValid(String password){
-        if(password == null || password.isEmpty()) {
+    private boolean isPasswordValid(){
+        if(passwordEditText.getText() == null) {
             passwordTextInputLayout.setError(getString(R.string.password_warning));
             return false;
         }
-
         passwordTextInputLayout.setError(null);
         return true;
     }
