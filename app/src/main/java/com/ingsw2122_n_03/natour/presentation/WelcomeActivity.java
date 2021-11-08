@@ -26,9 +26,9 @@ public class WelcomeActivity extends BaseActivity {
         Button signInButton = (Button) findViewById(R.id.sign_in_button);
         FloatingActionButton signInWithGoogle = (FloatingActionButton) findViewById(R.id.sign_in_with_google);
 
-        signUpButton.setOnClickListener(v -> authController.onRegisterButtonPressed());
+        signUpButton.setOnClickListener(v -> authController.goToActivity(WelcomeActivity.this, SignUpActivity.class));
 
-        signInButton.setOnClickListener(v -> authController.onSignInButtonPressed());
+        signInButton.setOnClickListener(v -> authController.goToActivity(WelcomeActivity.this, SignInActivity.class));
 
         signInWithGoogle.setOnClickListener(v -> authController.loginWithGoogle());
     }

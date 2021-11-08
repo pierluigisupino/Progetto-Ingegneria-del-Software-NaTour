@@ -57,9 +57,6 @@ public final class AuthController extends Controller {
         goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
 
-    public void onSignInButtonPressed() {
-        goToActivity(welcomeActivity, SignInActivity.class);
-    }
 
     public void signIn(String email, String password) {
         authInterface.signIn(email, password);
@@ -94,9 +91,6 @@ public final class AuthController extends Controller {
         goToActivity(signInActivity, VerifyAccountActivity.class, extras);
     }
 
-    public void onRegisterButtonPressed() {
-        goToActivity(welcomeActivity, SignUpActivity.class);
-    }
 
     public void signUp(String username, String email, String password) {
         authInterface.signUp(username, email, password);
