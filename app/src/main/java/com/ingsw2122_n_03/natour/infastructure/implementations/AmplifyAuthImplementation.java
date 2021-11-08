@@ -153,8 +153,6 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 },
                 error -> {
 
-                    Log.e("NaTour", error.toString());
-
                     String messageError = Objects.requireNonNull(error.getMessage());
 
                     if(messageError.contains("User not found in the system")) {
@@ -172,8 +170,11 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         Amplify.Auth.confirmResetPassword(
                 newPassword,
                 confirmationCode,
-                () -> Log.i("NaTour", "New password confirmed"),
-                error -> Log.e("NaTour", error.toString())
+                controller::onConfirmResetPasswordSuccess,
+                error -> {
+                    Log.e("NaTour", error.toString());
+                    controller.onConfirmResetPasswordFailure();
+                }
         );
     }
 

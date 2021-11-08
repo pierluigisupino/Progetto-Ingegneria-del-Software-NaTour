@@ -176,7 +176,7 @@ public final class AuthController extends Controller {
             put("email", email);
         }};
 
-        goToActivity(forgotPasswordActivity, ResetPasswordActivity.class, extras);
+        goToActivityAndFinish(forgotPasswordActivity, ResetPasswordActivity.class, extras);
     }
 
     public void onResetPasswordFailure(int errorCode){
@@ -194,11 +194,16 @@ public final class AuthController extends Controller {
     }
 
     public void onConfirmResetPasswordSuccess(){
+        resetPasswordActivity.onSuccess(resetPasswordActivity.getResources().getString(R.string.password_changed_success));
 
+        if(forgotPasswordActivity != null) forgotPasswordActivity.finish();
+        if(signInActivity != null) signInActivity.finish();
+
+        goToActivityAndFinish(resetPasswordActivity, SignInActivity.class);
     }
 
     public void onConfirmResetPasswordFailure(){
-
+        resetPasswordActivity.onFail(resetPasswordActivity.getResources().getString(R.string.generic_error));
     }
 
     public void signOut(Activity callingActivity){

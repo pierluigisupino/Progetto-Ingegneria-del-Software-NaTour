@@ -50,6 +50,7 @@
     <string name="signup_success">Registrato</string>
     <string name="verify_success">Verificato</string>
     <string name="verification_code_sent">Codice di verifica inviato</string>
+    <string name="password_changed_success">Password cambiata</string>
 
     <!--ERRORS-->
     <string name="username_warning">Inserisci un username</string>
