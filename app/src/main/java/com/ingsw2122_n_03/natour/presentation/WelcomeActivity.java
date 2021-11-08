@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

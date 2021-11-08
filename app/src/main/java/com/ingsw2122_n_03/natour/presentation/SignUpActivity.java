@@ -51,20 +51,20 @@ public class SignUpActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setRegisterActivity(SignUpActivity.this);
 
-        layout = (ConstraintLayout) findViewById(R.id.layout);
-        MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
+        layout = findViewById(R.id.layout);
+        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
 
-        usernameTextInputLayout = (TextInputLayout) findViewById(R.id.usernameTextInputLayout);
-        usernameTextInputEditText = (TextInputEditText) findViewById(R.id.usernameTextInputEditText);
+        usernameTextInputLayout = findViewById(R.id.usernameTextInputLayout);
+        usernameTextInputEditText = findViewById(R.id.usernameTextInputEditText);
 
-        emailTextInputLayout = (TextInputLayout) findViewById(R.id.emailTextInputLayout);
-        emailTextInputEditText = (TextInputEditText) findViewById(R.id.emailTextInputEditText);
+        emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
+        emailTextInputEditText = findViewById(R.id.emailTextInputEditText);
 
-        passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordTextInputLayout);
-        passwordTextInputEditText = (TextInputEditText) findViewById(R.id.passwordTextInputEditText);
+        passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
+        passwordTextInputEditText = findViewById(R.id.passwordTextInputEditText);
 
-        registerButton = (Button) findViewById(R.id.registerButton);
-        progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
+        registerButton = findViewById(R.id.registerButton);
+        progressBar = findViewById(R.id.progressBar);
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
 

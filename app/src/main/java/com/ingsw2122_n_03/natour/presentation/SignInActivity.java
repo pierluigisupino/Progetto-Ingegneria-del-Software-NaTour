@@ -49,19 +49,19 @@ public class SignInActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setSignInActivity(SignInActivity.this);
 
-        layout = (ConstraintLayout) findViewById(R.id.layout);
-        MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
+        layout = findViewById(R.id.layout);
+        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
 
-        emailTextInputLayout = (TextInputLayout) findViewById(R.id.emailTextInputLayout);
-        emailTextInputEditText = (TextInputEditText) findViewById(R.id.emailTextInputEditText);
+        emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
+        emailTextInputEditText = findViewById(R.id.emailTextInputEditText);
 
-        passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordTextInputLayout);
-        passwordTextInputEditText = (TextInputEditText) findViewById(R.id.passwordTextInputEditText);
+        passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
+        passwordTextInputEditText = findViewById(R.id.passwordTextInputEditText);
 
-        forgotPasswordButton = (TextView) findViewById(R.id.forgot_password_button);
+        forgotPasswordButton = findViewById(R.id.forgot_password_button);
 
-        signInButton = (Button) findViewById(R.id.sign_in_button);
-        progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
+        signInButton = findViewById(R.id.sign_in_button);
+        progressBar = findViewById(R.id.progressBar);
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
 
@@ -101,9 +101,9 @@ public class SignInActivity extends BaseActivity {
             }
         });
 
-        forgotPasswordButton.setOnClickListener(view -> {
-            authController.goToActivity(SignInActivity.this, ForgotPasswordActivity.class);
-        });
+        forgotPasswordButton.setOnClickListener(view ->
+            authController.goToActivity(SignInActivity.this, ForgotPasswordActivity.class)
+        );
 
         signInButton.setOnClickListener(view -> {
 

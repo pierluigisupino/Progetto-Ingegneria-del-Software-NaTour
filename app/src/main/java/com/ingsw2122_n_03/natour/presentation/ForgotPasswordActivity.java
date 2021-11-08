@@ -1,9 +1,5 @@
 package com.ingsw2122_n_03.natour.presentation;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +8,9 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -43,14 +42,14 @@ public class ForgotPasswordActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setForgotPasswordActivity(ForgotPasswordActivity.this);
 
-        layout = (ConstraintLayout) findViewById(R.id.layout);
-        MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
+        layout = findViewById(R.id.layout);
+        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
 
-        emailTextInputLayout = (TextInputLayout) findViewById(R.id.emailTextInputLayout);
-        emailTextInputEditText = (TextInputEditText) findViewById(R.id.emailTextInputEditText);
+        emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
+        emailTextInputEditText = findViewById(R.id.emailTextInputEditText);
 
-        continueButton = (Button) findViewById(R.id.continue_button);
-        progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
+        continueButton = findViewById(R.id.continue_button);
+        progressBar = findViewById(R.id.progressBar);
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
 

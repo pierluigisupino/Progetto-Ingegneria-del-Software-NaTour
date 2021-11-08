@@ -41,19 +41,19 @@ public class VerifyAccountActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setVerifyAccountActivity(VerifyAccountActivity.this);
 
-        layout = (ConstraintLayout) findViewById(R.id.layout);
-        MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
+        layout = findViewById(R.id.layout);
+        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
 
-        TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
+        TextView emailTextView = findViewById(R.id.emailTextView);
         emailTextView.setText(email);
 
-        verificationCodePinView = (PinView) findViewById(R.id.verificationCode);
+        verificationCodePinView = findViewById(R.id.verificationCode);
 
-        TextView resendCodeTextView = (TextView) findViewById(R.id.resendCode);
+        TextView resendCodeTextView = findViewById(R.id.resendCode);
 
-        Button verifyButton = (Button) findViewById(R.id.verifyButton);
+        Button verifyButton = findViewById(R.id.verifyButton);
 
-        progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
 

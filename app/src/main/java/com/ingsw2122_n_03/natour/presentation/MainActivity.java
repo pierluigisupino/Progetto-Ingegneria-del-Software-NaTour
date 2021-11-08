@@ -25,9 +25,9 @@ public class MainActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setMainActivity(MainActivity.this);
 
-        layout = (ConstraintLayout) findViewById(R.id.layout);
+        layout = findViewById(R.id.layout);
 
-        Button signOutButton = (Button) findViewById(R.id.signOutButton);
+        Button signOutButton = findViewById(R.id.signOutButton);
 
         signOutButton.setOnClickListener(view -> authController.signOut(MainActivity.this));
 

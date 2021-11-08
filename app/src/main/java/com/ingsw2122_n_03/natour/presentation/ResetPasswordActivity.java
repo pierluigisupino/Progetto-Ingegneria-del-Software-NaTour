@@ -1,9 +1,5 @@
 package com.ingsw2122_n_03.natour.presentation;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +9,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.chaos.view.PinView;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -50,19 +49,19 @@ public class ResetPasswordActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setResetPasswordActivity(ResetPasswordActivity.this);
 
-        layout = (ConstraintLayout) findViewById(R.id.layout);
-        MaterialToolbar materialToolbar = (MaterialToolbar) findViewById(R.id.topAppBar);
+        layout = findViewById(R.id.layout);
+        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
 
-        newPasswordTextInputLayout = (TextInputLayout) findViewById(R.id.newPasswordTextInputLayout);
-        newPasswordTextInputEditText = (TextInputEditText) findViewById(R.id.newPasswordTextInputEditText);
+        newPasswordTextInputLayout = findViewById(R.id.newPasswordTextInputLayout);
+        newPasswordTextInputEditText = findViewById(R.id.newPasswordTextInputEditText);
 
-        TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
+        TextView emailTextView = findViewById(R.id.emailTextView);
         emailTextView.setText(email);
 
-        verificationCodePinView = (PinView) findViewById(R.id.verificationCode);
+        verificationCodePinView = findViewById(R.id.verificationCode);
 
-        resetPasswordButton = (Button) findViewById(R.id.reset_button);
-        progressBar = (LinearProgressIndicator) findViewById(R.id.progressBar);
+        resetPasswordButton = findViewById(R.id.reset_button);
+        progressBar = findViewById(R.id.progressBar);
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
 
