@@ -59,7 +59,7 @@
     <string name="verification_code_warning">Insert the verification code.</string>
     <string name="verification_code_warning_1">Complete the verification code.</string>
 
-    <string name="username_length_error">At least 4 letters</string>
+    <string name="username_length_error">At least 4 characters</string>
     <string name="mail_error">Check your e-mail address</string>
     <string name="password_length_error">At least 8 characters</string>
 
