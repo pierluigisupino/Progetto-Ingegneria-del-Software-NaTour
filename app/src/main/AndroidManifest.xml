@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ingsw2122_n_03.natour">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -21,10 +25,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
         <!-- MAIN ACTIVITY -->
         <activity
             android:name=".presentation.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/ColoredStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
