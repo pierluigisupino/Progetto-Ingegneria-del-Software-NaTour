@@ -3,7 +3,6 @@ package com.ingsw2122_n_03.natour.presentation;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -15,11 +14,9 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.MenuItem;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -33,7 +30,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,20 +38,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
+import com.ingsw2122_n_03.natour.BuildConfig;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
+import com.ingsw2122_n_03.natour.infastructure.directions.FetchURL;
+import com.ingsw2122_n_03.natour.infastructure.directions.TaskLoadedCallback;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 
-public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
+public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener, TaskLoadedCallback {
 
     private AuthController authController;
     private ConstraintLayout layout;
@@ -65,6 +65,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
 
     private GoogleMap myGoogleMap;
     private Geocoder geocoder;
+    private Polyline polyline;
 
     private boolean isFollowing = true;
 
@@ -153,9 +154,51 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             checkSettingsAndStartLocationUpdates();
             myGoogleMap.setMyLocationEnabled(true);
+
+            LatLng[] waypoints = new LatLng[] {
+                    new LatLng(41.87953406823568, 12.484918534755707),
+                    new LatLng(41.87858047507068, 12.484844103455544),
+                    new LatLng(41.87719074981401, 12.484728768467905),
+            };
+
+            MarkerOptions place1 = new MarkerOptions().position(new LatLng(41.880650902452025, 12.485749013721943));
+            MarkerOptions place5 = new MarkerOptions().position(new LatLng(41.87727238171806, 12.485873401165009));
+
+            myGoogleMap.addMarker(place1);
+            myGoogleMap.addMarker(place5);
+
+            String url = getUrl(place1.getPosition(), place5.getPosition(), "driving", waypoints);
+            new FetchURL(MainActivity.this).execute(url, "driving");
+
         } else {
             askLocationPermission();
         }
+    }
+
+    private String getUrl(LatLng origin, LatLng dest, String directionMode, @Nullable LatLng[] waypoints) {
+
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        StringBuilder str_waypoints = new StringBuilder("&waypoints=optimize:true");
+
+        if(waypoints != null){
+            for(LatLng waypoint : waypoints){
+                str_waypoints.append("|").append(waypoint.latitude).append(",").append(waypoint.longitude);
+            }
+        }
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + str_waypoints + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + BuildConfig.MAPS_API_KEY;
+        return url;
     }
 
     private void checkSettingsAndStartLocationUpdates(){
@@ -287,5 +330,15 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
     public boolean onMarkerClick(@NonNull Marker marker) {
         marker.remove();
         return false;
+    }
+
+    @Override
+    public void onTaskDone(Object... values) {
+        if(polyline != null){
+            polyline.remove();
+        }else{
+            polyline = myGoogleMap.addPolyline((PolylineOptions) values[0]);
+        }
+
     }
 }
