@@ -186,7 +186,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
             MainActivity.this.startActivity(intent);
             finish();
         });
-        alertDialogBuilder.setNegativeButton("Annulla", (dialogInterface, i) -> finish());
+        alertDialogBuilder.setNegativeButton("Esci", (dialogInterface, i) -> finish());
 
         AlertDialog dialog = alertDialogBuilder.create();
         dialog.setCanceledOnTouchOutside(false);
@@ -210,7 +210,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkSettingsAndStartLocationUpdates();
             } else {
-                finish();
+                showAlertGpsPermissionNeeded();
             }
         }
     }
@@ -238,5 +238,4 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
 
         locationTask.addOnFailureListener(e -> Log.e("natoure", e.getLocalizedMessage()));
     }
-
 }
