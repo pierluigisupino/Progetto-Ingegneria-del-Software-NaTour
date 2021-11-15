@@ -186,7 +186,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
             MainActivity.this.startActivity(intent);
             finish();
         });
-        alertDialogBuilder.setNegativeButton("Annulla", (dialogInterface, i) -> finish());
+        alertDialogBuilder.setNegativeButton("Esci", (dialogInterface, i) -> finish());
 
         AlertDialog dialog = alertDialogBuilder.create();
         dialog.setCanceledOnTouchOutside(false);
