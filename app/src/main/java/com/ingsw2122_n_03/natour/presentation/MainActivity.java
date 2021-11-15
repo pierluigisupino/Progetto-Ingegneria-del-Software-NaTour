@@ -55,7 +55,7 @@ import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import java.io.IOException;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements OnMapReadyCallback{
+public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
 
     private AuthController authController;
     private ConstraintLayout layout;
@@ -64,6 +64,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
     private LocationRequest locationRequest;
 
     private GoogleMap myGoogleMap;
+    private Geocoder geocoder;
 
     private boolean isFollowing = true;
 
@@ -113,6 +114,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
         locationRequest.setInterval(4000);
         locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        geocoder = new Geocoder(this);
     }
 
     @Override
@@ -142,6 +145,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
         myGoogleMap = googleMap;
+        myGoogleMap.setOnMapLongClickListener(this);
+        myGoogleMap.setOnMarkerDragListener(this);
         myGoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(MainActivity.this, R.raw.map_style));
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -237,5 +242,44 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
         });
 
         locationTask.addOnFailureListener(e -> Log.e("natoure", e.getLocalizedMessage()));
+    }
+
+    @Override
+    public void onMapLongClick(@NonNull LatLng latLng) {
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if(addresses.size() > 0){
+                Address address = addresses.get(0);
+                String streetAddress = address.getAddressLine(0);
+                myGoogleMap.addMarker(new MarkerOptions().position(latLng).title(streetAddress).draggable(true));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onMarkerDrag(@NonNull Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(@NonNull Marker marker) {
+        LatLng latLng = marker.getPosition();
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if(addresses.size() > 0){
+                Address address = addresses.get(0);
+                String streetAddress = address.getAddressLine(0);
+               marker.setTitle(streetAddress);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onMarkerDragStart(@NonNull Marker marker) {
+
     }
 }
