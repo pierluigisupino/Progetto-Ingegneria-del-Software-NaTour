@@ -55,7 +55,7 @@ import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import java.io.IOException;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
+public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
 
     private AuthController authController;
     private ConstraintLayout layout;
@@ -147,6 +147,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
         myGoogleMap = googleMap;
         myGoogleMap.setOnMapLongClickListener(this);
         myGoogleMap.setOnMarkerDragListener(this);
+        myGoogleMap.setOnMarkerClickListener(this);
         myGoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(MainActivity.this, R.raw.map_style));
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -189,7 +190,6 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
             Uri uri = Uri.fromParts("package", MainActivity.this.getPackageName(), null);
             intent.setData(uri);
             MainActivity.this.startActivity(intent);
-            finish();
         });
         alertDialogBuilder.setNegativeButton("Esci", (dialogInterface, i) -> finish());
 
@@ -281,5 +281,11 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
     @Override
     public void onMarkerDragStart(@NonNull Marker marker) {
 
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        marker.remove();
+        return false;
     }
 }
