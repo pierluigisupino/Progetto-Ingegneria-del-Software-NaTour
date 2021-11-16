@@ -21,6 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.amplifyframework.auth.AuthUser;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -167,8 +168,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
             myGoogleMap.addMarker(place1);
             myGoogleMap.addMarker(place5);
 
-            String url = getUrl(place1.getPosition(), place5.getPosition(), "driving", waypoints);
-            new FetchURL(MainActivity.this).execute(url, "driving");
+            String url = getUrl(place1.getPosition(), place5.getPosition(), "walking", waypoints);
+            //new FetchURL(MainActivity.this).execute(url, "walking");
 
         } else {
             askLocationPermission();
@@ -177,9 +178,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
 
     private String getUrl(LatLng origin, LatLng dest, String directionMode, @Nullable LatLng[] waypoints) {
 
-        // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-
         StringBuilder str_waypoints = new StringBuilder("&waypoints=optimize:true");
 
         if(waypoints != null){
@@ -188,17 +187,12 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
             }
         }
 
-        // Destination of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-        // Mode
         String mode = "mode=" + directionMode;
-        // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + str_waypoints + "&" + mode;
-        // Output format
         String output = "json";
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + BuildConfig.MAPS_API_KEY;
-        return url;
+
+        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + BuildConfig.MAPS_API_KEY;
     }
 
     private void checkSettingsAndStartLocationUpdates(){
@@ -239,6 +233,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
         AlertDialog dialog = alertDialogBuilder.create();
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+        
     }
 
     private void askLocationPermission(){
