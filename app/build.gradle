@@ -19,6 +19,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "MAPS_API_KEY", localProperties['MAPS_API_KEY']
+        buildConfigField "String", "DATABASE_HOST", localProperties['DATABASE_HOST']
+        buildConfigField "String", "DATABASE", localProperties['DATABASE']
+        buildConfigField "String", "DATABASE_PORT", localProperties['DATABASE_PORT']
+        buildConfigField "String", "DATABSE_USER", localProperties['DATABSE_USER']
+        buildConfigField "String", "DATABASE_PASSWORD", localProperties['DATABASE_PASSWORD']
     }
 
     buildTypes {
@@ -45,4 +50,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.amplifyframework:aws-auth-cognito:1.28.1'
     implementation 'com.chaos.view:pinview:1.4.4'
+    implementation 'org.postgresql:postgresql:42.2.5.jre7'
 }
