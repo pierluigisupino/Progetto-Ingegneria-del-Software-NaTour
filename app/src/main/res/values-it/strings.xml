@@ -25,7 +25,7 @@
     <!--RESET PASSWORD ACTIVITY-->
     <string name="reset_password_activity_title">Reset</string>
     <string name="reset_password_text_1">Inserisci una nuova password</string>
-    <string name="reset_password_text_2">Inserisci il codice di verifica\ninviato a</string>
+    <string name="reset_password_text_2">Codice di verifica inviato a</string>
     <string name="new_password">Nuova password</string>
     <string name="reset_password_button_text">Resetta la password</string>
 
