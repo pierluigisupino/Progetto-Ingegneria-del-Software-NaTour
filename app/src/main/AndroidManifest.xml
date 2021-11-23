@@ -24,11 +24,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
 
+        <activity
+            android:name=".presentation.AddItineraryActivity"
+            android:exported="false"
+            android:theme="@style/NoActionBar"/>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
-
-        <!-- MAIN ACTIVITY -->
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
@@ -42,38 +45,26 @@
                 <data android:scheme="mainpage" />
             </intent-filter>
         </activity>
-
-        <!-- VERIFY ACCOUNT ACTIVITY -->
         <activity
             android:name=".presentation.VerifyAccountActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
-
-        <!-- REGISTER ACTIVITY -->
         <activity
             android:name=".presentation.SignUpActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
-
-        <!-- FORGOT PASSWORD ACTIVITY -->
         <activity
             android:name=".presentation.ForgotPasswordActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
-
-        <!-- RESET PASSWORD ACTIVITY -->
         <activity
             android:name=".presentation.ResetPasswordActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
-
-        <!-- LOGIN ACTIVITY -->
         <activity
             android:name=".presentation.SignInActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
-
-        <!-- WELCOME ACTIVITY -->
         <activity
             android:name=".presentation.WelcomeActivity"
             android:exported="true"
@@ -87,8 +78,6 @@
                 <data android:scheme="welcomepage" />
             </intent-filter>
         </activity>
-
-        <!-- SPLASH ACTIVITY -->
         <activity
             android:name=".presentation.SplashActivity"
             android:exported="true"
@@ -99,8 +88,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- ERROR ACTIVITY -->
         <activity
             android:name=".presentation.ErrorActivity"
             android:exported="false"
