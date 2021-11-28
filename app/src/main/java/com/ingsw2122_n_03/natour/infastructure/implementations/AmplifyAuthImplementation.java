@@ -6,6 +6,7 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.results.SignUpResult;
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.AuthProvider;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
@@ -28,6 +29,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     @Override
     public boolean configureAuth(BaseActivity callingActivity) {
         try {
+            Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
             return true;

@@ -21,7 +21,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.auth.AuthUser;
+import com.amplifyframework.core.Amplify;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -52,6 +54,7 @@ import com.ingsw2122_n_03.natour.infastructure.directions.TaskLoadedCallback;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -90,6 +93,18 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/prova")
+                .build();
+
+        Amplify.API.get(options,
+
+                restResponse -> {
+                   Log.i("MyAmplifyApp", "GET succeeded: " + restResponse.getData().asString());
+                },
+                apiFailure -> Log.e("MyAmplifyApp", "GET failed.", apiFailure)
+        );
 
         authController = AuthController.getInstance();
         authController.setMainActivity(MainActivity.this);
