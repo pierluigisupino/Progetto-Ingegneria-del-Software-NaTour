@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
         setContentView(R.layout.activity_main);
 
         RestOptions options = RestOptions.builder()
-                .addPath("/prova")
+                .addPath("/items")
                 .build();
 
         Amplify.API.get(options,
