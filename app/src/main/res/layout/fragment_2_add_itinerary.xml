@@ -21,70 +21,60 @@
         app:layout_constraintGuide_percent="0.92"/>
 
     <TextView
-        android:id="@+id/duration"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="Duration:"
-        android:textAlignment="center"
-        android:textColor="@color/primary"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/timePicker"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toTopOf="@+id/timePicker" />
-
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:timePickerMode="spinner"
-        android:layout_marginStart="10dp"
-        android:theme="@style/TimePicker"
-        app:layout_constraintStart_toEndOf="@+id/duration"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/difficulty"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
         android:text="Difficulty:"
         android:textAlignment="center"
         android:textColor="@color/primary"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/radioGroup"
-        app:layout_constraintLeft_toRightOf="@id/leftGuideline"
-        app:layout_constraintTop_toTopOf="@+id/radioGroup" />
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintLeft_toRightOf="@id/difficulty"
-        app:layout_constraintTop_toBottomOf="@id/timePicker">
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="40dp"
+        android:theme="@style/TimePicker"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toEndOf="@+id/duration"
+        app:layout_constraintTop_toBottomOf="@id/menu" />
 
-        <RadioButton
-            android:id="@+id/radioButton"
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="217dp"
+        android:fontFamily="@font/euclid_circular_semi_bold"
+        android:text="Duration:"
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/difficulty" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/menu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintLeft_toRightOf="@id/leftGuideline"
+        app:layout_constraintRight_toRightOf="@id/rightGuideline"
+        app:layout_constraintTop_toBottomOf="@id/difficulty">
+
+        <AutoCompleteTextView
+            android:id="@+id/difficultyAutoComplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Diff 1"
-            android:buttonTint="@color/primary"/>
+            android:inputType="none" />
 
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Diff 2"
-            android:buttonTint="@color/primary"/>
-
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Diff 3"
-            android:buttonTint="@color/primary"/>
-    </RadioGroup>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

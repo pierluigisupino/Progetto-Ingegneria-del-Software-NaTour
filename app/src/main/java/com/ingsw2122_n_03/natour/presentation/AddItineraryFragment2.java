@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TimePicker;
 
 import com.ingsw2122_n_03.natour.R;
@@ -68,8 +70,17 @@ public class AddItineraryFragment2 extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        TimePicker timePicker = getView().findViewById(R.id.timePicker);
+        TimePicker timePicker = view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.difficultyAutoComplete);
+        String[] difficulties = new String[]{
+                "Turistico (*)",
+                "Escursionistico (**)",
+                "Esperto (***)",
+        };
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.difficult_list_item, difficulties);
+        autoCompleteTextView.setAdapter(arrayAdapter);
+        autoCompleteTextView.setText(autoCompleteTextView.getAdapter().getItem(0).toString(), false);
     }
 
 }
