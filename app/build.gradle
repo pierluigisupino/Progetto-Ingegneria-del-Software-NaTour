@@ -46,4 +46,5 @@ dependencies {
     implementation 'com.amplifyframework:aws-auth-cognito:1.28.1'
     implementation 'com.chaos.view:pinview:1.4.4'
     implementation 'com.amplifyframework:aws-api:1.30.0'
+    implementation 'com.shuhart.stepview:stepview:1.5.1'
 }

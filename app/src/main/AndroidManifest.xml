@@ -23,19 +23,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
-
         <activity
             android:name=".presentation.AddItineraryActivity"
             android:exported="false"
-            android:theme="@style/NoActionBar"/>
+            android:theme="@style/NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
-            android:theme="@style/ColoredStatusBar">
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
