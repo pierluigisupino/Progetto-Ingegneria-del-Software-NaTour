@@ -2,20 +2,22 @@ package com.ingsw2122_n_03.natour.presentation;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TimePicker;
 
 import com.ingsw2122_n_03.natour.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BlankFragment3#newInstance} factory method to
+ * Use the {@link AddItineraryFragment2#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BlankFragment3 extends Fragment {
+public class AddItineraryFragment2 extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +28,7 @@ public class BlankFragment3 extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public BlankFragment3() {
+    public AddItineraryFragment2() {
         // Required empty public constructor
     }
 
@@ -36,11 +38,11 @@ public class BlankFragment3 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment3.
+     * @return A new instance of fragment BlankFragment2.
      */
     // TODO: Rename and change types and number of parameters
-    public static BlankFragment3 newInstance(String param1, String param2) {
-        BlankFragment3 fragment = new BlankFragment3();
+    public static AddItineraryFragment2 newInstance(String param1, String param2) {
+        AddItineraryFragment2 fragment = new AddItineraryFragment2();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +63,13 @@ public class BlankFragment3 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank3, container, false);
+        return inflater.inflate(R.layout.fragment_2_add_itinerary, container, false);
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        TimePicker timePicker = getView().findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
+    }
+
 }

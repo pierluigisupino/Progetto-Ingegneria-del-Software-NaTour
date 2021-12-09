@@ -34,4 +34,12 @@
         <item name="android:fontFamily">@font/euclid_circular_bold</item>
     </style>
 
+    <style name="TimePicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="fontFamily">@font/euclid_circular_semi_bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColorPrimary">@color/primary</item>
+    </style>
+
 </resources>
