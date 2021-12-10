@@ -27,7 +27,6 @@ public class AddItineraryActivity extends AppCompatActivity {
 
     private Button backButton;
     private Button nextButton;
-    private Button addButton;
 
     private int stepIndex = 0;
 
@@ -43,7 +42,6 @@ public class AddItineraryActivity extends AppCompatActivity {
         stepView = findViewById(R.id.stepView);
         backButton = findViewById(R.id.back_button);
         nextButton = findViewById(R.id.next_button);
-        addButton = findViewById(R.id.add_button);
 
         materialToolbar.setNavigationOnClickListener(view -> finish());
 
@@ -55,36 +53,22 @@ public class AddItineraryActivity extends AppCompatActivity {
         backButton.setVisibility(View.INVISIBLE);
         backButton.setEnabled(false);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(stepIndex > 0){
-                    stepIndex--;
-                    changeFragment();
-                }
+        backButton.setOnClickListener(v -> {
+            if(stepIndex > 0){
+                stepIndex--;
+                changeFragment();
             }
         });
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(addItineraryFragment1.isNameValid()) {
-                    if (stepIndex < 2) {
-                        stepIndex++;
-                        changeFragment();
-                    }
-                }
-            }
-        });
-
-        addButton.setVisibility(View.INVISIBLE);
-        addButton.setEnabled(false);
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(AddItineraryActivity.this, "Added", Toast.LENGTH_SHORT).show();
+        nextButton.setOnClickListener(v -> {
+            if (stepIndex == 0 && addItineraryFragment1.isNameValid()){
+                stepIndex++;
+                changeFragment();
+            }else if(stepIndex == 1 && (addItineraryFragment2.getHours() != 0 || addItineraryFragment2.getMinutes() != 0)){
+                stepIndex++;
+                changeFragment();
+            }else if(stepIndex == 2){
+                Toast.makeText(this, "Add pressed", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -94,9 +78,7 @@ public class AddItineraryActivity extends AppCompatActivity {
     private void addFragment(){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
         fragmentTransaction.add(R.id.fragmentContainer, addItineraryFragment1);
-
         fragmentTransaction.commit();
     }
 
@@ -138,17 +120,9 @@ public class AddItineraryActivity extends AppCompatActivity {
 
     private void showAddButton(){
         if(stepIndex == 2){
-            nextButton.setVisibility(View.INVISIBLE);
-            nextButton.setEnabled(false);
-
-            addButton.setVisibility(View.VISIBLE);
-            addButton.setEnabled(true);
+            nextButton.setText("Add");
         }else{
-            nextButton.setVisibility(View.VISIBLE);
-            nextButton.setEnabled(true);
-
-            addButton.setVisibility(View.INVISIBLE);
-            addButton.setEnabled(false);
+            nextButton.setText("Next"); //(R.string...)
         }
     }
 }

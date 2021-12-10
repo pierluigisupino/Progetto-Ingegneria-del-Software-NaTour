@@ -18,6 +18,8 @@ public class AddItineraryFragment2 extends Fragment {
 
     private AutoCompleteTextView difficultyAutoCompleteTextView;
     private TimePicker timePicker;
+    private int hour = 1;
+    private int minutes = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,13 @@ public class AddItineraryFragment2 extends Fragment {
         difficultyAutoCompleteTextView = view.findViewById(R.id.difficultyAutoComplete);
 
         timePicker.setIs24HourView(true);
+        timePicker.setHour(hour);
+        timePicker.setMinute(minutes);
 
         String[] difficulties = new String[]{
                 "Turistico",
                 "Escursionistico",
-                "Esperto",
+                "Esperto"
         };
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.difficult_list_item, difficulties);
@@ -54,11 +58,13 @@ public class AddItineraryFragment2 extends Fragment {
     }
 
     public int getHours(){
-        return timePicker.getHour();
+        hour = timePicker.getHour();
+        return hour;
     }
 
     public int getMinutes(){
-        return timePicker.getMinute();
+        minutes = timePicker.getMinute();
+        return minutes;
     }
 
 }

@@ -30,7 +30,6 @@ public final class AuthController extends Controller {
     private VerifyAccountActivity verifyAccountActivity;
     private ForgotPasswordActivity forgotPasswordActivity;
     private ResetPasswordActivity resetPasswordActivity;
-    private MainActivity mainActivity;
 
     private AuthController() {
         authInterface = new AmplifyAuthImplementation(this);
@@ -210,11 +209,11 @@ public final class AuthController extends Controller {
     }
 
     public void onSignOutSuccess(){
-        mainActivity.onSuccess(welcomeActivity.getResources().getString(R.string.logout_success));
+        //mainActivity.onSuccess(welcomeActivity.getResources().getString(R.string.logout_success));
     }
 
     public void onSignOutFailure() {
-        mainActivity.onFail(welcomeActivity.getResources().getString(R.string.generic_error));
+        //mainActivity.onFail(welcomeActivity.getResources().getString(R.string.generic_error));
     }
 
     public void setErrorActivity(ErrorActivity errorActivity) {
@@ -223,10 +222,6 @@ public final class AuthController extends Controller {
 
     public void setSignInActivity(SignInActivity signInActivity) {
         this.signInActivity = signInActivity;
-    }
-
-    public void setMainActivity(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
     }
 
     public void setRegisterActivity(SignUpActivity signUpActivity) {

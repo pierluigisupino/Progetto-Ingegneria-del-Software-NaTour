@@ -113,18 +113,4 @@
         app:layout_constraintStart_toStartOf="@+id/buttonRightGuideline"
         app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
 
-    <Button
-        android:id="@+id/add_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_dark_background"
-        android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="Add"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@+id/buttonRightGuideline"
-        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
