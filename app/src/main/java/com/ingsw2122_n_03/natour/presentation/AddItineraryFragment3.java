@@ -2,48 +2,41 @@ package com.ingsw2122_n_03.natour.presentation;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.ingsw2122_n_03.natour.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddItineraryFragment3#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddItineraryFragment3 extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
+    private static final String ARG_PARAM4 = "param4";
+    private static final String ARG_PARAM5 = "param5";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String name;
+    private String description;
+    private String difficulty;
+    private String hours;
+    private String minutes;
 
-    public AddItineraryFragment3() {
-        // Required empty public constructor
-    }
+    public AddItineraryFragment3() {}
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment3.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddItineraryFragment3 newInstance(String param1, String param2) {
+    public static AddItineraryFragment3 newInstance(String name, String description, String difficulty, int hours, int minutes) {
         AddItineraryFragment3 fragment = new AddItineraryFragment3();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, name);
+        args.putString(ARG_PARAM2, description);
+        args.putString(ARG_PARAM3, difficulty);
+        args.putString(ARG_PARAM4, String.valueOf(hours));
+        args.putString(ARG_PARAM5, String.valueOf(minutes));
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +45,22 @@ public class AddItineraryFragment3 extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            name = getArguments().getString(ARG_PARAM1);
+            description = getArguments().getString(ARG_PARAM2);
+            difficulty = getArguments().getString(ARG_PARAM3);
+            hours = getArguments().getString(ARG_PARAM4);
+            minutes = getArguments().getString(ARG_PARAM5);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_3_add_itinerary, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.e("test", name + " " +  description + " " + difficulty + " " + hours + " " + minutes);
     }
 }

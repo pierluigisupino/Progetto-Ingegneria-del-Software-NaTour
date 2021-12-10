@@ -23,7 +23,7 @@ public class AddItineraryActivity extends AppCompatActivity {
 
     private AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1();
     private AddItineraryFragment2 addItineraryFragment2 = new AddItineraryFragment2();
-    private AddItineraryFragment3 addItineraryFragment3 = new AddItineraryFragment3();
+    private AddItineraryFragment3 addItineraryFragment3;
 
     private Button backButton;
     private Button nextButton;
@@ -68,9 +68,12 @@ public class AddItineraryActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(stepIndex < 2){
-                    stepIndex++;
-                    changeFragment();
+
+                if(addItineraryFragment1.isNameValid()) {
+                    if (stepIndex < 2) {
+                        stepIndex++;
+                        changeFragment();
+                    }
                 }
             }
         });
@@ -106,6 +109,14 @@ public class AddItineraryActivity extends AppCompatActivity {
         }else if(stepIndex == 1){
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment2);
         }else if(stepIndex == 2){
+
+            String name = addItineraryFragment1.getName();
+            String description = addItineraryFragment1.getDescription();
+            String difficulty = addItineraryFragment2.getDifficulty();
+            int hours = addItineraryFragment2.getHours();
+            int minutes = addItineraryFragment2.getMinutes();
+
+            addItineraryFragment3 = AddItineraryFragment3.newInstance(name, description, difficulty, hours, minutes);
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment3);
         }
 

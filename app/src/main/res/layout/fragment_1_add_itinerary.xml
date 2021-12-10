@@ -32,14 +32,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.30"/>
+        app:layout_constraintGuide_percent="0.35"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailTextInputLayout"
+        android:id="@+id/nameTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/username_place_holder"
+        android:hint="@string/required_username_place_holder"
         app:startIconDrawable="@drawable/ic_edit"
         app:startIconTint="@color/primary"
         app:endIconMode="clear_text"
@@ -61,7 +61,7 @@
         app:layout_constraintStart_toStartOf="@+id/leftGuideline">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emailTextInputEditText"
+            android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textAutoCorrect"
@@ -71,7 +71,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/usernameTextInputLayout"
+        android:id="@+id/descriptionTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         app:startIconTint="@color/primary">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/usernameTextInputEditText"
+            android:id="@+id/descriptionEditText"
             android:layout_width="match_parent"
             android:maxLength="100"
             android:layout_height="wrap_content"

@@ -30,6 +30,7 @@
     <string name="reset_password_button_text">Reset password</string>
 
     <!--GENERICS-->
+    <string name="required_username_place_holder">Name*</string>
     <string name="username_place_holder">Name</string>
     <string name="email_place_holder">Email</string>
     <string name="password_place_holder">Password</string>
@@ -58,6 +59,7 @@
     <string name="password_warning">Insert a password.</string>
     <string name="verification_code_warning">Insert the verification code.</string>
     <string name="verification_code_warning_1">Complete the verification code.</string>
+    <string name="name_warning">Insert a name.</string>
 
     <string name="username_length_error">At least 4 characters</string>
     <string name="mail_error">Check your e-mail address</string>
