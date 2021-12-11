@@ -1,17 +1,34 @@
 package com.ingsw2122_n_03.natour.presentation;
 
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 
 import com.ingsw2122_n_03.natour.R;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AddItineraryFragment3 extends Fragment {
 
@@ -26,6 +43,28 @@ public class AddItineraryFragment3 extends Fragment {
     private String difficulty;
     private String hours;
     private String minutes;
+    private ArrayList<byte[]> imagesBytes = new ArrayList<>();
+
+    private Button selectPhotoButton;
+
+    private final ActivityResultLauncher<Intent> getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+
+                    ClipData clipData = data.getClipData();
+                    if (clipData != null) {
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            Uri imageUri = clipData.getItemAt(i).getUri();
+                            imagesBytes.add(getImageBytes(imageUri));
+                        }
+                    } else {
+                        Uri imageUri = data.getData();
+                        imagesBytes.add(getImageBytes(imageUri));
+                    }
+                }
+            });
 
     public AddItineraryFragment3() {}
 
@@ -61,6 +100,42 @@ public class AddItineraryFragment3 extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Log.e("test", name + " " +  description + " " + difficulty + " " + hours + " " + minutes);
+        selectPhotoButton = getView().findViewById(R.id.selectPhotoButton);
+
+        selectPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                getImages.launch(intent);
+            }
+        });
+    }
+
+    private byte[] getImageBytes(Uri imageUri){
+
+        Bitmap bitmap;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] bytes = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            try {
+                bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(requireContext().getContentResolver(), imageUri));
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                bytes = byteArrayOutputStream.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageUri);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                bytes = byteArrayOutputStream.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return bytes;
     }
 }
