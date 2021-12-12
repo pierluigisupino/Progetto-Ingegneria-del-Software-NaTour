@@ -24,9 +24,9 @@
         android:id="@+id/difficulty"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="@string/difficulty_text"
+        android:text="Difficulty:"
         android:textAlignment="center"
         android:textColor="@color/primary"
         android:textSize="18sp"
@@ -38,34 +38,44 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:theme="@style/TimePicker"
         android:timePickerMode="spinner"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toEndOf="@+id/duration"
-        app:layout_constraintTop_toBottomOf="@id/difficultyMenu" />
+        app:layout_constraintTop_toBottomOf="@id/menu" />
 
     <TextView
         android:id="@+id/duration"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="217dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="@string/duration_text"
+        android:text="Duration:"
         android:textAlignment="center"
         android:textColor="@color/primary"
         android:textSize="18sp"
         app:layout_constraintLeft_toRightOf="@id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/difficulty" />
 
-    <Spinner
-        android:id="@+id/difficultyMenu"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/menu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="85dp"
-        android:minHeight="48dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintLeft_toRightOf="@id/leftGuideline"
         app:layout_constraintRight_toRightOf="@id/rightGuideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/difficulty">
+
+        <AutoCompleteTextView
+            android:id="@+id/difficultyAutoComplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:text="Turistico"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
