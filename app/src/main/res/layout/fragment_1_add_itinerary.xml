@@ -75,7 +75,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Description"
+        android:hint="@string/description_place_holder"
         app:counterEnabled="true"
         app:counterMaxLength="100"
         app:boxCornerRadiusBottomEnd="15dp"

@@ -78,4 +78,26 @@
     <!--IMAGES DESCRIPTION-->
     <string name="splash_image_description">Splash Image </string>
     <string name="welcome_page_image_description">Welcome page image</string>
+
+    <!--ITINERARY-->
+    <string name="add_itinerary_title">Aggiungi Itinerario</string>
+    <string name="next_button">Avanti</string>
+    <string name="back_button">Indietro</string>
+    <string name="add_button">Aggiungi</string>
+    <string name="description_place_holder">Descrizione</string>
+    <string name="difficulty_text">Difficoltà</string>
+    <string name="duration_text">Durata</string>
+    <string name="photo_text">Foto</string>
+    <string name="track_text">Tracciato</string>
+    <string name="or_text">oppure</string>
+    <string name="open_maps_button_text">Apri Mappa</string>
+    <string name="select_photo_button_text">Seleziona Foto</string>
+    <string name="select_gpx_button_text">Seleziona GPX</string>
+    <string-array name="difficulties">
+        <item>Turistico (T)</item>
+        <item>Escursionistico (E)</item>
+        <item>Esperto (EE)</item>
+    </string-array>
+
+
 </resources>

@@ -1,27 +1,20 @@
 package com.ingsw2122_n_03.natour.presentation;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Patterns;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
-
 import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 
-import java.util.Objects;
 
 public class AddItineraryFragment1 extends Fragment {
 
@@ -49,11 +42,11 @@ public class AddItineraryFragment1 extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        nameTextInputLayout = getView().findViewById(R.id.nameTextInputLayout);
-        nameEditText = getView().findViewById(R.id.nameEditText);
+        nameTextInputLayout = view.findViewById(R.id.nameTextInputLayout);
+        nameEditText = view.findViewById(R.id.nameEditText);
 
-        descriptionTextInputLayout = getView().findViewById(R.id.descriptionTextInputLayout);
-        descriptionEditText = getView().findViewById(R.id.descriptionEditText);
+        descriptionTextInputLayout = view.findViewById(R.id.descriptionTextInputLayout);
+        descriptionEditText = view.findViewById(R.id.descriptionEditText);
 
         nameEditText.addTextChangedListener(new TextWatcher(){
 
@@ -74,6 +67,7 @@ public class AddItineraryFragment1 extends Fragment {
         });
     }
 
+    //CHECK IF USER TEXTS ONLY SPACES
     public boolean isNameValid(){
 
         isFirstSubmit = false;
@@ -83,7 +77,7 @@ public class AddItineraryFragment1 extends Fragment {
             return false;
         }
 
-        nameEditText.setError(null);
+        nameTextInputLayout.setError(null);
         return true;
     }
 

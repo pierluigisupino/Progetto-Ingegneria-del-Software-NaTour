@@ -78,4 +78,26 @@
     <!--IMAGES DESCRIPTION-->
     <string name="splash_image_description">Splash Image </string>
     <string name="welcome_page_image_description">Welcome page image</string>
+
+    <!--ITINERARY-->
+    <string name="add_itinerary_title">Add Itinerary</string>
+    <string name="next_button">Next</string>
+    <string name="back_button">Back</string>
+    <string name="add_button">Add</string>
+    <string name="description_place_holder">Description</string>
+    <string name="difficulty_text">Difficulty</string>
+    <string name="duration_text">Duration</string>
+    <string name="photo_text">Photo</string>
+    <string name="track_text">Track</string>
+    <string name="or_text">or</string>
+    <string name="open_maps_button_text">Open Maps</string>
+    <string name="select_photo_button_text">Select Photo</string>
+    <string name="select_gpx_button_text">Select GPX</string>
+    <string-array name="difficulties">
+        <item>Touristic (T)</item>
+        <item>Hiking (E)</item>
+        <item>Experienced Hiking (EE)</item>
+    </string-array>
+
+
 </resources>

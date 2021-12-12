@@ -64,7 +64,7 @@ public class AddItineraryActivity extends AppCompatActivity {
             if (stepIndex == 0 && addItineraryFragment1.isNameValid()){
                 stepIndex++;
                 changeFragment();
-            }else if(stepIndex == 1 && (addItineraryFragment2.getHours() != 0 || addItineraryFragment2.getMinutes() != 0)){
+            }else if(stepIndex == 1 && addItineraryFragment2.isDurationValid()){
                 stepIndex++;
                 changeFragment();
             }else if(stepIndex == 2){
@@ -120,9 +120,9 @@ public class AddItineraryActivity extends AppCompatActivity {
 
     private void showAddButton(){
         if(stepIndex == 2){
-            nextButton.setText("Add");
+            nextButton.setText(R.string.add_button);
         }else{
-            nextButton.setText("Next"); //(R.string...)
+            nextButton.setText(R.string.next_button);
         }
     }
 }
