@@ -20,7 +20,7 @@ import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    private AuthController authController; //NEEDS TO HAVE?
+    private AuthController authController;
     private IterController iterController;
 
     private DrawerLayout drawerLayout;
@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (item.getItemId()){
             case R.id.nav_logout:
                 authController.signOut(this);
-                
+
             //navigazione
         }
         return true;
