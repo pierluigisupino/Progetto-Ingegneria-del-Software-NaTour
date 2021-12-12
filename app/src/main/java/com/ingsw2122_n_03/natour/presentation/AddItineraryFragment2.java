@@ -11,16 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.ingsw2122_n_03.natour.R;
 
 public class AddItineraryFragment2 extends Fragment {
 
     private View view;
-    private AutoCompleteTextView difficultyAutoCompleteTextView;
+    private AutoCompleteTextView difficultyTextView;
     private TimePicker timePicker;
     private int hour = 1;
     private int minutes = 0;
+    private String difficulty;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,29 +40,28 @@ public class AddItineraryFragment2 extends Fragment {
 
         this.view = view;
         timePicker = view.findViewById(R.id.timePicker);
-        difficultyAutoCompleteTextView = view.findViewById(R.id.difficultyAutoComplete);
+        difficultyTextView = view.findViewById(R.id.difficultyAutoComplete);
 
         timePicker.setIs24HourView(true);
         timePicker.setHour(hour);
         timePicker.setMinute(minutes);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        String[] difficulties = new String[]{
-                "Turistico",
-                "Escursionistico",
-                "Esperto"
-        };
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.difficult_list_item, difficulties);
-        difficultyAutoCompleteTextView.setAdapter(arrayAdapter);
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(view.getContext(), R.array.difficulties, R.layout.difficult_list_item);
+        difficultyTextView.setAdapter(arrayAdapter);
+        if(difficulty == null) {
+            difficulty = arrayAdapter.getItem(0).toString();
+            difficultyTextView.setText(difficulty, false);
+        }
     }
 
     public String getDifficulty(){
-        return difficultyAutoCompleteTextView.getText().toString();
+        difficulty = difficultyTextView.getText().toString();
+        return difficulty;
     }
 
     public int getHours(){
@@ -71,6 +72,15 @@ public class AddItineraryFragment2 extends Fragment {
     public int getMinutes(){
         minutes = timePicker.getMinute();
         return minutes;
+    }
+
+    public boolean isDurationValid(){
+        if(getHours()!=0 || getMinutes()!=0)
+            return true;
+        else{
+            Toast.makeText(view.getContext(), "Choose a Duration!!!!!!!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
 }

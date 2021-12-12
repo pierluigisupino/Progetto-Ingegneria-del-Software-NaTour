@@ -97,7 +97,7 @@
             android:maxLength="100"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:lines="4"
+            android:lines="5"
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -64,7 +64,7 @@ public class AddItineraryActivity extends AppCompatActivity {
             if (stepIndex == 0 && addItineraryFragment1.isNameValid()){
                 stepIndex++;
                 changeFragment();
-            }else if(stepIndex == 1){
+            }else if(stepIndex == 1 && addItineraryFragment2.isDurationValid()){
                 stepIndex++;
                 changeFragment();
             }else if(stepIndex == 2){

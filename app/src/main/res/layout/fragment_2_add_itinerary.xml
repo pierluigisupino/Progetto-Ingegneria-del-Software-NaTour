@@ -26,10 +26,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="Difficulty:"
+        android:text="@string/difficulty_text"
         android:textAlignment="center"
         android:textColor="@color/primary"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,10 +51,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="217dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="Duration:"
+        android:text="@string/duration_text"
         android:textAlignment="center"
         android:textColor="@color/primary"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintLeft_toRightOf="@id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/difficulty" />
 
@@ -72,8 +72,7 @@
             android:id="@+id/difficultyAutoComplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:text="Turistico"/>
+            android:inputType="none" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

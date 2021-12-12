@@ -21,7 +21,6 @@ public class AddItineraryFragment1 extends Fragment {
     private TextInputLayout nameTextInputLayout;
     private EditText nameEditText;
 
-    private TextInputLayout descriptionTextInputLayout;
     private EditText descriptionEditText;
 
     private boolean isFirstSubmit = true;
@@ -45,7 +44,7 @@ public class AddItineraryFragment1 extends Fragment {
         nameTextInputLayout = view.findViewById(R.id.nameTextInputLayout);
         nameEditText = view.findViewById(R.id.nameEditText);
 
-        descriptionTextInputLayout = view.findViewById(R.id.descriptionTextInputLayout);
+        //TextInputLayout descriptionTextInputLayout = view.findViewById(R.id.descriptionTextInputLayout);
         descriptionEditText = view.findViewById(R.id.descriptionEditText);
 
         nameEditText.addTextChangedListener(new TextWatcher(){
@@ -67,12 +66,11 @@ public class AddItineraryFragment1 extends Fragment {
         });
     }
 
-    //CHECK IF USER TEXTS ONLY SPACES
     public boolean isNameValid(){
 
         isFirstSubmit = false;
 
-        if(nameEditText.getText() == null || nameEditText.getText().length() == 0) {
+        if(nameEditText.getText() == null || nameEditText.getText().length() == 0 || nameEditText.getText().toString().matches("\\s+")) {
             nameTextInputLayout.setError(getString(R.string.name_warning));
             return false;
         }
