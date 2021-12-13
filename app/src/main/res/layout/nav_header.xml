@@ -9,7 +9,7 @@
         android:layout_marginStart="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="NaToure"
+        android:text="NaTour"
         android:textSize="25sp"
         android:textColor="@color/primary"
         android:fontFamily="@font/euclid_circular_semi_bold"
