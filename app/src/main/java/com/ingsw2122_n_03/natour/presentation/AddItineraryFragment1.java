@@ -70,8 +70,11 @@ public class AddItineraryFragment1 extends Fragment {
 
         isFirstSubmit = false;
 
-        if(nameEditText.getText() == null || nameEditText.getText().length() == 0 || nameEditText.getText().toString().matches("\\s+")) {
+        if(nameEditText.getText() == null || nameEditText.getText().length() == 0) {
             nameTextInputLayout.setError(getString(R.string.name_warning));
+            return false;
+        }else if(nameEditText.getText().toString().matches("\\s+.*")){
+            nameTextInputLayout.setError(getString(R.string.name_space_warning));
             return false;
         }
 

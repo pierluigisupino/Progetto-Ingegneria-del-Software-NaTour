@@ -60,10 +60,14 @@
     <string name="verification_code_warning">Inserisci il codice di verifica.</string>
     <string name="verification_code_warning_1">Completa il codice di verifica.</string>
     <string name="name_warning">Inserisci un nome.</string>
+    <string name="name_space_warning">Evita gli spazi iniziali</string>
 
     <string name="username_length_error">Almeno 4 caratteri</string>
     <string name="mail_error">Controlla l\'indirizzo e-mail</string>
     <string name="password_length_error">Almeno 8 caratteri</string>
+    <string name="password_length_error_max">Meno di 20 caratteri</string>
+    <string name="password_space_warning">Evita gli spazi</string>
+    <string name="password_regex_warning">Deve contenere almeno una lettera maiuscola, una minuscola e un numero</string>
 
     <string name="account_error">L\'account non esiste</string>
     <string name="email_taken_error">Indirizzo email gia\' in uso</string>

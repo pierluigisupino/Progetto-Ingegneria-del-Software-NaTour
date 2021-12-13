@@ -176,6 +176,9 @@ public class SignUpActivity extends BaseActivity {
         }else if(usernameEditText.getText().length() < 4) {
             usernameTextInputLayout.setError(getString(R.string.username_length_error));
             return false;
+        }else if(usernameEditText.getText().toString().matches("\\s+.*")) {
+            usernameTextInputLayout.setError(getString(R.string.name_space_warning));
+            return false;
         }
         usernameTextInputLayout.setError(null);
         return true;
@@ -199,6 +202,15 @@ public class SignUpActivity extends BaseActivity {
             return false;
         }else if(passwordEditText.getText().length() < 8) {
             passwordTextInputLayout.setError(getString(R.string.password_length_error));
+            return false;
+        }else if(passwordEditText.getText().length() > 20) {
+            passwordTextInputLayout.setError(getString(R.string.password_length_error_max));
+            return false;
+        }else if(passwordEditText.getText().toString().matches(".*\\s+.*")) {
+            passwordTextInputLayout.setError(getString(R.string.password_space_warning));
+            return false;
+        }else if(!passwordEditText.getText().toString().matches(".*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*")){
+            passwordTextInputLayout.setError(getString(R.string.password_regex_warning));
             return false;
         }
         passwordTextInputLayout.setError(null);

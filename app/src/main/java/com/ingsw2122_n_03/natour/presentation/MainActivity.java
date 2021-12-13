@@ -33,6 +33,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         authController = AuthController.getInstance();
         iterController = IterController.getInstance();
+        iterController.setMainActivity(this);
 
         MaterialToolbar materialToolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.layout);
