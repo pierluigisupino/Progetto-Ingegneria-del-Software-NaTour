@@ -65,7 +65,7 @@
     <string name="username_length_error">At least 4 characters</string>
     <string name="mail_error">Check your e-mail address</string>
     <string name="password_length_error">At least 8 characters</string>
-    <string name="password_length_error_max">Less than 20 characters</string>
+    <string name="password_length_error_max">At most 20 characters</string>
     <string name="password_space_warning">Avoid spaces</string>
     <string name="password_regex_warning">Must contains a lower case, an upper case and a number</string>
 
