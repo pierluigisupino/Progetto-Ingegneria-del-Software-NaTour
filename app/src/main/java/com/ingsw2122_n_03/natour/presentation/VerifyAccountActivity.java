@@ -17,6 +17,7 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
+import com.ingsw2122_n_03.natour.databinding.ActivityVerifyAccountBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class VerifyAccountActivity extends BaseActivity {
@@ -32,7 +33,9 @@ public class VerifyAccountActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_verify_account);
+        ActivityVerifyAccountBinding binding = ActivityVerifyAccountBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Intent intent = getIntent();
         String email = intent.getExtras().getString("email");
@@ -41,28 +44,28 @@ public class VerifyAccountActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setVerifyAccountActivity(VerifyAccountActivity.this);
 
-        layout = findViewById(R.id.layout);
-        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
+        layout = binding.layout;
+        MaterialToolbar materialToolbar = binding.topAppBar;
 
-        TextView emailTextView = findViewById(R.id.emailTextView);
+        TextView emailTextView = binding.emailTextView;
         emailTextView.setText(email);
 
-        verificationCodePinView = findViewById(R.id.verificationCode);
+        verificationCodePinView = binding.verificationCode;
 
-        TextView resendCodeTextView = findViewById(R.id.resendCode);
+        TextView resendCodeTextView = binding.resendCode;
 
-        Button verifyButton = findViewById(R.id.verifyButton);
+        Button verifyButton = binding.verifyButton;
 
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = binding.progressBar;
 
-        materialToolbar.setNavigationOnClickListener(view -> finish());
+        materialToolbar.setNavigationOnClickListener(v -> finish());
 
-        resendCodeTextView.setOnClickListener(view -> {
+        resendCodeTextView.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
             authController.sendVerificationCode(email);
         });
 
-        verifyButton.setOnClickListener(view -> {
+        verifyButton.setOnClickListener(v -> {
 
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(verifyButton.getWindowToken(), 0);
@@ -76,11 +79,9 @@ public class VerifyAccountActivity extends BaseActivity {
 
     @Override
     public void onSuccess(String msg) {
-        runOnUiThread(() -> {
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(VerifyAccountActivity.this, R.color.success))
-                    .show();
-        });
+        runOnUiThread(() -> Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(VerifyAccountActivity.this, R.color.success))
+                .show());
     }
 
     @Override

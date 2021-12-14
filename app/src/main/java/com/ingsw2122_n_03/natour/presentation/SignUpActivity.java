@@ -19,6 +19,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
+import com.ingsw2122_n_03.natour.databinding.ActivitySignInBinding;
+import com.ingsw2122_n_03.natour.databinding.ActivitySignUpBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.Objects;
@@ -48,7 +50,9 @@ public class SignUpActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        ActivitySignUpBinding binding = ActivitySignUpBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         authController = AuthController.getInstance();
         authController.setRegisterActivity(SignUpActivity.this);
@@ -56,19 +60,19 @@ public class SignUpActivity extends BaseActivity {
         layout = findViewById(R.id.layout);
         MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
 
-        usernameTextInputLayout = findViewById(R.id.usernameTextInputLayout);
-        usernameEditText = findViewById(R.id.usernameTextInputEditText);
+        usernameTextInputLayout = binding.usernameTextInputLayout;
+        usernameEditText = binding.usernameTextInputEditText;
 
-        emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
-        emailEditText = findViewById(R.id.emailTextInputEditText);
+        emailTextInputLayout = binding.emailTextInputLayout;
+        emailEditText = binding.emailTextInputEditText;
 
-        passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
-        passwordEditText = findViewById(R.id.passwordTextInputEditText);
+        passwordTextInputLayout = binding.passwordTextInputLayout;
+        passwordEditText = binding.passwordTextInputEditText;
 
-        registerButton = findViewById(R.id.registerButton);
-        progressBar = findViewById(R.id.progressBar);
+        registerButton = binding.registerButton;
+        progressBar = binding.progressBar;
 
-        materialToolbar.setNavigationOnClickListener(view -> finish());
+        materialToolbar.setNavigationOnClickListener(v -> finish());
 
         usernameEditText.addTextChangedListener(new TextWatcher(){
 
@@ -125,7 +129,7 @@ public class SignUpActivity extends BaseActivity {
         });
 
 
-        registerButton.setOnClickListener(view -> {
+        registerButton.setOnClickListener(v -> {
 
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(registerButton.getWindowToken(), 0);

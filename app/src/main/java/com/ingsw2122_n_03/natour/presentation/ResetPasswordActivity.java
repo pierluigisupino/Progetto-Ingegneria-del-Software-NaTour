@@ -21,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
+import com.ingsw2122_n_03.natour.databinding.ActivityResetPasswordBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class ResetPasswordActivity extends BaseActivity {
@@ -41,7 +42,9 @@ public class ResetPasswordActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reset_password);
+        ActivityResetPasswordBinding binding = ActivityResetPasswordBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Intent intent = getIntent();
         String email = intent.getExtras().getString("email");
@@ -49,21 +52,21 @@ public class ResetPasswordActivity extends BaseActivity {
         authController = AuthController.getInstance();
         authController.setResetPasswordActivity(ResetPasswordActivity.this);
 
-        layout = findViewById(R.id.layout);
-        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
+        layout = binding.layout;
+        MaterialToolbar materialToolbar = binding.topAppBar;
 
-        newPasswordTextInputLayout = findViewById(R.id.newPasswordTextInputLayout);
-        newPasswordEditText = findViewById(R.id.newPasswordTextInputEditText);
+        newPasswordTextInputLayout = binding.newPasswordTextInputLayout;
+        newPasswordEditText = binding.newPasswordTextInputEditText;
 
-        TextView emailTextView = findViewById(R.id.emailTextView);
+        TextView emailTextView = binding.emailTextView;
         emailTextView.setText(email);
 
-        verificationCodePinView = findViewById(R.id.verificationCode);
+        verificationCodePinView = binding.verificationCode;
 
-        resetPasswordButton = findViewById(R.id.reset_button);
-        progressBar = findViewById(R.id.progressBar);
+        resetPasswordButton = binding.resetButton;
+        progressBar = binding.progressBar;
 
-        materialToolbar.setNavigationOnClickListener(view -> finish());
+        materialToolbar.setNavigationOnClickListener(v -> finish());
 
         newPasswordEditText.addTextChangedListener(new TextWatcher(){
 
@@ -83,7 +86,7 @@ public class ResetPasswordActivity extends BaseActivity {
             }
         });
 
-        resetPasswordButton.setOnClickListener(view -> {
+        resetPasswordButton.setOnClickListener(v -> {
 
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(resetPasswordButton.getWindowToken(), 0);

@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -13,17 +12,16 @@ import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
+import com.ingsw2122_n_03.natour.databinding.ActivitySignInBinding;
 import com.shuhart.stepview.StepView;
 
 public class AddItineraryActivity extends AppCompatActivity {
 
-    private ConstraintLayout layout;
-    private MaterialToolbar materialToolbar;
     private StepView stepView;
 
-    private AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1();
-    private AddItineraryFragment2 addItineraryFragment2 = new AddItineraryFragment2();
-    private AddItineraryFragment3 addItineraryFragment3;
+    private final AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1();
+    private final AddItineraryFragment2 addItineraryFragment2 = new AddItineraryFragment2();
 
     private Button backButton;
     private Button nextButton;
@@ -35,15 +33,16 @@ public class AddItineraryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_itinerary);
+        ActivityAddItineraryBinding binding = ActivityAddItineraryBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        layout = findViewById(R.id.layout);
-        materialToolbar = findViewById(R.id.topAppBar);
-        stepView = findViewById(R.id.stepView);
-        backButton = findViewById(R.id.back_button);
-        nextButton = findViewById(R.id.next_button);
+        MaterialToolbar materialToolbar = binding.topAppBar;
+        stepView = binding.stepView;
+        backButton = binding.backButton;
+        nextButton = binding.nextButton;
 
-        materialToolbar.setNavigationOnClickListener(view -> finish());
+        materialToolbar.setNavigationOnClickListener(v -> finish());
 
         stepView.getState()
                 .animationType(StepView.ANIMATION_CIRCLE)
@@ -98,7 +97,7 @@ public class AddItineraryActivity extends AppCompatActivity {
             int hours = addItineraryFragment2.getHours();
             int minutes = addItineraryFragment2.getMinutes();
 
-            addItineraryFragment3 = AddItineraryFragment3.newInstance(name, description, difficulty, hours, minutes);
+            AddItineraryFragment3 addItineraryFragment3 = AddItineraryFragment3.newInstance(name, description, difficulty, hours, minutes);
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment3);
         }
 

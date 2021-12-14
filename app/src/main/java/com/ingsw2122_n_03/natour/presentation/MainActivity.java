@@ -2,6 +2,7 @@ package com.ingsw2122_n_03.natour.presentation;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,6 +16,7 @@ import com.google.android.material.shape.MaterialShapeDrawable;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.application.IterController;
+import com.ingsw2122_n_03.natour.databinding.ActivityMainBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -29,15 +31,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         authController = AuthController.getInstance();
         iterController = IterController.getInstance();
         iterController.setMainActivity(this);
 
-        MaterialToolbar materialToolbar = findViewById(R.id.toolbar);
-        drawerLayout = findViewById(R.id.layout);
-        navigationView = findViewById(R.id.navView);
+        MaterialToolbar materialToolbar = binding.toolbar;
+        drawerLayout = binding.layout;
+        navigationView = binding.navView;
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, materialToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);

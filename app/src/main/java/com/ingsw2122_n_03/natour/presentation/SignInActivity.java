@@ -20,6 +20,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
+import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
+import com.ingsw2122_n_03.natour.databinding.ActivitySignInBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.Objects;
@@ -45,26 +47,29 @@ public class SignInActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+
+        ActivitySignInBinding binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         authController = AuthController.getInstance();
         authController.setSignInActivity(SignInActivity.this);
 
-        layout = findViewById(R.id.layout);
-        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
+        layout = binding.layout;
+        MaterialToolbar materialToolbar = binding.topAppBar;
 
-        emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
-        emailEditText = findViewById(R.id.emailTextInputEditText);
+        emailTextInputLayout = binding.emailTextInputLayout;
+        emailEditText = binding.emailTextInputEditText;
 
-        passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
-        passwordEditText = findViewById(R.id.passwordTextInputEditText);
+        passwordTextInputLayout = binding.passwordTextInputLayout;
+        passwordEditText = binding.passwordTextInputEditText;
 
-        TextView forgotPasswordButton = findViewById(R.id.forgot_password_button);
+        TextView forgotPasswordButton = binding.forgotPasswordButton;
 
-        signInButton = findViewById(R.id.sign_in_button);
-        progressBar = findViewById(R.id.progressBar);
+        signInButton = binding.signInButton;
+        progressBar = binding.progressBar;
 
-        materialToolbar.setNavigationOnClickListener(view -> finish());
+        materialToolbar.setNavigationOnClickListener(v -> finish());
 
         emailEditText.addTextChangedListener(new TextWatcher(){
 
@@ -102,11 +107,11 @@ public class SignInActivity extends BaseActivity {
             }
         });
 
-        forgotPasswordButton.setOnClickListener(view ->
+        forgotPasswordButton.setOnClickListener(v ->
                 authController.goToActivity(SignInActivity.this, ForgotPasswordActivity.class)
         );
 
-        signInButton.setOnClickListener(view -> {
+        signInButton.setOnClickListener(v -> {
 
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(signInButton.getWindowToken(), 0);

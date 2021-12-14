@@ -14,8 +14,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.databinding.Fragment1AddItineraryBinding;
+import com.ingsw2122_n_03.natour.databinding.Fragment2AddItineraryBinding;
 
 public class AddItineraryFragment2 extends Fragment {
+
+    private Fragment2AddItineraryBinding binding;
 
     private View view;
     private AutoCompleteTextView difficultyTextView;
@@ -32,15 +36,17 @@ public class AddItineraryFragment2 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_2_add_itinerary, container, false);
+        binding = Fragment2AddItineraryBinding.inflate(inflater, container, false);
+
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         this.view = view;
-        timePicker = view.findViewById(R.id.timePicker);
-        difficultyTextView = view.findViewById(R.id.difficultyAutoComplete);
+        timePicker = binding.timePicker;
+        difficultyTextView = binding.difficultyAutoComplete;
 
         timePicker.setIs24HourView(true);
         timePicker.setHour(hour);

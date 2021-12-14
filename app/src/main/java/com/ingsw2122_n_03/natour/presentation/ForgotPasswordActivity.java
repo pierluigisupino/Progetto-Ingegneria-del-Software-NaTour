@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
+import com.ingsw2122_n_03.natour.databinding.ActivityForgotPasswordBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.Objects;
@@ -39,21 +40,23 @@ public class ForgotPasswordActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgot_password);
+        ActivityForgotPasswordBinding binding =  ActivityForgotPasswordBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         authController = AuthController.getInstance();
         authController.setForgotPasswordActivity(ForgotPasswordActivity.this);
 
-        layout = findViewById(R.id.layout);
-        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
+        layout = binding.layout;
+        MaterialToolbar materialToolbar = binding.topAppBar;
 
-        emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
-        emailEditText = findViewById(R.id.emailTextInputEditText);
+        emailTextInputLayout = binding.emailTextInputLayout;
+        emailEditText = binding.emailTextInputEditText;
 
-        continueButton = findViewById(R.id.continue_button);
-        progressBar = findViewById(R.id.progressBar);
+        continueButton = binding.continueButton;
+        progressBar = binding.progressBar;
 
-        materialToolbar.setNavigationOnClickListener(view -> finish());
+        materialToolbar.setNavigationOnClickListener(v -> finish());
 
         emailEditText.addTextChangedListener(new TextWatcher(){
 
@@ -73,7 +76,7 @@ public class ForgotPasswordActivity extends BaseActivity {
             }
         });
 
-        continueButton.setOnClickListener(view -> {
+        continueButton.setOnClickListener(v -> {
 
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(continueButton.getWindowToken(), 0);

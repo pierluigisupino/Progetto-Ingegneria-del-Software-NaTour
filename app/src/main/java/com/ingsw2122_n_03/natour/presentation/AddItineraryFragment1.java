@@ -14,9 +14,12 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.databinding.Fragment1AddItineraryBinding;
 
 
 public class AddItineraryFragment1 extends Fragment {
+
+    private Fragment1AddItineraryBinding binding;
 
     private TextInputLayout nameTextInputLayout;
     private EditText nameEditText;
@@ -33,19 +36,22 @@ public class AddItineraryFragment1 extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_1_add_itinerary, container, false);
+
+        binding = Fragment1AddItineraryBinding.inflate(inflater, container, false);
+
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        nameTextInputLayout = view.findViewById(R.id.nameTextInputLayout);
-        nameEditText = view.findViewById(R.id.nameEditText);
+        nameTextInputLayout = binding.nameTextInputLayout;
+        nameEditText = binding.nameEditText;
 
         //TextInputLayout descriptionTextInputLayout = view.findViewById(R.id.descriptionTextInputLayout);
-        descriptionEditText = view.findViewById(R.id.descriptionEditText);
+        descriptionEditText = binding.descriptionEditText;
 
         nameEditText.addTextChangedListener(new TextWatcher(){
 
