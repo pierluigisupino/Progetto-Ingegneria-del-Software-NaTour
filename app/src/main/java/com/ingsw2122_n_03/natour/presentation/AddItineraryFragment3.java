@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 
 public class AddItineraryFragment3 extends Fragment {
 
-    private  Fragment3AddItineraryBinding binding;
+    private Fragment3AddItineraryBinding binding;
 
     private RecyclerView recyclerView;
 
@@ -43,6 +44,9 @@ public class AddItineraryFragment3 extends Fragment {
     private static final String ARG_PARAM5 = "param5";
 
     private final ArrayList<Bitmap> imagesBitmap = new ArrayList<>();
+
+    private ImageButton imageButtonLeft;
+    private ImageButton imageButtonRight;
 
     private final ActivityResultLauncher<Intent> getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -90,6 +94,7 @@ public class AddItineraryFragment3 extends Fragment {
             String hours = getArguments().getString(ARG_PARAM4);
             String minutes = getArguments().getString(ARG_PARAM5);
         }
+
     }
 
     @Override
@@ -106,17 +111,30 @@ public class AddItineraryFragment3 extends Fragment {
         View view1 = getView();
         Button selectPhotoButton = binding.selectPhotoButton;
 
-        recyclerView = binding.image;
+        imageButtonLeft = binding.imageButtonLeft;
+        imageButtonRight = binding.imageButtonRight;
+        imageButtonLeft.setVisibility(View.INVISIBLE);
+        imageButtonRight.setVisibility(View.INVISIBLE);
 
-        recyclerView.setLayoutManager(
-                new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        );
+
+        recyclerView = binding.image;
+        LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
 
         selectPhotoButton.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             getImages.launch(intent);
+            if(layoutManager.canScrollHorizontally()) {
+                imageButtonRight.setVisibility(View.VISIBLE);
+            }
         });
+
+        imageButtonRight.setOnClickListener(v -> {
+            int next = layoutManager.findFirstCompletelyVisibleItemPosition() +1;
+            layoutManager.scrollToPosition(next);
+        });
+
     }
 
     private Bitmap getImageBitmap(Uri imageUri){
