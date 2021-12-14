@@ -14,6 +14,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
+import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,6 +33,8 @@ import java.util.ArrayList;
 public class AddItineraryFragment3 extends Fragment {
 
     private  Fragment3AddItineraryBinding binding;
+
+    private RecyclerView recyclerView;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -56,6 +61,8 @@ public class AddItineraryFragment3 extends Fragment {
                         Uri imageUri = data.getData();
                         imagesBitmap.add(getImageBitmap(imageUri));
                     }
+
+                    recyclerView.setAdapter(new ImageAdapter(imagesBitmap));
                 }
             });
 
@@ -98,6 +105,12 @@ public class AddItineraryFragment3 extends Fragment {
 
         View view1 = getView();
         Button selectPhotoButton = binding.selectPhotoButton;
+
+        recyclerView = binding.image;
+
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        );
 
         selectPhotoButton.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
