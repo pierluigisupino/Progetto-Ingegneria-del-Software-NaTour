@@ -10,8 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import com.ingsw2122_n_03.natour.databinding.FragmentAddItinerary4Binding;
+import com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ public class AddItineraryFragment4 extends Fragment {
     private static final String ARG_PARAM5 = "param5";
     private static final String ARG_PARAM6 = "param6";
 
-    private FragmentAddItinerary4Binding binding;
+    private Fragment4AddItineraryBinding binding;
     private ArrayList<byte[]> imagesBytes;
 
     public AddItineraryFragment4() {}
@@ -59,7 +58,7 @@ public class AddItineraryFragment4 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentAddItinerary4Binding.inflate(inflater, container, false);
+        binding = Fragment4AddItineraryBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
     }
