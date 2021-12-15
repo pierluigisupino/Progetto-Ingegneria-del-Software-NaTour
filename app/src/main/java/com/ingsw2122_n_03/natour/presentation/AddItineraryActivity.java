@@ -16,12 +16,15 @@ import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
 import com.ingsw2122_n_03.natour.databinding.ActivitySignInBinding;
 import com.shuhart.stepview.StepView;
 
+import java.util.ArrayList;
+
 public class AddItineraryActivity extends AppCompatActivity {
 
     private StepView stepView;
 
     private final AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1();
     private final AddItineraryFragment2 addItineraryFragment2 = new AddItineraryFragment2();
+    AddItineraryFragment3 addItineraryFragment3 = new AddItineraryFragment3();
 
     private Button backButton;
     private Button nextButton;
@@ -67,6 +70,9 @@ public class AddItineraryActivity extends AppCompatActivity {
                 stepIndex++;
                 changeFragment();
             }else if(stepIndex == 2){
+                stepIndex++;
+                changeFragment();
+            } else if(stepIndex == 3){
                 Toast.makeText(this, "Add pressed", Toast.LENGTH_SHORT).show();
             }
         });
@@ -90,15 +96,19 @@ public class AddItineraryActivity extends AppCompatActivity {
         }else if(stepIndex == 1){
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment2);
         }else if(stepIndex == 2){
+            fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment3);
+        }else if(stepIndex == 3){
 
             String name = addItineraryFragment1.getName();
             String description = addItineraryFragment1.getDescription();
             String difficulty = addItineraryFragment2.getDifficulty();
             int hours = addItineraryFragment2.getHours();
             int minutes = addItineraryFragment2.getMinutes();
+            ArrayList<byte[]> imagesBytes = addItineraryFragment3.getImagesBytes();
 
-            AddItineraryFragment3 addItineraryFragment3 = AddItineraryFragment3.newInstance(name, description, difficulty, hours, minutes);
-            fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment3);
+            AddItineraryFragment4 addItineraryFragment4 = AddItineraryFragment4.newInstance(name, description, difficulty, hours, minutes, imagesBytes);
+            fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment4);
+
         }
 
         fragmentTransaction.commit();
@@ -118,7 +128,7 @@ public class AddItineraryActivity extends AppCompatActivity {
     }
 
     private void showAddButton(){
-        if(stepIndex == 2){
+        if(stepIndex == 3){
             nextButton.setText(R.string.add_button);
         }else{
             nextButton.setText(R.string.next_button);

@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
@@ -33,72 +34,56 @@ import java.util.ArrayList;
 
 public class AddItineraryFragment3 extends Fragment {
 
-    private Fragment3AddItineraryBinding binding;
-
-    private RecyclerView recyclerView;
-
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
     private static final String ARG_PARAM5 = "param5";
 
-    private final ArrayList<Bitmap> imagesBitmap = new ArrayList<>();
+    private Fragment3AddItineraryBinding binding;
+    private RecyclerView recyclerView;
 
-    private ImageButton imageButtonLeft;
-    private ImageButton imageButtonRight;
+    private ArrayList<Bitmap> imagesBitmap;
+    private ArrayList<byte[]> imagesBytes;
+
+    private TextView textView;
 
     private final ActivityResultLauncher<Intent> getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
 
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
+                    imagesBitmap = new ArrayList<>();
+                    imagesBytes = new ArrayList<>();
 
                     assert data != null;
                     ClipData clipData = data.getClipData();
                     if (clipData != null) {
                         for (int i = 0; i < clipData.getItemCount(); i++) {
                             Uri imageUri = clipData.getItemAt(i).getUri();
-                            imagesBitmap.add(getImageBitmap(imageUri));
+                            Bitmap bitmap = createImageBitmap(imageUri);
+                            imagesBitmap.add(bitmap);
+                            imagesBytes.add(createImageBytes(bitmap));
                         }
                     } else {
                         Uri imageUri = data.getData();
-                        imagesBitmap.add(getImageBitmap(imageUri));
+                        Bitmap bitmap = createImageBitmap(imageUri);
+                        imagesBitmap.add(bitmap);
+                        imagesBytes.add(createImageBytes(bitmap));
                     }
 
                     recyclerView.setAdapter(new ImageAdapter(imagesBitmap));
-                    if(recyclerView.getAdapter().getItemCount() > 1) {
-                        imageButtonRight.setVisibility(View.VISIBLE);
+
+                    //da spostare in strings
+                    if(imagesBytes.size() == 0){
+                        textView.setText("No photo selected");
+                    }else{
+                        textView.setText(imagesBytes.size() + " photo selected");
                     }
                 }
             });
 
     public AddItineraryFragment3() {}
-
-    public static AddItineraryFragment3 newInstance(String name, String description, String difficulty, int hours, int minutes) {
-        AddItineraryFragment3 fragment = new AddItineraryFragment3();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, name);
-        args.putString(ARG_PARAM2, description);
-        args.putString(ARG_PARAM3, difficulty);
-        args.putString(ARG_PARAM4, String.valueOf(hours));
-        args.putString(ARG_PARAM5, String.valueOf(minutes));
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String name = getArguments().getString(ARG_PARAM1);
-            String description = getArguments().getString(ARG_PARAM2);
-            String difficulty = getArguments().getString(ARG_PARAM3);
-            String hours = getArguments().getString(ARG_PARAM4);
-            String minutes = getArguments().getString(ARG_PARAM5);
-        }
-
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -111,17 +96,11 @@ public class AddItineraryFragment3 extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        View view1 = getView();
+        textView = binding.photoTextView2;
         Button selectPhotoButton = binding.selectPhotoButton;
 
-        imageButtonLeft = binding.imageButtonLeft;
-        imageButtonRight = binding.imageButtonRight;
-        imageButtonLeft.setVisibility(View.INVISIBLE);
-        imageButtonRight.setVisibility(View.INVISIBLE);
-
-
         recyclerView = binding.image;
-        LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         selectPhotoButton.setOnClickListener(v -> {
@@ -130,18 +109,9 @@ public class AddItineraryFragment3 extends Fragment {
             getImages.launch(intent);
         });
 
-        imageButtonRight.setOnClickListener(v -> {
-            int next = layoutManager.findFirstCompletelyVisibleItemPosition() +1;
-            layoutManager.scrollToPosition(next);
-            imageButtonLeft.setVisibility(View.VISIBLE);
-            if(layoutManager.getItemCount()-1 == layoutManager.findFirstCompletelyVisibleItemPosition()) {
-                imageButtonRight.setVisibility(View.INVISIBLE);
-            }
-        });
-
     }
 
-    private Bitmap getImageBitmap(Uri imageUri){
+    private Bitmap createImageBitmap(Uri imageUri){
 
         Bitmap bitmap = null;
 
@@ -162,7 +132,7 @@ public class AddItineraryFragment3 extends Fragment {
         return bitmap;
 }
 
-    private byte[] getImageBytes(Bitmap imageBitmap){
+    private byte[] createImageBytes(Bitmap imageBitmap){
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] bytes;
@@ -171,5 +141,9 @@ public class AddItineraryFragment3 extends Fragment {
         bytes = byteArrayOutputStream.toByteArray();
 
         return bytes;
+    }
+
+    public ArrayList<byte[]> getImagesBytes(){
+        return this.imagesBytes;
     }
 }
