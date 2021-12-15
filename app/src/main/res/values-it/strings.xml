@@ -88,9 +88,11 @@
     <string name="next_button">Avanti</string>
     <string name="back_button">Indietro</string>
     <string name="add_button">Aggiungi</string>
+    <string name="name_itinerary_textHint">Come si chiama?</string>
+    <string name="description_itinerary_textHint">Vuoi raccontare di più?</string>
     <string name="description_place_holder">Descrizione</string>
-    <string name="difficulty_text">Difficoltà</string>
-    <string name="duration_text">Durata</string>
+    <string name="difficulty_text">Che tipo di difficoltà ha?</string>
+    <string name="duration_text">Quanto\nDura?</string>
     <string name="photo_text">Foto</string>
     <string name="track_text">Tracciato</string>
     <string name="or_text">oppure</string>
