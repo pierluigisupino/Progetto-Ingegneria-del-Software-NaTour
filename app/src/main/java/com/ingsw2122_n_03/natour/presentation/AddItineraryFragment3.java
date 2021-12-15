@@ -134,7 +134,7 @@ public class AddItineraryFragment3 extends Fragment {
             int next = layoutManager.findFirstCompletelyVisibleItemPosition() +1;
             layoutManager.scrollToPosition(next);
             imageButtonLeft.setVisibility(View.VISIBLE);
-            if(layoutManager.findLastCompletelyVisibleItemPosition() == layoutManager.findFirstCompletelyVisibleItemPosition()) {
+            if(layoutManager.getItemCount()-1 == layoutManager.findFirstCompletelyVisibleItemPosition()) {
                 imageButtonRight.setVisibility(View.INVISIBLE);
             }
         });
