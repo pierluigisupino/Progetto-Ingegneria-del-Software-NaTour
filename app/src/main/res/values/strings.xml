@@ -88,9 +88,11 @@
     <string name="next_button">Next</string>
     <string name="back_button">Back</string>
     <string name="add_button">Add</string>
+    <string name="name_itinerary_textHint">What\'s the name of?</string>
+    <string name="description_itinerary_textHint">Want to tell more about?</string>
     <string name="description_place_holder">Description</string>
-    <string name="difficulty_text">Difficulty</string>
-    <string name="duration_text">Duration</string>
+    <string name="difficulty_text">What is the Difficulty Level?</string>
+    <string name="duration_text">How long\nit lasts?</string>
     <string name="photo_text">Photo</string>
     <string name="track_text">Track</string>
     <string name="or_text">or</string>
