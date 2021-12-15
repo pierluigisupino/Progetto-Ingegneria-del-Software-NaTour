@@ -20,24 +20,11 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.92"/>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/nameGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/descriptionGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="236dp" />
-
     <TextView
         android:id="@+id/nameHint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
         android:text="@string/name_itinerary_textHint"
         android:textAlignment="viewStart"
@@ -45,7 +32,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/nameGuideline" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameTextInputLayout"
@@ -93,9 +80,10 @@
         android:textAlignment="viewStart"
         android:textColor="@color/primary"
         android:textSize="18sp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/descriptionGuideline" />
+        app:layout_constraintTop_toBottomOf="@+id/nameTextInputLayout" />
 
 
     <com.google.android.material.textfield.TextInputLayout

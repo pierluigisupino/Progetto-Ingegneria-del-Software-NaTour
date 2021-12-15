@@ -97,7 +97,7 @@
     <string name="track_text">Tracciato</string>
     <string name="or_text">oppure</string>
     <string name="open_maps_button_text">Apri Mappa</string>
-    <string name="select_photo_button_text">Seleziona Foto</string>
+    <string name="select_photo_button_text">Seleziona</string>
     <string name="select_gpx_button_text">Seleziona GPX</string>
     <string-array name="difficulties">
         <item>Turistico (T)</item>
