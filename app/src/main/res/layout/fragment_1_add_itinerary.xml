@@ -38,14 +38,14 @@
         android:id="@+id/nameHint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
         android:text="@string/name_itinerary_textHint"
-        android:textAlignment="center"
+        android:textAlignment="viewStart"
         android:textColor="@color/primary"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/nameGuideline"/>
+        app:layout_constraintTop_toBottomOf="@id/nameGuideline" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameTextInputLayout"
@@ -62,6 +62,7 @@
         app:endIconTint="@color/primary"
         app:errorIconDrawable="@drawable/ic_error"
         app:errorEnabled="true"
+        android:layout_marginTop="10dp"
         app:errorTextColor="@color/error"
         app:errorIconTint="@color/error"
         app:boxStrokeErrorColor="@color/error"
@@ -87,14 +88,14 @@
         android:id="@+id/descriptionHint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
         android:text="@string/description_itinerary_textHint"
-        android:textAlignment="center"
+        android:textAlignment="viewStart"
         android:textColor="@color/primary"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/descriptionGuideline"/>
+        app:layout_constraintTop_toBottomOf="@id/descriptionGuideline" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -105,6 +106,7 @@
         android:hint="@string/description_place_holder"
         app:counterEnabled="true"
         app:counterMaxLength="100"
+        android:layout_marginTop="10dp"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
@@ -122,6 +124,7 @@
             android:id="@+id/descriptionEditText"
             android:layout_width="match_parent"
             android:maxLength="100"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:lines="5"
