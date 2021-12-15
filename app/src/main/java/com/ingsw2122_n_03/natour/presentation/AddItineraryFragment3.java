@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 
@@ -111,12 +112,11 @@ public class AddItineraryFragment3 extends Fragment {
         recyclerView.setAdapter(new ImageAdapter(imagesBitmap));
 
         // TODO: 15/12/2021
-        //da spostare in strings
 
         if(imagesBytes.size() == 0){
-            textView.setText("No photo selected");
+            textView.setText(getString(R.string.no_photo_selected_text));
         }else{
-            textView.setText(imagesBytes.size() + " photo selected");
+            textView.setText(imagesBytes.size()+" "+getString(R.string.photo_selected_text));
         }
     }
 
@@ -139,7 +139,7 @@ public class AddItineraryFragment3 extends Fragment {
         }
 
         return bitmap;
-}
+    }
 
     private byte[] createImageBytes(Bitmap imageBitmap){
 

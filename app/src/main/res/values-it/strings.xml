@@ -93,7 +93,7 @@
     <string name="description_place_holder">Descrizione</string>
     <string name="difficulty_text">Che tipo di difficoltà ha?</string>
     <string name="duration_text">Quanto\nDura?</string>
-    <string name="photo_text">Foto</string>
+    <string name="photo_text">Aggiungi delle foto</string>
     <string name="track_text">Tracciato</string>
     <string name="or_text">oppure</string>
     <string name="open_maps_button_text">Apri Mappa</string>
@@ -102,8 +102,11 @@
     <string-array name="difficulties">
         <item>Turistico (T)</item>
         <item>Escursionistico (E)</item>
-        <item>Esperto (EE)</item>
+        <item>Escursionisti Esperti (EE)</item>
+        <item>con Attrezzatura Alpina (EEA)</item>
     </string-array>
+    <string name="no_photo_selected_text">Nessuna foto selezionata</string>
+    <string name="photo_selected_text">foto</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

@@ -93,7 +93,7 @@
     <string name="description_place_holder">Description</string>
     <string name="difficulty_text">What is the Difficulty Level?</string>
     <string name="duration_text">How long\nit lasts?</string>
-    <string name="photo_text">Photo</string>
+    <string name="photo_text">Add Photos</string>
     <string name="track_text">Track</string>
     <string name="or_text">or</string>
     <string name="open_maps_button_text">Open Maps</string>
@@ -102,8 +102,11 @@
     <string-array name="difficulties">
         <item>Touristic (T)</item>
         <item>Hiking (E)</item>
-        <item>Experienced Hiking (EE)</item>
+        <item>for Experienced Hikers (EE)</item>
+        <item>Skilled Equipped Hikers (EEA)</item>
     </string-array>
+    <string name="no_photo_selected_text">No photo selected</string>
+    <string name="photo_selected_text">photo selected</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
