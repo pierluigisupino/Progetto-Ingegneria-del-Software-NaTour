@@ -43,8 +43,8 @@ public class AddItineraryFragment3 extends Fragment {
     private Fragment3AddItineraryBinding binding;
     private RecyclerView recyclerView;
 
-    private ArrayList<Bitmap> imagesBitmap;
-    private ArrayList<byte[]> imagesBytes;
+    private ArrayList<Bitmap> imagesBitmap = new ArrayList<>();
+    private ArrayList<byte[]> imagesBytes = new ArrayList<>();
 
     private TextView textView;
 
@@ -53,8 +53,6 @@ public class AddItineraryFragment3 extends Fragment {
 
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
-                    imagesBitmap = new ArrayList<>();
-                    imagesBytes = new ArrayList<>();
 
                     assert data != null;
                     ClipData clipData = data.getClipData();
@@ -72,14 +70,7 @@ public class AddItineraryFragment3 extends Fragment {
                         imagesBytes.add(createImageBytes(bitmap));
                     }
 
-                    recyclerView.setAdapter(new ImageAdapter(imagesBitmap));
-
-                    //da spostare in strings
-                    if(imagesBytes.size() == 0){
-                        textView.setText("No photo selected");
-                    }else{
-                        textView.setText(imagesBytes.size() + " photo selected");
-                    }
+                    setAdapter();
                 }
             });
 
@@ -108,7 +99,25 @@ public class AddItineraryFragment3 extends Fragment {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             getImages.launch(intent);
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setAdapter();
+    }
+
+    private void setAdapter(){
+        recyclerView.setAdapter(new ImageAdapter(imagesBitmap));
+
+        // TODO: 15/12/2021
+        //da spostare in strings
+
+        if(imagesBytes.size() == 0){
+            textView.setText("No photo selected");
+        }else{
+            textView.setText(imagesBytes.size() + " photo selected");
+        }
     }
 
     private Bitmap createImageBitmap(Uri imageUri){
