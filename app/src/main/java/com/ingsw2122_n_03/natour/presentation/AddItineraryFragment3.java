@@ -67,6 +67,9 @@ public class AddItineraryFragment3 extends Fragment {
                     }
 
                     recyclerView.setAdapter(new ImageAdapter(imagesBitmap));
+                    if(recyclerView.getAdapter().getItemCount() > 1) {
+                        imageButtonRight.setVisibility(View.VISIBLE);
+                    }
                 }
             });
 
@@ -125,14 +128,15 @@ public class AddItineraryFragment3 extends Fragment {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             getImages.launch(intent);
-            if(layoutManager.canScrollHorizontally()) {
-                imageButtonRight.setVisibility(View.VISIBLE);
-            }
         });
 
         imageButtonRight.setOnClickListener(v -> {
             int next = layoutManager.findFirstCompletelyVisibleItemPosition() +1;
             layoutManager.scrollToPosition(next);
+            imageButtonLeft.setVisibility(View.VISIBLE);
+            if(layoutManager.findLastCompletelyVisibleItemPosition() == layoutManager.findFirstCompletelyVisibleItemPosition()) {
+                imageButtonRight.setVisibility(View.INVISIBLE);
+            }
         });
 
     }
