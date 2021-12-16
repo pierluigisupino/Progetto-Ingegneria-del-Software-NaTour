@@ -26,9 +26,9 @@ public class AddItineraryFragment4 extends Fragment {
 
     private Fragment4AddItineraryBinding binding;
     private ArrayList<byte[]> imagesBytes;
-    private BaseActivity addItineraryActivity;
+    private AddItineraryActivity addItineraryActivity;
 
-    public AddItineraryFragment4(BaseActivity addItineraryActivity) {
+    public AddItineraryFragment4(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
     }
 

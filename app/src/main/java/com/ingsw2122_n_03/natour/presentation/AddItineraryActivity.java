@@ -142,6 +142,14 @@ public class AddItineraryActivity extends BaseActivity {
         }
     }
 
+    public void showProgressBar(){
+        linearProgressIndicator.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgressBar(){
+        linearProgressIndicator.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     public void onSuccess(String msg) {
         runOnUiThread(() -> {

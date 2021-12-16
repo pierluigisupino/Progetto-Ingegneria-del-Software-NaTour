@@ -22,7 +22,7 @@ public class AddItineraryFragment2 extends Fragment {
 
     private Fragment2AddItineraryBinding binding;
 
-    private BaseActivity addItineraryActivity;
+    private AddItineraryActivity addItineraryActivity;
     private View view;
     private AutoCompleteTextView difficultyTextView;
     private TimePicker timePicker;
@@ -30,7 +30,7 @@ public class AddItineraryFragment2 extends Fragment {
     private int minutes = 0;
     private String difficulty;
 
-    public AddItineraryFragment2(BaseActivity addItineraryActivity) {
+    public AddItineraryFragment2(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
     }
 

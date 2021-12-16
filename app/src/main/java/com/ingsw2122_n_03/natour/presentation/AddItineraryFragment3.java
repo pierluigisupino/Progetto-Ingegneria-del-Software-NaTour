@@ -44,7 +44,7 @@ public class AddItineraryFragment3 extends Fragment {
 
     private Fragment3AddItineraryBinding binding;
     private RecyclerView recyclerView;
-    private BaseActivity addItineraryActivity;
+    private AddItineraryActivity addItineraryActivity;
 
     private final ArrayList<Bitmap> imagesBitmap = new ArrayList<>();
     private final ArrayList<byte[]> imagesBytes = new ArrayList<>();
@@ -55,7 +55,7 @@ public class AddItineraryFragment3 extends Fragment {
     private final ActivityResultLauncher<Intent> getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    progressBar.setVisibility(View.VISIBLE);
+                    addItineraryActivity.showProgressBar();
                     new Thread(() -> {
                         Intent data = result.getData();
                         assert data != null;
@@ -75,13 +75,13 @@ public class AddItineraryFragment3 extends Fragment {
                         }
                         recyclerView.post(() -> {
                             setAdapter();
-                            progressBar.setVisibility(View.INVISIBLE);
+                            addItineraryActivity.hideProgressBar();
                         });
                     }).start();
                 }
             });
 
-    public AddItineraryFragment3(BaseActivity addItineraryActivity) {
+    public AddItineraryFragment3(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
     }
 
