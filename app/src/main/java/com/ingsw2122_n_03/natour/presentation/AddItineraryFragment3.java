@@ -118,7 +118,6 @@ public class AddItineraryFragment3 extends Fragment {
     private void setAdapter(){
         recyclerView.setAdapter(new ImageAdapter(textView, imagesBitmap));
 
-        // TODO: 15/12/2021
         if(imagesBytes.size() != 0)
             textView.setText(imagesBytes.size()+" "+getString(R.string.photo_selected_text));
 
@@ -158,10 +157,11 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     public ArrayList<byte[]> getImagesBytes(){
-        Iterator<Bitmap> iterator = imagesBitmap.iterator();
-        while(iterator.hasNext()) {
-            imagesBytes.add(createImageBytes(iterator.next()));
+
+        for(Bitmap bitmap : imagesBitmap){
+            imagesBytes.add(createImageBytes(bitmap));
         }
+
         return this.imagesBytes;
     }
 }
