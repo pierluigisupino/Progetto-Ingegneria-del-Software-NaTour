@@ -75,9 +75,11 @@ public class AddItineraryFragment3 extends Fragment {
                         }
                         recyclerView.post(() -> {
                             setAdapter();
-                            addItineraryActivity.hideProgressBar();
+                            addItineraryActivity.onSuccess("Foto aggiunte");
                         });
                     }).start();
+                }else {
+                    addItineraryActivity.onFail("Qualcosa e\' andato storto riprova");
                 }
             });
 
