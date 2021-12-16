@@ -22,12 +22,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 
 import java.io.ByteArrayOutputStream;
@@ -44,9 +44,10 @@ public class AddItineraryFragment3 extends Fragment {
 
     private Fragment3AddItineraryBinding binding;
     private RecyclerView recyclerView;
+    private BaseActivity addItineraryActivity;
 
-    private ArrayList<Bitmap> imagesBitmap = new ArrayList<>();
-    private ArrayList<byte[]> imagesBytes = new ArrayList<>();
+    private final ArrayList<Bitmap> imagesBitmap = new ArrayList<>();
+    private final ArrayList<byte[]> imagesBytes = new ArrayList<>();
 
     private TextView textView;
     private LinearProgressIndicator progressBar;
@@ -80,7 +81,9 @@ public class AddItineraryFragment3 extends Fragment {
                 }
             });
 
-    public AddItineraryFragment3() {}
+    public AddItineraryFragment3(BaseActivity addItineraryActivity) {
+        this.addItineraryActivity = addItineraryActivity;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -95,7 +98,6 @@ public class AddItineraryFragment3 extends Fragment {
 
         textView = binding.photoTextView2;
         Button selectPhotoButton = binding.selectPhotoButton;
-        
         recyclerView = binding.image;
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);

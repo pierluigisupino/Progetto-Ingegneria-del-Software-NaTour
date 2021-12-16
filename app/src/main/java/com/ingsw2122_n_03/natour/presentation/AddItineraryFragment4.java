@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.ArrayList;
 
@@ -25,11 +26,14 @@ public class AddItineraryFragment4 extends Fragment {
 
     private Fragment4AddItineraryBinding binding;
     private ArrayList<byte[]> imagesBytes;
+    private BaseActivity addItineraryActivity;
 
-    public AddItineraryFragment4() {}
+    public AddItineraryFragment4(BaseActivity addItineraryActivity) {
+        this.addItineraryActivity = addItineraryActivity;
+    }
 
-    public static AddItineraryFragment4 newInstance(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes) {
-        AddItineraryFragment4 fragment = new AddItineraryFragment4();
+    public static AddItineraryFragment4 newInstance(BaseActivity addItineraryActivity, String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes) {
+        AddItineraryFragment4 fragment = new AddItineraryFragment4(addItineraryActivity);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, name);
         args.putString(ARG_PARAM2, description);

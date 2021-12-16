@@ -16,17 +16,23 @@ import android.widget.Toast;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment1AddItineraryBinding;
 import com.ingsw2122_n_03.natour.databinding.Fragment2AddItineraryBinding;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class AddItineraryFragment2 extends Fragment {
 
     private Fragment2AddItineraryBinding binding;
 
+    private BaseActivity addItineraryActivity;
     private View view;
     private AutoCompleteTextView difficultyTextView;
     private TimePicker timePicker;
     private int hour = 1;
     private int minutes = 0;
     private String difficulty;
+
+    public AddItineraryFragment2(BaseActivity addItineraryActivity) {
+        this.addItineraryActivity = addItineraryActivity;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

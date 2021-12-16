@@ -15,20 +15,23 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment1AddItineraryBinding;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 
 public class AddItineraryFragment1 extends Fragment {
 
     private Fragment1AddItineraryBinding binding;
 
+    private BaseActivity addItineraryActivity;
     private TextInputLayout nameTextInputLayout;
     private EditText nameEditText;
-
     private EditText descriptionEditText;
 
     private boolean isFirstSubmit = true;
 
-    public AddItineraryFragment1() {}
+    public AddItineraryFragment1(BaseActivity addItineraryActivity) {
+        this.addItineraryActivity = addItineraryActivity;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
