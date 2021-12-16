@@ -50,7 +50,6 @@ public class AddItineraryFragment3 extends Fragment {
     private final ArrayList<byte[]> imagesBytes = new ArrayList<>();
 
     private TextView textView;
-    private LinearProgressIndicator progressBar;
 
     private final ActivityResultLauncher<Intent> getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
