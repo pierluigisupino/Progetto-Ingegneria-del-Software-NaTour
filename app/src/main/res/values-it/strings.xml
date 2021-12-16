@@ -107,6 +107,7 @@
     </string-array>
     <string name="no_photo_selected_text">Nessuna foto selezionata</string>
     <string name="photo_selected_text">foto</string>
+    <string name="photo_added_success">Foto aggiunte</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

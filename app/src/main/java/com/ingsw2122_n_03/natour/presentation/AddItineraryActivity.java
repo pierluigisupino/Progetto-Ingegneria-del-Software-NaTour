@@ -150,9 +150,11 @@ public class AddItineraryActivity extends BaseActivity {
     public void onSuccess(String msg) {
         runOnUiThread(() -> {
             linearProgressIndicator.setVisibility(View.INVISIBLE);
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.success))
-                    .show();
+            if(msg != null) {
+                Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.success))
+                        .show();
+            }
         });
     }
 

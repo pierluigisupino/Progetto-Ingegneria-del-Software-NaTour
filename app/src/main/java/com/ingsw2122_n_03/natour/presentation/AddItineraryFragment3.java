@@ -8,6 +8,12 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -17,22 +23,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
-import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class AddItineraryFragment3 extends Fragment {
 
@@ -64,21 +62,20 @@ public class AddItineraryFragment3 extends Fragment {
                                Uri imageUri = clipData.getItemAt(i).getUri();
                                Bitmap bitmap = createImageBitmap(imageUri);
                                imagesBitmap.add(bitmap);
-                               imagesBytes.add(createImageBytes(bitmap));
                             }
                         } else {
                             Uri imageUri = data.getData();
                             Bitmap bitmap = createImageBitmap(imageUri);
                             imagesBitmap.add(bitmap);
-                            imagesBytes.add(createImageBytes(bitmap));
                         }
                         recyclerView.post(() -> {
                             setAdapter();
-                            addItineraryActivity.onSuccess("Foto aggiunte");
+                            addItineraryActivity.onSuccess(null);
+                            //addItineraryActivity.onSuccess(getString(R.string.photo_added_success));
                         });
                     }).start();
                 }else {
-                    addItineraryActivity.onFail("Qualcosa e\' andato storto riprova");
+                    addItineraryActivity.onFail(getString(R.string.generic_error));
                 }
             });
 
@@ -120,12 +117,9 @@ public class AddItineraryFragment3 extends Fragment {
         recyclerView.setAdapter(new ImageAdapter(imagesBitmap));
 
         // TODO: 15/12/2021
-
-        if(imagesBytes.size() == 0){
-            textView.setText(getString(R.string.no_photo_selected_text));
-        }else{
+        if(imagesBytes.size() != 0)
             textView.setText(imagesBytes.size()+" "+getString(R.string.photo_selected_text));
-        }
+
     }
 
     private Bitmap createImageBitmap(Uri imageUri){
@@ -161,6 +155,10 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     public ArrayList<byte[]> getImagesBytes(){
+        Iterator<Bitmap> iterator = imagesBitmap.iterator();
+        while(iterator.hasNext()) {
+            imagesBytes.add(createImageBytes(iterator.next()));
+        }
         return this.imagesBytes;
     }
 }
