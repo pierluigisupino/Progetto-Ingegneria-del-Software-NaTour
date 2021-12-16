@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
@@ -48,30 +49,34 @@ public class AddItineraryFragment3 extends Fragment {
     private ArrayList<byte[]> imagesBytes = new ArrayList<>();
 
     private TextView textView;
+    private LinearProgressIndicator progressBar;
 
     private final ActivityResultLauncher<Intent> getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
-
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-
-                    assert data != null;
-                    ClipData clipData = data.getClipData();
-                    if (clipData != null) {
-                        for (int i = 0; i < clipData.getItemCount(); i++) {
-                            Uri imageUri = clipData.getItemAt(i).getUri();
+                    progressBar.setVisibility(View.VISIBLE);
+                    new Thread(() -> {
+                        Intent data = result.getData();
+                        assert data != null;
+                        ClipData clipData = data.getClipData();
+                        if (clipData != null) {
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
+                               Uri imageUri = clipData.getItemAt(i).getUri();
+                               Bitmap bitmap = createImageBitmap(imageUri);
+                               imagesBitmap.add(bitmap);
+                               imagesBytes.add(createImageBytes(bitmap));
+                            }
+                        } else {
+                            Uri imageUri = data.getData();
                             Bitmap bitmap = createImageBitmap(imageUri);
                             imagesBitmap.add(bitmap);
                             imagesBytes.add(createImageBytes(bitmap));
                         }
-                    } else {
-                        Uri imageUri = data.getData();
-                        Bitmap bitmap = createImageBitmap(imageUri);
-                        imagesBitmap.add(bitmap);
-                        imagesBytes.add(createImageBytes(bitmap));
-                    }
-
-                    setAdapter();
+                        recyclerView.post(() -> {
+                            setAdapter();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        });
+                    }).start();
                 }
             });
 
@@ -90,7 +95,7 @@ public class AddItineraryFragment3 extends Fragment {
 
         textView = binding.photoTextView2;
         Button selectPhotoButton = binding.selectPhotoButton;
-
+        progressBar = binding.progressBar;
         recyclerView = binding.image;
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
