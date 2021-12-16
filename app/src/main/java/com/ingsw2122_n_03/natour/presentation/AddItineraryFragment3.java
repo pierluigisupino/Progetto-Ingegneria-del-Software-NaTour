@@ -100,6 +100,8 @@ public class AddItineraryFragment3 extends Fragment {
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
+        textView.setText(getString(R.string.no_photo_selected_text));
+
         selectPhotoButton.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -114,12 +116,16 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     private void setAdapter(){
+<<<<<<< Updated upstream
         recyclerView.setAdapter(new ImageAdapter(imagesBitmap));
 
         // TODO: 15/12/2021
         if(imagesBytes.size() != 0)
             textView.setText(imagesBytes.size()+" "+getString(R.string.photo_selected_text));
 
+=======
+        recyclerView.setAdapter(new ImageAdapter(textView, imagesBitmap));
+>>>>>>> Stashed changes
     }
 
     private Bitmap createImageBitmap(Uri imageUri){
