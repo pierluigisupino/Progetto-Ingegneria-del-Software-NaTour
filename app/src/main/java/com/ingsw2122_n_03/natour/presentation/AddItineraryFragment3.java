@@ -116,16 +116,13 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     private void setAdapter(){
-<<<<<<< Updated upstream
-        recyclerView.setAdapter(new ImageAdapter(imagesBitmap));
+        recyclerView.setAdapter(new ImageAdapter(textView, imagesBitmap));
 
         // TODO: 15/12/2021
         if(imagesBytes.size() != 0)
             textView.setText(imagesBytes.size()+" "+getString(R.string.photo_selected_text));
 
-=======
         recyclerView.setAdapter(new ImageAdapter(textView, imagesBitmap));
->>>>>>> Stashed changes
     }
 
     private Bitmap createImageBitmap(Uri imageUri){
