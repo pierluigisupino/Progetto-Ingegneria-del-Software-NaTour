@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +29,7 @@ public class AddItineraryActivity extends BaseActivity {
     private final AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1(this);
     private final AddItineraryFragment2 addItineraryFragment2 = new AddItineraryFragment2(this);
     private final AddItineraryFragment3 addItineraryFragment3 = new AddItineraryFragment3(this);
+    private final AddItineraryFragment4 addItineraryFragment4 = new AddItineraryFragment4(this);
 
     private ConstraintLayout layout;
     private Button backButton;
@@ -37,6 +37,13 @@ public class AddItineraryActivity extends BaseActivity {
     private LinearProgressIndicator linearProgressIndicator;
 
     private int stepIndex = 0;
+
+    private String name;
+    private String description;
+    private String difficulty;
+    private int hours;
+    private int minutes;
+    private ArrayList <byte[]> imagesBytes;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -54,7 +61,14 @@ public class AddItineraryActivity extends BaseActivity {
         nextButton = binding.nextButton;
         linearProgressIndicator = binding.progressBar;
 
-        materialToolbar.setNavigationOnClickListener(v -> finish());
+        materialToolbar.setNavigationOnClickListener(v ->
+                new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_cancel)
+                .setTitle(R.string.cancel_operation_title)
+                .setMessage(R.string.cancel_operation_msgText)
+                .setPositiveButton(R.string.yes_text, (dialog, which) -> finish())
+                .setNegativeButton(R.string.no_text, null)
+                .show());
 
         stepView.getState()
                 .animationType(StepView.ANIMATION_CIRCLE)
@@ -73,12 +87,18 @@ public class AddItineraryActivity extends BaseActivity {
 
         nextButton.setOnClickListener(v -> {
             if (stepIndex == 0 && addItineraryFragment1.isNameValid()){
+                name = addItineraryFragment1.getName();
+                description = addItineraryFragment1.getDescription();
                 stepIndex++;
                 changeFragment();
             }else if(stepIndex == 1 && addItineraryFragment2.isDurationValid()){
+                difficulty = addItineraryFragment2.getDifficulty();
+                hours = addItineraryFragment2.getHours();
+                minutes = addItineraryFragment2.getMinutes();
                 stepIndex++;
                 changeFragment();
             }else if(stepIndex == 2){
+                imagesBytes= addItineraryFragment3.getImagesBytes();
                 stepIndex++;
                 changeFragment();
             } else if(stepIndex == 3){
@@ -107,17 +127,8 @@ public class AddItineraryActivity extends BaseActivity {
         }else if(stepIndex == 2){
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment3);
         }else if(stepIndex == 3){
-
-            String name = addItineraryFragment1.getName();
-            String description = addItineraryFragment1.getDescription();
-            String difficulty = addItineraryFragment2.getDifficulty();
-            int hours = addItineraryFragment2.getHours();
-            int minutes = addItineraryFragment2.getMinutes();
-            ArrayList<byte[]> imagesBytes = addItineraryFragment3.getImagesBytes();
-
-            AddItineraryFragment4 addItineraryFragment4 = AddItineraryFragment4.newInstance(this, name, description, difficulty, hours, minutes, imagesBytes);
+            //AddItineraryFragment4 addItineraryFragment4 = AddItineraryFragment4.newInstance(this, name, description, difficulty, hours, minutes, imagesBytes);
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment4);
-
         }
 
         fragmentTransaction.commit();
@@ -170,15 +181,14 @@ public class AddItineraryActivity extends BaseActivity {
         });
     }
 
-    //@TODO: insert icon and string res
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Annulla Inserimento")
-                .setMessage("Annullare l'inserimento del percorso?")
-                .setPositiveButton("Si", (dialog, which) -> finish())
-                .setNegativeButton("No", null)
+                .setIcon(R.drawable.ic_cancel)
+                .setTitle(R.string.cancel_operation_title)
+                .setMessage(R.string.cancel_operation_msgText)
+                .setPositiveButton(R.string.yes_text, (dialog, which) -> finish())
+                .setNegativeButton(R.string.no_text, null)
                 .show();
     }
 }

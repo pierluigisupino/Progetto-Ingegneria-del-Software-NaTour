@@ -33,12 +33,6 @@ import java.util.ArrayList;
 
 public class AddItineraryFragment3 extends Fragment {
 
-    /*private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static final String ARG_PARAM3 = "param3";
-    private static final String ARG_PARAM4 = "param4";
-    private static final String ARG_PARAM5 = "param5";*/
-
     private Fragment3AddItineraryBinding binding;
     private RecyclerView recyclerView;
     private final AddItineraryActivity addItineraryActivity;
@@ -84,11 +78,13 @@ public class AddItineraryFragment3 extends Fragment {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
                                     Bitmap bitmap = createImageBitmap(imageUri);
                                     imagesBitmap.add(bitmap);
+                                    new Thread(() -> imagesBytes.add(createImageBytes(bitmap)));
                                 }
                             } else {
                                 Uri imageUri = data.getData();
                                 Bitmap bitmap = createImageBitmap(imageUri);
                                 imagesBitmap.add(bitmap);
+                                new Thread(() -> imagesBytes.add(createImageBytes(bitmap)));
                             }
                             recyclerView.post(() -> {
                                 setAdapter();
@@ -149,13 +145,13 @@ public class AddItineraryFragment3 extends Fragment {
         return bytes;
     }
 
-    //@TODO
     public ArrayList<byte[]> getImagesBytes(){
 
-        for(Bitmap bitmap : imagesBitmap){
+        /*for(Bitmap bitmap : imagesBitmap){
             imagesBytes.add(createImageBytes(bitmap));
-        }
+        }*/
 
         return this.imagesBytes;
     }
+
 }

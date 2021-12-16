@@ -35,6 +35,8 @@
     <string name="email_place_holder">Email</string>
     <string name="password_place_holder">Password</string>
     <string name="continue_button_text">Continua</string>
+    <string name="yes_text">Si</string>
+    <string name="no_text">No</string>
 
     <!--ERROR ACTIVITY-->
     <string name="exit">Esci</string>
@@ -110,6 +112,8 @@
     <string name="no_photo_selected_text">Nessuna foto selezionata</string>
     <string name="photo_selected_text">foto</string>
     <string name="photo_added_success">Foto aggiunte</string>
+    <string name="cancel_operation_title">Annullare l\' inserimento?</string>
+    <string name="cancel_operation_msgText">Tutti i progressi andranno persi</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

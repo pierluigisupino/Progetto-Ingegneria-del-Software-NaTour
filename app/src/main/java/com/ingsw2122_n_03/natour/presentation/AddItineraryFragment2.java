@@ -42,7 +42,6 @@ public class AddItineraryFragment2 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = Fragment2AddItineraryBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 

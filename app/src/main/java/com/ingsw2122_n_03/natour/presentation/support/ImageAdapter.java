@@ -1,8 +1,7 @@
 package com.ingsw2122_n_03.natour.presentation.support;
-
 import com.ingsw2122_n_03.natour.R;
 
-import android.content.res.Resources;
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +13,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
+
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
-    private ViewGroup parent;
-    private TextView textView;
-    private List<Bitmap> bitmaps;
+    private final TextView textView;
+    private final List<Bitmap> bitmaps;
 
     public ImageAdapter(TextView textView, List<Bitmap> bitmaps) {
         this.textView = textView;
@@ -32,8 +29,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     @NonNull
     @Override
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        this.parent = parent;
 
         return new ImageViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
@@ -80,11 +75,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void setPhotoCount(ImageViewHolder holder){
         if(bitmaps.size() == 0){
             textView.setText(holder.itemView.getContext().getString(R.string.no_photo_selected_text));
         }else{
-            textView.setText(bitmaps.size()+" " + holder.itemView.getContext().getString(R.string.photo_selected_text));
+            textView.setText(bitmaps.size()+" " +holder.itemView.getContext().getString(R.string.photo_selected_text));
         }
     }
 }
