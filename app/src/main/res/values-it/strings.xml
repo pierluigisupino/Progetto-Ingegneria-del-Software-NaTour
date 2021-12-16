@@ -77,6 +77,8 @@
     <string name="user_not_confirmed_error">Account non confermato</string>
     <string name="too_many_requests_error">Troppe richieste</string>
 
+    <string name="duration_error">Inserisci una durata valida.</string>
+
     <string name="generic_error">Something went wrong, try again later.</string>
 
     <!--IMAGES DESCRIPTION-->

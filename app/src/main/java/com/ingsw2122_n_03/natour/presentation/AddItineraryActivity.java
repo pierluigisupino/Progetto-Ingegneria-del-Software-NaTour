@@ -6,6 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -166,5 +168,17 @@ public class AddItineraryActivity extends BaseActivity {
                     .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.error))
                     .show();
         });
+    }
+
+    //@TODO: insert icon and string res
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Annulla Inserimento")
+                .setMessage("Annullare l'inserimento del percorso?")
+                .setPositiveButton("Si", (dialog, which) -> finish())
+                .setNegativeButton("No", null)
+                .show();
     }
 }

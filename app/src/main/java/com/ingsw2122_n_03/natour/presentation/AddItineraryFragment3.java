@@ -30,55 +30,25 @@ import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class AddItineraryFragment3 extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
+    /*private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
-    private static final String ARG_PARAM5 = "param5";
+    private static final String ARG_PARAM5 = "param5";*/
 
     private Fragment3AddItineraryBinding binding;
     private RecyclerView recyclerView;
-    private AddItineraryActivity addItineraryActivity;
+    private final AddItineraryActivity addItineraryActivity;
 
     private final ArrayList<Bitmap> imagesBitmap = new ArrayList<>();
     private final ArrayList<byte[]> imagesBytes = new ArrayList<>();
 
-    private TextView textView;
-    private ImageAdapter imageAdapter = null;
+    private TextView countImageTextView;
 
-    private final ActivityResultLauncher<Intent> getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    addItineraryActivity.showProgressBar();
-                    new Thread(() -> {
-                        Intent data = result.getData();
-                        assert data != null;
-                        ClipData clipData = data.getClipData();
-                        if (clipData != null) {
-                            for (int i = 0; i < clipData.getItemCount(); i++) {
-                               Uri imageUri = clipData.getItemAt(i).getUri();
-                               Bitmap bitmap = createImageBitmap(imageUri);
-                               imagesBitmap.add(bitmap);
-                            }
-                        } else {
-                            Uri imageUri = data.getData();
-                            Bitmap bitmap = createImageBitmap(imageUri);
-                            imagesBitmap.add(bitmap);
-                        }
-                        recyclerView.post(() -> {
-                            setAdapter();
-                            addItineraryActivity.onSuccess(null);
-                            //addItineraryActivity.onSuccess(getString(R.string.photo_added_success));
-                        });
-                    }).start();
-                }else {
-                    addItineraryActivity.onFail(getString(R.string.generic_error));
-                }
-            });
+    private ActivityResultLauncher<Intent> getImages;
 
     public AddItineraryFragment3(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
@@ -95,13 +65,40 @@ public class AddItineraryFragment3 extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        textView = binding.photoTextView2;
+        countImageTextView = binding.photoTextView2;
         Button selectPhotoButton = binding.selectPhotoButton;
         recyclerView = binding.image;
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        textView.setText(getString(R.string.no_photo_selected_text));
+        getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        addItineraryActivity.showProgressBar();
+                        new Thread(() -> {
+                            Intent data = result.getData();
+                            assert data != null;
+                            ClipData clipData = data.getClipData();
+                            if (clipData != null) {
+                                for (int i = 0; i < clipData.getItemCount(); i++) {
+                                    Uri imageUri = clipData.getItemAt(i).getUri();
+                                    Bitmap bitmap = createImageBitmap(imageUri);
+                                    imagesBitmap.add(bitmap);
+                                }
+                            } else {
+                                Uri imageUri = data.getData();
+                                Bitmap bitmap = createImageBitmap(imageUri);
+                                imagesBitmap.add(bitmap);
+                            }
+                            recyclerView.post(() -> {
+                                setAdapter();
+                                addItineraryActivity.onSuccess(null);
+                            });
+                        }).start();
+                    }else {
+                        addItineraryActivity.onFail(getString(R.string.generic_error));
+                    }
+                });
 
         selectPhotoButton.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -117,17 +114,7 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     private void setAdapter(){
-
-        if(imageAdapter == null){
-            recyclerView.setAdapter(new ImageAdapter(textView, imagesBitmap));
-        }else{
-            imageAdapter.notifyDataSetChanged();
-        }
-
-        if(imagesBytes.size() != 0)
-            textView.setText(imagesBytes.size()+" "+getString(R.string.photo_selected_text));
-
-        recyclerView.setAdapter(new ImageAdapter(textView, imagesBitmap));
+        recyclerView.setAdapter(new ImageAdapter(countImageTextView, imagesBitmap));
     }
 
     private Bitmap createImageBitmap(Uri imageUri){
@@ -162,6 +149,7 @@ public class AddItineraryFragment3 extends Fragment {
         return bytes;
     }
 
+    //@TODO
     public ArrayList<byte[]> getImagesBytes(){
 
         for(Bitmap bitmap : imagesBitmap){

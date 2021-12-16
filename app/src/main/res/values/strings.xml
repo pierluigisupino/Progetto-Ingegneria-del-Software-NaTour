@@ -77,6 +77,8 @@
     <string name="user_not_confirmed_error">User not confirmed</string>
     <string name="too_many_requests_error">Too many requests.</string>
 
+    <string name="duration_error">Insert a valid duration.</string>
+
     <string name="generic_error">Something went wrong, try again later.</string>
 
     <!--IMAGES DESCRIPTION-->
