@@ -95,7 +95,7 @@ public class AddItineraryFragment3 extends Fragment {
 
         textView = binding.photoTextView2;
         Button selectPhotoButton = binding.selectPhotoButton;
-        progressBar = binding.progressBar;
+        
         recyclerView = binding.image;
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);

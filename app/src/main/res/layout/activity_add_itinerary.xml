@@ -22,13 +22,6 @@
         app:layout_constraintGuide_percent="0.92"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottomGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.98"/>
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/buttonLeftGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -89,28 +82,41 @@
         android:id="@+id/back_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/button_light_background"
         android:fontFamily="@font/euclid_circular_semi_bold"
         android:text="@string/back_button"
+        android:textAllCaps="false"
         android:textColor="@color/primary"
         android:textSize="16sp"
-        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintEnd_toStartOf="@+id/buttonLeftGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline" />
 
     <Button
         android:id="@+id/next_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/button_dark_background"
         android:fontFamily="@font/euclid_circular_semi_bold"
         android:text="@string/next_button"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@+id/buttonRightGuideline"
-        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
+        app:layout_constraintStart_toStartOf="@+id/buttonRightGuideline" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressBar"
+        android:scaleY="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

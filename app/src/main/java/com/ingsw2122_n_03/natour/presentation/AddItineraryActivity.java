@@ -1,6 +1,7 @@
 package com.ingsw2122_n_03.natour.presentation;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -11,23 +12,27 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
-import com.ingsw2122_n_03.natour.databinding.ActivitySignInBinding;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.shuhart.stepview.StepView;
 
 import java.util.ArrayList;
 
-public class AddItineraryActivity extends AppCompatActivity {
+public class AddItineraryActivity extends BaseActivity {
 
     private StepView stepView;
 
     private final AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1();
     private final AddItineraryFragment2 addItineraryFragment2 = new AddItineraryFragment2();
-    AddItineraryFragment3 addItineraryFragment3 = new AddItineraryFragment3();
+    private final AddItineraryFragment3 addItineraryFragment3 = new AddItineraryFragment3();
 
+    private ConstraintLayout layout;
     private Button backButton;
     private Button nextButton;
+    private LinearProgressIndicator linearProgressIndicator;
 
     private int stepIndex = 0;
 
@@ -40,10 +45,12 @@ public class AddItineraryActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        layout = binding.layout;
         MaterialToolbar materialToolbar = binding.topAppBar;
         stepView = binding.stepView;
         backButton = binding.backButton;
         nextButton = binding.nextButton;
+        linearProgressIndicator = binding.progressBar;
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
@@ -133,5 +140,25 @@ public class AddItineraryActivity extends AppCompatActivity {
         }else{
             nextButton.setText(R.string.next_button);
         }
+    }
+
+    @Override
+    public void onSuccess(String msg) {
+        runOnUiThread(() -> {
+            linearProgressIndicator.setVisibility(View.INVISIBLE);
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.success))
+                    .show();
+        });
+    }
+
+    @Override
+    public void onFail(String msg) {
+        runOnUiThread(() -> {
+            linearProgressIndicator.setVisibility(View.INVISIBLE);
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.error))
+                    .show();
+        });
     }
 }
