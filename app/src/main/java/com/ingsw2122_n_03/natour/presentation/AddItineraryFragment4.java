@@ -32,7 +32,7 @@ public class AddItineraryFragment4 extends Fragment {
         this.addItineraryActivity = addItineraryActivity;
     }
 
-    public static AddItineraryFragment4 newInstance(BaseActivity addItineraryActivity, String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes) {
+    public static AddItineraryFragment4 newInstance(AddItineraryActivity addItineraryActivity, String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes) {
         AddItineraryFragment4 fragment = new AddItineraryFragment4(addItineraryActivity);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, name);
