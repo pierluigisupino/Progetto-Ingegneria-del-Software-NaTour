@@ -1,7 +1,12 @@
 package com.ingsw2122_n_03.natour.presentation;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -10,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
@@ -25,6 +31,10 @@ public class AddItineraryFragment4 extends Fragment {
     private static final String ARG_PARAM6 = "param6";
 
     private Fragment4AddItineraryBinding binding;
+    private FloatingActionButton addGPX;
+
+    private ActivityResultLauncher<Intent> getGPX;
+
     private ArrayList<byte[]> imagesBytes;
     private AddItineraryActivity addItineraryActivity;
 
@@ -70,5 +80,25 @@ public class AddItineraryFragment4 extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        addGPX = binding.addGPXbutton;
+
+        getGPX = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                Intent data = result.getData();
+                Uri contentUri = data.getData();
+            }
+        });;
+
+        addGPX.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent data = new Intent(Intent.ACTION_GET_CONTENT);
+                data.addCategory(Intent.CATEGORY_OPENABLE);
+                data.setType("*/*");
+                Intent intent = Intent.createChooser(data, "Choose a file");
+                getGPX.launch(intent);
+            }
+        });
     }
 }

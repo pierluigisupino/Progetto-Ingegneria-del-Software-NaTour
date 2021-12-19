@@ -58,6 +58,7 @@ public class AddItineraryFragment3 extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         countImageTextView = binding.photoTextView2;
         Button selectPhotoButton = binding.selectPhotoButton;
