@@ -127,7 +127,6 @@ public class AddItineraryActivity extends BaseActivity {
         }else if(stepIndex == 2){
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment3);
         }else if(stepIndex == 3){
-            //AddItineraryFragment4 addItineraryFragment4 = AddItineraryFragment4.newInstance(this, name, description, difficulty, hours, minutes, imagesBytes);
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment4);
         }
 

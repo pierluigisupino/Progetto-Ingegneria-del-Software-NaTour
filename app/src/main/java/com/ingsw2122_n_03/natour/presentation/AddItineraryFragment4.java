@@ -2,7 +2,6 @@ package com.ingsw2122_n_03.natour.presentation;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -11,15 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding;
-import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
-import java.util.ArrayList;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import io.ticofab.androidgpxparser.parser.GPXParser;
+import io.ticofab.androidgpxparser.parser.domain.Gpx;
+import io.ticofab.androidgpxparser.parser.domain.WayPoint;
 
 public class AddItineraryFragment4 extends Fragment {
 
@@ -34,43 +43,19 @@ public class AddItineraryFragment4 extends Fragment {
     private FloatingActionButton addGPX;
 
     private ActivityResultLauncher<Intent> getGPX;
-
-    private ArrayList<byte[]> imagesBytes;
     private AddItineraryActivity addItineraryActivity;
 
     public AddItineraryFragment4(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
     }
 
-    public static AddItineraryFragment4 newInstance(AddItineraryActivity addItineraryActivity, String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes) {
-        AddItineraryFragment4 fragment = new AddItineraryFragment4(addItineraryActivity);
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, name);
-        args.putString(ARG_PARAM2, description);
-        args.putString(ARG_PARAM3, difficulty);
-        args.putString(ARG_PARAM4, String.valueOf(hours));
-        args.putString(ARG_PARAM5, String.valueOf(minutes));
-        args.putSerializable(ARG_PARAM6, imagesBytes);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String name = getArguments().getString(ARG_PARAM1);
-            String description = getArguments().getString(ARG_PARAM2);
-            String difficulty = getArguments().getString(ARG_PARAM3);
-            String hours = getArguments().getString(ARG_PARAM4);
-            String minutes = getArguments().getString(ARG_PARAM5);
-            imagesBytes = (ArrayList<byte[]>) getArguments().getSerializable(ARG_PARAM6);
-
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = Fragment4AddItineraryBinding.inflate(inflater, container, false);
 
@@ -86,19 +71,37 @@ public class AddItineraryFragment4 extends Fragment {
         getGPX = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK) {
                 Intent data = result.getData();
-                Uri contentUri = data.getData();
-            }
-        });;
+                String path = data.getData().getPath();
 
-        addGPX.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent data = new Intent(Intent.ACTION_GET_CONTENT);
-                data.addCategory(Intent.CATEGORY_OPENABLE);
-                data.setType("*/*");
-                Intent intent = Intent.createChooser(data, "Choose a file");
-                getGPX.launch(intent);
+                GPXParser mParser = new GPXParser();
+                Gpx parsedGpx = null;
+
+                try {
+                    File file = new File(path);
+                    InputStream in = new FileInputStream(file);
+                    parsedGpx = mParser.parse(in);
+                } catch (IOException | XmlPullParserException e) {
+                    Log.e("GPX test", e.toString());
+                }
+
+                if (parsedGpx != null) {
+                    List<WayPoint> wayPoints = parsedGpx.getWayPoints();
+
+                    for(WayPoint wayPoint : wayPoints){
+                        Log.e("NaToure",wayPoint.getLatitude()+ " " + wayPoint.getLongitude() + " " + wayPoint.getElevation());
+                    }
+                } else {
+                    Log.e("NaToure", "Error parsing gpx track!");
+                }
             }
+        });
+
+        addGPX.setOnClickListener(v -> {
+            Intent data = new Intent(Intent.ACTION_GET_CONTENT);
+            data.addCategory(Intent.CATEGORY_OPENABLE);
+            data.setType("*/*");
+            Intent intent = Intent.createChooser(data, "Choose a file");
+            getGPX.launch(intent);
         });
     }
 }
