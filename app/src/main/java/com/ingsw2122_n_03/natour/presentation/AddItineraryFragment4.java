@@ -27,7 +27,11 @@ import java.io.InputStream;
 import java.util.List;
 
 import io.ticofab.androidgpxparser.parser.GPXParser;
+import io.ticofab.androidgpxparser.parser.domain.Extensions;
 import io.ticofab.androidgpxparser.parser.domain.Gpx;
+import io.ticofab.androidgpxparser.parser.domain.Track;
+import io.ticofab.androidgpxparser.parser.domain.TrackPoint;
+import io.ticofab.androidgpxparser.parser.domain.TrackSegment;
 import io.ticofab.androidgpxparser.parser.domain.WayPoint;
 
 public class AddItineraryFragment4 extends Fragment {
@@ -85,13 +89,28 @@ public class AddItineraryFragment4 extends Fragment {
                 }
 
                 if (parsedGpx != null) {
-                    List<WayPoint> wayPoints = parsedGpx.getWayPoints();
-
-                    for(WayPoint wayPoint : wayPoints){
-                        Log.e("NaToure",wayPoint.getLatitude()+ " " + wayPoint.getLongitude() + " " + wayPoint.getElevation());
+                    List<Track> tracks = parsedGpx.getTracks();
+                    for (int i = 0; i < tracks.size(); i++) {
+                        Track track = tracks.get(i);
+                        Log.d("GPX test", "track " + i + ":");
+                        List<TrackSegment> segments = track.getTrackSegments();
+                        for (int j = 0; j < segments.size(); j++) {
+                            TrackSegment segment = segments.get(j);
+                            Log.d("GPX test", "  segment " + j + ":");
+                            for (TrackPoint trackPoint : segment.getTrackPoints()) {
+                                String msg = "    point: lat " + trackPoint.getLatitude() + ", lon " + trackPoint.getLongitude() + ", time " + trackPoint.getTime();
+                                Extensions ext = trackPoint.getExtensions();
+                                Double speed;
+                                if (ext != null) {
+                                    speed = ext.getSpeed();
+                                    msg = msg.concat(", speed " + speed);
+                                }
+                                Log.d("GPX test", msg);
+                            }
+                        }
                     }
                 } else {
-                    Log.e("NaToure", "Error parsing gpx track!");
+                    Log.e("GPX test", "Error parsing gpx track!");
                 }
             }
         });
