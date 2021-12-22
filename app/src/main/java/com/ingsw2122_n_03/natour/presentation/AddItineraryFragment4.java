@@ -112,7 +112,8 @@ public class AddItineraryFragment4 extends Fragment implements OnMapReadyCallbac
 
             @Override
             public void onError(@NonNull Status status) {
-                if(!status.toString().contains("CANCELLED")){
+
+                if(!status.toString().contains("CANCELED")){
                     addItineraryActivity.onFail(getString(R.string.generic_error));
                 }
             }
