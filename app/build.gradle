@@ -1,10 +1,6 @@
 plugins {
     id 'com.android.application'
-    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
-
-def localProperties = new Properties()
-localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
     compileSdk 31
@@ -17,8 +13,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField "String", "MAPS_API_KEY", localProperties['MAPS_API_KEY']
     }
 
     buildFeatures{
@@ -49,10 +43,7 @@ dependencies {
     implementation 'com.amplifyframework:aws-auth-cognito:1.30.0'
     implementation 'com.amplifyframework:aws-api:1.30.0'
 
-    implementation 'com.google.android.gms:play-services-maps:18.0.1'
-    implementation 'com.google.android.gms:play-services-location:19.0.0'
-    implementation 'com.google.android.gms:play-services-places:17.0.0'
-    implementation 'com.google.android.libraries.places:places:2.5.0'
+    implementation 'org.osmdroid:osmdroid-android:6.1.10'
 
     implementation 'com.chaos.view:pinview:1.4.4'
     implementation 'com.shuhart.stepview:stepview:1.5.1'

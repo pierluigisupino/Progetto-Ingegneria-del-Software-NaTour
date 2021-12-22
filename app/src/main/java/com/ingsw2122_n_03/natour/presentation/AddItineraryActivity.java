@@ -1,6 +1,5 @@
 package com.ingsw2122_n_03.natour.presentation;
 
-import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
@@ -9,30 +8,21 @@ import androidx.fragment.app.FragmentTransaction;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
+
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
-import com.ingsw2122_n_03.natour.BuildConfig;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
-import com.ingsw2122_n_03.natour.infastructure.directions.FetchURL;
-import com.ingsw2122_n_03.natour.infastructure.directions.TaskLoadedCallback;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.shuhart.stepview.StepView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class AddItineraryActivity extends BaseActivity implements TaskLoadedCallback {
+public class AddItineraryActivity extends BaseActivity {
 
     private StepView stepView;
 
@@ -54,7 +44,6 @@ public class AddItineraryActivity extends BaseActivity implements TaskLoadedCall
     private int hours;
     private int minutes;
     private ArrayList <byte[]> imagesBytes;
-    private Polyline polyline;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -113,15 +102,7 @@ public class AddItineraryActivity extends BaseActivity implements TaskLoadedCall
                 stepIndex++;
                 changeFragment();
             } else if(stepIndex == 3){
-                Toast.makeText(this, "Add pressed", Toast.LENGTH_SHORT).show();
-
-
-                Marker startMarker = addItineraryFragment4.getStartMarker();
-                Marker endMarker = addItineraryFragment4.getEndMarker();
-                LatLng[] markerList = addItineraryFragment4.getWaypoints();
-
-                String url = getUrl(startMarker.getPosition(), endMarker.getPosition(), "walking", markerList);
-                new FetchURL(AddItineraryActivity.this).execute(url, "walking");
+                //add
             }
         });
 
@@ -208,33 +189,5 @@ public class AddItineraryActivity extends BaseActivity implements TaskLoadedCall
                 .setPositiveButton(R.string.yes_text, (dialog, which) -> finish())
                 .setNegativeButton(R.string.no_text, null)
                 .show();
-    }
-
-    private String getUrl(LatLng origin, LatLng dest, String directionMode, @Nullable LatLng[] waypoints) {
-
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-        StringBuilder str_waypoints = new StringBuilder("&waypoints=optimize:true");
-
-        if(waypoints != null){
-            for(LatLng waypoint : waypoints){
-                str_waypoints.append("|").append(waypoint.latitude).append(",").append(waypoint.longitude);
-            }
-        }
-
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-        String mode = "mode=" + directionMode;
-        String parameters = str_origin + "&" + str_dest + str_waypoints + "&" + mode;
-        String output = "json";
-
-        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + BuildConfig.MAPS_API_KEY;
-    }
-
-    @Override
-    public void onTaskDone(Object... values) {
-        if(polyline != null){
-            polyline.remove();
-        }else{
-            polyline = addItineraryFragment4.getMap().addPolyline((PolylineOptions) values[0]);
-        }
     }
 }
