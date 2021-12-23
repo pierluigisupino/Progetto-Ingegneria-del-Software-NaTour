@@ -60,7 +60,7 @@ public class AddItineraryFragment4 extends Fragment {
     private IMapController mapController;
     private Geocoder geocoder;
 
-    private List<Marker> markers = new LinkedList<>();
+    private ArrayList<Marker> markers = new ArrayList<>();
     private ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
     private ActivityResultLauncher<Intent> getGPXLauncher;
