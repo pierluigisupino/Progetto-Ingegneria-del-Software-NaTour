@@ -60,6 +60,7 @@ public class AddItineraryFragment4 extends Fragment {
     private IMapController mapController;
     private Geocoder geocoder;
 
+    private List<Marker> markers = new LinkedList<>();
     private ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
     private ActivityResultLauncher<Intent> getGPXLauncher;
@@ -103,8 +104,6 @@ public class AddItineraryFragment4 extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                Log.e("test", query);
-
                 List<Address> addressList = null;
 
                 if(query != null && !query.equals("")){
@@ -112,11 +111,6 @@ public class AddItineraryFragment4 extends Fragment {
                         addressList = geocoder.getFromLocationName(query, 1);
 
                         if(addressList.size() > 0) {
-
-                            for(Address a : addressList){
-                                Log.e("test", String.valueOf(a));
-                            }
-
                             Address address = addressList.get(0);
                             GeoPoint geoPoint = new GeoPoint(address.getLatitude(), address.getLongitude());
                             mapController.animateTo(geoPoint);
@@ -227,10 +221,20 @@ public class AddItineraryFragment4 extends Fragment {
 
     private void addWaypoint(GeoPoint p) {
         Marker marker = new Marker(map);
+
+        if(markers.size() == 0) {
+            marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
+        }else if(markers.size() == 1){
+            marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+        }else{
+            markers.get(markers.size() - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
+            marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+        }
+
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
         map.getOverlays().add(marker);
         marker.setPosition(p);
+        markers.add(marker);
         waypoints.add(p);
     }
 
