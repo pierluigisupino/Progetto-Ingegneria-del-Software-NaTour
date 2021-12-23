@@ -222,7 +222,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
         if(markers.size() == 0) {
             marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
-        }else if(markers.size() == 1){
+        }else if(markers.size() == 1) {
+            markers.get(0).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
             marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
         }else{
             markers.get(markers.size() - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
@@ -246,7 +247,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     public boolean onMarkerClick(Marker marker, MapView mapView) {
         int index = markers.indexOf(marker);
 
-        if(index == 0 && markers.size() > 1){
+        if(index == 0){
             markers.get(index + 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
         } else if(index == markers.size() - 1 && markers.size() > 1){
             markers.get(index - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
@@ -284,6 +285,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             roadOverlay = RoadManager.buildRoadOverlay(road);
             map.getOverlays().add(roadOverlay);
             map.invalidate();
+        }else{
+            map.getOverlays().remove(roadOverlay);
         }
     }
 }
