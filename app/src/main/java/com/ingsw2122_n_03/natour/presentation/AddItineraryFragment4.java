@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding;
+import com.ingsw2122_n_03.natour.model.NaTourMarker;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -44,13 +45,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-public class AddItineraryFragment4 extends Fragment {
+public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
 
     private Fragment4AddItineraryBinding binding;
     private SearchView searchView;
+    private View view;
     private FloatingActionButton searchButton;
     private FloatingActionButton addGPX;
 
@@ -59,6 +60,8 @@ public class AddItineraryFragment4 extends Fragment {
     private MapView map = null;
     private IMapController mapController;
     private Geocoder geocoder;
+    private RoadManager roadManager;
+    private Polyline roadOverlay;
 
     private ArrayList<Marker> markers = new ArrayList<>();
     private ArrayList<GeoPoint> waypoints = new ArrayList<>();
@@ -181,18 +184,13 @@ public class AddItineraryFragment4 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        OSRMRoadManager roadManager = new OSRMRoadManager(view.getContext(), null);
+        roadManager = new OSRMRoadManager(view.getContext(), null);
 
         MapEventsReceiver mReceiver = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
                 addWaypoint(p);
-                if(waypoints.size() > 1){
-                    Road road = roadManager.getRoad(waypoints);
-                    Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-                    map.getOverlays().add(roadOverlay);
-                    map.invalidate();
-                }
+                makeRoads();
                 return false;
             }
 
@@ -220,7 +218,7 @@ public class AddItineraryFragment4 extends Fragment {
     }
 
     private void addWaypoint(GeoPoint p) {
-        Marker marker = new Marker(map);
+        NaTourMarker marker = new NaTourMarker(map);
 
         if(markers.size() == 0) {
             marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
@@ -231,11 +229,61 @@ public class AddItineraryFragment4 extends Fragment {
             marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
         }
 
+        marker.setDraggable(true);
+        marker.setOnMarkerClickListener(this);
+        marker.setOnMarkerDragListener(this);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        map.getOverlays().add(marker);
         marker.setPosition(p);
+        map.getOverlays().add(marker);
+
         markers.add(marker);
-        waypoints.add(p);
+
+        NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(p.getLatitude(), p.getLongitude());
+        waypoints.add(naTourWaypoint);
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker, MapView mapView) {
+        int index = markers.indexOf(marker);
+
+        if(index == 0 && markers.size() > 1){
+            markers.get(index + 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
+        } else if(index == markers.size() - 1 && markers.size() > 1){
+            markers.get(index - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+        }
+
+        waypoints.remove(((NaTourMarker) marker).getGeoPoint());
+        map.getOverlays().remove(marker);
+        markers.remove(index);
+        makeRoads();
+        return true;
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+        ((NaTourMarker) marker).getGeoPoint().setLatitude(marker.getPosition().getLatitude());
+        ((NaTourMarker) marker).getGeoPoint().setLongitude(marker.getPosition().getLongitude());
+        makeRoads();
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    private void makeRoads(){
+        if(waypoints.size() > 1){
+            Road road = roadManager.getRoad(waypoints);
+            map.getOverlays().remove(roadOverlay);
+            roadOverlay = RoadManager.buildRoadOverlay(road);
+            map.getOverlays().add(roadOverlay);
+            map.invalidate();
+        }
+    }
 }
