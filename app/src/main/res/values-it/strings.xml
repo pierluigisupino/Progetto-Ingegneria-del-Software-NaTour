@@ -114,6 +114,7 @@
     <string name="photo_added_success">Foto aggiunte</string>
     <string name="cancel_operation_title">Annullare l\' inserimento?</string>
     <string name="cancel_operation_msgText">Tutti i progressi andranno persi</string>
+    <string name="search">Cerca...</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

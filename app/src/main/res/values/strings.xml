@@ -114,6 +114,7 @@
     <string name="photo_added_success">Photo added</string>
     <string name="cancel_operation_title">Cancel Operation?</string>
     <string name="cancel_operation_msgText">All progress will be lost</string>
+    <string name="search">Search...</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
