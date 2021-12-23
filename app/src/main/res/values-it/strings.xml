@@ -115,6 +115,7 @@
     <string name="cancel_operation_title">Annullare l\' inserimento?</string>
     <string name="cancel_operation_msgText">Tutti i progressi andranno persi</string>
     <string name="search">Cerca...</string>
+    <string name="search_error">Nessun luogo trovato</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

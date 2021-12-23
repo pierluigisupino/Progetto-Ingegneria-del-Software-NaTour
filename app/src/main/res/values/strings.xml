@@ -115,6 +115,7 @@
     <string name="cancel_operation_title">Cancel Operation?</string>
     <string name="cancel_operation_msgText">All progress will be lost</string>
     <string name="search">Search...</string>
+    <string name="search_error">No place found</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

@@ -121,6 +121,8 @@ public class AddItineraryFragment4 extends Fragment {
                             GeoPoint geoPoint = new GeoPoint(address.getLatitude(), address.getLongitude());
                             mapController.animateTo(geoPoint);
                             mapController.setZoom(18.0);
+                        }else{
+                            addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.search_error));
                         }
 
                     }catch (IOException e){
