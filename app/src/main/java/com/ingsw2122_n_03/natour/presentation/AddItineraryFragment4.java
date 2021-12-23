@@ -185,6 +185,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         super.onViewCreated(view, savedInstanceState);
 
         roadManager = new OSRMRoadManager(view.getContext(), null);
+        ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
 
         MapEventsReceiver mReceiver = new MapEventsReceiver() {
             @Override
@@ -233,7 +234,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         marker.setDraggable(true);
         marker.setOnMarkerClickListener(this);
         marker.setOnMarkerDragListener(this);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
         marker.setPosition(p);
         map.getOverlays().add(marker);
 
