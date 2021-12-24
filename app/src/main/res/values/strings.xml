@@ -88,7 +88,7 @@
     <string name="welcome_page_image_description">Welcome page image</string>
 
     <!--ITINERARY-->
-    <string name="add_itinerary_title">Add Itinerary</string>
+    <string name="add_itinerary_title">Add an Itinerary</string>
     <string name="next_button">Next</string>
     <string name="back_button">Back</string>
     <string name="add_button">Add</string>

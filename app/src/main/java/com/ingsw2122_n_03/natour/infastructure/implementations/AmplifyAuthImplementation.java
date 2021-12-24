@@ -71,14 +71,14 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     }
 
     @Override
-    public void signUp(String username, String email, String password) {
+    public void signUp(String name, String email, String password) {
 
         AuthSignUpOptions options = AuthSignUpOptions.builder()
-                .userAttribute(AuthUserAttributeKey.name(), username)
+                .userAttribute(AuthUserAttributeKey.name(), name)
                 .build();
 
         Amplify.Auth.signUp(email, password, options,
-                result -> controller.onSignUpSuccess(email, password),
+                result -> controller.onSignUpSuccess(name, email, password),
                 error -> {
 
                     String messageError = Objects.requireNonNull(error.getMessage());

@@ -3,8 +3,11 @@ package com.ingsw2122_n_03.natour.application;
 import android.app.Activity;
 
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.infastructure.implementations.UserDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.AuthInterface;
 import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyAuthImplementation;
+import com.ingsw2122_n_03.natour.infastructure.interfaces.UserDaoInterface;
+import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.ForgotPasswordActivity;
 import com.ingsw2122_n_03.natour.presentation.ResetPasswordActivity;
@@ -21,6 +24,7 @@ public final class AuthController extends Controller {
 
     private static AuthController instance = null;
     private final AuthInterface authInterface;
+    private final UserDaoInterface userDao;
 
     private ErrorActivity errorActivity;
     private WelcomeActivity welcomeActivity;
@@ -33,6 +37,7 @@ public final class AuthController extends Controller {
 
     private AuthController() {
         authInterface = new AmplifyAuthImplementation(this);
+        userDao = new UserDaoImplementation();
     }
 
     public static AuthController getInstance() {
@@ -91,19 +96,24 @@ public final class AuthController extends Controller {
     }
 
 
-    public void signUp(String username, String email, String password) {
-        authInterface.signUp(username, email, password);
+    public void signUp(String name, String email, String password) {
+        authInterface.signUp(name, email, password);
     }
 
-    public void onSignUpSuccess(String email, String password) {
-        signUpActivity.onSuccess(signUpActivity.getResources().getString(R.string.signup_success));
+    public void onSignUpSuccess(String name, String email, String password) {
 
-        HashMap<String, String> extras = new HashMap<String, String>() {{
-            put("email", email);
-            put("password", password);
-        }};
+        if(userDao.putUser(new User(email, name))){
+            signUpActivity.onSuccess(signUpActivity.getResources().getString(R.string.signup_success));
 
-        goToActivityAndFinish(signUpActivity, VerifyAccountActivity.class, extras);
+            HashMap<String, String> extras = new HashMap<String, String>() {{
+                put("email", email);
+                put("password", password);
+            }};
+
+            goToActivityAndFinish(signUpActivity, VerifyAccountActivity.class, extras);
+        }
+        onSignUpFailure(1);
+
     }
 
     public void onSignUpFailure(int errorCode) {
