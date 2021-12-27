@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,22 +40,16 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.ticofab.androidgpxparser.parser.GPXParser;
-import io.ticofab.androidgpxparser.parser.domain.Extensions;
 import io.ticofab.androidgpxparser.parser.domain.Gpx;
-import io.ticofab.androidgpxparser.parser.domain.Route;
-import io.ticofab.androidgpxparser.parser.domain.RoutePoint;
 import io.ticofab.androidgpxparser.parser.domain.Track;
 import io.ticofab.androidgpxparser.parser.domain.TrackPoint;
 import io.ticofab.androidgpxparser.parser.domain.TrackSegment;
-import io.ticofab.androidgpxparser.parser.domain.WayPoint;
 
 public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
 
@@ -95,7 +88,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Context ctx = getActivity().getApplicationContext();
+        Context ctx = requireActivity().getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
         binding = Fragment4AddItineraryBinding.inflate(inflater, container, false);
@@ -118,7 +111,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                List<Address> addressList = null;
+                List<Address> addressList;
 
                 if(query != null && !query.equals("")){
                     try{
@@ -156,7 +149,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                         Gpx parsedGpx = null;
                         Uri uri = data.getData();
                         try {
-                            InputStream is = getView().getContext().getContentResolver().openInputStream(uri);
+                            InputStream is = requireView().getContext().getContentResolver().openInputStream(uri);
                             parsedGpx = mParser.parse(is);
 
                         } catch (IOException | XmlPullParserException e) {
@@ -205,6 +198,10 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         });
 
         addGPX.setOnClickListener(view -> {
+            for(Marker marker : markers){
+                waypoints.remove(((NaTourMarker) marker).getGeoPoint());
+                map.getOverlays().remove(marker);
+            }
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
