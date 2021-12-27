@@ -118,7 +118,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                             Address address = addressList.get(0);
                             GeoPoint geoPoint = new GeoPoint(address.getLatitude(), address.getLongitude());
                             mapController.animateTo(geoPoint);
-                            mapController.setZoom(18.0);
+                            mapController.setZoom(15.50);
                         }else{
                             addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.search_error));
                         }
