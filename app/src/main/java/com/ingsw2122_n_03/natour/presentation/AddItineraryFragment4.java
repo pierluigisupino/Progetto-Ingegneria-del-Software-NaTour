@@ -183,7 +183,9 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                                     }
                                 }
 
-                                //DA FARE IN BACKGROUND CON PROGRESS BAR
+                                // TODO: 27/12/2021
+
+                                //DA FARE IN BACKGROUND CON PROGRESS BAR CREARE IL THREAD IN makeRoads()
                                 makeRoads();
                             }
                         } else {
