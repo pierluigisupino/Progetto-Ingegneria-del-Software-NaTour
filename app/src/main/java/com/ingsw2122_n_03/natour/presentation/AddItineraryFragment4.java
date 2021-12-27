@@ -165,6 +165,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
                         if (parsedGpx != null) {
                             List<Track> tracks = parsedGpx.getTracks();
+                            parsedGpx.getWayPoints();
                             for (int i = 0; i < tracks.size(); i++) {
                                 Track track = tracks.get(i);
                                 List<TrackSegment> segments = track.getTrackSegments();
@@ -175,7 +176,10 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                                         addWaypoint(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
 
                                         // TODO: 27/12/2021
-                                        //PERICOLO DI MORTE CON GPX CON TANTI WAYPOINTS
+                                        //PERICOLO DI MORTE CON GPX CON TANTI WAYPOINTS NECESSARIO THREAD IN BACKGROUND
+                                        //I FILE GPX HANNO TUTTI ALMENO UN TRACK AL LORO INTERNO? parsedGpx.getTracks();
+                                        //SE HANNO SOLO PUNTO INIZIALE E FINALE?  parsedGpx.getWayPoints();
+                                        //COSA FA parsedGpx.getRoutes(); ?
 
                                         //makeRoads();
                                     }
