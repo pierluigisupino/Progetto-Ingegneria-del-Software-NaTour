@@ -58,7 +58,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     private final AddItineraryActivity addItineraryActivity;
 
-    private MapView map = null;
+    private MapView map;
     private IMapController mapController;
     private Geocoder geocoder;
     private RoadManager roadManager;
@@ -124,7 +124,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                         }
 
                     }catch (IOException e){
-                        e.printStackTrace();
+                        addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
                     }
                 }
 
