@@ -172,7 +172,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                                         addWaypoint(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
                                     }
                                 }
-                                
+
                                 makeRoads();
                             }
                         } else {
@@ -196,6 +196,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                 waypoints.remove(((NaTourMarker) marker).getGeoPoint());
                 map.getOverlays().remove(marker);
             }
+            map.getOverlays().remove(roadOverlay);
+            markers.clear();
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
