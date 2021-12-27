@@ -8,8 +8,8 @@ public class WayPoint {
     /**CONSTRUCTORS
      */
 
-    public WayPoint(double lat, double longitude){
-        latitude = lat;
+    public WayPoint(double latitude, double longitude){
+        this.latitude = latitude;
         this.longitude = longitude;
     }
 

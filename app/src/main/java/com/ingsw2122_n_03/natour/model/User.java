@@ -2,21 +2,20 @@ package com.ingsw2122_n_03.natour.model;
 
 public class User {
 
+    private String userId;
+    private String name;
+
     /**CONSTRUCTORS
      */
 
-    private String userId;
-    private String name;
+    public User(String uid) {
+        userId = uid;
+    }
 
     /**GETTERS
        &
     SETTERS
     */
-
-    public User(String uid, String name) {
-        userId = uid;
-        this.name = name;
-    }
 
     public String getUid() {
         return userId;

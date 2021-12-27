@@ -13,17 +13,19 @@ public class Itinerary {
     private int minutesDuration;
     private WayPoint startPoint;
     private ArrayList<WayPoint> wayPoints;
+    private User creator;
 
 
     /**CONSTRUCTORS
      */
 
-    public Itinerary(String name, String difficulty, int hours, int minutes, WayPoint startPoint) {
+    public Itinerary(String name, String difficulty, int hours, int minutes, WayPoint startPoint, User creator) {
         this.name = name;
         this.difficulty = difficulty;
         hoursDuration = hours;
         minutesDuration = minutes;
         this.startPoint = startPoint;
+        this.creator = creator;
     }
 
     public Itinerary(String name, String difficulty, int hours, int minutes, String id) {
@@ -107,4 +109,11 @@ public class Itinerary {
         this.iterId = iterId;
     }
 
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
 }

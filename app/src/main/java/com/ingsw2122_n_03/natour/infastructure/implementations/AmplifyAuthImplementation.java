@@ -78,7 +78,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 .build();
 
         Amplify.Auth.signUp(email, password, options,
-                result -> controller.onSignUpSuccess(name, email, password),
+                result -> controller.onSignUpSuccess(email, password),
                 error -> {
 
                     String messageError = Objects.requireNonNull(error.getMessage());
