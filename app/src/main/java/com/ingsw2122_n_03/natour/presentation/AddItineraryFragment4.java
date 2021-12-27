@@ -165,7 +165,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
                         if (parsedGpx != null) {
                             List<Track> tracks = parsedGpx.getTracks();
-                            parsedGpx.getWayPoints();
                             for (int i = 0; i < tracks.size(); i++) {
                                 Track track = tracks.get(i);
                                 List<TrackSegment> segments = track.getTrackSegments();
