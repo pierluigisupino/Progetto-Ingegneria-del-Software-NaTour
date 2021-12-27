@@ -315,6 +315,13 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     }
 
     private void makeRoads(){
+
+        addItineraryActivity.showProgressBar();
+
+        // TODO: 27/12/2021
+
+        //CREAZIONE THREAD
+
         if(waypoints.size() > 1){
             Road road = roadManager.getRoad(waypoints);
             map.getOverlays().remove(roadOverlay);
@@ -324,5 +331,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         }else{
             map.getOverlays().remove(roadOverlay);
         }
+
+        //SI PUò SOSTITUIRE CON addItineraryActivity.onSuccess() o onFail()
+        addItineraryActivity.hideProgressBar();
     }
 }
