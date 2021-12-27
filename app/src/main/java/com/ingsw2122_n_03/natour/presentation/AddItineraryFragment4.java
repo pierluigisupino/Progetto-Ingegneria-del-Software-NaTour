@@ -176,6 +176,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
                                         // TODO: 27/12/2021
                                         //PERICOLO DI MORTE CON GPX CON TANTI WAYPOINTS NECESSARIO THREAD IN BACKGROUND
+                                        //OPEN STREET MAP POTREBBE BANNARE LA NOSTRA APP PER LE TROPPE RICHIESTE
+
                                         //I FILE GPX HANNO TUTTI ALMENO UN TRACK AL LORO INTERNO? parsedGpx.getTracks();
                                         //SE HANNO SOLO PUNTO INIZIALE E FINALE?  parsedGpx.getWayPoints();
                                         //COSA FA parsedGpx.getRoutes(); ?
