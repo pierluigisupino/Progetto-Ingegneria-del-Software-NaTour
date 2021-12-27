@@ -53,11 +53,8 @@ import io.ticofab.androidgpxparser.parser.domain.TrackSegment;
 
 public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
 
-    private Fragment4AddItineraryBinding binding;
     private SearchView searchView;
-    private View view;
     private FloatingActionButton searchButton;
-    private FloatingActionButton addGPX;
 
     private final AddItineraryActivity addItineraryActivity;
 
@@ -91,12 +88,12 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         Context ctx = requireActivity().getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-        binding = Fragment4AddItineraryBinding.inflate(inflater, container, false);
+        com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding binding = Fragment4AddItineraryBinding.inflate(inflater, container, false);
 
         map = binding.map;
         searchView = binding.searchView;
         searchButton = binding.searchButton;
-        addGPX = binding.gpxButton;
+        FloatingActionButton addGPX = binding.gpxButton;
 
         map.setMultiTouchControls(true);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -175,10 +172,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                                         addWaypoint(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
                                     }
                                 }
-
-                                // TODO: 27/12/2021
-
-                                //DA FARE IN BACKGROUND CON PROGRESS BAR CREARE IL THREAD IN makeRoads()
+                                
                                 makeRoads();
                             }
                         } else {
@@ -294,9 +288,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     }
 
     @Override
-    public void onMarkerDrag(Marker marker) {
-
-    }
+    public void onMarkerDrag(Marker marker) {}
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
@@ -307,29 +299,24 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     }
 
     @Override
-    public void onMarkerDragStart(Marker marker) {
-
-    }
+    public void onMarkerDragStart(Marker marker) {}
 
     private void makeRoads(){
 
         addItineraryActivity.showProgressBar();
+        new Thread(()-> {
+            if(waypoints.size() > 1){
+                Road road = roadManager.getRoad(waypoints);
+                map.getOverlays().remove(roadOverlay);
+                roadOverlay = RoadManager.buildRoadOverlay(road);
+                map.getOverlays().add(roadOverlay);
+                map.invalidate();
+            }else {
+                map.getOverlays().remove(roadOverlay);
+            }
+            requireView().post(()->addItineraryActivity.hideProgressBar());
+        }).start();
 
-        // TODO: 27/12/2021
-
-        //CREAZIONE THREAD
-
-        if(waypoints.size() > 1){
-            Road road = roadManager.getRoad(waypoints);
-            map.getOverlays().remove(roadOverlay);
-            roadOverlay = RoadManager.buildRoadOverlay(road);
-            map.getOverlays().add(roadOverlay);
-            map.invalidate();
-        }else{
-            map.getOverlays().remove(roadOverlay);
-        }
-
-        //SI PUò SOSTITUIRE CON addItineraryActivity.onSuccess() o onFail()
-        addItineraryActivity.hideProgressBar();
     }
+
 }

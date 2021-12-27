@@ -79,13 +79,13 @@ public class AddItineraryFragment3 extends Fragment {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
                                     Bitmap bitmap = createImageBitmap(imageUri);
                                     imagesBitmap.add(bitmap);
-                                    new Thread(() -> imagesBytes.add(createImageBytes(bitmap)));
+                                    new Thread(() -> imagesBytes.add(createImageBytes(bitmap))).start();
                                 }
                             } else {
                                 Uri imageUri = data.getData();
                                 Bitmap bitmap = createImageBitmap(imageUri);
                                 imagesBitmap.add(bitmap);
-                                new Thread(() -> imagesBytes.add(createImageBytes(bitmap)));
+                                new Thread(() -> imagesBytes.add(createImageBytes(bitmap))).start();
                             }
                             recyclerView.post(() -> {
                                 setAdapter();
