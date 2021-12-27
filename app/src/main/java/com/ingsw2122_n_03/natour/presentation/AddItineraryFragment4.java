@@ -160,10 +160,17 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                             parsedGpx = mParser.parse(is);
 
                         } catch (IOException | XmlPullParserException e) {
-                            e.printStackTrace();
+                            addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
                         }
 
                         if (parsedGpx != null) {
+
+                            // TODO: 27/12/2021
+
+                            //I FILE GPX HANNO TUTTI ALMENO UN TRACK AL LORO INTERNO? parsedGpx.getTracks();
+                            //SE HANNO SOLO PUNTO INIZIALE E FINALE?  parsedGpx.getWayPoints();
+                            //COSA FA parsedGpx.getRoutes(); ?
+
                             List<Track> tracks = parsedGpx.getTracks();
                             for (int i = 0; i < tracks.size(); i++) {
                                 Track track = tracks.get(i);
@@ -173,21 +180,14 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
                                     for (TrackPoint trackPoint : segment.getTrackPoints()) {
                                         addWaypoint(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
-
-                                        // TODO: 27/12/2021
-                                        //PERICOLO DI MORTE CON GPX CON TANTI WAYPOINTS NECESSARIO THREAD IN BACKGROUND
-                                        //OPEN STREET MAP POTREBBE BANNARE LA NOSTRA APP PER LE TROPPE RICHIESTE
-
-                                        //I FILE GPX HANNO TUTTI ALMENO UN TRACK AL LORO INTERNO? parsedGpx.getTracks();
-                                        //SE HANNO SOLO PUNTO INIZIALE E FINALE?  parsedGpx.getWayPoints();
-                                        //COSA FA parsedGpx.getRoutes(); ?
-
-                                        //makeRoads();
                                     }
                                 }
+
+                                //DA FARE IN BACKGROUND CON PROGRESS BAR
+                                makeRoads();
                             }
                         } else {
-                            Log.e("NaTour", "Error parsing gpx track!");
+                            addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
                         }
                     }
                 });
