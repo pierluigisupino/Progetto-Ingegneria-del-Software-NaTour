@@ -58,7 +58,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     private final AddItineraryActivity addItineraryActivity;
 
-    private MapView map = null;
+    private MapView map;
     private IMapController mapController;
     private Geocoder geocoder;
     private RoadManager roadManager;
@@ -118,13 +118,13 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                             Address address = addressList.get(0);
                             GeoPoint geoPoint = new GeoPoint(address.getLatitude(), address.getLongitude());
                             mapController.animateTo(geoPoint);
-                            mapController.setZoom(18.0);
+                            mapController.setZoom(15.50);
                         }else{
                             addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.search_error));
                         }
 
                     }catch (IOException e){
-                        e.printStackTrace();
+                        addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
                     }
                 }
 
