@@ -316,9 +316,21 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             }else {
                 map.getOverlays().remove(roadOverlay);
             }
-            requireView().post(()->addItineraryActivity.hideProgressBar());
+            requireView().post(addItineraryActivity::hideProgressBar);
         }).start();
+    }
 
+    public ArrayList<GeoPoint> getWaypoints(){
+        return waypoints;
+    }
+
+    public boolean startPointInserted() {
+        if(!waypoints.isEmpty())
+            return true;
+        else{
+            addItineraryActivity.onFail(getString(R.string.start_point_error));
+            return false;
+        }
     }
 
 }
