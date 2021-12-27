@@ -16,7 +16,7 @@
     <string name="forgot_password"><u>Password dimenticata?</u></string>
 
     <!--REGISTER ACTIVITY-->
-    <string name="register_activity_title">Registarti</string>
+    <string name="register_activity_title">Registrati</string>
 
     <!--FORGOT PASSWORD ACTIVITY-->
     <string name="forgot_password_activity_title">Reset</string>
