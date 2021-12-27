@@ -21,6 +21,8 @@ import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.shuhart.stepview.StepView;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 
 public class AddItineraryActivity extends BaseActivity {
@@ -40,6 +42,14 @@ public class AddItineraryActivity extends BaseActivity {
     private IterController iterController;
 
     private int stepIndex = 0;
+
+    private String name = null;
+    private String description = null;
+    private String difficulty = null;
+    private int hours = 0;
+    private int minutes = 0;
+    private ArrayList <byte[]> imagesBytes = null;
+    private ArrayList<GeoPoint> waypoints;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -85,13 +95,6 @@ public class AddItineraryActivity extends BaseActivity {
 
         nextButton.setOnClickListener(v -> {
 
-            String name = null;
-            String description = null;
-            String difficulty = null;
-            int hours = 0;
-            int minutes = 0;
-            ArrayList <byte[]> imagesBytes;
-
             if (stepIndex == 0 && addItineraryFragment1.isNameValid()){
                 name = addItineraryFragment1.getName();
                 description = addItineraryFragment1.getDescription();
@@ -104,15 +107,18 @@ public class AddItineraryActivity extends BaseActivity {
                 stepIndex++;
                 changeFragment();
             }else if(stepIndex == 2){
-                imagesBytes= addItineraryFragment3.getImagesBytes();
+                imagesBytes = addItineraryFragment3.getImagesBytes();
                 stepIndex++;
                 changeFragment();
-            } else if(stepIndex == 3){
-                iterController.insertItinerary(name, description, difficulty, hours, minutes);
+            } else if(stepIndex == 3 && !addItineraryFragment4.startPointInserted()){
+                waypoints = addItineraryFragment4.getWaypoints();
+                iterController.insertItinerary(name, description, difficulty, hours, minutes, imagesBytes, waypoints);
             }
+
         });
 
         addFragment();
+
     }
 
     private void addFragment(){

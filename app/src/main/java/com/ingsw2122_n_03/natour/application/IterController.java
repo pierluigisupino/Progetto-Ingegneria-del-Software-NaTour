@@ -9,6 +9,10 @@ import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
 
+import org.osmdroid.util.GeoPoint;
+
+import java.util.ArrayList;
+
 public class IterController extends Controller {
 
     private static IterController instance = null;
@@ -16,6 +20,11 @@ public class IterController extends Controller {
     private MainActivity mainActivity;
     private ItineraryDaoInterface itineraryDao;
     private UserDaoInterface userDao;
+
+    private ArrayList<WayPoint> wayPointArrayList;
+    private User creator;
+
+    private ArrayList<byte[]> imagesBytes;
 
     private IterController(){
         itineraryDao = new ItineraryDaoImplementation(this);
@@ -29,14 +38,19 @@ public class IterController extends Controller {
         return instance;
     }
 
-    //@TODO OTHER ATTRIBUTES REQUIRED
-    public void insertItinerary(String name, String description, String difficulty, int hours, int minutes) {
-        User creator = new User(userDao.getCurrentUserId());
-        //@TODO 1)OBTAIN START WAYPOINT FROM MAP, 2)CREATE WAYPOINT DAO TO INSERT WAYPOINTS, 3)CREATE ITER ID, 4)CREATE CLASS FOR IMAGE UPLOAD
-        WayPoint startPoint = new WayPoint(1, 2);
-        Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator);
+    //@TODO 1)IMPLEMENT WAYPOINT DAO TO INSERT WAYPOINTS, 2)CREATE ITER ID, 3)CREATE CLASS FOR IMAGE UPLOAD
+    public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
+        creator = new User(userDao.getCurrentUserId());
+        wayPointArrayList = new ArrayList<>();
+        this.imagesBytes = imagesBytes;
+        for(GeoPoint g : waypoints){
+            wayPointArrayList.add(new WayPoint(g.getLatitude(), g.getLongitude()));
+        }
+        Itinerary iter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), creator);
         if(description.length() > 0)
            iter.setDescription(description);
+
+        itineraryDao.postItinerary(iter);
 
     }
 
