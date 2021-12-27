@@ -16,6 +16,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.shuhart.stepview.StepView;
@@ -36,14 +37,9 @@ public class AddItineraryActivity extends BaseActivity {
     private Button nextButton;
     private LinearProgressIndicator linearProgressIndicator;
 
-    private int stepIndex = 0;
+    private IterController iterController;
 
-    private String name;
-    private String description;
-    private String difficulty;
-    private int hours;
-    private int minutes;
-    private ArrayList <byte[]> imagesBytes;
+    private int stepIndex = 0;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -53,6 +49,8 @@ public class AddItineraryActivity extends BaseActivity {
         ActivityAddItineraryBinding binding = ActivityAddItineraryBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        iterController = IterController.getInstance();
 
         layout = binding.layout;
         MaterialToolbar materialToolbar = binding.topAppBar;
@@ -86,6 +84,14 @@ public class AddItineraryActivity extends BaseActivity {
         });
 
         nextButton.setOnClickListener(v -> {
+
+            String name = null;
+            String description = null;
+            String difficulty = null;
+            int hours = 0;
+            int minutes = 0;
+            ArrayList <byte[]> imagesBytes;
+
             if (stepIndex == 0 && addItineraryFragment1.isNameValid()){
                 name = addItineraryFragment1.getName();
                 description = addItineraryFragment1.getDescription();
@@ -102,7 +108,7 @@ public class AddItineraryActivity extends BaseActivity {
                 stepIndex++;
                 changeFragment();
             } else if(stepIndex == 3){
-                //add
+                iterController.insertItinerary(name, description, difficulty, hours, minutes);
             }
         });
 
