@@ -39,6 +39,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,6 +47,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.ticofab.androidgpxparser.parser.GPXParser;
+import io.ticofab.androidgpxparser.parser.domain.Extensions;
+import io.ticofab.androidgpxparser.parser.domain.Gpx;
+import io.ticofab.androidgpxparser.parser.domain.Route;
+import io.ticofab.androidgpxparser.parser.domain.RoutePoint;
+import io.ticofab.androidgpxparser.parser.domain.Track;
+import io.ticofab.androidgpxparser.parser.domain.TrackPoint;
+import io.ticofab.androidgpxparser.parser.domain.TrackSegment;
+import io.ticofab.androidgpxparser.parser.domain.WayPoint;
 
 public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
 
@@ -141,22 +152,38 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         assert data != null;
+                        GPXParser mParser = new GPXParser();
+                        Gpx parsedGpx = null;
                         Uri uri = data.getData();
                         try {
                             InputStream is = getView().getContext().getContentResolver().openInputStream(uri);
-                            BufferedReader bf = new BufferedReader(new InputStreamReader(is));
-                            StringBuilder sb = new StringBuilder();
-                            String readLines;
-                            while((readLines = bf.readLine()) != null) {
-                                sb.append(readLines+"\n");
-                            }
-                            is.close();
-                            Log.i("READ:", sb.toString());
+                            parsedGpx = mParser.parse(is);
 
-                        } catch (IOException e) {
+                        } catch (IOException | XmlPullParserException e) {
                             e.printStackTrace();
                         }
 
+                        if (parsedGpx != null) {
+                            List<Track> tracks = parsedGpx.getTracks();
+                            for (int i = 0; i < tracks.size(); i++) {
+                                Track track = tracks.get(i);
+                                List<TrackSegment> segments = track.getTrackSegments();
+                                for (int j = 0; j < segments.size(); j++) {
+                                    TrackSegment segment = segments.get(j);
+
+                                    for (TrackPoint trackPoint : segment.getTrackPoints()) {
+                                        addWaypoint(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
+
+                                        // TODO: 27/12/2021
+                                        //PERICOLO DI MORTE CON GPX CON TANTI WAYPOINTS
+
+                                        //makeRoads();
+                                    }
+                                }
+                            }
+                        } else {
+                            Log.e("NaTour", "Error parsing gpx track!");
+                        }
                     }
                 });
 
@@ -236,8 +263,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         marker.setOnMarkerDragListener(this);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
         marker.setPosition(p);
-        map.getOverlays().add(marker);
 
+        map.getOverlays().add(marker);
         markers.add(marker);
 
         NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(p.getLatitude(), p.getLongitude());
