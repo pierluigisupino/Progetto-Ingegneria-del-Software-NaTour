@@ -210,6 +210,21 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     @Override
     public void onResume() {
         super.onResume();
+
+        for(Marker marker : markers){
+
+            if(markers.indexOf(marker) == 0){
+                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
+            }else if(markers.indexOf(marker) == markers.size() - 1){
+                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+            }else{
+                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
+            }
+
+            map.getOverlays().add(marker);
+        }
+        makeRoads();
+
         map.onResume();
     }
 
