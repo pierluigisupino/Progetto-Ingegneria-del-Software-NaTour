@@ -48,8 +48,8 @@ public class IterController extends Controller {
         Itinerary iter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), creator);
         if(description.length() > 0)
            iter.setDescription(description);
-        waypoints.remove(0);
-        if(waypoints.size() > 1)
+        wayPointArrayList.remove(0);
+        if(wayPointArrayList.size() > 1)
             iter.setWayPoints(wayPointArrayList);
 
         itineraryDao.postItinerary(iter);
