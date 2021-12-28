@@ -21,7 +21,6 @@ public class IterController extends Controller {
     private ItineraryDaoInterface itineraryDao;
     private UserDaoInterface userDao;
 
-    private ArrayList<WayPoint> wayPointArrayList;
     private User creator;
 
     private ArrayList<byte[]> imagesBytes;
@@ -41,14 +40,17 @@ public class IterController extends Controller {
     //@TODO 1)IMPLEMENT WAYPOINT DAO TO INSERT WAYPOINTS, 2)CREATE ITER ID, 3)CREATE CLASS FOR IMAGE UPLOAD
     public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
         creator = new User(userDao.getCurrentUserId());
-        wayPointArrayList = new ArrayList<>();
         this.imagesBytes = imagesBytes;
+        ArrayList<WayPoint> wayPointArrayList = new ArrayList<>();
         for(GeoPoint g : waypoints){
             wayPointArrayList.add(new WayPoint(g.getLatitude(), g.getLongitude()));
         }
         Itinerary iter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), creator);
         if(description.length() > 0)
            iter.setDescription(description);
+        waypoints.remove(0);
+        if(waypoints.size() > 1)
+            iter.setWayPoints(wayPointArrayList);
 
         itineraryDao.postItinerary(iter);
 
