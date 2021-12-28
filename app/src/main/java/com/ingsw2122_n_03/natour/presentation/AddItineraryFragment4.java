@@ -143,44 +143,15 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         assert data != null;
-                        GPXParser mParser = new GPXParser();
                         Gpx parsedGpx = null;
                         Uri uri = data.getData();
-                        try {
-                            InputStream is = requireView().getContext().getContentResolver().openInputStream(uri);
-                            parsedGpx = mParser.parse(is);
 
-                        } catch (IOException | XmlPullParserException e) {
-                            addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
-                        }
+                        InputStream is = getInputStream(uri);
+                        parsedGpx = parsGpx(is);
 
                         if (parsedGpx != null) {
-
-                            List<WayPoint> wayPoints = parsedGpx.getWayPoints();
-
-                            if(wayPoints.size() > 0){
-                                WayPoint startWayPoint = wayPoints.get(0);
-                                addWaypoint(new GeoPoint(startWayPoint.getLatitude(), startWayPoint.getLongitude()));
-                            }
-
-                            List<Track> tracks = parsedGpx.getTracks();
-                            for (int i = 0; i < tracks.size(); i++) {
-                                Track track = tracks.get(i);
-                                List<TrackSegment> segments = track.getTrackSegments();
-                                for (int j = 0; j < segments.size(); j++) {
-                                    TrackSegment segment = segments.get(j);
-
-                                    for (TrackPoint trackPoint : segment.getTrackPoints()) {
-                                        addWaypoint(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
-                                    }
-                                }
-
-                                if(wayPoints.size() == 2) {
-                                    WayPoint endWayPoint = wayPoints.get(wayPoints.size() - 1);
-                                    addWaypoint(new GeoPoint(endWayPoint.getLatitude(), endWayPoint.getLongitude()));
-                                }
-                                makeRoads();
-                            }
+                            addGpxWaypoints(parsedGpx);
+                            makeRoads();
                         } else {
                             addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
                         }
@@ -339,4 +310,62 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         }
     }
 
+    private InputStream getInputStream(Uri uri){
+
+        InputStream is = null;
+
+        try {
+            is = requireView().getContext().getContentResolver().openInputStream(uri);
+        } catch (IOException e) {
+            addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
+        }
+
+        return is;
+    }
+
+    private Gpx parsGpx(InputStream inputStream){
+
+        if(inputStream == null){
+            return null;
+        }
+
+        GPXParser mParser = new GPXParser();
+        Gpx parsedGpx = null;
+
+        try {
+            parsedGpx = mParser.parse(inputStream);
+        } catch (IOException | XmlPullParserException e) {
+            addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
+        }
+
+        return parsedGpx;
+    }
+
+    private void addGpxWaypoints(Gpx gpx){
+
+        List<WayPoint> wayPoints = gpx.getWayPoints();
+        List<Track> tracks = gpx.getTracks();
+
+        if(wayPoints.size() > 0){
+            WayPoint startWayPoint = wayPoints.get(0);
+            addWaypoint(new GeoPoint(startWayPoint.getLatitude(), startWayPoint.getLongitude()));
+        }
+
+        for (int i = 0; i < tracks.size(); i++) {
+            Track track = tracks.get(i);
+            List<TrackSegment> segments = track.getTrackSegments();
+            for (int j = 0; j < segments.size(); j++) {
+                TrackSegment segment = segments.get(j);
+
+                for (TrackPoint trackPoint : segment.getTrackPoints()) {
+                    addWaypoint(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
+                }
+            }
+
+            if (wayPoints.size() == 2) {
+                WayPoint endWayPoint = wayPoints.get(wayPoints.size() - 1);
+                addWaypoint(new GeoPoint(endWayPoint.getLatitude(), endWayPoint.getLongitude()));
+            }
+        }
+    }
 }
