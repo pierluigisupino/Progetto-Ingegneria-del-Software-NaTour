@@ -80,7 +80,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         if(bitmaps.size() == 0){
             textView.setText(holder.itemView.getContext().getString(R.string.no_photo_selected_text));
         }else{
-            textView.setText(bitmaps.size()+" " +holder.itemView.getContext().getString(R.string.photo_selected_text));
+            textView.setText(bitmaps.size() + holder.itemView.getContext().getString(R.string.photo_selected_text));
         }
     }
 }

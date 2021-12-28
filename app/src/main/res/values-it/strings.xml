@@ -83,6 +83,10 @@
 
     <string name="generic_error">Something went wrong, try again later.</string>
 
+    <string name="search_error">Nessun luogo trovato</string>
+    <string name="start_point_error">Inserisci almeno un punto</string>
+    <string name="photo_limit">Limite di 5 foto superato</string>
+
     <!--IMAGES DESCRIPTION-->
     <string name="splash_image_description">Splash Image </string>
     <string name="welcome_page_image_description">Welcome page image</string>
@@ -110,13 +114,11 @@
         <item>con Attrezzatura Alpina (EEA)</item>
     </string-array>
     <string name="no_photo_selected_text">Nessuna foto selezionata</string>
-    <string name="photo_selected_text">foto</string>
+    <string name="photo_selected_text">/5 foto selezionate</string>
     <string name="photo_added_success">Foto aggiunte</string>
     <string name="cancel_operation_title">Annullare l\' inserimento?</string>
     <string name="cancel_operation_msgText">Tutti i progressi andranno persi</string>
     <string name="search">Cerca...</string>
-    <string name="search_error">Nessun luogo trovato</string>
-    <string name="start_point_error">Inserisci almeno un punto</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

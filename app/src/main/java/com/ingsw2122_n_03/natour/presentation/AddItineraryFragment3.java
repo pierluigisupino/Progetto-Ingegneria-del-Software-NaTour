@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,25 +75,27 @@ public class AddItineraryFragment3 extends Fragment {
                             Intent data = result.getData();
                             assert data != null;
                             ClipData clipData = data.getClipData();
-                            if (clipData != null) {
-                                for (int i = 0; i < clipData.getItemCount(); i++) {
+                            if (clipData != null && imagesBitmap.size() < 5) {
+
+                                if(clipData.getItemCount() > 5 || imagesBitmap.size() + clipData.getItemCount() > 5){
+                                    addItineraryActivity.onFail(getString(R.string.photo_limit));
+                                }
+
+                                for (int i = 0; (i < clipData.getItemCount()) & (imagesBitmap.size() < 5); i++) {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
                                     Bitmap bitmap = createImageBitmap(imageUri);
                                     imagesBitmap.add(bitmap);
                                     new Thread(() -> imagesBytes.add(createImageBytes(bitmap))).start();
                                 }
-                            } else {
-                                Uri imageUri = data.getData();
-                                Bitmap bitmap = createImageBitmap(imageUri);
-                                imagesBitmap.add(bitmap);
-                                new Thread(() -> imagesBytes.add(createImageBytes(bitmap))).start();
+                            }else if(imagesBitmap.size() == 5){
+                                    addItineraryActivity.onFail(getString(R.string.photo_limit));
                             }
                             recyclerView.post(() -> {
                                 setAdapter();
                                 addItineraryActivity.onSuccess(null);
                             });
                         }).start();
-                    }else {
+                    }else if(result.getResultCode() != Activity.RESULT_CANCELED){
                         addItineraryActivity.onFail(getString(R.string.generic_error));
                     }
                 });
@@ -147,11 +150,6 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     public ArrayList<byte[]> getImagesBytes(){
-
-        /*for(Bitmap bitmap : imagesBitmap){
-            imagesBytes.add(createImageBytes(bitmap));
-        }*/
-
         return this.imagesBytes;
     }
 
