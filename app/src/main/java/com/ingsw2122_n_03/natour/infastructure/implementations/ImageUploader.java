@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.util.Log;
+
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -45,7 +47,7 @@ public class ImageUploader {
                 .build();
 
         Amplify.API.post(options,
-                response-> {},
+                response-> Log.i("RESPONSE", response.getData().asString()),
                 error -> {}
                 );
 

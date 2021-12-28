@@ -44,7 +44,19 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 .build();
 
         Amplify.API.post(options,
-                response -> Log.i("IterID", response.getData().asString()),//controller.onItineraryInsertSuccess(1),
+                response -> {
+                    try {
+
+                        String s = response.getData().asString();
+                        Log.i("ID", s);
+
+                        Integer i = Integer.parseInt(s);
+                        controller.onItineraryInsertSuccess(i);
+
+                    }catch(NumberFormatException e){
+                        controller.onItineraryInsertError("SORRY MY MISTAKE: SERVER IS DUMB");
+                    }
+                    },
                 error -> controller.onItineraryInsertError(error.getMessage())
         );
 
