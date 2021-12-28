@@ -20,7 +20,7 @@ public class WayPoint {
 
     @Override
     public String toString() {
-        return "{\"Latitude\": " + "\"" + this.getLatitude() + "\", \"Longitude\": "  + "\"" + this.getLongitude() + "\"}";
+        return "{\"Latitude\": " + "\"" + latitude + "\", \"Longitude\": "  + "\"" + longitude + "\"}";
     }
 
 
