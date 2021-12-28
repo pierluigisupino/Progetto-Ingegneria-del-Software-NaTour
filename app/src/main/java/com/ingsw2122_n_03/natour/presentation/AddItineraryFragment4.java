@@ -50,6 +50,7 @@ import io.ticofab.androidgpxparser.parser.domain.Gpx;
 import io.ticofab.androidgpxparser.parser.domain.Track;
 import io.ticofab.androidgpxparser.parser.domain.TrackPoint;
 import io.ticofab.androidgpxparser.parser.domain.TrackSegment;
+import io.ticofab.androidgpxparser.parser.domain.WayPoint;
 
 public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
 
@@ -155,11 +156,12 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
                         if (parsedGpx != null) {
 
-                            // TODO: 27/12/2021
+                            List<WayPoint> wayPoints = parsedGpx.getWayPoints();
 
-                            //I FILE GPX HANNO TUTTI ALMENO UN TRACK AL LORO INTERNO? parsedGpx.getTracks();
-                            //SE HANNO SOLO PUNTO INIZIALE E FINALE?  parsedGpx.getWayPoints();
-                            //COSA FA parsedGpx.getRoutes(); ?
+                            if(wayPoints.size() > 0){
+                                WayPoint startWayPoint = wayPoints.get(0);
+                                addWaypoint(new GeoPoint(startWayPoint.getLatitude(), startWayPoint.getLongitude()));
+                            }
 
                             List<Track> tracks = parsedGpx.getTracks();
                             for (int i = 0; i < tracks.size(); i++) {
@@ -173,6 +175,10 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                                     }
                                 }
 
+                                if(wayPoints.size() == 2) {
+                                    WayPoint endWayPoint = wayPoints.get(wayPoints.size() - 1);
+                                    addWaypoint(new GeoPoint(endWayPoint.getLatitude(), endWayPoint.getLongitude()));
+                                }
                                 makeRoads();
                             }
                         } else {
