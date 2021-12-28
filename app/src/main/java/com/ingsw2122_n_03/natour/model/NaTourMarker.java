@@ -7,6 +7,7 @@ import org.osmdroid.views.overlay.Marker;
 public class NaTourMarker extends Marker {
 
     private GeoPoint geoPoint;
+    private NaTourGeoPoint naTourGeoPoint;
 
     public NaTourMarker(MapView mapView) {
         super(mapView);
@@ -17,7 +18,17 @@ public class NaTourMarker extends Marker {
         public NaTourGeoPoint(double aLatitude, double aLongitude) {
             super(aLatitude, aLongitude);
             geoPoint = this;
+            naTourGeoPoint = this;
         }
+
+        @Override
+        public String toString() {
+            return "{\"Latitude\": " + "\"" + this.getLatitude() + "\", \"Longitude:\" "  + "\"" + this.getLongitude() + "\"}";
+        }
+    }
+
+    public NaTourGeoPoint getNatoureGeoPoint(){
+        return naTourGeoPoint;
     }
 
     public GeoPoint getGeoPoint() {
