@@ -22,12 +22,17 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", iter.getIterId());
+
             jsonObject.put("name", iter.getName());
-            jsonObject.put("description", iter.getDescription());
+            if(iter.getDescription() != null) {
+                jsonObject.put("description", iter.getDescription());
+            }
+            jsonObject.put("difficulty", iter.getDifficulty());
             jsonObject.put("hours", iter.getHoursDuration());
             jsonObject.put("minutes", iter.getMinutesDuration());
             jsonObject.put("creator", iter.getCreator());
+            jsonObject.put("startPoint", iter.getStartPoint());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
