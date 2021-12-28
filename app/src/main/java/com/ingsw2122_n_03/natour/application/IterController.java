@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.application;
 
+import com.ingsw2122_n_03.natour.infastructure.implementations.ImageUploader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ItineraryDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.implementations.UserDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.ItineraryDaoInterface;
@@ -18,8 +19,10 @@ public class IterController extends Controller {
     private static IterController instance = null;
 
     private MainActivity mainActivity;
+
     private ItineraryDaoInterface itineraryDao;
     private UserDaoInterface userDao;
+    private ImageUploader imageUploader;
 
     private User creator;
 
@@ -28,6 +31,7 @@ public class IterController extends Controller {
     private IterController(){
         itineraryDao = new ItineraryDaoImplementation(this);
         userDao = new UserDaoImplementation();
+        imageUploader = new ImageUploader(this);
     }
 
     public static IterController getInstance() {
@@ -56,8 +60,8 @@ public class IterController extends Controller {
 
     }
 
-    public void onItineraryInsertSuccess() {
-
+    public void onItineraryInsertSuccess(int iterID) {
+        imageUploader.uploadImages(iterID, imagesBytes);
     }
 
     public void onItineraryInsertError(String msg) {

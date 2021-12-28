@@ -44,7 +44,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 .build();
 
         Amplify.API.post(options,
-                response -> Log.i("RESPONSE", response.getData().asString()),
+                response -> Log.i("IterID", response.getData().asString()),//controller.onItineraryInsertSuccess(1),
                 error -> controller.onItineraryInsertError(error.getMessage())
         );
 
