@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.util.Log;
+
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -24,14 +26,13 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
         try {
 
             jsonObject.put("name", iter.getName());
-            if(iter.getDescription() != null) {
-                jsonObject.put("description", iter.getDescription());
-            }
+            jsonObject.put("iterDescription", iter.getDescription());
             jsonObject.put("difficulty", iter.getDifficulty());
             jsonObject.put("hours", iter.getHoursDuration());
             jsonObject.put("minutes", iter.getMinutesDuration());
-            jsonObject.put("creator", iter.getCreator());
+            jsonObject.put("creator", iter.getCreator().getUid());
             jsonObject.put("startPoint", iter.getStartPoint());
+            jsonObject.put("waypoints", iter.getWayPoints());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -43,7 +44,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 .build();
 
         Amplify.API.post(options,
-                response -> controller.onItineraryInsertSuccess(),
+                response -> Log.i("RESPONSE", response.getData().asString()),
                 error -> controller.onItineraryInsertError(error.getMessage())
         );
 
