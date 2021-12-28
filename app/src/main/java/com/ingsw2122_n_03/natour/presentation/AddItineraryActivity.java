@@ -110,7 +110,7 @@ public class AddItineraryActivity extends BaseActivity {
                 imagesBytes = addItineraryFragment3.getImagesBytes();
                 stepIndex++;
                 changeFragment();
-            } else if(stepIndex == 3 && !addItineraryFragment4.startPointInserted()){
+            } else if(stepIndex == 3 && addItineraryFragment4.isStartPointInserted()){
                 waypoints = addItineraryFragment4.getWaypoints();
                 iterController.insertItinerary(name, description, difficulty, hours, minutes, imagesBytes, waypoints);
             }
