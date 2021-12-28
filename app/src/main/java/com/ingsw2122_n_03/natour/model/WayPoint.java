@@ -18,6 +18,12 @@ public class WayPoint {
     SETTERS
     */
 
+    @Override
+    public String toString() {
+        return "{\"Latitude\": " + "\"" + this.getLatitude() + "\", \"Longitude\": "  + "\"" + this.getLongitude() + "\"}";
+    }
+
+
     public double getLatitude() {
         return latitude;
     }
