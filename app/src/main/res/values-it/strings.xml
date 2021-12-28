@@ -116,7 +116,7 @@
     <string name="cancel_operation_msgText">Tutti i progressi andranno persi</string>
     <string name="search">Cerca...</string>
     <string name="search_error">Nessun luogo trovato</string>
-    <string name="start_point_error">Inserisci un punto di partenza</string>
+    <string name="start_point_error">Inserisci almeno un punto</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

@@ -298,7 +298,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         return waypoints;
     }
 
-    public boolean startPointInserted() {
+    public boolean isStartPointInserted() {
         if(!waypoints.isEmpty())
             return true;
         else{
