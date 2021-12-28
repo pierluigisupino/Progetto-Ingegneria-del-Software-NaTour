@@ -45,6 +45,8 @@ public class AddItineraryFragment3 extends Fragment {
 
     private ActivityResultLauncher<Intent> getImages;
 
+    private final int photoCount = 5;
+
     public AddItineraryFragment3(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
     }
@@ -75,19 +77,19 @@ public class AddItineraryFragment3 extends Fragment {
                             Intent data = result.getData();
                             assert data != null;
                             ClipData clipData = data.getClipData();
-                            if (clipData != null && imagesBitmap.size() < 5) {
+                            if (clipData != null && imagesBitmap.size() < photoCount) {
 
-                                if(clipData.getItemCount() > 5 || imagesBitmap.size() + clipData.getItemCount() > 5){
+                                if(clipData.getItemCount() > photoCount || imagesBitmap.size() + clipData.getItemCount() > photoCount){
                                     addItineraryActivity.onFail(getString(R.string.photo_limit));
                                 }
 
-                                for (int i = 0; (i < clipData.getItemCount()) & (imagesBitmap.size() < 5); i++) {
+                                for (int i = 0; (i < clipData.getItemCount()) & (imagesBitmap.size() < photoCount); i++) {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
                                     Bitmap bitmap = createImageBitmap(imageUri);
                                     imagesBitmap.add(bitmap);
                                     new Thread(() -> imagesBytes.add(createImageBytes(bitmap))).start();
                                 }
-                            }else if(imagesBitmap.size() == 5){
+                            }else if(imagesBitmap.size() == photoCount){
                                     addItineraryActivity.onFail(getString(R.string.photo_limit));
                             }
                             recyclerView.post(() -> {
