@@ -243,7 +243,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         markers.add(marker);
 
         NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(p.getLatitude(), p.getLongitude());
-        Log.e("test", ((NaTourMarker) marker).getNatoureGeoPoint().toString());
         waypoints.add(naTourWaypoint);
     }
 
