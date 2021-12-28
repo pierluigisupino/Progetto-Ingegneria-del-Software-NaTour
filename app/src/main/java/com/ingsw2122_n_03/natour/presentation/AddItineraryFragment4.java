@@ -89,7 +89,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         Context ctx = requireActivity().getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-        com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding binding = Fragment4AddItineraryBinding.inflate(inflater, container, false);
+       Fragment4AddItineraryBinding binding = Fragment4AddItineraryBinding.inflate(inflater, container, false);
 
         map = binding.map;
         searchView = binding.searchView;
@@ -143,8 +143,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         assert data != null;
-                        Gpx parsedGpx = null;
                         Uri uri = data.getData();
+                        Gpx parsedGpx = null;
 
                         InputStream is = getInputStream(uri);
                         parsedGpx = parsGpx(is);
@@ -169,12 +169,9 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         });
 
         addGPX.setOnClickListener(view -> {
-            for(Marker marker : markers){
-                waypoints.remove(((NaTourMarker) marker).getGeoPoint());
-                map.getOverlays().remove(marker);
-            }
-            map.getOverlays().remove(roadOverlay);
-            markers.clear();
+
+            clearMap();
+
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -367,5 +364,14 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                 addWaypoint(new GeoPoint(endWayPoint.getLatitude(), endWayPoint.getLongitude()));
             }
         }
+    }
+
+    private void clearMap(){
+        for(Marker marker : markers){
+            waypoints.remove(((NaTourMarker) marker).getGeoPoint());
+            map.getOverlays().remove(marker);
+        }
+        map.getOverlays().remove(roadOverlay);
+        markers.clear();
     }
 }
