@@ -23,7 +23,7 @@ public class NaTourMarker extends Marker {
 
         @Override
         public String toString() {
-            return "{\"Latitude\": " + "\"" + this.getLatitude() + "\", \"Longitude:\" "  + "\"" + this.getLongitude() + "\"}";
+            return "{\"Latitude\": " + "\"" + this.getLatitude() + "\", \"Longitude\": "  + "\"" + this.getLongitude() + "\"}";
         }
     }
 
