@@ -1,4 +1,4 @@
-package com.ingsw2122_n_03.natour.model;
+package com.ingsw2122_n_03.natour.presentation.support;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
