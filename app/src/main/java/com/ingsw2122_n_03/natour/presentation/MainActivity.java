@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
@@ -26,7 +28,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private IterController iterController;
 
     private DrawerLayout drawerLayout;
-    NavigationView navigationView;
+    private NavigationView navigationView;
+
+    private MainFragment mainFragment = new MainFragment();
+    private MessagesFragment messagesFragment = new MessagesFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer, new MainFragment());
+        fragmentTransaction.commit();
 
         authController = AuthController.getInstance();
         iterController = IterController.getInstance();
@@ -48,6 +58,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        navigationView.setCheckedItem(R.id.home);
         navigationView.setNavigationItemSelectedListener(this);
 
         float radius = getResources().getDimension(R.dimen.corner_radious);
@@ -88,13 +99,29 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.nav_logout:
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        switch (item.getItemId()) {
+            case R.id.home:
+                if (!mainFragment.isVisible()) {
+                    fragmentTransaction.replace(R.id.fragmentContainer, mainFragment);
+                    fragmentTransaction.commit();
+                }
+                break;
+            case R.id.messages:
+                if (!messagesFragment.isVisible()) {
+                    fragmentTransaction.replace(R.id.fragmentContainer, messagesFragment);
+                    fragmentTransaction.commit();
+                }
+                break;
+            case R.id.logout:
                 authController.signOut(this);
                 break;
-
-            //navigazione
         }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }
