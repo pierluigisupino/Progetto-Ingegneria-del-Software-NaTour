@@ -24,6 +24,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.predictions.models.LabelType;
+import com.amplifyframework.predictions.result.IdentifyLabelsResult;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
@@ -31,6 +34,8 @@ import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AddItineraryFragment3 extends Fragment {
 
@@ -77,6 +82,7 @@ public class AddItineraryFragment3 extends Fragment {
                             Intent data = result.getData();
                             assert data != null;
                             ClipData clipData = data.getClipData();
+
                             if (clipData != null && imagesBitmap.size() < photoCount) {
 
                                 if(clipData.getItemCount() > photoCount || imagesBitmap.size() + clipData.getItemCount() > photoCount){
@@ -86,14 +92,17 @@ public class AddItineraryFragment3 extends Fragment {
                                 for (int i = 0; (i < clipData.getItemCount()) & (imagesBitmap.size() < photoCount); i++) {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
                                     Bitmap bitmap = createImageBitmap(imageUri);
-                                    imagesBitmap.add(bitmap);
-                                    new Thread(() -> imagesBytes.add(createImageBytes(bitmap))).start();
+
+                                    // TODO: 30/12/2021 SI DOVREBBE ASPETTATE "RESULT" DI addBitmap GUARDA IL COMMENTO DOPO
+                                    addBitmap(bitmap); //<- QUI AVVIENE LA CLASSIFICAZIONE
                                 }
                             }else if(imagesBitmap.size() == photoCount){
                                     addItineraryActivity.onFail(getString(R.string.photo_limit));
                             }
+
+                            // TODO: 30/12/2021 QUANDO VIENE CHIAMATO POST() LA CLASSIFICAZIONE DELL'IMMAGINE NON è PRONTA L'ADAPTER SARà VUOTO
                             recyclerView.post(() -> {
-                                setAdapter();
+                                setAdapter();  // TODO: 30/12/2021 DOVREBBE ESSERE CHIAMATA DOPO CHE TUTTI I "RESULT" DI OGNI FOTO IN addBitmap() SONO STATI "CHIAMATI"
                                 addItineraryActivity.onSuccess(null);
                             });
                         }).start();
@@ -127,13 +136,13 @@ public class AddItineraryFragment3 extends Fragment {
             try {
                 bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(requireContext().getContentResolver(), imageUri));
             } catch (IOException e) {
-                e.printStackTrace();
+                addItineraryActivity.onFail(getString(R.string.generic_error));
             }
         } else {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageUri);
             } catch (IOException e) {
-                e.printStackTrace();
+                addItineraryActivity.onFail(getString(R.string.generic_error));
             }
         }
 
@@ -151,8 +160,25 @@ public class AddItineraryFragment3 extends Fragment {
         return bytes;
     }
 
+    public void addBitmap(Bitmap image) {
+        Amplify.Predictions.identify(
+                LabelType.MODERATION_LABELS,
+                image,
+                result -> {
+                    IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
+
+                    if(!identifyResult.isUnsafeContent()) {
+                        imagesBitmap.add(image);
+                        new Thread(() -> imagesBytes.add(createImageBytes(image))).start();
+                    }else{
+                        addItineraryActivity.onFail(getString(R.string.explicit_content));
+                    }
+                },
+                error -> addItineraryActivity.onFail(getString(R.string.generic_error))
+        );
+    }
+
     public ArrayList<byte[]> getImagesBytes(){
         return this.imagesBytes;
     }
-
 }
