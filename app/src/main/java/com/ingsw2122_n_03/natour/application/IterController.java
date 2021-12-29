@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.application;
 
+import com.ingsw2122_n_03.natour.infastructure.implementations.ImageUploader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ItineraryDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.implementations.UserDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.ItineraryDaoInterface;
@@ -18,8 +19,10 @@ public class IterController extends Controller {
     private static IterController instance = null;
 
     private MainActivity mainActivity;
+
     private ItineraryDaoInterface itineraryDao;
     private UserDaoInterface userDao;
+    private ImageUploader imageUploader;
 
     private User creator;
 
@@ -28,6 +31,7 @@ public class IterController extends Controller {
     private IterController(){
         itineraryDao = new ItineraryDaoImplementation(this);
         userDao = new UserDaoImplementation();
+        imageUploader = new ImageUploader(this);
     }
 
     public static IterController getInstance() {
@@ -37,7 +41,7 @@ public class IterController extends Controller {
         return instance;
     }
 
-    //@TODO 1)IMPLEMENT WAYPOINT DAO TO INSERT WAYPOINTS, 2)CREATE ITER ID, 3)CREATE CLASS FOR IMAGE UPLOAD
+
     public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
         creator = new User(userDao.getCurrentUserId());
         this.imagesBytes = imagesBytes;
@@ -56,13 +60,21 @@ public class IterController extends Controller {
 
     }
 
-    public void onItineraryInsertSuccess() {
-
+    public void onItineraryInsertSuccess(int iterID) {
+        if(imagesBytes.size() > 0)
+            imageUploader.uploadImages(iterID, imagesBytes);
+        else
+            onItineraryInsertComplete();
     }
 
     public void onItineraryInsertError(String msg) {
 
     }
+
+    public void onItineraryInsertComplete() {
+
+    }
+
 
     public void setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
