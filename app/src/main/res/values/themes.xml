@@ -31,7 +31,6 @@
         <item name="titleTextColor">@color/primary</item>
         <item name="android:textColorSecondary">@color/primary</item>
         <item name="textAllCaps">false</item>
-        <item name="android:textSize">38sp</item>
         <item name="android:fontFamily">@font/euclid_circular_bold</item>
     </style>
 
