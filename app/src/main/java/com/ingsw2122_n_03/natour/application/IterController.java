@@ -41,7 +41,7 @@ public class IterController extends Controller {
         return instance;
     }
 
-    //@TODO 1)IMPLEMENT WAYPOINT DAO TO INSERT WAYPOINTS, 2)CREATE ITER ID, 3)CREATE CLASS FOR IMAGE UPLOAD
+
     public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
         creator = new User(userDao.getCurrentUserId());
         this.imagesBytes = imagesBytes;
@@ -61,12 +61,20 @@ public class IterController extends Controller {
     }
 
     public void onItineraryInsertSuccess(int iterID) {
-        imageUploader.uploadImages(iterID, imagesBytes);
+        if(imagesBytes.size() > 0)
+            imageUploader.uploadImages(iterID, imagesBytes);
+        else
+            onItineraryInsertComplete();
     }
 
     public void onItineraryInsertError(String msg) {
 
     }
+
+    public void onItineraryInsertComplete() {
+
+    }
+
 
     public void setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
