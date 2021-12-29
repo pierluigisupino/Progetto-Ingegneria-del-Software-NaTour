@@ -35,7 +35,7 @@ public class ImageUploader {
             jsonObject.put("iterID", iterID);
             jsonObject.put("photo_count", photoCount);
             for(int i=0; i<photoCount; ++i) {
-                jsonObject.put("photo"+String.valueOf(i), encodedStrings[i]);
+                jsonObject.put("photo"+i, encodedStrings[i]);
             }
         } catch (JSONException e) {
             e.printStackTrace();
