@@ -52,7 +52,6 @@ public class AddItineraryFragment1 extends Fragment {
         nameTextInputLayout = binding.nameTextInputLayout;
         nameEditText = binding.nameEditText;
 
-        //TextInputLayout descriptionTextInputLayout = view.findViewById(R.id.descriptionTextInputLayout);
         descriptionEditText = binding.descriptionEditText;
 
         nameEditText.addTextChangedListener(new TextWatcher(){
