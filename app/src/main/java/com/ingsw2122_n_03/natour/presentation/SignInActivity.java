@@ -20,7 +20,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
-import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
 import com.ingsw2122_n_03.natour.databinding.ActivitySignInBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 

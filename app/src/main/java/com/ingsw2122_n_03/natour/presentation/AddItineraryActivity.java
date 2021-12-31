@@ -29,7 +29,7 @@ public class AddItineraryActivity extends BaseActivity {
 
     private StepView stepView;
 
-    private final AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1(this);
+    private final AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1();
     private final AddItineraryFragment2 addItineraryFragment2 = new AddItineraryFragment2(this);
     private final AddItineraryFragment3 addItineraryFragment3 = new AddItineraryFragment3(this);
     private final AddItineraryFragment4 addItineraryFragment4 = new AddItineraryFragment4(this);

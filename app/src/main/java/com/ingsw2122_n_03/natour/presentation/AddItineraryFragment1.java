@@ -21,16 +21,11 @@ public class AddItineraryFragment1 extends Fragment {
 
     private Fragment1AddItineraryBinding binding;
 
-    private final AddItineraryActivity addItineraryActivity;
     private TextInputLayout nameTextInputLayout;
     private EditText nameEditText;
     private EditText descriptionEditText;
 
     private boolean isFirstSubmit = true;
-
-    public AddItineraryFragment1(AddItineraryActivity addItineraryActivity) {
-        this.addItineraryActivity = addItineraryActivity;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

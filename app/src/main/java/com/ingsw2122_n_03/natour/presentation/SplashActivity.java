@@ -1,14 +1,15 @@
 package com.ingsw2122_n_03.natour.presentation;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
-import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.databinding.ActivitySplashBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
 
     private AuthController authController;

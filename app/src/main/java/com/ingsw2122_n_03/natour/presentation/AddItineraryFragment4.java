@@ -65,8 +65,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     private RoadManager roadManager;
     private Polyline roadOverlay;
 
-    private ArrayList<Marker> markers = new ArrayList<>();
-    private ArrayList<GeoPoint> waypoints = new ArrayList<>();
+    private final ArrayList<Marker> markers = new ArrayList<>();
+    private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
     private ActivityResultLauncher<Intent> getGPXLauncher;
 
@@ -144,7 +144,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                         Intent data = result.getData();
                         assert data != null;
                         Uri uri = data.getData();
-                        Gpx parsedGpx = null;
+                        Gpx parsedGpx;
 
                         InputStream is = getInputStream(uri);
                         parsedGpx = parsGpx(is);
@@ -309,19 +309,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         }).start();
     }
 
-    public ArrayList<GeoPoint> getWaypoints(){
-        return waypoints;
-    }
-
-    public boolean isStartPointInserted() {
-        if(!waypoints.isEmpty())
-            return true;
-        else{
-            addItineraryActivity.onFail(getString(R.string.start_point_error));
-            return false;
-        }
-    }
-
     private InputStream getInputStream(Uri uri){
 
         InputStream is = null;
@@ -389,4 +376,18 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         map.getOverlays().remove(roadOverlay);
         markers.clear();
     }
+
+    public boolean isStartPointInserted() {
+        if(!waypoints.isEmpty())
+            return true;
+        else{
+            addItineraryActivity.onFail(getString(R.string.start_point_error));
+            return false;
+        }
+    }
+
+    public ArrayList<GeoPoint> getWaypoints(){
+        return waypoints;
+    }
+
 }
