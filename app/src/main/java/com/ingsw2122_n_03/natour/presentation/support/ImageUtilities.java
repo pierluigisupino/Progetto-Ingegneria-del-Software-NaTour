@@ -7,12 +7,19 @@ import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
+
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.predictions.models.LabelType;
+import com.amplifyframework.predictions.result.IdentifyLabelsResult;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageUtilities {
+
+    private static boolean isSafe = false;
 
     public Bitmap createImageBitmap(Uri imageUri, Context context) throws IOException{
 
@@ -49,9 +56,26 @@ public class ImageUtilities {
             ExifInterface exifInterface = new ExifInterface(inputStream);
             latLong = exifInterface.getLatLong();
         }
-        
+
         return latLong;
 
     }
 
+    public boolean isImageSafe(Bitmap image){
+
+        Amplify.Predictions.identify(
+                LabelType.MODERATION_LABELS,
+                image,
+                result -> {
+                    IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
+                    isSafe = identifyResult.isUnsafeContent();
+                },
+                error -> {
+                    isSafe = false;
+                    Log.e("NaTour", "errore");
+                }
+        );
+
+        return isSafe;
+    }
 }

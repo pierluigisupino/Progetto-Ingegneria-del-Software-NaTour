@@ -43,6 +43,7 @@ dependencies {
 
     implementation 'com.amplifyframework:aws-auth-cognito:1.30.0'
     implementation 'com.amplifyframework:aws-api:1.30.0'
+    implementation 'com.amplifyframework:aws-predictions:1.31.0'
 
     implementation 'org.osmdroid:osmdroid-android:6.1.10'
     implementation 'com.github.MKergall:osmbonuspack:6.7.0'
