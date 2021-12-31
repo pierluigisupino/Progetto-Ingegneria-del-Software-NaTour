@@ -3,12 +3,14 @@ package com.ingsw2122_n_03.natour.presentation.support;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
+import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ImageUtilities {
 
@@ -35,6 +37,20 @@ public class ImageUtilities {
         bytes = byteArrayOutputStream.toByteArray();
 
         return bytes;
+
+    }
+
+    public double[] getPositionFromUri(Uri imageUri, Context context) throws IOException {
+
+        double[] latLong = new double[2];
+
+        InputStream inputStream = context.getContentResolver().openInputStream(imageUri);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            ExifInterface exifInterface = new ExifInterface(inputStream);
+            latLong = exifInterface.getLatLong();
+        }
+        
+        return latLong;
 
     }
 
