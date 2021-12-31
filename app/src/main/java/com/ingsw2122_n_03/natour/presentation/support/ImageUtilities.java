@@ -16,22 +16,15 @@ public class ImageUtilities {
 
         Bitmap bitmap;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            try {
-                bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), imageUri));
-            } catch (IOException e) {
-                throw new IOException();
-            }
-        } else {
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
-            } catch (IOException e) {
-                throw new IOException();
-            }
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+            bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), imageUri));
+        else
+            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
 
         return bitmap;
+
     }
+
 
     public byte[] createImageBytes(Bitmap imageBitmap){
 
@@ -42,7 +35,7 @@ public class ImageUtilities {
         bytes = byteArrayOutputStream.toByteArray();
 
         return bytes;
-    }
 
+    }
 
 }
