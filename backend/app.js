@@ -84,28 +84,34 @@ app.post('/items/user', async function(req, res) {
   })
 });
 
-app.post('/items/itineraries', async function(req, res) {
+app.post('/items/itineraries', function(req, res) {
   
-  await checkCredentials()
-
   var startPoint = JSON.parse(req.body.startPoint);
-
+  var waypoints = req.body.waypoints;
+  
+  if(waypoints != null){
+    waypoints = JSON.parse(waypoints);
+  }
+  
   client.connect();
-
-  var query = 'INSERT INTO ITINERARY(iterName, description, difficulty, hours, minutes, startPoint, creator, waypoints) VALUES (\'' + req.body.name + '\',\'' + req.body.iterDescription + '\',\'' + req.body.difficulty + '\',\'' + req.body.hours + '\',\'' + req.body.minutes + '\',\'(' + startPoint.Latitude + ',' + startPoint.Longitude + ')\',\'' + req.body.creator + '\',array[\'' + req.body.waypoints + '\']::json[]) RETURNING iterID';
-
-  client.query(query, (err, suc) => {
-    if (err) {
+  
+  var query = 'INSERT INTO ITINERARY(iterName, description, difficulty, hours, minutes, startPoint, creator, waypoints) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING IterID';
+  
+  client.query(query, [req.body.name, req.body.iterDescription, req.body.difficulty, req.body.hours, req.body.minutes, 
+  '('+startPoint.Latitude+','+startPoint.Longitude+')', req.body.creator, waypoints] ,(err, suc) => {
+    
+    if(err) {
+      
       client.end();
-      res.json({
-        Error: err
-      });
-    } else {
-      var iterID = suc.rows[0].iterid;
-      var bucketName = 'natour-images-' + iterID;
-
+      res.json({Error: err.stack});
+      
+    }else {
+      
+      var iterID = suc.rows[0].iterid; 
+      var bucketName = 'natour-images-'+iterID;
+      
       var bucketParams = {
-        Bucket: bucketName,
+        Bucket : bucketName,
         CreateBucketConfiguration: {
           LocationConstraint: 'eu-west-3'
         },
@@ -113,18 +119,21 @@ app.post('/items/itineraries', async function(req, res) {
 
       s3.createBucket(bucketParams, function(err, data) {
         if (err) {
-          client.query('DELETE FROM ITINERARY WHERE IterID = ' + iterID, function(error, succeed) {});
+          
+          client.query('DELETE FROM ITINERARY WHERE IterID = '+iterID, function(error, succeed){});
           client.end();
-          res.json({
-            error: err.stack
-          });
-        } else {
+          res.json({error: err.stack}); 
+          
+        }else {
+          
           client.end();
           res.json(iterID);
+          
         }
       });
     }
   });
+  
 });
 
 app.post('/items/photos', function(req, res) {
@@ -132,12 +141,13 @@ app.post('/items/photos', function(req, res) {
     var iterID = req.body.iterID;
     var bucketName = 'natour-images-' + iterID;
     var count = req.body.photo_count;
-
+    
     for (let i = 0; i < count; i++) {
+        var filename = Math.random().toString(36).slice(2);
         var photoBody = 'photo' + i;
         var uploadParams = {
             Bucket: bucketName,
-            Key: photoBody, //TODO: it will be number of file in the bucket+1
+            Key: filename,
             Body: req.body[photoBody],
             ContentEncoding: 'base64'
         };
