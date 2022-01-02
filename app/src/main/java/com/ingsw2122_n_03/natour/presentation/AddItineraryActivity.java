@@ -43,12 +43,12 @@ public class AddItineraryActivity extends BaseActivity {
 
     private int stepIndex = 0;
 
-    private String name = null;
-    private String description = null;
-    private String difficulty = null;
-    private int hours = 0;
-    private int minutes = 0;
-    private ArrayList <byte[]> imagesBytes = null;
+    private String name;
+    private String description;
+    private String difficulty;
+    private int hours;
+    private int minutes;
+    private ArrayList <byte[]> imagesBytes;
     private ArrayList<GeoPoint> waypoints;
 
     @SuppressLint("ClickableViewAccessibility")

@@ -28,11 +28,11 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     }
 
     @Override
-    public boolean configureAuth(BaseActivity callingActivity) {
+    public boolean configurePlugins(BaseActivity callingActivity) {
         try {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
-            Amplify.addPlugin(new AWSPredictionsPlugin());
+            //Amplify.addPlugin(new AWSPredictionsPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
             return true;
         }catch (Amplify.AlreadyConfiguredException ignored){

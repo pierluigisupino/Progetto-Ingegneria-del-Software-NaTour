@@ -267,7 +267,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
         if(markers.size() > 1 && index == 0){
             markers.get(index + 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
-        } else if(index == markers.size() - 1 && markers.size() > 1){
+        } else if(index == markers.size() - 1 && markers.size() > 2){
             markers.get(index - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
         }
 

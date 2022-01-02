@@ -87,8 +87,6 @@
     <string name="start_point_error">Inserisci almeno un punto</string>
     <string name="photo_limit">Limite di 5 foto superato</string>
 
-    <string name="explicit_content">Contenuto esplicito eliminato</string>
-
     <!--IMAGES DESCRIPTION-->
     <string name="splash_image_description">Splash Image </string>
     <string name="welcome_page_image_description">Welcome page image</string>

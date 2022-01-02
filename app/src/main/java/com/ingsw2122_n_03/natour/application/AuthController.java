@@ -43,7 +43,7 @@ public final class AuthController extends Controller {
     }
 
     public void setUp() {
-        if(authInterface.configureAuth(splashActivity)) {
+        if(authInterface.configurePlugins(splashActivity)) {
             if (authInterface.checkUserLogged()) {
                 goToActivityAndFinish(splashActivity, MainActivity.class);
             } else {

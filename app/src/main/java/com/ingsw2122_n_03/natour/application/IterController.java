@@ -29,20 +29,25 @@ public class IterController extends Controller {
     private ArrayList<byte[]> imagesBytes;
 
     private IterController(){
+
         itineraryDao = new ItineraryDaoImplementation(this);
         userDao = new UserDaoImplementation();
         imageUploader = new ImageUploader(this);
+
     }
 
     public static IterController getInstance() {
+
         if(instance == null){
             instance = new IterController();
         }
         return instance;
+
     }
 
 
     public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
+
         creator = new User(userDao.getCurrentUserId());
         this.imagesBytes = imagesBytes;
         ArrayList<WayPoint> wayPointArrayList = new ArrayList<>();
@@ -50,10 +55,12 @@ public class IterController extends Controller {
             wayPointArrayList.add(new WayPoint(g.getLatitude(), g.getLongitude()));
         }
         Itinerary iter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), creator);
+        wayPointArrayList.remove(0);
+
         if(description.length() > 0)
            iter.setDescription(description);
-        wayPointArrayList.remove(0);
-        if(wayPointArrayList.size() > 1)
+
+        if(wayPointArrayList.size() > 0)
             iter.setWayPoints(wayPointArrayList);
 
         itineraryDao.postItinerary(iter);
@@ -61,13 +68,15 @@ public class IterController extends Controller {
     }
 
     public void onItineraryInsertSuccess(int iterID) {
-        if(imagesBytes.size() > 0)
-            imageUploader.uploadImages(iterID, imagesBytes);
-        else
+
+        if(imagesBytes.isEmpty())
             onItineraryInsertComplete();
+        else
+            imageUploader.uploadImages(iterID, imagesBytes);
+
     }
 
-    public void onItineraryInsertError(String msg) {
+    public void onItineraryInsertError() {
 
     }
 

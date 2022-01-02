@@ -1,7 +1,5 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
-import android.util.Log;
-
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -43,21 +41,18 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 .addBody(jsonObject.toString().getBytes())
                 .build();
 
+
         Amplify.API.post(options,
                 response -> {
-                    try {
-
-                        String s = response.getData().asString();
-                        Log.i("ID", s);
-
-                        Integer i = Integer.parseInt(s);
-                        controller.onItineraryInsertSuccess(i);
-
-                    }catch(NumberFormatException e){
-                        controller.onItineraryInsertError("SORRY MY MISTAKE: SERVER IS DUMB");
-                    }
+                       try {
+                           int i = Integer.parseInt(response.getData().asString());
+                           controller.onItineraryInsertSuccess(i);
+                       }catch(NumberFormatException e) {
+                           controller.onItineraryInsertError();
+                       }
                     },
-                error -> controller.onItineraryInsertError(error.getMessage())
+
+                error -> controller.onItineraryInsertError()
         );
 
     }

@@ -29,6 +29,7 @@ import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public class AddItineraryFragment3 extends Fragment {
 
     private Fragment3AddItineraryBinding binding;
@@ -41,6 +42,7 @@ public class AddItineraryFragment3 extends Fragment {
     private TextView countImageTextView;
 
     private ActivityResultLauncher<Intent> getImages;
+    private ImageUtilities imageUtilities;
 
     private final int photoCount = 5;
 
@@ -65,7 +67,7 @@ public class AddItineraryFragment3 extends Fragment {
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        ImageUtilities imageUtilities = new ImageUtilities();
+        imageUtilities = new ImageUtilities();
 
         getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -83,11 +85,8 @@ public class AddItineraryFragment3 extends Fragment {
 
                                 for (int i = 0; (i < clipData.getItemCount()) & (imagesBitmap.size() < photoCount); i++) {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
-                                    Bitmap bitmap;
                                     try {
-                                        bitmap = imageUtilities.createImageBitmap(imageUri, requireContext());
-                                        imagesBitmap.add(bitmap);
-                                        new Thread(() -> imagesBytes.add(imageUtilities.createImageBytes(bitmap))).start();
+                                        imageUtilities.addImageBitmap(imageUri, requireContext(), imagesBitmap);
                                     } catch (IOException e) {
                                         addItineraryActivity.onFail(getString(R.string.generic_error));
                                         break;
@@ -114,6 +113,7 @@ public class AddItineraryFragment3 extends Fragment {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             getImages.launch(intent);
         });
+
     }
 
     @Override
@@ -127,7 +127,13 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     public ArrayList<byte[]> getImagesBytes(){
+
+        for(Bitmap bitmap : imagesBitmap) {
+            new Thread(() -> imagesBytes.add(imageUtilities.createImageBytes(bitmap))).start();
+        }
+
         return this.imagesBytes;
+
     }
 
 }
