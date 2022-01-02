@@ -1,11 +1,11 @@
 package com.ingsw2122_n_03.natour.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class Itinerary {
 
-    private String iterId;
     private String name;
     private String description;
     private String difficulty;
@@ -14,6 +14,8 @@ public class Itinerary {
     private WayPoint startPoint;
     private ArrayList<WayPoint> wayPoints;
     private User creator;
+    private Date editDate;
+    private int iterId;
 
 
     /**CONSTRUCTORS
@@ -23,16 +25,16 @@ public class Itinerary {
         this.name = name;
         this.difficulty = difficulty;
         hoursDuration = hours;
-        minutesDuration = minutes;
+        setMinutesDuration(minutes);
         this.startPoint = startPoint;
         this.creator = creator;
     }
 
-    public Itinerary(String name, String difficulty, int hours, int minutes, String id) {
+    public Itinerary(String name, String difficulty, int hours, int minutes, int id) {
         this.name = name;
         this.difficulty = difficulty;
         hoursDuration = hours;
-        minutesDuration = minutes;
+        setMinutesDuration(minutes);
         iterId = id;
     }
 
@@ -69,11 +71,7 @@ public class Itinerary {
         return hoursDuration;
     }
 
-    public void setHoursDuration(int hoursDuration) {
-        if(hoursDuration < 0 || hoursDuration > 23)
-            throw new IllegalArgumentException();
-        this.hoursDuration = hoursDuration;
-    }
+    public void setHoursDuration(int hoursDuration) { this.hoursDuration = hoursDuration; }
 
     public int getMinutesDuration() {
         return minutesDuration;
@@ -101,11 +99,11 @@ public class Itinerary {
         this.wayPoints = wayPoints;
     }
 
-    public String getIterId() {
+    public int getIterId() {
         return iterId;
     }
 
-    public void setIterId(String iterId) {
+    public void setIterId(int iterId) {
         this.iterId = iterId;
     }
 
@@ -116,4 +114,9 @@ public class Itinerary {
     public void setCreator(User creator) {
         this.creator = creator;
     }
+
+    public Date getEditDate() { return editDate; }
+
+    public void setEditDate(Date editDate) { this.editDate = editDate; }
+
 }

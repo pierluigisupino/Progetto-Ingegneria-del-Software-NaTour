@@ -103,7 +103,7 @@ app.post('/items/itineraries', function(req, res) {
     if(err) {
       
       client.end();
-      res.json({Error: err.stack});
+      return res.json({Error: err.stack});
       
     }else {
       
@@ -122,12 +122,12 @@ app.post('/items/itineraries', function(req, res) {
           
           client.query('DELETE FROM ITINERARY WHERE IterID = '+iterID, function(error, succeed){});
           client.end();
-          res.json({error: err.stack}); 
+          return res.json({error: err.stack}); 
           
         }else {
           
           client.end();
-          res.json(iterID);
+          return res.json(iterID);
           
         }
       });
@@ -154,13 +154,16 @@ app.post('/items/photos', function(req, res) {
 
         s3.putObject(uploadParams, (err, dataUp) => {
             if (err) {
-                res.json({
+                return res.json({
                     error: err.stack
                 });
-                i = count;
+                
             }
         });
     }
+    
+    return res.json();
+
 });
 
 app.listen(3000, function() {

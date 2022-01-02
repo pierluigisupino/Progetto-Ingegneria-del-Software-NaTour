@@ -14,7 +14,7 @@ import java.util.Base64;
 
 public class ImageUploader {
 
-    private IterController controller;
+    private final IterController controller;
 
     public ImageUploader(IterController controller) {
         this.controller = controller;
@@ -46,10 +46,11 @@ public class ImageUploader {
                 .addBody(jsonObject.toString().getBytes())
                 .build();
 
-        Amplify.API.post(options,
+        Amplify.API.post(
+                options,
                 response-> controller.onItineraryInsertComplete(0),
-                error -> controller.onItineraryInsertComplete(1)
-                );
+                error -> {controller.onItineraryInsertComplete(1); Log.i("ERROR:", error.getMessage());}
+        );
 
     }
 

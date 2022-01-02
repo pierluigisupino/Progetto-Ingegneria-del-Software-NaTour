@@ -61,6 +61,7 @@ public class IterController extends Controller {
         loadingDialog = new LoadingDialog(addItineraryActivity);
         loadingDialog.startLoading();
         creator = new User(userDao.getCurrentUserId());
+        userDao.setCurrentUserName(creator);
         this.imagesBytes = imagesBytes;
         ArrayList<WayPoint> wayPointArrayList = new ArrayList<>();
         for(GeoPoint g : waypoints){
@@ -79,9 +80,9 @@ public class IterController extends Controller {
 
     }
 
-    public void onItineraryInsertSuccess(int iterID, String userName) {
+    public void onItineraryInsertSuccess(int iterID) {
 
-        creator.setName(userName);
+        iter.setIterId(iterID);
 
         if(imagesBytes.isEmpty())
             onItineraryInsertComplete(0);

@@ -1,7 +1,5 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
-import android.util.Log;
-
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -44,14 +42,13 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 .build();
 
 
-        Amplify.API.post(options,
+        Amplify.API.post(
+                options,
                 response -> {
                        try {
-                           JSONObject result = response.getData().asJSONObject();
-                           int id = Integer.parseInt(result.getString("iterID"));
-                           String userName = result.getString("userName");
-                           controller.onItineraryInsertSuccess(id, userName);
-                       }catch(NumberFormatException | JSONException e) {
+                           int i = Integer.parseInt(response.getData().asString());
+                           controller.onItineraryInsertSuccess(i);
+                       }catch(NumberFormatException e) {
                            controller.onItineraryInsertError();
                        }
                     },
