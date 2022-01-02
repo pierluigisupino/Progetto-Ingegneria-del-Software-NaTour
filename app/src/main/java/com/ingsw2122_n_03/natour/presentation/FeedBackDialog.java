@@ -25,7 +25,7 @@ public class FeedBackDialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        View view = inflater.inflate(R.layout.dialog_add_itinerary, null);
+        View view = inflater.inflate(R.layout.dialog_feedback, null);
 
         TimePicker timePicker = view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);

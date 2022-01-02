@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +29,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private IterController iterController;
 
     private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
 
-    private MainFragment mainFragment = new MainFragment();
-    private MessagesFragment messagesFragment = new MessagesFragment();
+    private final MainFragment mainFragment = new MainFragment();
+    private final MessagesFragment messagesFragment = new MessagesFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         MaterialToolbar materialToolbar = binding.toolbar;
         drawerLayout = binding.layout;
-        navigationView = binding.navView;
+        NavigationView navigationView = binding.navView;
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, materialToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -97,6 +97,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -104,21 +105,25 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         switch (item.getItemId()) {
+
             case R.id.home:
                 if (!mainFragment.isVisible()) {
                     fragmentTransaction.replace(R.id.fragmentContainer, mainFragment);
                     fragmentTransaction.commit();
                 }
                 break;
+
             case R.id.messages:
                 if (!messagesFragment.isVisible()) {
                     fragmentTransaction.replace(R.id.fragmentContainer, messagesFragment);
                     fragmentTransaction.commit();
                 }
                 break;
+
             case R.id.logout:
                 authController.signOut(this);
                 break;
+
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

@@ -119,6 +119,8 @@
     <string name="cancel_operation_title">Cancel Operation?</string>
     <string name="cancel_operation_msgText">All progress will be lost</string>
     <string name="search">Search...</string>
+    <string name="loading_screen_text">Uploading Itinerary...</string>
+    <string name="itinerary_insert_failure">Failed to upload Itinerary, try again.</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

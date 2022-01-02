@@ -61,6 +61,7 @@ public class AddItineraryActivity extends BaseActivity {
         setContentView(view);
 
         iterController = IterController.getInstance();
+        iterController.setAddItineraryActivity(this);
 
         layout = binding.layout;
         MaterialToolbar materialToolbar = binding.topAppBar;
