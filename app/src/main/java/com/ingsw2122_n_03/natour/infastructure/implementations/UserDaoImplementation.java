@@ -10,4 +10,5 @@ public final class UserDaoImplementation implements UserDaoInterface {
     public String getCurrentUserId() {
         return Amplify.Auth.getCurrentUser().getUserId();
     }
+
 }

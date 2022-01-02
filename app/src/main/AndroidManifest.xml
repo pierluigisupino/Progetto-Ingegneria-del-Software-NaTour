@@ -26,6 +26,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
         <activity
+            android:name=".presentation.ItineraryDetailActivity"
+            android:exported="false"
+            android:theme="@style/NoActionBar"/>
+        <activity
             android:name=".presentation.AddItineraryActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />

@@ -128,6 +128,8 @@ public class AddItineraryFragment3 extends Fragment {
 
     public ArrayList<byte[]> getImagesBytes(){
 
+        imagesBytes.clear();
+
         for(Bitmap bitmap : imagesBitmap) {
             new Thread(() -> imagesBytes.add(imageUtilities.createImageBytes(bitmap))).start();
         }
