@@ -6,4 +6,6 @@ public interface ItineraryDaoInterface {
 
     void postItinerary(Itinerary iter);
 
+    void getItineraries();
+
 }

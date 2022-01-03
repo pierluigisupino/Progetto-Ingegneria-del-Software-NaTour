@@ -23,7 +23,7 @@ public class MainFragment extends Fragment {
     private FragmentMainBinding binding;
     private RecyclerView recyclerView;
 
-    private ArrayList<Itinerary> itineraries;
+    private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
     public MainFragment() {}
 

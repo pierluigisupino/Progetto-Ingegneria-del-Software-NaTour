@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.util.Log;
+
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -54,6 +56,21 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                     },
 
                 error -> controller.onItineraryInsertError()
+        );
+
+    }
+
+    public void getItineraries() {
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/items/itineraries")
+                .build();
+
+
+        Amplify.API.get(
+                options,
+                response -> Log.i("RESPONSE", response.getData().asString()),
+                error -> Log.e("ERROR", error.getMessage())
         );
 
     }

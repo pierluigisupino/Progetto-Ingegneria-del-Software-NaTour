@@ -1,10 +1,11 @@
 package com.ingsw2122_n_03.natour.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 
-public class Itinerary {
+public class Itinerary implements Serializable {
 
     private String name;
     private String description;

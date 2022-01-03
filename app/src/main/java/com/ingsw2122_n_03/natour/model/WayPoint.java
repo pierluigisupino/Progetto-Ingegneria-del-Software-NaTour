@@ -1,6 +1,8 @@
 package com.ingsw2122_n_03.natour.model;
 
-public class WayPoint {
+import java.io.Serializable;
+
+public class WayPoint implements Serializable {
 
     private double latitude;
     private double longitude;
