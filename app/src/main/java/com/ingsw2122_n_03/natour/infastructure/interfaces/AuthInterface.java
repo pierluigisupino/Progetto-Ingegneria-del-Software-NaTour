@@ -15,5 +15,4 @@ public interface AuthInterface {
      void confirmResetPassword(String newPassword, String confirmationCode);
      void signOut();
 
-
 }

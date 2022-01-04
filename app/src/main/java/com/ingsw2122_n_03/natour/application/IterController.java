@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.application;
 
+import android.app.Activity;
+
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageUploader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ItineraryDaoImplementation;
@@ -33,8 +35,9 @@ public class IterController extends Controller {
     private final UserDaoInterface userDao;
     private final ImageUploader imageUploader;
 
-    private User creator;
-    private Itinerary iter;
+    private User currentUser;
+    private Itinerary currentIter;
+    private final ArrayList<Itinerary> itineraries = new ArrayList<>();
 
     private ArrayList<byte[]> imagesBytes;
 
@@ -55,34 +58,41 @@ public class IterController extends Controller {
 
     }
 
+    //@TODO RETRIEVE ITINERARIES FROM DB AND SHOW MAIN ACTIVITY
+    public void setUp(Activity callingActivity) {
+        itineraryDao.getItineraries();
+        goToActivityAndFinish(callingActivity, MainActivity.class);
+    }
 
     public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
 
         loadingDialog = new LoadingDialog(addItineraryActivity);
         loadingDialog.startLoading();
-        creator = new User(userDao.getCurrentUserId());
-        userDao.setCurrentUserName(creator);
+
+        currentUser = new User(userDao.getCurrentUserId());
+        userDao.setCurrentUserName(currentUser);
+
         this.imagesBytes = imagesBytes;
         ArrayList<WayPoint> wayPointArrayList = new ArrayList<>();
         for(GeoPoint g : waypoints){
             wayPointArrayList.add(new WayPoint(g.getLatitude(), g.getLongitude()));
         }
-        iter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), creator);
+        currentIter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), currentUser);
         wayPointArrayList.remove(0);
 
         if(description.length() > 0)
-           iter.setDescription(description);
+           currentIter.setDescription(description);
 
         if(!wayPointArrayList.isEmpty())
-            iter.setWayPoints(wayPointArrayList);
+            currentIter.setWayPoints(wayPointArrayList);
 
-        itineraryDao.postItinerary(iter);
+        itineraryDao.postItinerary(currentIter);
 
     }
 
     public void onItineraryInsertSuccess(int iterID) {
 
-        iter.setIterId(iterID);
+        currentIter.setIterId(iterID);
 
         if(imagesBytes.isEmpty())
             onItineraryInsertComplete(0);
@@ -104,10 +114,10 @@ public class IterController extends Controller {
 
         //@TODO CHANGE TO MAP<STRING, OBJECT>
         HashMap<String, String> map = new HashMap<>();
-        map.put("name", iter.getName());
-        map.put("hours", String.valueOf(iter.getHoursDuration()));
-        map.put("creator", creator.getName());
-        map.put("minutes", String.valueOf(iter.getMinutesDuration()));
+        map.put("name", currentIter.getName());
+        map.put("hours", String.valueOf(currentIter.getHoursDuration()));
+        map.put("creator", currentUser.getName());
+        map.put("minutes", String.valueOf(currentIter.getMinutesDuration()));
 
         if(response == 0)
             goToActivityAndFinish(addItineraryActivity, ItineraryDetailActivity.class, map);
@@ -115,6 +125,11 @@ public class IterController extends Controller {
             goToActivityAndFinish(addItineraryActivity, MainActivity.class);
 
     }
+
+
+    /**********
+     * SETTERS
+     **********/
 
 
     public void setMainActivity(MainActivity mainActivity) {

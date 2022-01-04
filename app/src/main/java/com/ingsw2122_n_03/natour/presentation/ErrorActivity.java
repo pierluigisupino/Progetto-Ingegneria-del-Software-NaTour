@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
-import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.databinding.ActivityErrorBinding;
 
 public class ErrorActivity extends AppCompatActivity {
@@ -18,8 +18,12 @@ public class ErrorActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        AuthController authController = AuthController.getInstance();
-        authController.setErrorActivity(ErrorActivity.this);
+        Button exitButton = binding.exitButton;
+        exitButton.setOnClickListener(v -> {
+            finish();
+            System.exit(1);
+        });
 
     }
+
 }

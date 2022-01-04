@@ -98,7 +98,7 @@
         app:layout_constraintTop_toTopOf="@+id/imageBottomGuideline" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/exitButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_dark_background"

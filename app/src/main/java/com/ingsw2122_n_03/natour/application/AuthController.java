@@ -7,7 +7,6 @@ import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyAuthImplem
 import com.ingsw2122_n_03.natour.infastructure.interfaces.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.ForgotPasswordActivity;
-import com.ingsw2122_n_03.natour.presentation.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.ResetPasswordActivity;
 import com.ingsw2122_n_03.natour.presentation.SignInActivity;
 import com.ingsw2122_n_03.natour.presentation.SignUpActivity;
@@ -22,7 +21,6 @@ public final class AuthController extends Controller {
     private static AuthController instance = null;
     private final AuthInterface authInterface;
 
-    private ErrorActivity errorActivity;
     private WelcomeActivity welcomeActivity;
     private SplashActivity splashActivity;
     private SignUpActivity signUpActivity;
@@ -45,7 +43,8 @@ public final class AuthController extends Controller {
     public void setUp() {
         if(authInterface.configurePlugins(splashActivity)) {
             if (authInterface.checkUserLogged()) {
-                goToActivityAndFinish(splashActivity, MainActivity.class);
+                IterController iterController = IterController.getInstance();
+                iterController.setUp(splashActivity);
             } else {
                 goToActivityAndFinish(splashActivity, WelcomeActivity.class);
             }
@@ -62,16 +61,24 @@ public final class AuthController extends Controller {
     }
 
     public void onSignInSuccess() {
+
+        Activity callingActivity = null;
+
         if(signInActivity != null){
             signInActivity.onSuccess(signInActivity.getResources().getString(R.string.login_success));
-            goToActivityAndFinish(signInActivity, MainActivity.class);
+            callingActivity = signInActivity;
         }
 
         if(verifyAccountActivity != null) {
-            goToActivityAndFinish(verifyAccountActivity, MainActivity.class);
+            if(callingActivity != null) callingActivity.finish();
+            callingActivity = verifyAccountActivity;
         }
 
         if(welcomeActivity != null) welcomeActivity.finish();
+
+        IterController iterController = IterController.getInstance();
+        iterController.setUp(callingActivity);
+
     }
 
     public void onLoginFailure(int errorCode) {
@@ -218,9 +225,10 @@ public final class AuthController extends Controller {
         //mainActivity.onFail(welcomeActivity.getResources().getString(R.string.generic_error));
     }
 
-    public void setErrorActivity(ErrorActivity errorActivity) {
-        this.errorActivity = errorActivity;
-    }
+
+    /**********
+     * SETTERS
+     **********/
 
     public void setSignInActivity(SignInActivity signInActivity) {
         this.signInActivity = signInActivity;
@@ -249,4 +257,5 @@ public final class AuthController extends Controller {
     public void setResetPasswordActivity(ResetPasswordActivity resetPasswordActivity){
         this.resetPasswordActivity = resetPasswordActivity;
     }
+
 }
