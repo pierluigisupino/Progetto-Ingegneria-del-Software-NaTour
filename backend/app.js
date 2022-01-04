@@ -43,6 +43,30 @@ app.use(function(req, res, next) {
     next()
 });
 
+
+/**********************
+ * get methods *
+ **********************/
+ 
+ 
+app.get('/items/itineraries', function(req, res) {
+  
+  client.connect();
+  
+  client.query('SELECT * FROM ITINERARY', (err, data) => {
+    
+    if(err) {
+      client.end();
+      return res.json({Error : err.stack});
+    }else {
+      client.end();
+      return res.json(data.rows);
+    }
+  });
+  
+});
+
+
 app.get('/items/user', async function(req, res) {
   
   await checkCredentials()
@@ -53,41 +77,28 @@ app.get('/items/user', async function(req, res) {
     };
     cognito.adminGetUser(params, function(err, data) {
         if (err)
-            res.json({
+            return res.json({
                 Error: err
             })
         else
-            var x = data.UserAttributes[2];
-        res.json({
-            Success: x.Value
-        })
+         
+        return res.json(
+            (data.UserAttributes[2]).Value
+        );
     });
 
 });
 
-app.post('/items/user', async function(req, res) {
-  
-  await checkCredentials()
-  
-  client.connect();
-  
-  var query = 'INSERT INTO ENDUSER VALUES (\'' + req.body.email + '\',\'' + req.body.name + '\')';
-  
-  client.query(query, (err, suc) => {
-    if (err) {
-      client.end();
-      res.json(err);
-    } else {
-      client.end();
-      res.json(suc);
-    }
-  })
-});
+
+/****************************
+* post methods *
+****************************/
 
 app.post('/items/itineraries', function(req, res) {
   
   var startPoint = JSON.parse(req.body.startPoint);
   var waypoints = req.body.waypoints;
+  
   
   if(waypoints != null){
     waypoints = JSON.parse(waypoints);
@@ -95,10 +106,10 @@ app.post('/items/itineraries', function(req, res) {
   
   client.connect();
   
-  var query = 'INSERT INTO ITINERARY(iterName, description, difficulty, hours, minutes, startPoint, creator, waypoints) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING IterID';
+  var query = 'INSERT INTO ITINERARY(iterName, description, difficulty, hours, minutes, startPoint, waypoints, creatorID, shareDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING IterID';
   
   client.query(query, [req.body.name, req.body.iterDescription, req.body.difficulty, req.body.hours, req.body.minutes, 
-  '('+startPoint.Latitude+','+startPoint.Longitude+')', req.body.creator, waypoints] ,(err, suc) => {
+  '('+startPoint.Latitude+','+startPoint.Longitude+')', waypoints, req.body.creator, new Date()] ,(err, suc) => {
     
     if(err) {
       
@@ -122,49 +133,52 @@ app.post('/items/itineraries', function(req, res) {
           
           client.query('DELETE FROM ITINERARY WHERE IterID = '+iterID, function(error, succeed){});
           client.end();
-          return res.json({error: err.stack}); 
+          return res.json({Error: err.stack}); 
           
         }else {
           
           client.end();
           return res.json(iterID);
-          
+              
         }
       });
+      
     }
   });
   
 });
 
+
 app.post('/items/photos', function(req, res) {
-
-    var iterID = req.body.iterID;
-    var bucketName = 'natour-images-' + iterID;
-    var count = req.body.photo_count;
+  
+  var bucketName = 'natour-images-'+req.body.iterID;
+  var count = req.body.photo_count;
+  
+  for(let i = 0; i < count; i++){
     
-    for (let i = 0; i < count; i++) {
-        var filename = Math.random().toString(36).slice(2);
-        var photoBody = 'photo' + i;
-        var uploadParams = {
-            Bucket: bucketName,
-            Key: filename,
-            Body: req.body[photoBody],
-            ContentEncoding: 'base64'
-        };
-
-        s3.putObject(uploadParams, (err, dataUp) => {
-            if (err) {
-                return res.json({
-                    error: err.stack
-                });
-                
-            }
-        });
-    }
+    var filename = Math.random().toString(36).slice(2);
+    var photoBody = 'photo'+i;
     
-    return res.json();
-
+    var uploadParams = {
+      Bucket: bucketName, 
+      Key: filename, 
+      Body: req.body[photoBody],
+      ContentEncoding: 'base64'
+    };
+    
+    s3.putObject(uploadParams, (err, dataUp) => {
+      if (err){
+        return res.json({Error: err.stack});
+      }
+    });
+  } 
+  
 });
+
+
+/****************************
+****************************/
+
 
 app.listen(3000, function() {
     console.log("App started")
