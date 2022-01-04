@@ -33,16 +33,23 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
+        }
+
         recyclerView = binding.itinerary;
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);

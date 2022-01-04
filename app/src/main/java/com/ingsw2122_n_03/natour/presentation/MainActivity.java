@@ -1,6 +1,7 @@
 package com.ingsw2122_n_03.natour.presentation;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +31,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private DrawerLayout drawerLayout;
 
-    private final MainFragment mainFragment = new MainFragment();
+    private MainFragment mainFragment;
     private final MessagesFragment messagesFragment = new MessagesFragment();
 
     @Override
@@ -40,12 +41,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         View view = binding.getRoot();
         setContentView(view);
 
+        this.mainFragment = new MainFragment();
+
+        Intent intent = getIntent();
+        if(intent.hasExtra("itineraries")) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("itineraries", intent.getSerializableExtra("itineraries"));
+            mainFragment.setArguments(bundle);
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainer, new MainFragment());
+        fragmentTransaction.replace(R.id.fragmentContainer, mainFragment);
         fragmentTransaction.commit();
 
         authController = AuthController.getInstance();
+        authController.setMainActivity(this);
+
         iterController = IterController.getInstance();
         iterController.setMainActivity(this);
 
@@ -121,7 +133,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.logout:
-                authController.signOut(this);
+                authController.signOut();
                 break;
 
         }

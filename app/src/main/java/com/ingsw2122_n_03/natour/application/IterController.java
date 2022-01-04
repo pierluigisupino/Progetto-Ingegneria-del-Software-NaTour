@@ -19,7 +19,6 @@ import com.ingsw2122_n_03.natour.presentation.MainActivity;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class IterController extends Controller {
@@ -37,7 +36,7 @@ public class IterController extends Controller {
 
     private User currentUser;
     private Itinerary currentIter;
-    private final ArrayList<Itinerary> itineraries = new ArrayList<>();
+    private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
     private ArrayList<byte[]> imagesBytes;
 
@@ -59,9 +58,16 @@ public class IterController extends Controller {
     }
 
     //@TODO RETRIEVE ITINERARIES FROM DB AND SHOW MAIN ACTIVITY
-    public void setUp(Activity callingActivity) {
-        itineraryDao.getItineraries();
+    public void setUpItineraries(Activity callingActivity) {
+        //itineraryDao.getItineraries(callingActivity);
+        //WAIT RETRIEVAL OF ITINERARIES AND CHANGE ACTIVITY
         goToActivityAndFinish(callingActivity, MainActivity.class);
+    }
+
+    //@TODO PASS ITINERARIES TO MAIN FRAGMENT
+    public void onSetUpSuccess(ArrayList<Itinerary> itineraries, Activity callingActivity) {
+        this.itineraries = itineraries;
+        goToActivityItineraries(callingActivity, MainActivity.class, itineraries);
     }
 
     public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
@@ -111,18 +117,15 @@ public class IterController extends Controller {
     public void onItineraryInsertComplete(int response) {
 
         loadingDialog.dismissDialog();
+        itineraries.add(currentIter);
 
-        //@TODO CHANGE TO MAP<STRING, OBJECT>
-        HashMap<String, String> map = new HashMap<>();
-        map.put("name", currentIter.getName());
-        map.put("hours", String.valueOf(currentIter.getHoursDuration()));
-        map.put("creator", currentUser.getName());
-        map.put("minutes", String.valueOf(currentIter.getMinutesDuration()));
+        goToActivityItineraries(addItineraryActivity, MainActivity.class, itineraries);
+        //OR (TO IMPLEMENT METHOD)
+        //goToActivityAndFinish(addItineraryActivity, ItineraryDetailActivity.class, currentIter);
 
-        if(response == 0)
-            goToActivityAndFinish(addItineraryActivity, ItineraryDetailActivity.class, map);
-        else
-            goToActivityAndFinish(addItineraryActivity, MainActivity.class);
+        //photos inserted?
+        if(response != 0)
+            mainActivity.onFail("Itinerary inserted but photo uploading failed"); //CREATE STRING RES
 
     }
 

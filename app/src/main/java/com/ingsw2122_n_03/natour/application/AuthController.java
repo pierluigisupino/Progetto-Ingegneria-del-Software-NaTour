@@ -7,6 +7,7 @@ import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyAuthImplem
 import com.ingsw2122_n_03.natour.infastructure.interfaces.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.ForgotPasswordActivity;
+import com.ingsw2122_n_03.natour.presentation.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.ResetPasswordActivity;
 import com.ingsw2122_n_03.natour.presentation.SignInActivity;
 import com.ingsw2122_n_03.natour.presentation.SignUpActivity;
@@ -28,6 +29,7 @@ public final class AuthController extends Controller {
     private VerifyAccountActivity verifyAccountActivity;
     private ForgotPasswordActivity forgotPasswordActivity;
     private ResetPasswordActivity resetPasswordActivity;
+    private MainActivity mainActivity;
 
     private AuthController() {
         authInterface = new AmplifyAuthImplementation(this);
@@ -44,7 +46,7 @@ public final class AuthController extends Controller {
         if(authInterface.configurePlugins(splashActivity)) {
             if (authInterface.checkUserLogged()) {
                 IterController iterController = IterController.getInstance();
-                iterController.setUp(splashActivity);
+                iterController.setUpItineraries(splashActivity);
             } else {
                 goToActivityAndFinish(splashActivity, WelcomeActivity.class);
             }
@@ -77,7 +79,7 @@ public final class AuthController extends Controller {
         if(welcomeActivity != null) welcomeActivity.finish();
 
         IterController iterController = IterController.getInstance();
-        iterController.setUp(callingActivity);
+        iterController.setUpItineraries(callingActivity);
 
     }
 
@@ -212,17 +214,15 @@ public final class AuthController extends Controller {
         }
     }
 
-    public void signOut(Activity callingActivity){
-        authInterface.signOut();
-        goToActivityAndFinish(callingActivity, WelcomeActivity.class);
-    }
+    public void signOut(){ authInterface.signOut(); }
 
     public void onSignOutSuccess(){
-        //mainActivity.onSuccess(welcomeActivity.getResources().getString(R.string.logout_success));
+        mainActivity.onSuccess(welcomeActivity.getResources().getString(R.string.logout_success));
+        goToActivityAndFinish(mainActivity, WelcomeActivity.class);
     }
 
     public void onSignOutFailure() {
-        //mainActivity.onFail(welcomeActivity.getResources().getString(R.string.generic_error));
+        mainActivity.onFail(welcomeActivity.getResources().getString(R.string.generic_error));
     }
 
 
@@ -256,6 +256,10 @@ public final class AuthController extends Controller {
 
     public void setResetPasswordActivity(ResetPasswordActivity resetPasswordActivity){
         this.resetPasswordActivity = resetPasswordActivity;
+    }
+
+    public void setMainActivity(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
     }
 
 }

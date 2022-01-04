@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.amplifyframework.api.rest.RestOptions;
@@ -60,12 +61,11 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
     }
 
-    public void getItineraries() {
+    public void getItineraries(Activity callingActivity) {
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/itineraries")
                 .build();
-
 
         Amplify.API.get(
                 options,

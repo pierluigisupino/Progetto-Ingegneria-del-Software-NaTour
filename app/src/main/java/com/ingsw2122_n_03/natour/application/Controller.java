@@ -3,6 +3,9 @@ package com.ingsw2122_n_03.natour.application;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.ingsw2122_n_03.natour.model.Itinerary;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Controller {
@@ -39,6 +42,15 @@ public class Controller {
 
         source.startActivity(intent);
         source.finish();
+    }
+
+    public void goToActivityItineraries(Activity source, Class<?> destination, ArrayList<Itinerary> itineraries) {
+
+        Intent intent = new Intent(source, destination);
+        intent.putExtra("itineraries", itineraries);
+        source.startActivity(intent);
+        source.finish();
+
     }
     
 }
