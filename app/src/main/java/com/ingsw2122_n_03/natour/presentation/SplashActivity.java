@@ -2,17 +2,16 @@ package com.ingsw2122_n_03.natour.presentation;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.databinding.ActivitySplashBinding;
-import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
+
 
 @SuppressLint("CustomSplashScreen")
-public class SplashActivity extends BaseActivity {
-
-    private AuthController authController;
+public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,16 +20,10 @@ public class SplashActivity extends BaseActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        authController = AuthController.getInstance();
+        AuthController authController = AuthController.getInstance();
         authController.setSplashActivity(SplashActivity.this);
+        authController.setUp();
 
-        final Handler handler = new Handler();
-        handler.postDelayed(() -> authController.setUp(), 800);
     }
 
-    @Override
-    public void onSuccess(String msg) { }
-
-    @Override
-    public void onFail(String msg) { }
 }

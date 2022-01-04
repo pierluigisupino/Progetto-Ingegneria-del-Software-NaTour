@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -28,7 +29,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     }
 
     @Override
-    public boolean configurePlugins(BaseActivity callingActivity) {
+    public boolean configurePlugins(Activity callingActivity) {
         try {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());

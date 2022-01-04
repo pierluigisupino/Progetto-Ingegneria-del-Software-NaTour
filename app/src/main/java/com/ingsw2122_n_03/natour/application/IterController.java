@@ -12,6 +12,7 @@ import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
 import com.ingsw2122_n_03.natour.presentation.AddItineraryActivity;
+import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.ItineraryDetailActivity;
 import com.ingsw2122_n_03.natour.presentation.LoadingDialog;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
@@ -58,16 +59,21 @@ public class IterController extends Controller {
     }
 
     //@TODO RETRIEVE ITINERARIES FROM DB AND SHOW MAIN ACTIVITY
-    public void setUpItineraries(Activity callingActivity) {
+    public void setUp(Activity callingActivity) {
         //itineraryDao.getItineraries(callingActivity);
         //WAIT RETRIEVAL OF ITINERARIES AND CHANGE ACTIVITY
-        goToActivityAndFinish(callingActivity, MainActivity.class);
+        goToActivityItineraries(callingActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
     //@TODO PASS ITINERARIES TO MAIN FRAGMENT
     public void onSetUpSuccess(ArrayList<Itinerary> itineraries, Activity callingActivity) {
         this.itineraries = itineraries;
         goToActivityItineraries(callingActivity, MainActivity.class, itineraries);
+    }
+
+    public void onSetUpError(Activity callingActivity) {
+        //MAYBE ANOTHER TRY?
+        goToActivityAndFinish(callingActivity, ErrorActivity.class);
     }
 
     public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {

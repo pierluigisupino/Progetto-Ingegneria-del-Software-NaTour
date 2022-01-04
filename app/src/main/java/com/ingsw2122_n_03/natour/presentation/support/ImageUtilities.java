@@ -44,7 +44,7 @@ public class ImageUtilities {
 
     }
 
-
+    //@TODO VERIFY SYNC
     private void isImageSafe(Bitmap image, ArrayList<Bitmap> bitmapArray){
 
         Amplify.Predictions.identify(
@@ -54,6 +54,7 @@ public class ImageUtilities {
                     IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
                     if(!identifyResult.isUnsafeContent())
                         bitmapArray.add(image);
+                        /** Set Adapter here is a good choice? **/
                 },
                 error -> { }
         );

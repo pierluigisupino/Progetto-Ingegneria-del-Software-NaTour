@@ -48,8 +48,8 @@ public class ImageUploader {
 
         Amplify.API.post(
                 options,
-                response-> controller.onItineraryInsertComplete(0),
-                error -> {controller.onItineraryInsertComplete(1); Log.i("ERROR:", error.getMessage());}
+                response-> {controller.onItineraryInsertComplete(0); Log.i("RESPONSE", response.getData().asString());},
+                error -> {controller.onItineraryInsertComplete(1); Log.e("ERROR:", error.getMessage());}
         );
 
     }

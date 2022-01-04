@@ -31,14 +31,6 @@ public class Itinerary implements Serializable {
         this.creator = creator;
     }
 
-    public Itinerary(String name, String difficulty, int hours, int minutes, int id) {
-        this.name = name;
-        this.difficulty = difficulty;
-        hoursDuration = hours;
-        setMinutesDuration(minutes);
-        iterId = id;
-    }
-
     /**GETTERS
        &
     SETTERS

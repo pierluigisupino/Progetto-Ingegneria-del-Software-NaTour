@@ -46,7 +46,7 @@ public final class AuthController extends Controller {
         if(authInterface.configurePlugins(splashActivity)) {
             if (authInterface.checkUserLogged()) {
                 IterController iterController = IterController.getInstance();
-                iterController.setUpItineraries(splashActivity);
+                iterController.setUp(splashActivity);
             } else {
                 goToActivityAndFinish(splashActivity, WelcomeActivity.class);
             }
@@ -79,7 +79,7 @@ public final class AuthController extends Controller {
         if(welcomeActivity != null) welcomeActivity.finish();
 
         IterController iterController = IterController.getInstance();
-        iterController.setUpItineraries(callingActivity);
+        iterController.setUp(callingActivity);
 
     }
 
