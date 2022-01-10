@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -26,7 +27,10 @@ import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
@@ -86,15 +90,18 @@ public class AddItineraryFragment3 extends Fragment {
                                 for (int i = 0; (i < clipData.getItemCount()) & (imagesBitmap.size() < photoCount); i++) {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
 
-                                    // TODO: 10/01/2022 codice per testare da cambiare
-                                    imageUtilities.getImageLocation(getActivity(), imageUri);
-
                                     try {
-                                        imageUtilities.addImageBitmap(imageUri, requireContext(), imagesBitmap);
-                                    } catch (IOException e) {
+
+                                        byte[] inputData = imageUtilities.getBytes(getActivity(), imageUri);
+                                        imagesBytes.add(inputData);
+                                        imageUtilities.getImageLocation(getActivity(), inputData);
+                                        imagesBitmap.add(imageUtilities.getImageBitmap(inputData));
+
+                                    }catch (IOException e) {
                                         addItineraryActivity.onFail(getString(R.string.generic_error));
                                         break;
                                     }
+
                                 }
 
                             }else if(imagesBitmap.size() == photoCount){
@@ -130,13 +137,18 @@ public class AddItineraryFragment3 extends Fragment {
         recyclerView.setAdapter(new ImageAdapter(countImageTextView, imagesBitmap));
     }
 
+
+
     public ArrayList<byte[]> getImagesBytes(){
 
-        imagesBytes.clear();
+        /*imagesBytes.clear();
 
         for(Bitmap bitmap : imagesBitmap) {
-            new Thread(() -> imagesBytes.add(imageUtilities.createImageBytes(bitmap))).start();
-        }
+            new Thread(() -> {
+                imagesBytes.add(imageUtilities.createImageBytes(bitmap));
+                imageUtilities.getImageLocation(getActivity(), imagesBytes.get(0));
+            }).start();
+        }*/
 
         return this.imagesBytes;
 

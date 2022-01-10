@@ -2,21 +2,26 @@ package com.ingsw2122_n_03.natour.presentation.support;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.predictions.models.LabelType;
 import com.amplifyframework.predictions.result.IdentifyLabelsResult;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
+import com.drew.lang.ByteArrayReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,30 +30,23 @@ import java.util.ArrayList;
 public class ImageUtilities {
 
 
-    public void addImageBitmap(Uri imageUri, Context context, ArrayList<Bitmap> bitmapArray) throws IOException{
-
-        Bitmap bitmap;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-            bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), imageUri));
-        else
-            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
-
-        //isImageSafe(bitmap, bitmapArray);
-        bitmapArray.add(bitmap);
+    //@TODO IMAGE SAFE
+    public Bitmap getImageBitmap(byte[] bytes) {
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
+    public byte[] getBytes(Context context, Uri imageUri) throws IOException {
 
-    public byte[] createImageBytes(Bitmap imageBitmap){
+        InputStream iStream = context.getContentResolver().openInputStream(imageUri);
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byte[] bytes;
+        byte[] buffer = new byte[1024];
+        int len;
 
-        imageBitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
-        bytes = byteArrayOutputStream.toByteArray();
-
-        return bytes;
-
+        while ((len = iStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 
     /* TODO: 10/01/2022
@@ -56,7 +54,7 @@ public class ImageUtilities {
         - Uri deve essere sostituito da byte[] lo stesso che verrà inserito nel db
         - le coordinate sono recuperate nel formato DMS (vedi log) devono essere convertite in double */
 
-    public String[] getImageLocation(Context context, Uri uri){
+    public String[] getImageLocation(Context context, byte[] bytes)  {
 
         String[] coordinates = new String[2];
 
@@ -66,9 +64,11 @@ public class ImageUtilities {
         String longitude = "";
 
         try {
-            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            //InputStream inputStream = context.getContentResolver().openInputStream(uri);
 
-            Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
+            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+            Metadata metadata = ImageMetadataReader.readMetadata(bis);
+
 
             for (Directory directory : metadata.getDirectories()) {
 
@@ -125,5 +125,6 @@ public class ImageUtilities {
                 error -> { }
         );
     }
+
 
 }

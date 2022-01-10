@@ -63,8 +63,8 @@ public class IterController extends Controller {
 
     //@TODO RETRIEVE ITINERARIES FROM DB AND SHOW MAIN ACTIVITY
     public void setUp() {
-        itineraryDao.getItineraries();
-        //goToActivityItineraries(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
+        //itineraryDao.getItineraries();
+        goToActivityItineraries(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
     //@TODO PASS ITINERARIES TO MAIN FRAGMENT
