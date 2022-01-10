@@ -1,7 +1,5 @@
 package com.ingsw2122_n_03.natour.application;
 
-import android.app.Activity;
-
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageUploader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ItineraryDaoImplementation;
@@ -16,6 +14,7 @@ import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.ItineraryDetailActivity;
 import com.ingsw2122_n_03.natour.presentation.LoadingDialog;
 import com.ingsw2122_n_03.natour.presentation.MainActivity;
+import com.ingsw2122_n_03.natour.presentation.SplashActivity;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -26,6 +25,7 @@ public class IterController extends Controller {
 
     private static IterController instance = null;
 
+    private SplashActivity splashActivity;
     private MainActivity mainActivity;
     private AddItineraryActivity addItineraryActivity;
     private LoadingDialog loadingDialog;
@@ -59,21 +59,20 @@ public class IterController extends Controller {
     }
 
     //@TODO RETRIEVE ITINERARIES FROM DB AND SHOW MAIN ACTIVITY
-    public void setUp(Activity callingActivity) {
-        //itineraryDao.getItineraries(callingActivity);
-        //WAIT RETRIEVAL OF ITINERARIES AND CHANGE ACTIVITY
-        goToActivityItineraries(callingActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
+    public void setUp() {
+        itineraryDao.getItineraries();
+        //goToActivityItineraries(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
     //@TODO PASS ITINERARIES TO MAIN FRAGMENT
-    public void onSetUpSuccess(ArrayList<Itinerary> itineraries, Activity callingActivity) {
+    public void onSetUpSuccess(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
-        goToActivityItineraries(callingActivity, MainActivity.class, itineraries);
+        goToActivityItineraries(splashActivity, MainActivity.class, itineraries);
     }
 
-    public void onSetUpError(Activity callingActivity) {
+    public void onSetUpError() {
         //MAYBE ANOTHER TRY?
-        goToActivityAndFinish(callingActivity, ErrorActivity.class);
+        goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
 
     public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
@@ -129,7 +128,7 @@ public class IterController extends Controller {
         //OR (TO IMPLEMENT METHOD)
         //goToActivityAndFinish(addItineraryActivity, ItineraryDetailActivity.class, currentIter);
 
-        //photos inserted?
+        //photos inserted? TODO
         if(response != 0)
             mainActivity.onFail("Itinerary inserted but photo uploading failed"); //CREATE STRING RES
 
@@ -140,6 +139,7 @@ public class IterController extends Controller {
      * SETTERS
      **********/
 
+    public void setSplashActivity(SplashActivity splashActivity) { this.splashActivity = splashActivity; }
 
     public void setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;

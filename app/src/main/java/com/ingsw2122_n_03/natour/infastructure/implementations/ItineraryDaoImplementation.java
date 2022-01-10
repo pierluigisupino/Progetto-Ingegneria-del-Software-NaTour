@@ -1,6 +1,5 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
-import android.app.Activity;
 import android.util.Log;
 
 import com.amplifyframework.api.rest.RestOptions;
@@ -69,7 +68,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
     }
 
     /** CODE REVIEW & ADD SHARE DATE TO GET **/
-    public void getItineraries(Activity callingActivity) {
+    public void getItineraries() {
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/itineraries")
@@ -80,6 +79,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                 response -> {
 
+                    Log.i("RESPONSE", response.getData().asString());
                     ArrayList<Itinerary> iters = new ArrayList<>();
 
                     try {
@@ -128,17 +128,19 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                             iters.add(iter);
 
+
                         }
 
-                    } catch (JSONException e) {
-                        controller.onSetUpError(callingActivity);
-                    }
+                        controller.onSetUpSuccess(iters);
 
-                    controller.onSetUpSuccess(iters, callingActivity);
+
+                    } catch (JSONException e) {
+                        controller.onSetUpError();
+                    }
 
                 },
 
-                error -> controller.onSetUpError(callingActivity)
+                error -> {controller.onSetUpError(); Log.i("Error", error.getMessage());}
 
         );
 
