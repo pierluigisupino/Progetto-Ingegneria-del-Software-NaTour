@@ -20,6 +20,8 @@ import com.drew.lang.ByteArrayReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.presentation.AddItineraryActivity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -54,17 +56,19 @@ public class ImageUtilities {
         - Uri deve essere sostituito da byte[] lo stesso che verrà inserito nel db
         - le coordinate sono recuperate nel formato DMS (vedi log) devono essere convertite in double */
 
-    public String[] getImageLocation(Context context, byte[] bytes)  {
+    public ArrayList<Double> getImageLocation(Context context, byte[] bytes)  {
 
-        String[] coordinates = new String[2];
+        ArrayList<Double> coordinates = new ArrayList<>();
 
         String latitudeRef = "";
         String latitude = "";
         String longitudeRef = "";
         String longitude = "";
 
+        double dLatitude;
+        double dLongitude;
+
         try {
-            //InputStream inputStream = context.getContentResolver().openInputStream(uri);
 
             ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
             Metadata metadata = ImageMetadataReader.readMetadata(bis);
@@ -93,15 +97,34 @@ public class ImageUtilities {
                 }
             }
 
-            coordinates[0] = latitude + " " + latitudeRef;
-            coordinates[1] = longitude + " " + longitudeRef;
+            double latitudeDegrees = Double.parseDouble(latitude.substring(0,(latitude.indexOf("° "))));
+            double latitudeMinutes = Double.parseDouble(latitude.substring((latitude.indexOf("° "))+1,(latitude.indexOf("'"))));
+            double latitudeSeconds = Double.parseDouble(latitude.substring((latitude.indexOf("'"))+1,latitude.indexOf('"')));
 
-            Log.i("Coordinates", "Latitude: " + coordinates[0] + " Longitude: " + coordinates[1]);
+            double longitudeDegrees = Double.parseDouble(longitude.substring(0,(longitude.indexOf("° "))));
+            double longitudeMinutes = Double.parseDouble(longitude.substring((longitude.indexOf("° "))+1,(longitude.indexOf("'"))));
+            double longitudeSeconds = Double.parseDouble(longitude.substring((longitude.indexOf("'"))+1,longitude.indexOf('"')));
+
+            dLatitude = latitudeDegrees + ( ((latitudeMinutes * 60) + latitudeSeconds) / 3600);
+            dLongitude = longitudeDegrees + (((longitudeMinutes * 60) + longitudeSeconds) / 3600);
+
+            if(latitudeRef.equals("S")){
+                dLatitude = -dLatitude;
+            }
+
+            if(longitudeRef.equals("W")){
+                dLongitude = -dLongitude;
+            }
+
+            coordinates.add(dLatitude);
+            coordinates.add(dLongitude);
+
+            Log.i("Coordinates", "Latitude: " + dLatitude + " Longitude: " + dLongitude);
 
             return  coordinates;
 
         } catch (ImageProcessingException | IOException e) {
-            e.printStackTrace();
+            ((AddItineraryActivity) context).onFail(context.getString(R.string.generic_error));
         }
 
         return coordinates;
