@@ -93,11 +93,8 @@ public class ImageUtilities {
                 }
             }
 
-            String mLatitude = latitude + latitudeRef;
-            String mLongitude = longitude + longitudeRef;
-
-            coordinates[0] = mLatitude;
-            coordinates[1] = mLongitude;
+            coordinates[0] = latitude + " " + latitudeRef;
+            coordinates[1] = longitude + " " + longitudeRef;
 
             Log.i("Coordinates", "Latitude: " + coordinates[0] + " Longitude: " + coordinates[1]);
 
