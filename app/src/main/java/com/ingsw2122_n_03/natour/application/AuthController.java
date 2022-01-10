@@ -42,6 +42,11 @@ public final class AuthController extends Controller {
         return instance;
     }
 
+
+    /*********
+     * SET UP
+     *********/
+
     public void setUp() {
         if(authInterface.configurePlugins(splashActivity)) {
 
@@ -57,6 +62,10 @@ public final class AuthController extends Controller {
         goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
 
+
+    /**********
+     * SIGN IN
+     **********/
 
     public void signIn(String email, String password) {
         authInterface.signIn(email, password);
@@ -98,6 +107,10 @@ public final class AuthController extends Controller {
         goToActivity(signInActivity, VerifyAccountActivity.class, extras);
     }
 
+
+    /**********
+     * SIGN UP
+     **********/
 
     public void signUp(String name, String email, String password) {
         authInterface.signUp(name, email, password);
@@ -156,17 +169,26 @@ public final class AuthController extends Controller {
         }
     }
 
+    /***********************
+     * SOCIAL PROVIDER LOGIN
+     **********************/
+
     public void loginWithGoogle(){
         authInterface.loginWithGoogle(welcomeActivity);
     }
 
     public void onLoginWithGoogleSuccess(){
-        welcomeActivity.onFail(welcomeActivity.getResources().getString(R.string.login_success));
+        welcomeActivity.onSuccess(welcomeActivity.getResources().getString(R.string.login_success));
     }
 
     public void onLoginWithGoogleFailure() {
         welcomeActivity.onFail(welcomeActivity.getResources().getString(R.string.generic_error));
     }
+
+
+    /*****************
+     * RESET PASSWORD
+     ****************/
 
     public void resetPassword(String username){
         authInterface.resetPassword(username);
@@ -212,6 +234,11 @@ public final class AuthController extends Controller {
             resetPasswordActivity.onFail(resetPasswordActivity.getResources().getString(R.string.generic_error));
         }
     }
+
+
+    /**********
+     * SIGN OUT
+     **********/
 
     public void signOut(){ authInterface.signOut(); }
 

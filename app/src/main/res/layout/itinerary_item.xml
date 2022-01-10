@@ -15,7 +15,25 @@
         android:layout_marginTop="10dp"/>
 
     <TextView
-        android:id="@+id/creator_textView"
+        android:id="@+id/date_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/euclid_circular_medium"
+        android:textSize="18sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/difficulty_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/euclid_circular_medium"
+        android:textSize="18sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/duration_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/euclid_circular_medium"

@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 
+
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.ItineraryViewHolder>{
@@ -37,9 +39,19 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
 
     @Override
     public void onBindViewHolder(@NonNull ItineraryViewHolder holder, int position) {
+
         Itinerary iter = itineraries.get(position);
         holder.setNameText(iter.getName());
-        holder.setCreatorText(iter.getCreator().getName());
+
+        SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yyyy");
+        String shareDate = dateFormat.format(iter.getShareDate());
+        holder.setDateText(shareDate);
+
+        holder.setDifficultyText(iter.getDifficulty());
+
+        String duration = iter.getHoursDuration() + "h & " + iter.getMinutesDuration()+"m";
+        holder.setDurationText(duration);
+
     }
 
 
@@ -52,21 +64,29 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
     public class ItineraryViewHolder extends RecyclerView.ViewHolder{
 
         TextView nameTextView;
-        TextView creatorTextView;
+        TextView dateTextView;
+        TextView difficultyTextView;
+        TextView durationTextView;
 
         public ItineraryViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.name_textView);
-            creatorTextView = itemView.findViewById(R.id.creator_textView);
+            dateTextView = itemView.findViewById(R.id.date_textView);
+            difficultyTextView = itemView.findViewById(R.id.difficulty_textView);
+            durationTextView = itemView.findViewById(R.id.duration_textView);
         }
 
         public void setNameText(String name) {
             nameTextView.setText(name);
         }
 
-        public void setCreatorText(String creator) {
-            creatorTextView.setText(creator);
+        public void setDateText(String date) {
+            dateTextView.setText(date);
         }
+
+        public void setDifficultyText(String difficulty) { difficultyTextView.setText(difficulty); }
+
+        public void setDurationText(String duration) { durationTextView.setText(duration); }
 
     }
 }

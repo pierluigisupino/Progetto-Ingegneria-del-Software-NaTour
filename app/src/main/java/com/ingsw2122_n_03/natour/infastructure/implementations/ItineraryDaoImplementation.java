@@ -1,6 +1,9 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
@@ -14,11 +17,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Date;
 
 public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
     private final IterController controller;
+
 
     public ItineraryDaoImplementation(IterController controller) {
         this.controller = controller;
@@ -54,7 +62,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
         Amplify.API.post(
                 options,
                 response -> {
-                    Log.i("RESPONSE", response.getData().asString());
+
                        try {
                            int i = Integer.parseInt(response.getData().asString());
                            controller.onItineraryInsertSuccess(i);
@@ -63,12 +71,13 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                        }
                     },
 
-                error -> {controller.onItineraryInsertError(); Log.e("ERROR", error.getMessage());}
+                error -> controller.onItineraryInsertError()
         );
 
     }
 
-    /** CODE REVIEW & ADD SHARE DATE TO GET **/
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void getItineraries() {
 
         RestOptions options = RestOptions.builder()
@@ -79,8 +88,10 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 options,
 
                 response -> {
+                    Log.i("RESPONSE", response.getData().asString());
 
                     try {
+
 
                         ArrayList<Itinerary> iters = new ArrayList<>();
                         JSONArray result = response.getData().asJSONObject().getJSONArray("Result");
@@ -100,6 +111,18 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                             String creatorID = jsonObject.getString("creatorid");
                             User creator = new User(creatorID);
+
+                            DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
+                            TemporalAccessor accessor;
+
+                            accessor = timeFormatter.parse(jsonObject.getString("sharedate"));
+                            Date shareDate = Date.from(Instant.from(accessor));
+
+                            Date updateDate = null;
+                            if(!jsonObject.isNull("updatedate")) {
+                                accessor = timeFormatter.parse(jsonObject.getString("updatedate"));
+                                updateDate = Date.from(Instant.from(accessor));
+                            }
 
                             JSONObject startPointJSON = jsonObject.getJSONObject("startpoint");
                             double x = startPointJSON.getDouble("x");
@@ -124,6 +147,8 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                             iter.setIterId(id);
                             iter.setDescription(description);
+                            iter.setShareDate(shareDate);
+                            iter.setEditDate(updateDate);
 
                             if(!iterWaypoints.isEmpty())
                                 iter.setWayPoints(iterWaypoints);

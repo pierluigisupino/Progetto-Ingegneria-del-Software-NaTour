@@ -18,8 +18,6 @@ import com.ingsw2122_n_03.natour.presentation.SplashActivity;
 
 import org.osmdroid.util.GeoPoint;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -36,13 +34,14 @@ public class IterController extends Controller {
 
     private final ItineraryDaoInterface itineraryDao;
     private final UserDaoInterface userDao;
+
     private final ImageUploader imageUploader;
 
     private User currentUser;
     private Itinerary currentIter;
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
-    private ArrayList<byte[]> imagesBytes;
+    private ArrayList<byte[]> photos;
 
     private IterController(){
 
@@ -61,32 +60,42 @@ public class IterController extends Controller {
 
     }
 
-    //@TODO RETRIEVE ITINERARIES FROM DB AND SHOW MAIN ACTIVITY
+
+    /*********
+     * SET UP
+     *********/
+
     public void setUp() {
-        //itineraryDao.getItineraries();
-        goToActivityItineraries(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
+        itineraryDao.getItineraries();
+        //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
-    //@TODO PASS ITINERARIES TO MAIN FRAGMENT
     public void onSetUpSuccess(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
-        goToActivityItineraries(splashActivity, MainActivity.class, itineraries);
+        goToActivityAndFinish(splashActivity, MainActivity.class, itineraries);
     }
 
     public void onSetUpError() {
-        //MAYBE ANOTHER TRY?
         goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
+
+
+    /*****************
+     * POST ITINERARY
+     ****************/
 
     public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
 
         loadingDialog = new LoadingDialog(addItineraryActivity);
         loadingDialog.startLoading();
 
-        currentUser = new User(userDao.getCurrentUserId());
-        userDao.setCurrentUserName(currentUser);
+        if(currentUser == null) {
+            currentUser = new User(userDao.getCurrentUserId());
+            userDao.setCurrentUserName(currentUser);
+        }
 
-        this.imagesBytes = imagesBytes;
+        this.photos = imagesBytes;
+
         ArrayList<WayPoint> wayPointArrayList = new ArrayList<>();
         for(GeoPoint g : waypoints){
             wayPointArrayList.add(new WayPoint(g.getLatitude(), g.getLongitude()));
@@ -94,13 +103,7 @@ public class IterController extends Controller {
         currentIter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), currentUser);
         wayPointArrayList.remove(0);
 
-
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            Date shareDate = dateFormat.parse(dateFormat.format(new Date()));
-            currentIter.setShareDate(shareDate);
-        } catch (ParseException ignored) {}
-
+        currentIter.setShareDate(new Date());
 
         if(description.length() > 0)
            currentIter.setDescription(description);
@@ -116,10 +119,10 @@ public class IterController extends Controller {
 
         currentIter.setIterId(iterID);
 
-        if(imagesBytes.isEmpty())
+        if(photos.isEmpty())
             onItineraryInsertComplete(0);
         else
-            imageUploader.uploadImages(iterID, imagesBytes);
+            imageUploader.uploadImages(iterID, photos);
 
     }
 
@@ -135,7 +138,7 @@ public class IterController extends Controller {
         loadingDialog.dismissDialog();
         itineraries.add(currentIter);
 
-        goToActivityItineraries(addItineraryActivity, MainActivity.class, itineraries);
+        goToActivityAndFinish(addItineraryActivity, MainActivity.class, itineraries);
         //OR (TO IMPLEMENT METHOD)
         //goToActivityAndFinish(addItineraryActivity, ItineraryDetailActivity.class, currentIter);
 

@@ -44,8 +44,7 @@ public class Controller {
         source.finish();
     }
 
-    //@TODO CHANGE METHOD NAME
-    public void goToActivityItineraries(Activity source, Class<?> destination, ArrayList<Itinerary> itineraries) {
+    public void goToActivityAndFinish(Activity source, Class<?> destination, ArrayList<Itinerary> itineraries) {
 
         Intent intent = new Intent(source, destination);
         intent.putExtra("itineraries", itineraries);
