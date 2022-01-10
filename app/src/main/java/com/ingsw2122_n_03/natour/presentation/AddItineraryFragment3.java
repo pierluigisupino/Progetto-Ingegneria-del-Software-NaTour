@@ -85,6 +85,10 @@ public class AddItineraryFragment3 extends Fragment {
 
                                 for (int i = 0; (i < clipData.getItemCount()) & (imagesBitmap.size() < photoCount); i++) {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
+
+                                    // TODO: 10/01/2022 codice per testare da cambiare
+                                    imageUtilities.getImageLocation(getActivity(), imageUri);
+
                                     try {
                                         imageUtilities.addImageBitmap(imageUri, requireContext(), imagesBitmap);
                                     } catch (IOException e) {
