@@ -11,13 +11,14 @@ var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 
 const {Client} = require('pg')
-const client = new Client({
+const clientParams = {
   host: process.env.DBHOST,
   user: process.env.DBUSER,
   port: process.env.DBPORT,
   password: process.env.DBPASSWORD,
   database: process.env.DBNAME
-})
+} 
+
 
 const AWS = require('aws-sdk')
 AWS.config.update({region: 'eu-west-3'})
@@ -45,15 +46,15 @@ app.use(function(req, res, next) {
  
 app.get('/items/itineraries', function(req, res) {
   
+  const client = new Client(clientParams);
+  
   client.connect();
   
   client.query('SELECT * FROM ITINERARY', (err, data) => {
-    
+    client.end();
     if(err) {
-      client.end();
       return res.json({Error : err.stack});
     }else {
-      client.end();
       return res.json({Result: data.rows});
     }
   });
@@ -67,9 +68,9 @@ app.get('/items/itineraries', function(req, res) {
 
 app.post('/items/itineraries', function(req, res) {
   
+  const client = new Client(clientParams);
   var startPoint = JSON.parse(req.body.startPoint);
   var waypoints = req.body.waypoints;
-  
   
   if(waypoints != null){
     waypoints = JSON.parse(waypoints);
