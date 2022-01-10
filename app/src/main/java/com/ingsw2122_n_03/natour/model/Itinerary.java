@@ -15,6 +15,7 @@ public class Itinerary implements Serializable {
     private WayPoint startPoint;
     private ArrayList<WayPoint> wayPoints;
     private User creator;
+    private Date shareDate;
     private Date editDate;
     private int iterId;
 
@@ -111,5 +112,9 @@ public class Itinerary implements Serializable {
     public Date getEditDate() { return editDate; }
 
     public void setEditDate(Date editDate) { this.editDate = editDate; }
+
+    public Date getShareDate() { return shareDate; }
+
+    public void setShareDate(Date shareDate) { this.shareDate = shareDate; }
 
 }

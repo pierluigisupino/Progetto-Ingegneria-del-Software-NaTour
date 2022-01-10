@@ -44,12 +44,12 @@ public final class AuthController extends Controller {
 
     public void setUp() {
         if(authInterface.configurePlugins(splashActivity)) {
-            if (authInterface.checkUserLogged()) {
-                IterController iterController = IterController.getInstance();
-                iterController.setUp(splashActivity);
-            } else {
+
+            if (authInterface.checkUserLogged())
+                IterController.getInstance().setUp();
+            else
                 goToActivityAndFinish(splashActivity, WelcomeActivity.class);
-            }
+
         }
     }
 
@@ -78,8 +78,7 @@ public final class AuthController extends Controller {
 
         if(welcomeActivity != null) welcomeActivity.finish();
 
-        IterController iterController = IterController.getInstance();
-        iterController.setUp(callingActivity);
+        goToActivityAndFinish(callingActivity, SplashActivity.class);
 
     }
 
@@ -217,12 +216,12 @@ public final class AuthController extends Controller {
     public void signOut(){ authInterface.signOut(); }
 
     public void onSignOutSuccess(){
-        mainActivity.onSuccess(welcomeActivity.getResources().getString(R.string.logout_success));
+        mainActivity.onSuccess(mainActivity.getResources().getString(R.string.logout_success));
         goToActivityAndFinish(mainActivity, WelcomeActivity.class);
     }
 
     public void onSignOutFailure() {
-        mainActivity.onFail(welcomeActivity.getResources().getString(R.string.generic_error));
+        mainActivity.onFail(mainActivity.getResources().getString(R.string.generic_error));
     }
 
 
