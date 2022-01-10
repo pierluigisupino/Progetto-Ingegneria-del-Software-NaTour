@@ -51,11 +51,6 @@ public class ImageUtilities {
         return byteBuffer.toByteArray();
     }
 
-    /* TODO: 10/01/2022
-        - tipo di ritorno temporaneo
-        - Uri deve essere sostituito da byte[] lo stesso che verrà inserito nel db
-        - le coordinate sono recuperate nel formato DMS (vedi log) devono essere convertite in double */
-
     public ArrayList<Double> getImageLocation(Context context, byte[] bytes)  {
 
         ArrayList<Double> coordinates = new ArrayList<>();
@@ -72,7 +67,6 @@ public class ImageUtilities {
 
             ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
             Metadata metadata = ImageMetadataReader.readMetadata(bis);
-
 
             for (Directory directory : metadata.getDirectories()) {
 
@@ -105,7 +99,7 @@ public class ImageUtilities {
             double longitudeMinutes = Double.parseDouble(longitude.substring((longitude.indexOf("° "))+1,(longitude.indexOf("'"))));
             double longitudeSeconds = Double.parseDouble(longitude.substring((longitude.indexOf("'"))+1,longitude.indexOf('"')));
 
-            dLatitude = latitudeDegrees + ( ((latitudeMinutes * 60) + latitudeSeconds) / 3600);
+            dLatitude = latitudeDegrees + (((latitudeMinutes * 60) + latitudeSeconds) / 3600);
             dLongitude = longitudeDegrees + (((longitudeMinutes * 60) + longitudeSeconds) / 3600);
 
             if(latitudeRef.equals("S")){
