@@ -16,7 +16,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-
 public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
     private final IterController controller;
@@ -24,6 +23,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
     public ItineraryDaoImplementation(IterController controller) {
         this.controller = controller;
     }
+
 
     @Override
     public void postItinerary(Itinerary iter) {
@@ -39,9 +39,10 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
             jsonObject.put("creator", iter.getCreator().getUid());
             jsonObject.put("startPoint", iter.getStartPoint());
             jsonObject.put("waypoints", iter.getWayPoints());
+            jsonObject.put("date", iter.getShareDate());
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            controller.onItineraryInsertError();
         }
 
         RestOptions options = RestOptions.builder()
@@ -79,11 +80,9 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                 response -> {
 
-                    Log.i("RESPONSE", response.getData().asString());
-                    ArrayList<Itinerary> iters = new ArrayList<>();
-
                     try {
 
+                        ArrayList<Itinerary> iters = new ArrayList<>();
                         JSONArray result = response.getData().asJSONObject().getJSONArray("Result");
 
                         for(int i = 0; i < result.length(); ++i) {
@@ -91,11 +90,14 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                             JSONObject jsonObject = result.getJSONObject(i);
 
                             int id = jsonObject.getInt("iterid");
+
                             String name = jsonObject.getString("itername");
                             String description = jsonObject.getString("description");
                             String difficulty = jsonObject.getString("difficulty");
+
                             int hours = jsonObject.getInt("hours");
                             int minutes = jsonObject.getInt("minutes");
+
                             String creatorID = jsonObject.getString("creatorid");
                             User creator = new User(creatorID);
 
@@ -128,7 +130,6 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                             iters.add(iter);
 
-
                         }
 
                         controller.onSetUpSuccess(iters);
@@ -140,7 +141,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                 },
 
-                error -> {controller.onSetUpError(); Log.i("Error", error.getMessage());}
+                error -> controller.onSetUpError()
 
         );
 

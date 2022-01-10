@@ -18,7 +18,10 @@ import com.ingsw2122_n_03.natour.presentation.SplashActivity;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class IterController extends Controller {
@@ -90,6 +93,14 @@ public class IterController extends Controller {
         }
         currentIter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), currentUser);
         wayPointArrayList.remove(0);
+
+
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date shareDate = dateFormat.parse(dateFormat.format(new Date()));
+            currentIter.setShareDate(shareDate);
+        } catch (ParseException ignored) {}
+
 
         if(description.length() > 0)
            currentIter.setDescription(description);
