@@ -67,44 +67,45 @@ public class ImageUtilities {
 
         try {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
-                Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
 
-                for (Directory directory1 : metadata.getDirectories()) {
+            Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
 
-                    if (directory1.getName().equals("GPS")) {
-                        for (Tag tag : directory1.getTags()) {
+            for (Directory directory : metadata.getDirectories()) {
 
-                            switch (tag.getTagName()){
-                                case "GPS Latitude Ref":
-                                    latitudeRef = tag.getDescription();
-                                    break;
-                                case "GPS Latitude":
-                                    latitude = tag.getDescription();
-                                    break;
-                                case "GPS Longitude Ref":
-                                    longitudeRef = tag.getDescription();
-                                    break;
-                                case "GPS Longitude":
-                                    longitude = tag.getDescription();
-                                    break;
-                            }
+                if (directory.getName().equals("GPS")) {
+                    for (Tag tag : directory.getTags()) {
+
+                        switch (tag.getTagName()){
+                            case "GPS Latitude Ref":
+                                latitudeRef = tag.getDescription();
+                                break;
+                            case "GPS Latitude":
+                                latitude = tag.getDescription();
+                                break;
+                            case "GPS Longitude Ref":
+                                longitudeRef = tag.getDescription();
+                                break;
+                            case "GPS Longitude":
+                                longitude = tag.getDescription();
+                                break;
                         }
                     }
                 }
-
-                String mLatitude = latitude + latitudeRef;
-                String mLongitude = longitude + longitudeRef;
-
-                coordinates[0] = mLatitude;
-                coordinates[1] = mLongitude;
-
-                Log.i("Coordinates", "Latitude: " + coordinates[0] + " Longitude: " + coordinates[1]);
-
-                return  coordinates;
-
-            } catch (ImageProcessingException | IOException e) {
-                e.printStackTrace();
             }
+
+            String mLatitude = latitude + latitudeRef;
+            String mLongitude = longitude + longitudeRef;
+
+            coordinates[0] = mLatitude;
+            coordinates[1] = mLongitude;
+
+            Log.i("Coordinates", "Latitude: " + coordinates[0] + " Longitude: " + coordinates[1]);
+
+            return  coordinates;
+
+        } catch (ImageProcessingException | IOException e) {
+            e.printStackTrace();
+        }
 
         return coordinates;
     }
