@@ -113,9 +113,10 @@ public class AddItineraryActivity extends BaseActivity {
                 addItineraryFragment4 = new AddItineraryFragment4(this, addItineraryFragment3.getPointOfInterest());
                 stepIndex++;
                 changeFragment();
-            } else if(stepIndex == 3 && addItineraryFragment4.isStartPointInserted()){
+            } else if(stepIndex == 3 && addItineraryFragment4.isStartPointInserted() && addItineraryFragment4.arePositionsCorrect()){
                 waypoints = addItineraryFragment4.getWaypoints();
-                iterController.insertItinerary(name, description, difficulty, hours, minutes, imagesBytes, waypoints);
+                onSuccess("OK"); //@TODO DELETE, FOR TEST USAGE
+                //iterController.insertItinerary(name, description, difficulty, hours, minutes, imagesBytes, waypoints);
             }
 
         });

@@ -277,29 +277,27 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     }
 
     private void addPointOfInterests(){
+
         for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
+            
             byte[] bytes = entry.getKey();
             GeoPoint geoPoint = entry.getValue();
 
-            if(roadOverlay.isCloseTo(geoPoint, 10, map)) {
+            PointOfInterest pointOfInterest = new PointOfInterest(map);
 
-                PointOfInterest pointOfInterest = new PointOfInterest(map);
+            BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
 
-                BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
+            pointOfInterest.setImage(drawable);
+            pointOfInterest.setDrawable(drawable);
 
-                pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
-                pointOfInterest.setImage(drawable);
-                pointOfInterest.setDrawable(drawable);
+            pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+            pointOfInterest.setPosition(geoPoint);
 
-                pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-                pointOfInterest.setPosition(geoPoint);
+            pointOfInterest.setOnMarkerClickListener(this);
 
-                pointOfInterest.setOnMarkerClickListener(this);
+            map.getOverlays().add(pointOfInterest);
 
-                map.getOverlays().add(pointOfInterest);
-            }else{
-                addItineraryActivity.onFail("troppo lontana");
-            }
         }
     }
 
@@ -452,6 +450,25 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             addItineraryActivity.onFail(getString(R.string.start_point_error));
             return false;
         }
+    }
+
+    //@TODO PHOTO DELETE?
+    public boolean arePositionsCorrect() {
+
+        if(waypoints.size() > 1) {
+
+            for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
+                GeoPoint geoPoint = entry.getValue();
+                if(!roadOverlay.isCloseTo(geoPoint, 10, map)) {
+                    addItineraryActivity.onFail("FOTO TROPPO LONTANA!!!");
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
+
     }
 
     public ArrayList<GeoPoint> getWaypoints(){
