@@ -22,6 +22,6 @@ CREATE TABLE ITINERARY(
   (LENGTH(creatorID) > 0),
 
   CONSTRAINT check_duration CHECK
-  (hours = 0 AND minutes BETWEEN 1 AND 59) OR (hours > 0 AND minutes BETWEEN 0 AND 59)
+  ((hours = 0 AND minutes BETWEEN 1 AND 59) OR (hours > 0 AND minutes BETWEEN 0 AND 59))
 
 )
