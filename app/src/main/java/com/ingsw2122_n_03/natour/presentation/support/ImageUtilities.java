@@ -63,7 +63,8 @@ public class ImageUtilities {
             latLong = exifInterface.getLatLong();
         }
 
-        return latLong;
+return latLong;
+
 
 
     }
