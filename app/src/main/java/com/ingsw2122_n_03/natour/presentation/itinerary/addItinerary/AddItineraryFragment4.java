@@ -281,21 +281,25 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             byte[] bytes = entry.getKey();
             GeoPoint geoPoint = entry.getValue();
 
+            if(roadOverlay.isCloseTo(geoPoint, 10, map)) {
 
-            PointOfInterest pointOfInterest = new PointOfInterest(map);
+                PointOfInterest pointOfInterest = new PointOfInterest(map);
 
-            BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
 
-            pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
-            pointOfInterest.setImage(drawable);
-            pointOfInterest.setDrawable(drawable);
+                pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
+                pointOfInterest.setImage(drawable);
+                pointOfInterest.setDrawable(drawable);
 
-            pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-            pointOfInterest.setPosition(geoPoint);
+                pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+                pointOfInterest.setPosition(geoPoint);
 
-            pointOfInterest.setOnMarkerClickListener(this);
+                pointOfInterest.setOnMarkerClickListener(this);
 
-            map.getOverlays().add(pointOfInterest);
+                map.getOverlays().add(pointOfInterest);
+            }else{
+                addItineraryActivity.onFail("troppo lontana");
+            }
         }
     }
 
