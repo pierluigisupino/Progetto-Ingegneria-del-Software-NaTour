@@ -111,7 +111,7 @@ app.post('/items/itineraries', function(req, res) {
     }else {
       
       var iterID = suc.rows[0].iterid; 
-      var bucketName = 'natour-images-iter-'+iterID;
+      var bucketName = 'natour-images-'+iterID;
       
       var bucketParams = {
         Bucket : bucketName,
@@ -143,7 +143,7 @@ app.post('/items/itineraries', function(req, res) {
 
 app.post('/items/photos', function(req, res) {
   
-  var bucketName = 'natour-images-iter-'+req.body.iterID;
+  var bucketName = 'natour-images-'+req.body.iterID;
   var count = req.body.photo_count;
   
   for(let i = 0; i < count; i++){
