@@ -3,20 +3,13 @@ package com.ingsw2122_n_03.natour.presentation.support;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
-import android.util.Log;
+
+import androidx.exifinterface.media.ExifInterface;
 
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.predictions.models.LabelType;
 import com.amplifyframework.predictions.result.IdentifyLabelsResult;
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-import com.ingsw2122_n_03.natour.R;
-import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -46,7 +39,7 @@ public class ImageUtilities {
         return byteBuffer.toByteArray();
     }
 
-    public double[] getImageLocation(Context context, byte[] bytes)  {
+    public double[] getImageLocation(byte[] bytes)  {
 
         double[] latLong = new double[2];
 

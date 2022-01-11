@@ -92,7 +92,7 @@ public class AddItineraryFragment3 extends Fragment {
 
                                         byte[] inputData = imageUtilities.getBytes(requireActivity(), imageUri);
                                         imagesBytes.add(inputData);
-                                        double[] a = imageUtilities.getImageLocation(getActivity(), inputData);
+                                        double[] a = imageUtilities.getImageLocation(inputData);
                                         imagesBitmap.add(imageUtilities.getImageBitmap(inputData));
                                         Log.i("a", Arrays.toString(a));
 
