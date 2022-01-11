@@ -85,31 +85,34 @@ public class ImageUtilities {
                 }
             }
 
-            double latitudeDegrees = Double.parseDouble(latitude.substring(0,(latitude.indexOf("° "))));
-            double latitudeMinutes = Double.parseDouble(latitude.substring((latitude.indexOf("° "))+1,(latitude.indexOf("'"))));
-            double latitudeSeconds = Double.parseDouble(latitude.substring((latitude.indexOf("'"))+1,latitude.indexOf('"')));
+            if(!latitude.equals("") && !longitude.equals("")) {
 
-            double longitudeDegrees = Double.parseDouble(longitude.substring(0,(longitude.indexOf("° "))));
-            double longitudeMinutes = Double.parseDouble(longitude.substring((longitude.indexOf("° "))+1,(longitude.indexOf("'"))));
-            double longitudeSeconds = Double.parseDouble(longitude.substring((longitude.indexOf("'"))+1,longitude.indexOf('"')));
+                double latitudeDegrees = Double.parseDouble(latitude.substring(0, (latitude.indexOf("° "))));
+                double latitudeMinutes = Double.parseDouble(latitude.substring((latitude.indexOf("° ")) + 1, (latitude.indexOf("'"))));
+                double latitudeSeconds = Double.parseDouble(latitude.substring((latitude.indexOf("'")) + 1, latitude.indexOf('"')));
 
-            dLatitude = latitudeDegrees + (((latitudeMinutes * 60) + latitudeSeconds) / 3600);
-            dLongitude = longitudeDegrees + (((longitudeMinutes * 60) + longitudeSeconds) / 3600);
+                double longitudeDegrees = Double.parseDouble(longitude.substring(0, (longitude.indexOf("° "))));
+                double longitudeMinutes = Double.parseDouble(longitude.substring((longitude.indexOf("° ")) + 1, (longitude.indexOf("'"))));
+                double longitudeSeconds = Double.parseDouble(longitude.substring((longitude.indexOf("'")) + 1, longitude.indexOf('"')));
 
-            if(latitudeRef.equals("S")){
-                dLatitude = -dLatitude;
+                dLatitude = latitudeDegrees + (((latitudeMinutes * 60) + latitudeSeconds) / 3600);
+                dLongitude = longitudeDegrees + (((longitudeMinutes * 60) + longitudeSeconds) / 3600);
+
+                if (latitudeRef.equals("S")) {
+                    dLatitude = -dLatitude;
+                }
+
+                if (longitudeRef.equals("W")) {
+                    dLongitude = -dLongitude;
+                }
+
+                coordinates.add(dLatitude);
+                coordinates.add(dLongitude);
+
+                Log.i("Coordinates", "Latitude: " + dLatitude + " Longitude: " + dLongitude);
+
+                return coordinates;
             }
-
-            if(longitudeRef.equals("W")){
-                dLongitude = -dLongitude;
-            }
-
-            coordinates.add(dLatitude);
-            coordinates.add(dLongitude);
-
-            Log.i("Coordinates", "Latitude: " + dLatitude + " Longitude: " + dLongitude);
-
-            return  coordinates;
 
         } catch (ImageProcessingException | IOException e) {
             ((AddItineraryActivity) context).onFail(context.getString(R.string.generic_error));
