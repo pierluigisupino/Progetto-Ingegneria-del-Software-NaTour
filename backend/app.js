@@ -19,15 +19,15 @@ const clientParams = {
   database: process.env.DBNAME
 } 
 
-
 const AWS = require('aws-sdk')
 AWS.config.update({region: 'eu-west-3'})
 const s3 = new AWS.S3({apiVersion: '2006-03-01'})
+const cognito = new AWS.CognitoIdentityServiceProvider({apiVersion: '2016-04-18'})
 
 // declare a new express app
 var app = express()
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb'}));
+app.use(express.json({limit: '50mb'}))
+app.use(express.urlencoded({limit: '50mb'}))
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 
@@ -36,7 +36,7 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "*")
   next()
-});
+})
 
 
 /**********************
@@ -51,12 +51,31 @@ app.get('/items/itineraries', function(req, res) {
   client.connect();
   
   client.query('SELECT * FROM ITINERARY', (err, data) => {
+    
     client.end();
-    if(err) {
-      return res.json({Error : err.stack});
-    }else {
+    
+    if(err) 
+      return res.json({Error: err.stack});
+    else 
       return res.json({Result: data.rows});
-    }
+    
+  });
+  
+});
+
+
+app.get('/items/users', function(req, res) {
+  
+  var params = {
+    UserPoolId: process.env.USERPOOLID,
+    Username: req.query.id
+  };
+    
+  cognito.adminGetUser(params, function(err, data) {
+    if (err)
+      return res.json({Error: err.stack});
+    else
+      return res.json(data.UserAttributes[2].Value);
   });
   
 });
@@ -65,6 +84,7 @@ app.get('/items/itineraries', function(req, res) {
 /****************************
 * post methods *
 ****************************/
+
 
 app.post('/items/itineraries', function(req, res) {
   
@@ -81,7 +101,7 @@ app.post('/items/itineraries', function(req, res) {
   var query = 'INSERT INTO ITINERARY(iterName, description, difficulty, hours, minutes, startPoint, waypoints, creatorID, shareDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING IterID';
   
   client.query(query, [req.body.name, req.body.iterDescription, req.body.difficulty, req.body.hours, req.body.minutes, 
-  '('+startPoint.Latitude+','+startPoint.Longitude+')', waypoints, req.body.creator, new Date()] ,(err, suc) => {
+  '('+startPoint.Latitude+','+startPoint.Longitude+')', waypoints, req.body.creator, req.body.date] ,(err, suc) => {
     
     if(err) {
       
@@ -103,7 +123,7 @@ app.post('/items/itineraries', function(req, res) {
       s3.createBucket(bucketParams, function(err, data) {
         if (err) {
           
-          client.query('DELETE FROM ITINERARY WHERE IterID = '+iterID, function(error, succeed){});
+          client.query('DELETE FROM ITINERARY WHERE IterID = '+iterID, function(erro, succ){});
           client.end();
           return res.json({Error: err.stack}); 
           
@@ -119,6 +139,7 @@ app.post('/items/itineraries', function(req, res) {
   });
   
 });
+
 
 app.post('/items/photos', function(req, res) {
   
