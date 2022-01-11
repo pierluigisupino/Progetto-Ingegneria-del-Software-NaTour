@@ -458,7 +458,19 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
             for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
                 GeoPoint geoPoint = entry.getValue();
+
                 if(!roadOverlay.isCloseTo(geoPoint, 10, map)) {
+                    addItineraryActivity.onFail("FOTO TROPPO LONTANA!!!");
+                    return false;
+                }
+            }
+
+        }else {
+
+            for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
+                GeoPoint geoPoint = entry.getValue();
+
+                if(geoPoint.distanceToAsDouble(waypoints.get(0)) > 10000) {
                     addItineraryActivity.onFail("FOTO TROPPO LONTANA!!!");
                     return false;
                 }
