@@ -3,25 +3,19 @@ package com.ingsw2122_n_03.natour.presentation.support;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.util.Log;
-
-import androidx.fragment.app.FragmentActivity;
 
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.predictions.models.LabelType;
 import com.amplifyframework.predictions.result.IdentifyLabelsResult;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
-import com.drew.lang.ByteArrayReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.ingsw2122_n_03.natour.R;
-import com.ingsw2122_n_03.natour.presentation.AddItineraryActivity;
+import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

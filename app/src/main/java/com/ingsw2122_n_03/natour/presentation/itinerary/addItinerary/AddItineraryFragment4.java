@@ -1,4 +1,4 @@
-package com.ingsw2122_n_03.natour.presentation;
+package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 
 import android.app.Activity;
 import android.content.Context;

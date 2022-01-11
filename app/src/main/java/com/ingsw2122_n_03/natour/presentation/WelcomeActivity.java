@@ -7,6 +7,8 @@ import android.widget.Button;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.databinding.ActivityWelcomeBinding;
+import com.ingsw2122_n_03.natour.presentation.signIn.SignInActivity;
+import com.ingsw2122_n_03.natour.presentation.signUp.SignUpActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class WelcomeActivity extends BaseActivity {

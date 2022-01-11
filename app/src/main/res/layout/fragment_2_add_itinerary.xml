@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.AddItineraryFragment2">
+    tools:context=".presentation.itinerary.addItinerary.AddItineraryFragment2">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftGuideline"

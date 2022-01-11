@@ -1,4 +1,4 @@
-package com.ingsw2122_n_03.natour.presentation;
+package com.ingsw2122_n_03.natour.presentation.signUp;
 
 import android.content.Context;
 import android.content.Intent;

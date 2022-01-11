@@ -9,11 +9,11 @@ import com.ingsw2122_n_03.natour.infastructure.interfaces.UserDaoInterface;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
-import com.ingsw2122_n_03.natour.presentation.AddItineraryActivity;
+import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
-import com.ingsw2122_n_03.natour.presentation.ItineraryDetailActivity;
+import com.ingsw2122_n_03.natour.presentation.itinerary.ItineraryDetailActivity;
 import com.ingsw2122_n_03.natour.presentation.LoadingDialog;
-import com.ingsw2122_n_03.natour.presentation.MainActivity;
+import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.SplashActivity;
 
 import org.osmdroid.util.GeoPoint;
@@ -66,8 +66,8 @@ public class IterController extends Controller {
      *********/
 
     public void setUp() {
-        itineraryDao.getItineraries();
-        //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
+        //itineraryDao.getItineraries();
+        goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
     public void onSetUpSuccess(ArrayList<Itinerary> itineraries) {
