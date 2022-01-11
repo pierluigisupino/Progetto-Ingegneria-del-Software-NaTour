@@ -87,6 +87,9 @@ public class ImageUtilities {
 
             if(!latitude.equals("") && !longitude.equals("")) {
 
+                latitude = latitude.replace(',', '.');
+                longitude = longitude.replace(',', '.');
+
                 double latitudeDegrees = Double.parseDouble(latitude.substring(0, (latitude.indexOf("° "))));
                 double latitudeMinutes = Double.parseDouble(latitude.substring((latitude.indexOf("° ")) + 1, (latitude.indexOf("'"))));
                 double latitudeSeconds = Double.parseDouble(latitude.substring((latitude.indexOf("'")) + 1, latitude.indexOf('"')));
