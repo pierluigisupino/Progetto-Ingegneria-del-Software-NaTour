@@ -111,16 +111,13 @@ app.post('/items/itineraries', function(req, res) {
     }else {
       
       var iterID = suc.rows[0].iterid; 
-      var bucketName = 'natour-images-'+iterID;
-      
       var bucketParams = {
-        Bucket : bucketName,
-        CreateBucketConfiguration: {
-          LocationConstraint: 'eu-west-3'
-        },
+        Bucket: process.env.BUCKETNAME, 
+        Key: 'iter'+iterID+'/', 
       };
 
-      s3.createBucket(bucketParams, function(err, data) {
+      s3.putObject(bucketParams, function(err, data) {
+        
         if (err) {
           
           client.query('DELETE FROM ITINERARY WHERE IterID = '+iterID, function(erro, succ){});
@@ -143,27 +140,34 @@ app.post('/items/itineraries', function(req, res) {
 
 app.post('/items/photos', function(req, res) {
   
-  var bucketName = 'natour-images-'+req.body.iterID;
-  var count = req.body.photo_count;
+  const count = req.body.photo_count;
+  var i = 0;
+  var errno;
   
-  for(let i = 0; i < count; i++){
+  for(; i < count; i++){
     
     var filename = Math.random().toString(36).slice(2);
     var photoBody = 'photo'+i;
     
     var uploadParams = {
-      Bucket: bucketName, 
-      Key: filename, 
+      Bucket: process.env.BUCKETNAME, 
+      Key: 'iter'+req.body.iterID+'/'+filename, 
       Body: req.body[photoBody],
       ContentEncoding: 'base64'
     };
     
     s3.putObject(uploadParams, (err, dataUp) => {
       if (err){
-        return res.json({Error: err.stack});
+        i = count+1;
+        errno = err.stack;
       }
     });
   } 
+  
+  if(i > count) 
+    return res.json({Code: 400, Error: errno});
+  else
+    return res.json({Code: 200});
   
 });
 
