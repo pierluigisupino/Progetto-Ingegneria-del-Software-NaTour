@@ -25,10 +25,15 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
+import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
+
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Marker;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 public class AddItineraryFragment3 extends Fragment {
@@ -37,7 +42,8 @@ public class AddItineraryFragment3 extends Fragment {
     private RecyclerView recyclerView;
     private final AddItineraryActivity addItineraryActivity;
 
-    private final ArrayList<byte[]> imagesBytes = new ArrayList<>();
+    private ArrayList<byte[]> imagesBytes = new ArrayList<>();
+    private HashMap<GeoPoint, byte[]> pointOfInterests = new HashMap<>();
 
     private TextView countImageTextView;
 
@@ -90,9 +96,9 @@ public class AddItineraryFragment3 extends Fragment {
 
                                         byte[] photoByte = imageUtilities.getBytes(requireActivity(), imageUri);
                                         imagesBytes.add(photoByte);
-                                        //@TODO: DELETE, FOR TEST USAGE
-                                        double[] a = imageUtilities.getImageLocation(photoByte);
-                                        Log.i("POSITION", Arrays.toString(a));
+
+                                        double[] coordinates = imageUtilities.getImageLocation(photoByte);
+                                        if(coordinates != null) pointOfInterests.put(new GeoPoint(coordinates[0], coordinates[1]), photoByte);
 
                                     }catch (IOException e) {
                                         addItineraryActivity.onFail(getString(R.string.generic_error));
@@ -135,5 +141,9 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     public ArrayList<byte[]> getImagesBytes(){ return this.imagesBytes; }
+
+    public HashMap<GeoPoint, byte[]> getPointOfInterest(){
+        return this.pointOfInterests;
+    }
 
 }

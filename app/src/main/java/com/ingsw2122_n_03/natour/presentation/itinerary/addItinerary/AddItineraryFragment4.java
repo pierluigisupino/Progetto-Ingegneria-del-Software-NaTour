@@ -1,8 +1,16 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -12,6 +20,9 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -25,6 +36,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
+import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -43,7 +55,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.ticofab.androidgpxparser.parser.GPXParser;
 import io.ticofab.androidgpxparser.parser.domain.Gpx;
@@ -70,9 +84,12 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     private ActivityResultLauncher<Intent> getGPXLauncher;
 
+    private ArrayList<Marker> markersPointOfInterests = new ArrayList<>();
+    private HashMap<GeoPoint, byte[]> pointOfInterests;
 
-    public AddItineraryFragment4(AddItineraryActivity addItineraryActivity) {
+    public AddItineraryFragment4(AddItineraryActivity addItineraryActivity, HashMap<GeoPoint, byte[]> pointOfInterests) {
         this.addItineraryActivity = addItineraryActivity;
+        this.pointOfInterests = pointOfInterests;
     }
 
     @Override
@@ -205,6 +222,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         MapEventsOverlay mEventOverlay = new MapEventsOverlay(mReceiver);
         map.getOverlays().add(mEventOverlay);
 
+        addPointOfInterests();
+
     }
 
     @Override
@@ -258,23 +277,53 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
         NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(p.getLatitude(), p.getLongitude());
         waypoints.add(naTourWaypoint);
+
+    }
+
+    private void addPointOfInterests(){
+        for (Map.Entry<GeoPoint, byte[]> entry : pointOfInterests.entrySet()) {
+            GeoPoint geoPoint = entry.getKey();
+            byte[] bytes = entry.getValue();
+
+            PointOfInterest pointOfInterest = new PointOfInterest(map);
+
+            BitmapDrawable drawable = new BitmapDrawable(getResources(),BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+
+            pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
+            pointOfInterest.setImage(drawable);
+            pointOfInterest.setDrawable(drawable);
+
+            pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+            pointOfInterest.setPosition(geoPoint);
+
+            pointOfInterest.setOnMarkerClickListener(this);
+
+            map.getOverlays().add(pointOfInterest);
+            markersPointOfInterests.add(pointOfInterest);
+        }
     }
 
     @Override
     public boolean onMarkerClick(Marker marker, MapView mapView) {
 
-        int index = markers.indexOf(marker);
+        if(marker instanceof PointOfInterest){
+            showImage(((PointOfInterest) marker).getDrawable());
+        }else{
 
-        if(markers.size() > 1 && index == 0){
-            markers.get(index + 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
-        } else if(index == markers.size() - 1 && markers.size() > 2){
-            markers.get(index - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+            int index = markers.indexOf(marker);
+
+            if (markers.size() > 1 && index == 0) {
+                markers.get(index + 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
+            } else if (index == markers.size() - 1 && markers.size() > 2) {
+                markers.get(index - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+            }
+
+            waypoints.remove(((NaTourMarker) marker).getGeoPoint());
+            map.getOverlays().remove(marker);
+            markers.remove(index);
+            makeRoads();
+
         }
-
-        waypoints.remove(((NaTourMarker) marker).getGeoPoint());
-        map.getOverlays().remove(marker);
-        markers.remove(index);
-        makeRoads();
         return true;
     }
 
@@ -338,6 +387,25 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         }
 
         return parsedGpx;
+    }
+
+    public void showImage(Drawable drawable) {
+        Dialog builder = new Dialog(getActivity());
+        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        builder.getWindow().setBackgroundDrawable(
+                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        builder.setOnDismissListener(dialogInterface -> {
+
+        });
+
+        ImageView imageView = new ImageView(getActivity());
+        imageView.setImageDrawable(drawable);
+        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        builder.show();
     }
 
     private void addGpxWaypoints(Gpx gpx){

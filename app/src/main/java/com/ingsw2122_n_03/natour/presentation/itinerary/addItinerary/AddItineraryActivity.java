@@ -32,7 +32,7 @@ public class AddItineraryActivity extends BaseActivity {
     private final AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1();
     private final AddItineraryFragment2 addItineraryFragment2 = new AddItineraryFragment2(this);
     private final AddItineraryFragment3 addItineraryFragment3 = new AddItineraryFragment3(this);
-    private final AddItineraryFragment4 addItineraryFragment4 = new AddItineraryFragment4(this);
+    private AddItineraryFragment4 addItineraryFragment4 = null;
 
     private ConstraintLayout layout;
     private Button backButton;
@@ -141,6 +141,11 @@ public class AddItineraryActivity extends BaseActivity {
         }else if(stepIndex == 2){
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment3);
         }else if(stepIndex == 3){
+
+            if(addItineraryFragment4 == null){
+                addItineraryFragment4 = new AddItineraryFragment4(this, addItineraryFragment3.getPointOfInterest());
+            }
+
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment4);
         }
 
