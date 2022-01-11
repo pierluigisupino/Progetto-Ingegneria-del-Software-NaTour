@@ -2,7 +2,7 @@ package com.ingsw2122_n_03.natour.presentation.support;
 import com.ingsw2122_n_03.natour.R;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +19,11 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
     private final TextView textView;
-    private final List<Bitmap> bitmaps;
+    private final List<byte[]> bytes;
 
-    public ImageAdapter(TextView textView, List<Bitmap> bitmaps) {
+    public ImageAdapter(TextView textView, List<byte[]> bitmaps) {
         this.textView = textView;
-        this.bitmaps = bitmaps;
+        this.bytes = bitmaps;
     }
 
     @NonNull
@@ -41,9 +41,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        holder.setBitmap(bitmaps.get(position));
+        holder.setBitmap(bytes.get(position));
         holder.getDeleteButton().setOnClickListener(view -> {
-            bitmaps.remove(holder.getAdapterPosition());
+            bytes.remove(holder.getAdapterPosition());
             notifyItemRemoved(holder.getAdapterPosition());
             setPhotoCount(holder);
         });
@@ -52,7 +52,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public int getItemCount() {
-        return bitmaps.size();
+        return bytes.size();
     }
 
     static class ImageViewHolder extends RecyclerView.ViewHolder{
@@ -66,8 +66,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
 
-        private void setBitmap(Bitmap bitmap){
-            imageView.setImageBitmap(bitmap);
+        private void setBitmap(byte[] bytes){
+            imageView.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
         }
 
         private ImageButton getDeleteButton(){
@@ -77,10 +77,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @SuppressLint("SetTextI18n")
     private void setPhotoCount(ImageViewHolder holder){
-        if(bitmaps.size() == 0){
+        if(bytes.size() == 0){
             textView.setText(holder.itemView.getContext().getString(R.string.no_photo_selected_text));
         }else{
-            textView.setText(bitmaps.size() + holder.itemView.getContext().getString(R.string.photo_selected_text));
+            textView.setText(bytes.size() + holder.itemView.getContext().getString(R.string.photo_selected_text));
         }
     }
 }

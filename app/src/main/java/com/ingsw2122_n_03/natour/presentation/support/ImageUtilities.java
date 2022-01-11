@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class ImageUtilities {
 
 
-    //@TODO IMAGE SAFE
+    /** USELESS IN CLASS?**/
     public Bitmap getImageBitmap(byte[] bytes) {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }

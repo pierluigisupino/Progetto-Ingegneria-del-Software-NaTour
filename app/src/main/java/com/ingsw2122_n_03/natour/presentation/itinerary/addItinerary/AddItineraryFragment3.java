@@ -3,7 +3,6 @@ package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,7 +37,6 @@ public class AddItineraryFragment3 extends Fragment {
     private RecyclerView recyclerView;
     private final AddItineraryActivity addItineraryActivity;
 
-    private final ArrayList<Bitmap> imagesBitmap = new ArrayList<>();
     private final ArrayList<byte[]> imagesBytes = new ArrayList<>();
 
     private TextView countImageTextView;
@@ -79,22 +77,22 @@ public class AddItineraryFragment3 extends Fragment {
                             Intent data = result.getData();
                             assert data != null;
                             ClipData clipData = data.getClipData();
-                            if (clipData != null && imagesBitmap.size() < photoCount) {
+                            if (clipData != null && imagesBytes.size() < photoCount) {
 
-                                if(clipData.getItemCount() > photoCount || imagesBitmap.size() + clipData.getItemCount() > photoCount){
+                                if(clipData.getItemCount() > photoCount || imagesBytes.size() + clipData.getItemCount() > photoCount){
                                     addItineraryActivity.onFail(getString(R.string.photo_limit));
                                 }
 
-                                for (int i = 0; (i < clipData.getItemCount()) & (imagesBitmap.size() < photoCount); i++) {
+                                for (int i = 0; (i < clipData.getItemCount()) & (imagesBytes.size() < photoCount); i++) {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
 
                                     try {
 
-                                        byte[] inputData = imageUtilities.getBytes(requireActivity(), imageUri);
-                                        imagesBytes.add(inputData);
-                                        double[] a = imageUtilities.getImageLocation(inputData);
-                                        imagesBitmap.add(imageUtilities.getImageBitmap(inputData));
-                                        Log.i("a", Arrays.toString(a));
+                                        byte[] photoByte = imageUtilities.getBytes(requireActivity(), imageUri);
+                                        imagesBytes.add(photoByte);
+                                        //@TODO: DELETE, FOR TEST USAGE
+                                        double[] a = imageUtilities.getImageLocation(photoByte);
+                                        Log.i("POSITION", Arrays.toString(a));
 
                                     }catch (IOException e) {
                                         addItineraryActivity.onFail(getString(R.string.generic_error));
@@ -103,7 +101,7 @@ public class AddItineraryFragment3 extends Fragment {
 
                                 }
 
-                            }else if(imagesBitmap.size() == photoCount){
+                            }else if(imagesBytes.size() == photoCount){
                                 addItineraryActivity.onFail(getString(R.string.photo_limit));
                             }
 
@@ -133,24 +131,9 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     private void setAdapter(){
-        recyclerView.setAdapter(new ImageAdapter(countImageTextView, imagesBitmap));
+        recyclerView.setAdapter(new ImageAdapter(countImageTextView, imagesBytes));
     }
 
-
-
-    public ArrayList<byte[]> getImagesBytes(){
-
-        /*imagesBytes.clear();
-
-        for(Bitmap bitmap : imagesBitmap) {
-            new Thread(() -> {
-                imagesBytes.add(imageUtilities.createImageBytes(bitmap));
-                imageUtilities.getImageLocation(getActivity(), imagesBytes.get(0));
-            }).start();
-        }*/
-
-        return this.imagesBytes;
-
-    }
+    public ArrayList<byte[]> getImagesBytes(){ return this.imagesBytes; }
 
 }
