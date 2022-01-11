@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -79,8 +80,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     private RoadManager roadManager;
     private Polyline roadOverlay;
 
-    private final ArrayList<Marker> markers = new ArrayList<>();
-    private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
+    private ArrayList<Marker> markers = new ArrayList<>();
+    private ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
     private ActivityResultLauncher<Intent> getGPXLauncher;
 
@@ -287,7 +288,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
             PointOfInterest pointOfInterest = new PointOfInterest(map);
 
-            BitmapDrawable drawable = new BitmapDrawable(getResources(),BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
 
             pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
             pointOfInterest.setImage(drawable);
