@@ -25,8 +25,8 @@
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:layout_width="150dp"
-                android:layout_height="match_parent">
-            </ImageView>
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,7 +69,7 @@
                         android:id="@+id/difficulty_textView"
                         android:textColor="@color/primary"
                         android:gravity="center_vertical"
-                        android:drawablePadding="5dp"
+                        android:drawablePadding="10dp"
                         app:drawableLeftCompat="@drawable/ic_signal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                         android:id="@+id/duration_textView"
                         android:textColor="@color/primary"
                         android:gravity="center_vertical"
-                        android:drawablePadding="5dp"
+                        android:drawablePadding="10dp"
                         app:drawableLeftCompat="@drawable/ic_access_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
