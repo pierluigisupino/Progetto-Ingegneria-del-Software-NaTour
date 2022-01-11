@@ -32,7 +32,7 @@ public class AddItineraryActivity extends BaseActivity {
     private final AddItineraryFragment1 addItineraryFragment1 = new AddItineraryFragment1();
     private final AddItineraryFragment2 addItineraryFragment2 = new AddItineraryFragment2(this);
     private final AddItineraryFragment3 addItineraryFragment3 = new AddItineraryFragment3(this);
-    private AddItineraryFragment4 addItineraryFragment4 = null;
+    private final AddItineraryFragment4 addItineraryFragment4 = new AddItineraryFragment4(this);
 
     private ConstraintLayout layout;
     private Button backButton;
@@ -110,7 +110,7 @@ public class AddItineraryActivity extends BaseActivity {
                 changeFragment();
             }else if(stepIndex == 2){
                 imagesBytes = addItineraryFragment3.getImagesBytes();
-                addItineraryFragment4 = new AddItineraryFragment4(this, addItineraryFragment3.getPointOfInterest());
+                addItineraryFragment4.setPhoto(addItineraryFragment3.getPointOfInterest());
                 stepIndex++;
                 changeFragment();
             } else if(stepIndex == 3 && addItineraryFragment4.isStartPointInserted() && addItineraryFragment4.arePositionsCorrect()){

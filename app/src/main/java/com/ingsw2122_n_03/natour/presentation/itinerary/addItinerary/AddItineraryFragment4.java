@@ -78,14 +78,13 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     private final ArrayList<Marker> markers = new ArrayList<>();
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
-    private final HashMap<byte[], GeoPoint> pointOfInterests;
+    private HashMap<byte[], GeoPoint> pointOfInterests;
 
     private ActivityResultLauncher<Intent> getGPXLauncher;
 
 
-    public AddItineraryFragment4(AddItineraryActivity addItineraryActivity, HashMap<byte[], GeoPoint> pointOfInterests) {
+    public AddItineraryFragment4(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
-        this.pointOfInterests = pointOfInterests;
     }
 
     @Override
@@ -279,7 +278,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     private void addPointOfInterests(){
 
         for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
-            
+
             byte[] bytes = entry.getKey();
             GeoPoint geoPoint = entry.getValue();
 
@@ -473,6 +472,10 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     public ArrayList<GeoPoint> getWaypoints(){
         return waypoints;
+    }
+
+    public void setPhoto(HashMap<byte[], GeoPoint> pointOfInterests) {
+        this.pointOfInterests = pointOfInterests;
     }
 
 }
