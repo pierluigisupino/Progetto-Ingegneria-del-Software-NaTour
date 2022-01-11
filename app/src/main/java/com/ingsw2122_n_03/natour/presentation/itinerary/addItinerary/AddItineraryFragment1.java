@@ -75,8 +75,11 @@ public class AddItineraryFragment1 extends Fragment {
         if(nameEditText.getText() == null || nameEditText.getText().length() == 0) {
             nameTextInputLayout.setError(getString(R.string.name_warning));
             return false;
-        }else if(nameEditText.getText().toString().matches("\\s+.*")){
+        }else if(nameEditText.getText().toString().matches("\\s+.*")) {
             nameTextInputLayout.setError(getString(R.string.name_space_warning));
+            return false;
+        }else if(nameEditText.getText().length() < 4) {
+            nameTextInputLayout.setError(getString(R.string.username_length_error));
             return false;
         }
 

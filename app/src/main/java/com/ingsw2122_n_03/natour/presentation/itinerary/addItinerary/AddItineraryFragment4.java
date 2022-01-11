@@ -3,17 +3,13 @@ package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -80,15 +76,14 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     private RoadManager roadManager;
     private Polyline roadOverlay;
 
-    private ArrayList<Marker> markers = new ArrayList<>();
-    private ArrayList<GeoPoint> waypoints = new ArrayList<>();
+    private final ArrayList<Marker> markers = new ArrayList<>();
+    private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
+    private final HashMap<byte[], GeoPoint> pointOfInterests;
 
     private ActivityResultLauncher<Intent> getGPXLauncher;
 
-    private ArrayList<Marker> markersPointOfInterests = new ArrayList<>();
-    private HashMap<GeoPoint, byte[]> pointOfInterests;
 
-    public AddItineraryFragment4(AddItineraryActivity addItineraryActivity, HashMap<GeoPoint, byte[]> pointOfInterests) {
+    public AddItineraryFragment4(AddItineraryActivity addItineraryActivity, HashMap<byte[], GeoPoint> pointOfInterests) {
         this.addItineraryActivity = addItineraryActivity;
         this.pointOfInterests = pointOfInterests;
     }
@@ -282,9 +277,10 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     }
 
     private void addPointOfInterests(){
-        for (Map.Entry<GeoPoint, byte[]> entry : pointOfInterests.entrySet()) {
-            GeoPoint geoPoint = entry.getKey();
-            byte[] bytes = entry.getValue();
+        for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
+            byte[] bytes = entry.getKey();
+            GeoPoint geoPoint = entry.getValue();
+
 
             PointOfInterest pointOfInterest = new PointOfInterest(map);
 
@@ -300,7 +296,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             pointOfInterest.setOnMarkerClickListener(this);
 
             map.getOverlays().add(pointOfInterest);
-            markersPointOfInterests.add(pointOfInterest);
         }
     }
 

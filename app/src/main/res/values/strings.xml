@@ -102,7 +102,7 @@
     <string name="description_place_holder">Description</string>
     <string name="difficulty_text">What is the Difficulty Level?</string>
     <string name="duration_text">How long\nit lasts?</string>
-    <string name="photo_text">Add Photos</string>
+    <string name="photo_text">Want to show something?</string>
     <string name="track_text">Track</string>
     <string name="or_text">or</string>
     <string name="open_maps_button_text">Open Maps</string>

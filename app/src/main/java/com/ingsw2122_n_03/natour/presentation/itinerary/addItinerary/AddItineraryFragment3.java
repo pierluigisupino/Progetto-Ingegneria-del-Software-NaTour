@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +24,11 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
-import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.Marker;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -42,8 +38,8 @@ public class AddItineraryFragment3 extends Fragment {
     private RecyclerView recyclerView;
     private final AddItineraryActivity addItineraryActivity;
 
-    private ArrayList<byte[]> imagesBytes = new ArrayList<>();
-    private HashMap<GeoPoint, byte[]> pointOfInterests = new HashMap<>();
+    private final ArrayList<byte[]> imagesBytes = new ArrayList<>();
+    private final HashMap<byte[], GeoPoint> pointOfInterests = new HashMap<>();
 
     private TextView countImageTextView;
 
@@ -98,7 +94,7 @@ public class AddItineraryFragment3 extends Fragment {
                                         imagesBytes.add(photoByte);
 
                                         double[] coordinates = imageUtilities.getImageLocation(photoByte);
-                                        if(coordinates != null) pointOfInterests.put(new GeoPoint(coordinates[0], coordinates[1]), photoByte);
+                                        if(coordinates != null) pointOfInterests.put(photoByte, new GeoPoint(coordinates[0], coordinates[1]));
 
                                     }catch (IOException e) {
                                         addItineraryActivity.onFail(getString(R.string.generic_error));
@@ -137,12 +133,12 @@ public class AddItineraryFragment3 extends Fragment {
     }
 
     private void setAdapter(){
-        recyclerView.setAdapter(new ImageAdapter(countImageTextView, imagesBytes));
+        recyclerView.setAdapter(new ImageAdapter(countImageTextView, imagesBytes, pointOfInterests));
     }
 
     public ArrayList<byte[]> getImagesBytes(){ return this.imagesBytes; }
 
-    public HashMap<GeoPoint, byte[]> getPointOfInterest(){
+    public HashMap<byte[], GeoPoint> getPointOfInterest(){
         return this.pointOfInterests;
     }
 

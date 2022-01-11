@@ -98,7 +98,7 @@ public class AddItineraryActivity extends BaseActivity {
 
             if (stepIndex == 0 && addItineraryFragment1.isNameValid()){
                 name = addItineraryFragment1.getName();
-                name= name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();;
+                name = name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
                 description = addItineraryFragment1.getDescription();
                 stepIndex++;
                 changeFragment();
@@ -110,6 +110,7 @@ public class AddItineraryActivity extends BaseActivity {
                 changeFragment();
             }else if(stepIndex == 2){
                 imagesBytes = addItineraryFragment3.getImagesBytes();
+                addItineraryFragment4 = new AddItineraryFragment4(this, addItineraryFragment3.getPointOfInterest());
                 stepIndex++;
                 changeFragment();
             } else if(stepIndex == 3 && addItineraryFragment4.isStartPointInserted()){
@@ -141,11 +142,6 @@ public class AddItineraryActivity extends BaseActivity {
         }else if(stepIndex == 2){
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment3);
         }else if(stepIndex == 3){
-
-            if(addItineraryFragment4 == null){
-                addItineraryFragment4 = new AddItineraryFragment4(this, addItineraryFragment3.getPointOfInterest());
-            }
-
             fragmentTransaction.replace(R.id.fragmentContainer, addItineraryFragment4);
         }
 
@@ -185,11 +181,9 @@ public class AddItineraryActivity extends BaseActivity {
     public void onSuccess(String msg) {
         runOnUiThread(() -> {
             linearProgressIndicator.setVisibility(View.INVISIBLE);
-            if(msg != null) {
-                Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                        .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.success))
-                        .show();
-            }
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.success))
+                    .show();
         });
     }
 

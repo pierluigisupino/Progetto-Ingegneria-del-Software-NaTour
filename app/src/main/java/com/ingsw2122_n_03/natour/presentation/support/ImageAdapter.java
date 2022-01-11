@@ -13,6 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.osmdroid.util.GeoPoint;
+
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -20,10 +23,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     private final TextView textView;
     private final List<byte[]> bytes;
+    private final HashMap<byte[], GeoPoint> positions;
 
-    public ImageAdapter(TextView textView, List<byte[]> bitmaps) {
+    public ImageAdapter(TextView textView, List<byte[]> bitmaps, HashMap<byte[], GeoPoint> positions) {
         this.textView = textView;
         this.bytes = bitmaps;
+        this.positions = positions;
     }
 
     @NonNull
@@ -43,8 +48,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         holder.setBitmap(bytes.get(position));
         holder.getDeleteButton().setOnClickListener(view -> {
-            bytes.remove(holder.getAdapterPosition());
-            notifyItemRemoved(holder.getAdapterPosition());
+            int pos = holder.getAdapterPosition();
+            positions.remove(bytes.get(pos));
+            bytes.remove(pos);
+            notifyItemRemoved(pos);
             setPhotoCount(holder);
         });
         setPhotoCount(holder);

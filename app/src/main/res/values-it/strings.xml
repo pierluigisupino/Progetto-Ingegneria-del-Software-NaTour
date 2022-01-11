@@ -93,7 +93,7 @@
     <string name="itinerary_item_image_description">Iter name description</string>
 
     <!--ITINERARY-->
-    <string name="add_itinerary_title">Aggiungi Itinerario</string>
+    <string name="add_itinerary_title">Aggiungi un Itinerario</string>
     <string name="next_button">Avanti</string>
     <string name="back_button">Indietro</string>
     <string name="add_button">Aggiungi</string>
@@ -102,7 +102,7 @@
     <string name="description_place_holder">Descrizione</string>
     <string name="difficulty_text">Che tipo di difficoltà ha?</string>
     <string name="duration_text">Quanto\nDura?</string>
-    <string name="photo_text">Aggiungi delle foto</string>
+    <string name="photo_text">Vuoi mostrare qualcosa?</string>
     <string name="track_text">Tracciato</string>
     <string name="or_text">oppure</string>
     <string name="open_maps_button_text">Apri Mappa</string>
