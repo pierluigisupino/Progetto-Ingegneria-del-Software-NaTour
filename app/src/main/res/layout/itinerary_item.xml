@@ -13,7 +13,8 @@
         android:clickable="true"
         android:layout_marginHorizontal="5dp"
         android:layout_marginVertical="5dp"
-        android:foreground="@drawable/button_light_background">
+        android:foreground="@drawable/button_light_background"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +27,8 @@
                 android:adjustViewBounds="true"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@string/itinerary_item_image_description" />
 
             <LinearLayout
                 android:layout_width="match_parent"

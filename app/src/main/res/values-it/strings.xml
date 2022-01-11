@@ -90,6 +90,7 @@
     <!--IMAGES DESCRIPTION-->
     <string name="splash_image_description">Splash Image </string>
     <string name="welcome_page_image_description">Welcome page image</string>
+    <string name="itinerary_item_image_description">Iter name description</string>
 
     <!--ITINERARY-->
     <string name="add_itinerary_title">Aggiungi Itinerario</string>
@@ -118,7 +119,7 @@
     <string name="photo_added_success">Foto aggiunte</string>
     <string name="cancel_operation_title">Annullare l\' inserimento?</string>
     <string name="cancel_operation_msgText">Tutti i progressi andranno persi</string>
-    <string name="search">Cerca...</string>
+    <string name="search">Cerca</string>
     <string name="loading_screen_text">Stiamo Salvando il tuo Itinerario.</string>
     <string name="itinerary_insert_failure">Salvataggio fallito, riprova.</string>
 

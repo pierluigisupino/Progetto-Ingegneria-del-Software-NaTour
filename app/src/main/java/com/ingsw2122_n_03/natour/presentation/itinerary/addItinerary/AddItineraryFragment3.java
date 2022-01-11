@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class AddItineraryFragment3 extends Fragment {
@@ -88,10 +90,11 @@ public class AddItineraryFragment3 extends Fragment {
 
                                     try {
 
-                                        byte[] inputData = imageUtilities.getBytes(getActivity(), imageUri);
+                                        byte[] inputData = imageUtilities.getBytes(requireActivity(), imageUri);
                                         imagesBytes.add(inputData);
-                                        imageUtilities.getImageLocation(getActivity(), inputData);
+                                        double[] a = imageUtilities.getImageLocation(getActivity(), inputData);
                                         imagesBitmap.add(imageUtilities.getImageBitmap(inputData));
+                                        Log.i("a", Arrays.toString(a));
 
                                     }catch (IOException e) {
                                         addItineraryActivity.onFail(getString(R.string.generic_error));
