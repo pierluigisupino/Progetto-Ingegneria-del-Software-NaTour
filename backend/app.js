@@ -112,7 +112,7 @@ app.post('/items/photos', async function(req, res) {
   var i = 0;
   const count = req.body.photo_count;
   
-  for(i; i < count; i++){
+  for(; i < count; i++){
     
     var filename = Math.random().toString(36).slice(2);
     var photoBody = 'photo'+i;
@@ -127,14 +127,14 @@ app.post('/items/photos', async function(req, res) {
     await s3.putObject(uploadParams, (err, dataUp) => {
       if (err){
         i = count + 1;
-        res.json({Error: 400});
+        res.json({Code: 400});
       }
     }).promise();
   }
   
     
   if( i != count + 1){
-    res.json({Success: 200})
+    res.json({Code: 200})
   }
   
 });
