@@ -1,11 +1,3 @@
-/*
-Copyright 2017 - 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-http://aws.amazon.com/apache2.0/
-or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
-*/
-
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
@@ -103,36 +95,13 @@ app.post('/items/itineraries', function(req, res) {
   client.query(query, [req.body.name, req.body.iterDescription, req.body.difficulty, req.body.hours, req.body.minutes, 
   '('+startPoint.Latitude+','+startPoint.Longitude+')', waypoints, req.body.creator, req.body.date] ,(err, suc) => {
     
-    if(err) {
-      
-      client.end();
+    client.end();
+    
+    if(err) 
       return res.json({Error: err.stack});
-      
-    }else {
-      
-      var iterID = suc.rows[0].iterid; 
-      var bucketParams = {
-        Bucket: process.env.BUCKETNAME, 
-        Key: 'iter'+iterID+'/', 
-      };
-
-      s3.putObject(bucketParams, function(err, data) {
-        
-        if (err) {
-          
-          client.query('DELETE FROM ITINERARY WHERE IterID = '+iterID, function(erro, succ){});
-          client.end();
-          return res.json({Error: err.stack}); 
-          
-        }else {
-          
-          client.end();
-          return res.json(iterID);
-              
-        }
-      });
-      
-    }
+    else 
+      return res.json(suc.rows[0].iterid);
+    
   });
   
 });
@@ -141,10 +110,8 @@ app.post('/items/itineraries', function(req, res) {
 app.post('/items/photos', function(req, res) {
   
   const count = req.body.photo_count;
-  var i = 0;
-  var errno;
   
-  for(; i < count; i++){
+  for(var i = 0; i < count; i++){
     
     var filename = Math.random().toString(36).slice(2);
     var photoBody = 'photo'+i;
@@ -158,16 +125,10 @@ app.post('/items/photos', function(req, res) {
     
     s3.putObject(uploadParams, (err, dataUp) => {
       if (err){
-        i = count+1;
-        errno = err.stack;
+        return res.json({Error: err.stack});
       }
     });
   } 
-  
-  if(i > count) 
-    return res.json({Code: 400, Error: errno});
-  else
-    return res.json({Code: 200});
   
 });
 
