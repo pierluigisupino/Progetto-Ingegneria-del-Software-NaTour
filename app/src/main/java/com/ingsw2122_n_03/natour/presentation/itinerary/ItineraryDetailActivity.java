@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.presentation.itinerary;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -37,6 +38,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         TextView textViewName = binding.textViewName;
         TextView textViewCreator = binding.textViewCreator;
+        ImageView imageView = binding.image;
         TextView textViewDescription = binding.textViewDescription;
         TextView textViewDuration = binding.textViewDuration;
         TextView textViewDifficulty = binding.textViewDifficulty;
