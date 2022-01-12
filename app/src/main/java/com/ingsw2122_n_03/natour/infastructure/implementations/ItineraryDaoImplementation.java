@@ -51,6 +51,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
         } catch (JSONException e) {
             controller.onItineraryInsertError();
+            return;
         }
 
         RestOptions options = RestOptions.builder()
