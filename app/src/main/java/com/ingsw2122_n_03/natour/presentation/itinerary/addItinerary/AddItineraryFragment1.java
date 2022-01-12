@@ -37,8 +37,8 @@ public class AddItineraryFragment1 extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = Fragment1AddItineraryBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
+
     }
 
     @Override

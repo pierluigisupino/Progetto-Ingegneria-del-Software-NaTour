@@ -69,6 +69,17 @@ public class AddItineraryFragment2 extends Fragment {
         }
     }
 
+
+    public boolean isDurationValid(){
+        if(getHours()!=0 || getMinutes()!=0)
+            return true;
+        else{
+            addItineraryActivity.onFail(getString(R.string.duration_error));
+            return false;
+        }
+    }
+
+
     public String getDifficulty(){
         difficulty = difficultyTextView.getText().toString();
         return difficulty;
@@ -82,15 +93,6 @@ public class AddItineraryFragment2 extends Fragment {
     public int getMinutes(){
         minutes = timePicker.getMinute();
         return minutes;
-    }
-
-    public boolean isDurationValid(){
-        if(getHours()!=0 || getMinutes()!=0)
-            return true;
-        else{
-            addItineraryActivity.onFail(getString(R.string.duration_error));
-            return false;
-        }
     }
 
 }

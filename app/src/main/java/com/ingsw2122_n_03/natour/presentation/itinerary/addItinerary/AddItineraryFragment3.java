@@ -136,6 +136,7 @@ public class AddItineraryFragment3 extends Fragment {
         recyclerView.setAdapter(new ImageAdapter(countImageTextView, imagesBytes, pointOfInterests));
     }
 
+
     public ArrayList<byte[]> getImagesBytes(){ return this.imagesBytes; }
 
     public HashMap<byte[], GeoPoint> getPointOfInterest(){

@@ -38,8 +38,6 @@ public class AddItineraryActivity extends BaseActivity {
     private Button nextButton;
     private LinearProgressIndicator linearProgressIndicator;
 
-    private IterController iterController;
-
     private int stepIndex = 0;
 
     private String name;
@@ -49,6 +47,9 @@ public class AddItineraryActivity extends BaseActivity {
     private int minutes;
     private ArrayList <byte[]> imagesBytes;
     private ArrayList<GeoPoint> waypoints;
+
+    private IterController iterController;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -125,13 +126,16 @@ public class AddItineraryActivity extends BaseActivity {
     }
 
     private void addFragment(){
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragmentContainer, addItineraryFragment1);
         fragmentTransaction.commit();
+
     }
 
     private void changeFragment(){
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -149,9 +153,11 @@ public class AddItineraryActivity extends BaseActivity {
         stepView.go(stepIndex, true);
         showBackButton();
         showAddButton();
+
     }
 
     private void showBackButton(){
+
         if (stepIndex > 0) {
             backButton.setVisibility(View.VISIBLE);
             backButton.setEnabled(true);
@@ -159,50 +165,61 @@ public class AddItineraryActivity extends BaseActivity {
             backButton.setVisibility(View.INVISIBLE);
             backButton.setEnabled(false);
         }
+
     }
 
     private void showAddButton(){
-        if(stepIndex == 3){
+
+        if(stepIndex == 3)
             nextButton.setText(R.string.add_button);
-        }else{
+        else
             nextButton.setText(R.string.next_button);
-        }
+
     }
 
     public void showProgressBar(){
+
         backButton.setEnabled(false);
         nextButton.setEnabled(false);
         linearProgressIndicator.setVisibility(View.VISIBLE);
+
     }
 
     public void hideProgressBar(){
+
         linearProgressIndicator.setVisibility(View.INVISIBLE);
         backButton.setEnabled(true);
         nextButton.setEnabled(true);
+
     }
 
     @Override
     public void onSuccess(String msg) {
+
         runOnUiThread(() -> {
             linearProgressIndicator.setVisibility(View.INVISIBLE);
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                     .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.success))
                     .show();
         });
+
     }
 
     @Override
     public void onFail(String msg) {
+
         runOnUiThread(() -> {
             linearProgressIndicator.setVisibility(View.INVISIBLE);
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                     .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.error))
                     .show();
         });
+
     }
 
     @Override
     public void onBackPressed() {
+
         new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_cancel)
                 .setTitle(R.string.cancel_operation_title)
@@ -210,5 +227,7 @@ public class AddItineraryActivity extends BaseActivity {
                 .setPositiveButton(R.string.yes_text, (dialog, which) -> finish())
                 .setNegativeButton(R.string.no_text, null)
                 .show();
+
     }
+
 }

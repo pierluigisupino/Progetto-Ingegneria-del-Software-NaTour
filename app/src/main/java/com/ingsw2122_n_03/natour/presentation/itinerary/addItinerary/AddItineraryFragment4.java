@@ -151,6 +151,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
+
         });
 
         getGPXLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -190,6 +191,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             getGPXLauncher.launch(intent);
         });
+
+        pointOfInterests.clear();
 
         for(Map.Entry<byte[], GeoPoint> entry : rawPointOfInterests.entrySet()){
             PointOfInterest pointOfInterest = new PointOfInterest(map, entry.getKey());
@@ -255,6 +258,10 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         map.onPause();
     }
 
+    /************
+     * MAP UTILS
+     ************/
+
     private void addWaypoint(GeoPoint p) {
         NaTourMarker marker = new NaTourMarker(map);
 
@@ -306,6 +313,36 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         }
     }
 
+    private void makeRoads(){
+
+        addItineraryActivity.showProgressBar();
+        new Thread(()-> {
+            if(waypoints.size() > 1){
+                Road road = roadManager.getRoad(waypoints);
+                map.getOverlays().remove(roadOverlay);
+                roadOverlay = RoadManager.buildRoadOverlay(road);
+                map.getOverlays().add(roadOverlay);
+                map.invalidate();
+            }else {
+                map.getOverlays().remove(roadOverlay);
+            }
+            requireView().post(addItineraryActivity::hideProgressBar);
+        }).start();
+    }
+
+    private void clearMap(){
+        for(Marker marker : markers){
+            waypoints.remove(((NaTourMarker) marker).getGeoPoint());
+            map.getOverlays().remove(marker);
+        }
+        map.getOverlays().remove(roadOverlay);
+        markers.clear();
+    }
+
+    /*******************
+     * MARKER LISTENERS
+     ******************/
+
     @Override
     public boolean onMarkerClick(Marker marker, MapView mapView) {
 
@@ -344,22 +381,30 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     @Override
     public void onMarkerDragStart(Marker marker) {}
 
-    private void makeRoads(){
+    public void showImage(Drawable drawable) {
 
-        addItineraryActivity.showProgressBar();
-        new Thread(()-> {
-            if(waypoints.size() > 1){
-                Road road = roadManager.getRoad(waypoints);
-                map.getOverlays().remove(roadOverlay);
-                roadOverlay = RoadManager.buildRoadOverlay(road);
-                map.getOverlays().add(roadOverlay);
-                map.invalidate();
-            }else {
-                map.getOverlays().remove(roadOverlay);
-            }
-            requireView().post(addItineraryActivity::hideProgressBar);
-        }).start();
+        Dialog builder = new Dialog(getActivity());
+        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        builder.getWindow().setBackgroundDrawable(
+                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        builder.setOnDismissListener(dialogInterface -> {
+
+        });
+
+        ImageView imageView = new ImageView(getActivity());
+        imageView.setImageDrawable(drawable);
+        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        builder.show();
+
     }
+
+    /************
+     * GPX UTILS
+     ***********/
 
     private InputStream getInputStream(Uri uri){
 
@@ -392,25 +437,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         return parsedGpx;
     }
 
-    public void showImage(Drawable drawable) {
-        Dialog builder = new Dialog(getActivity());
-        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        builder.getWindow().setBackgroundDrawable(
-                new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        builder.setOnDismissListener(dialogInterface -> {
-
-        });
-
-        ImageView imageView = new ImageView(getActivity());
-        imageView.setImageDrawable(drawable);
-        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        builder.show();
-    }
-
     private void addGpxWaypoints(Gpx gpx){
 
         List<WayPoint> wayPoints = gpx.getWayPoints();
@@ -439,14 +465,9 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         }
     }
 
-    private void clearMap(){
-        for(Marker marker : markers){
-            waypoints.remove(((NaTourMarker) marker).getGeoPoint());
-            map.getOverlays().remove(marker);
-        }
-        map.getOverlays().remove(roadOverlay);
-        markers.clear();
-    }
+    /*****************
+     * ACTIVITY UTILS
+     ****************/
 
     private void showErrorDialog(String msg, ArrayList<PointOfInterest> invalidPointOfInterests){
 
@@ -456,10 +477,10 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                 .setMessage(msg)
                 .setNegativeButton(requireContext().getString(R.string.delete_photo_text), (dialogInterface, i) -> {
                     for(PointOfInterest p : invalidPointOfInterests) {
-                        map.getOverlays().remove(p);
-                        map.invalidate();
                         imagesBytes.remove(p.getBytes());
                         pointOfInterests.remove(p);
+                        map.getOverlays().remove(p);
+                        map.invalidate();
                     }
 
                 })
@@ -476,7 +497,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         }
     }
 
-
     public boolean arePositionsCorrect() {
 
         boolean ret = true;
@@ -486,7 +506,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
             for (PointOfInterest p : pointOfInterests) {
 
-                if(!roadOverlay.isCloseTo(p.getPosition(), 80, map)) {
+                if(!roadOverlay.isCloseTo(p.getPosition(), 100, map)) {
                     invalidPointOfInterests.add(p);
                     ret = false;
                 }
@@ -516,17 +536,18 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     }
 
-    public ArrayList<GeoPoint> getWaypoints(){
-        return waypoints;
-    }
 
     public void setRawPointOfInterests(HashMap<byte[], GeoPoint> poi) {
-        this.rawPointOfInterests = poi;
-
+        rawPointOfInterests = poi;
     }
 
     public void setImageBytes(ArrayList<byte[]> imagesBytes) {
         this.imagesBytes = imagesBytes;
+    }
+
+
+    public ArrayList<GeoPoint> getWaypoints(){
+        return waypoints;
     }
 
 }
