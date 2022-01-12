@@ -38,7 +38,8 @@ public class ImageUploader {
                 jsonObject.put("photo"+i, encodedStrings[i]);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            controller.onItineraryInsertComplete(1);
+            return;
         }
 
         RestOptions options = RestOptions.builder()
@@ -48,7 +49,10 @@ public class ImageUploader {
 
         Amplify.API.post(
                 options,
-                response-> {controller.onItineraryInsertComplete(0); Log.i("RESPONSE", response.getData().asString());},
+                response-> {
+                    Log.i("RESPONSE", response.getData().asString());
+                    controller.onItineraryInsertSuccess(0);
+                },
                 error -> {controller.onItineraryInsertComplete(1); Log.e("ERROR:", error.getMessage());}
         );
 
