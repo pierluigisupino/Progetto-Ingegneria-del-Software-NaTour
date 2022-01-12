@@ -9,11 +9,14 @@ import androidx.annotation.Nullable;
 
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
+import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class ItineraryDetailActivity extends BaseActivity {
 
     private IterController iterController;
+
+    private Itinerary itinerary;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,6 +27,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         setContentView(view);
 
         Intent intent = getIntent();
+        itinerary = (Itinerary) intent.getSerializableExtra("Itinerary");
 
         iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
@@ -33,10 +37,10 @@ public class ItineraryDetailActivity extends BaseActivity {
         TextView textView3 = binding.textView8;
         TextView textView4 = binding.textView10;
 
-        textView1.setText(intent.getStringExtra("name"));
-        textView2.setText(intent.getStringExtra("creator"));
-        textView3.setText(intent.getStringExtra("hours"));
-        textView4.setText(intent.getStringExtra("minutes"));
+        textView1.setText(itinerary.getName());
+        textView2.setText(itinerary.getCreator().getName());
+        textView3.setText(String.valueOf(itinerary.getHoursDuration()));
+        textView4.setText(String.valueOf(itinerary.getMinutesDuration()));
 
     }
 
