@@ -1,6 +1,7 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -451,7 +452,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         }
     }
 
-    //@TODO PHOTO DELETE?
+
     public boolean arePositionsCorrect() {
 
         if(waypoints.size() > 1) {
@@ -459,8 +460,13 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
                 GeoPoint geoPoint = entry.getValue();
 
-                if(!roadOverlay.isCloseTo(geoPoint, 10, map)) {
-                    addItineraryActivity.onFail("FOTO TROPPO LONTANA!!!");
+                if(!roadOverlay.isCloseTo(geoPoint, 20, map)) {
+                    new AlertDialog.Builder(requireContext())
+                            .setIcon(R.drawable.ic_error)
+                            .setTitle(requireContext().getString(R.string.warning_text))
+                            .setMessage(requireContext().getString(R.string.position_error))
+                            .setPositiveButton(requireContext().getString(R.string.ok_text), null)
+                            .show();
                     return false;
                 }
             }
@@ -471,7 +477,12 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                 GeoPoint geoPoint = entry.getValue();
 
                 if(geoPoint.distanceToAsDouble(waypoints.get(0)) > 10000) {
-                    addItineraryActivity.onFail("FOTO TROPPO LONTANA!!!");
+                    new AlertDialog.Builder(requireContext())
+                            .setIcon(R.drawable.ic_error)
+                            .setTitle(requireContext().getString(R.string.warning_text))
+                            .setMessage(requireContext().getString(R.string.position_error_point))
+                            .setPositiveButton(requireContext().getString(R.string.ok_text), null)
+                            .show();
                     return false;
                 }
             }
