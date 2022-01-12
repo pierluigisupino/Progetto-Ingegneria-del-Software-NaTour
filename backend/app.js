@@ -107,7 +107,7 @@ app.post('/items/itineraries', function(req, res) {
 });
 
 
-app.post('/items/photos', function(req, res) {
+app.post('/items/photos', async function(req, res) {
   
   const count = req.body.photo_count;
   
@@ -123,12 +123,17 @@ app.post('/items/photos', function(req, res) {
       ContentEncoding: 'base64'
     };
     
-    s3.putObject(uploadParams, (err, dataUp) => {
+    await s3.putObject(uploadParams, (err, dataUp) => {
       if (err){
-        return res.json({Error: err.stack});
+        i = count + 1;
+        res.json({Error: 400});
       }
     });
-  } 
+  }
+  
+  if( i != count + 1){
+    res.json({Success: 200})
+  }
   
 });
 
