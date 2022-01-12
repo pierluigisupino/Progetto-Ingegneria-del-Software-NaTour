@@ -125,6 +125,7 @@
     <string name="cancel_operation_title">Cancel Operation?</string>
     <string name="cancel_operation_msgText">All progress will be lost</string>
     <string name="search">Search</string>
+    <string name="delete_photo_text">Delete photos</string>
     <string name="loading_screen_text">Please Wait, we are uploading your Itinerary.</string>
     <string name="itinerary_insert_failure">Failed to upload Itinerary, try again.</string>
 

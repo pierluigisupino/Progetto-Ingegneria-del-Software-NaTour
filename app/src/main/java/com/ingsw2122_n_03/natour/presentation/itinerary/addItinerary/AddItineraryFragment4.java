@@ -79,7 +79,9 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     private final ArrayList<Marker> markers = new ArrayList<>();
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
-    private HashMap<byte[], GeoPoint> pointOfInterests;
+    private final ArrayList<PointOfInterest> pointOfInterests = new ArrayList<>();
+    private ArrayList<byte[]> imagesBytes;
+    private HashMap<byte[], GeoPoint> rawPointOfInterests;
 
     private ActivityResultLauncher<Intent> getGPXLauncher;
 
@@ -163,6 +165,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                         parsedGpx = parsGpx(is);
 
                         if (parsedGpx != null) {
+                            clearMap();
                             addGpxWaypoints(parsedGpx);
                             makeRoads();
                         } else {
@@ -182,14 +185,17 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         });
 
         addGPX.setOnClickListener(view -> {
-
-            clearMap();
-
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             getGPXLauncher.launch(intent);
         });
+
+        for(Map.Entry<byte[], GeoPoint> entry : rawPointOfInterests.entrySet()){
+            PointOfInterest pointOfInterest = new PointOfInterest(map, entry.getKey());
+            pointOfInterest.setPosition(entry.getValue());
+            this.pointOfInterests.add(pointOfInterest);
+        }
 
         return binding.getRoot();
     }
@@ -269,6 +275,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         marker.setPosition(p);
 
         map.getOverlays().add(marker);
+        map.invalidate();
         markers.add(marker);
 
         NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(p.getLatitude(), p.getLongitude());
@@ -278,25 +285,23 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     private void addPointOfInterests(){
 
-        for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
+        for (PointOfInterest p : pointOfInterests) {
 
-            byte[] bytes = entry.getKey();
-            GeoPoint geoPoint = entry.getValue();
-
-            PointOfInterest pointOfInterest = new PointOfInterest(map);
+            byte[] bytes = p.getBytes();
+            GeoPoint geoPoint = p.getPosition();
 
             BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
 
-            pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
-            pointOfInterest.setImage(drawable);
-            pointOfInterest.setDrawable(drawable);
+            p.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
+            p.setImage(drawable);
+            p.setDrawable(drawable);
 
-            pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-            pointOfInterest.setPosition(geoPoint);
+            p.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+            p.setPosition(geoPoint);
 
-            pointOfInterest.setOnMarkerClickListener(this);
+            p.setOnMarkerClickListener(this);
 
-            map.getOverlays().add(pointOfInterest);
+            map.getOverlays().add(p);
 
         }
     }
@@ -304,9 +309,9 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     @Override
     public boolean onMarkerClick(Marker marker, MapView mapView) {
 
-        if(marker instanceof PointOfInterest){
+        if(marker instanceof PointOfInterest)
             showImage(((PointOfInterest) marker).getDrawable());
-        }else{
+        else{
 
             int index = markers.indexOf(marker);
 
@@ -443,6 +448,25 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         markers.clear();
     }
 
+    private void showErrorDialog(String msg, ArrayList<PointOfInterest> invalidPointOfInterests){
+
+        new AlertDialog.Builder(requireContext())
+                .setIcon(R.drawable.ic_error)
+                .setTitle(requireContext().getString(R.string.warning_text))
+                .setMessage(msg)
+                .setNegativeButton(requireContext().getString(R.string.delete_photo_text), (dialogInterface, i) -> {
+                    for(PointOfInterest p : invalidPointOfInterests) {
+                        map.getOverlays().remove(p);
+                        map.invalidate();
+                        imagesBytes.remove(p.getBytes());
+                        pointOfInterests.remove(p);
+                    }
+
+                })
+                .setPositiveButton(requireContext().getString(R.string.ok_text), null)
+                .show();
+    }
+
     public boolean isStartPointInserted() {
         if(!waypoints.isEmpty())
             return true;
@@ -455,41 +479,40 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     public boolean arePositionsCorrect() {
 
+        boolean ret = true;
+        ArrayList<PointOfInterest> invalidPointOfInterests = new ArrayList<>();
+
         if(waypoints.size() > 1) {
 
-            for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
-                GeoPoint geoPoint = entry.getValue();
+            for (PointOfInterest p : pointOfInterests) {
 
-                if(!roadOverlay.isCloseTo(geoPoint, 20, map)) {
-                    new AlertDialog.Builder(requireContext())
-                            .setIcon(R.drawable.ic_error)
-                            .setTitle(requireContext().getString(R.string.warning_text))
-                            .setMessage(requireContext().getString(R.string.position_error))
-                            .setPositiveButton(requireContext().getString(R.string.ok_text), null)
-                            .show();
-                    return false;
+                if(!roadOverlay.isCloseTo(p.getPosition(), 80, map)) {
+                    invalidPointOfInterests.add(p);
+                    ret = false;
                 }
+            }
+
+            if(!ret) {
+                showErrorDialog(requireContext().getString(R.string.position_error), invalidPointOfInterests);
             }
 
         }else {
 
-            for (Map.Entry<byte[], GeoPoint> entry : pointOfInterests.entrySet()) {
-                GeoPoint geoPoint = entry.getValue();
+            for (PointOfInterest p : pointOfInterests) {
 
-                if(geoPoint.distanceToAsDouble(waypoints.get(0)) > 10000) {
-                    new AlertDialog.Builder(requireContext())
-                            .setIcon(R.drawable.ic_error)
-                            .setTitle(requireContext().getString(R.string.warning_text))
-                            .setMessage(requireContext().getString(R.string.position_error_point))
-                            .setPositiveButton(requireContext().getString(R.string.ok_text), null)
-                            .show();
-                    return false;
+                if (p.getPosition().distanceToAsDouble(waypoints.get(0)) > 10000) {
+                    invalidPointOfInterests.add(p);
+                    ret = false;
                 }
+            }
+
+            if(!ret) {
+                showErrorDialog(requireContext().getString(R.string.position_error_point), invalidPointOfInterests);
             }
 
         }
 
-        return true;
+        return ret;
 
     }
 
@@ -497,8 +520,13 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         return waypoints;
     }
 
-    public void setPhoto(HashMap<byte[], GeoPoint> pointOfInterests) {
-        this.pointOfInterests = pointOfInterests;
+    public void setRawPointOfInterests(HashMap<byte[], GeoPoint> poi) {
+        this.rawPointOfInterests = poi;
+
+    }
+
+    public void setImageBytes(ArrayList<byte[]> imagesBytes) {
+        this.imagesBytes = imagesBytes;
     }
 
 }

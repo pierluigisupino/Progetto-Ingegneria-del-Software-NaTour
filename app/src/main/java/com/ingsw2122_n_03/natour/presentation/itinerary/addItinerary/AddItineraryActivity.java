@@ -1,16 +1,15 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -110,13 +109,13 @@ public class AddItineraryActivity extends BaseActivity {
                 changeFragment();
             }else if(stepIndex == 2){
                 imagesBytes = addItineraryFragment3.getImagesBytes();
-                addItineraryFragment4.setPhoto(addItineraryFragment3.getPointOfInterest());
+                addItineraryFragment4.setRawPointOfInterests(addItineraryFragment3.getPointOfInterest());
+                addItineraryFragment4.setImageBytes(imagesBytes);
                 stepIndex++;
                 changeFragment();
             } else if(stepIndex == 3 && addItineraryFragment4.isStartPointInserted() && addItineraryFragment4.arePositionsCorrect()){
                 waypoints = addItineraryFragment4.getWaypoints();
-                onSuccess("OK"); //@TODO DELETE, FOR TEST USAGE
-                //iterController.insertItinerary(name, description, difficulty, hours, minutes, imagesBytes, waypoints);
+                iterController.insertItinerary(name, description, difficulty, hours, minutes, imagesBytes, waypoints);
             }
 
         });
@@ -171,11 +170,15 @@ public class AddItineraryActivity extends BaseActivity {
     }
 
     public void showProgressBar(){
+        backButton.setEnabled(false);
+        nextButton.setEnabled(false);
         linearProgressIndicator.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar(){
         linearProgressIndicator.setVisibility(View.INVISIBLE);
+        backButton.setEnabled(true);
+        nextButton.setEnabled(true);
     }
 
     @Override

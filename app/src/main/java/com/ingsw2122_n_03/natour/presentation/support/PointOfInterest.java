@@ -7,15 +7,12 @@ import org.osmdroid.views.overlay.Marker;
 
 public class PointOfInterest extends Marker {
 
-    Drawable drawable;
+    private byte[] bytes;
+    private Drawable drawable;
 
-    public PointOfInterest(MapView mapView){
+    public PointOfInterest(MapView mapView, byte[] bytes){
         super(mapView);
-    }
-
-    public PointOfInterest(MapView mapView, Drawable drawable) {
-        super(mapView);
-        this.drawable = drawable;
+        this.bytes = bytes;
     }
 
     public void setDrawable(Drawable drawable){
@@ -26,5 +23,8 @@ public class PointOfInterest extends Marker {
         return this.drawable;
     }
 
+    public byte[] getBytes() {
+        return bytes;
+    }
 
 }
