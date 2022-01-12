@@ -1,3 +1,4 @@
+
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
@@ -39,7 +40,6 @@ app.use(function(req, res, next) {
 app.get('/items/itineraries', function(req, res) {
   
   const client = new Client(clientParams);
-  
   client.connect();
   
   client.query('SELECT * FROM ITINERARY', (err, data) => {
@@ -64,10 +64,12 @@ app.get('/items/users', function(req, res) {
   };
     
   cognito.adminGetUser(params, function(err, data) {
+    
     if (err)
       return res.json({Error: err.stack});
     else
       return res.json(data.UserAttributes[2].Value);
+      
   });
   
 });
@@ -81,16 +83,15 @@ app.get('/items/users', function(req, res) {
 app.post('/items/itineraries', function(req, res) {
   
   const client = new Client(clientParams);
-  var startPoint = JSON.parse(req.body.startPoint);
+  const startPoint = JSON.parse(req.body.startPoint);
   var waypoints = req.body.waypoints;
   
-  if(waypoints != null){
+  if(waypoints != null)
     waypoints = JSON.parse(waypoints);
-  }
   
   client.connect();
   
-  var query = 'INSERT INTO ITINERARY(iterName, description, difficulty, hours, minutes, startPoint, waypoints, creatorID, shareDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING IterID';
+  const query = 'INSERT INTO ITINERARY(iterName, description, difficulty, hours, minutes, startPoint, waypoints, creatorID, shareDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING IterID';
   
   client.query(query, [req.body.name, req.body.iterDescription, req.body.difficulty, req.body.hours, req.body.minutes, 
   '('+startPoint.Latitude+','+startPoint.Longitude+')', waypoints, req.body.creator, req.body.date] ,(err, suc) => {
@@ -125,17 +126,18 @@ app.post('/items/photos', async function(req, res) {
     };
     
     await s3.putObject(uploadParams, (err, dataUp) => {
-      if (err){
+      
+      if (err)
         i = count + 1;
-        res.json({Code: 400});
-      }
+      
     }).promise();
-  }
-  
     
-  if( i != count + 1){
-    res.json({Code: 200})
   }
+    
+  if( i != count + 1)
+    return res.json({Code: 200});
+  else
+    return res.json({Code: 400});
   
 });
 
@@ -147,12 +149,7 @@ app.post('/items/photos', async function(req, res) {
 
 app.put('/items', function(req, res) {
   // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body})
-});
-
-app.put('/items/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body})
+  res.json({success: 'put call succeed!', url: req.url, body: req.body});
 });
 
 
@@ -166,10 +163,6 @@ app.delete('/items', function(req, res) {
   res.json({success: 'delete call succeed!', url: req.url});
 });
 
-app.delete('/items/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'delete call succeed!', url: req.url});
-});
 
 
 /****************************
