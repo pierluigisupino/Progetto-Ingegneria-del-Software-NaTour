@@ -109,9 +109,10 @@ app.post('/items/itineraries', function(req, res) {
 
 app.post('/items/photos', async function(req, res) {
   
+  var i = 0;
   const count = req.body.photo_count;
   
-  for(var i = 0; i < count; i++){
+  for(i; i < count; i++){
     
     var filename = Math.random().toString(36).slice(2);
     var photoBody = 'photo'+i;
@@ -128,9 +129,10 @@ app.post('/items/photos', async function(req, res) {
         i = count + 1;
         res.json({Error: 400});
       }
-    });
+    }).promise();
   }
   
+    
   if( i != count + 1){
     res.json({Success: 200})
   }
