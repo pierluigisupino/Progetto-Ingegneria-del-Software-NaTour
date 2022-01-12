@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
@@ -32,11 +33,15 @@ public class ItineraryDetailActivity extends BaseActivity {
         iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
 
+        MaterialToolbar materialToolbar = binding.topAppBar;
+
         TextView textViewName = binding.textViewName;
         TextView textViewCreator = binding.textViewCreator;
         TextView textViewDescription = binding.textViewDescription;
         TextView textViewDuration = binding.textViewDuration;
         TextView textViewDifficulty = binding.textViewDifficulty;
+
+        materialToolbar.setNavigationOnClickListener(v -> finish());
 
         textViewName.setText(itinerary.getName());
         textViewCreator.setText("By " + itinerary.getCreator().getName());
