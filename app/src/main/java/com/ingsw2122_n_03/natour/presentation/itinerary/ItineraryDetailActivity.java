@@ -32,15 +32,17 @@ public class ItineraryDetailActivity extends BaseActivity {
         iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
 
-        TextView textView1 = binding.textView6;
-        TextView textView2 = binding.textView7;
-        TextView textView3 = binding.textView8;
-        TextView textView4 = binding.textView10;
+        TextView textViewName = binding.textViewName;
+        TextView textViewCreator = binding.textViewCreator;
+        TextView textViewDescription = binding.textViewDescription;
+        TextView textViewDuration = binding.textViewDuration;
+        TextView textViewDifficulty = binding.textViewDifficulty;
 
-        textView1.setText(itinerary.getName());
-        textView2.setText(itinerary.getCreator().getName());
-        textView3.setText(String.valueOf(itinerary.getHoursDuration()));
-        textView4.setText(String.valueOf(itinerary.getMinutesDuration()));
+        textViewName.setText(itinerary.getName());
+        textViewCreator.setText("By " + itinerary.getCreator().getName());
+        textViewDescription.setText(itinerary.getDescription());
+        textViewDuration.setText(String.valueOf(itinerary.getHoursDuration()) + "h & " + String.valueOf(itinerary.getMinutesDuration()) + "m");
+        textViewDifficulty.setText(itinerary.getDifficulty());
 
     }
 
