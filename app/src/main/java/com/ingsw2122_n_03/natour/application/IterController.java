@@ -69,8 +69,8 @@ public class IterController extends Controller {
     public void setUp() {
         currentUser = new User(userDao.getCurrentUserId());
         currentUser.setName(splashActivity.getResources().getString(R.string.current_user_name_text));
-        itineraryDao.getItineraries();
-        //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
+        //itineraryDao.getItineraries();
+        goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
     public void onSetUpSuccess(ArrayList<Itinerary> itineraries) {
@@ -109,7 +109,8 @@ public class IterController extends Controller {
         if(!wayPointArrayList.isEmpty())
             currentIter.setWayPoints(wayPointArrayList);
 
-        itineraryDao.postItinerary(currentIter);
+        //itineraryDao.postItinerary(currentIter);
+        onItineraryInsertComplete(true);
 
     }
 
@@ -137,13 +138,12 @@ public class IterController extends Controller {
         loadingDialog.dismissDialog();
         itineraries.add(currentIter);
 
-        goToActivityAndFinish(addItineraryActivity, MainActivity.class, itineraries);
-        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
+        addItineraryActivity.finish();
 
         if(!success)
-            itineraryDetailActivity.onFail(itineraryDetailActivity.getString(R.string.photo_upload_failed));
+            mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
         else
-            itineraryDetailActivity.onSuccess(itineraryDetailActivity.getString(R.string.itinerary_insert_success));
+            mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));
 
     }
 

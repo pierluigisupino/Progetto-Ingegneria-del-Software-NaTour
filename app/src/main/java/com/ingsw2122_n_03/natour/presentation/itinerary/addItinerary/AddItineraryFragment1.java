@@ -2,10 +2,13 @@ package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -48,6 +51,9 @@ public class AddItineraryFragment1 extends Fragment {
         nameEditText = binding.nameEditText;
 
         descriptionEditText = binding.descriptionEditText;
+
+        descriptionEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        descriptionEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
         nameEditText.addTextChangedListener(new TextWatcher(){
 
@@ -95,11 +101,19 @@ public class AddItineraryFragment1 extends Fragment {
     }
 
     public String getDescription(){
-        String description = descriptionEditText.getText().toString();
-        description = description.substring(0,1).toUpperCase();
 
-        if(description.charAt(description.length() - 1) != '.'){
-            description = description + ".";
+        String description = descriptionEditText.getText().toString();
+
+        if(description != null && description.length() > 0) {
+
+            description = description.substring(0,1).toUpperCase();
+
+            if(description.charAt(description.length() - 1) != '.'){
+                description = description + ".";
+            }
+
+            Log.i("DESCRIPTION", description);
+
         }
 
         return description;

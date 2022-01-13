@@ -147,9 +147,12 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                             Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator);
 
                             iter.setIterId(id);
-                            iter.setDescription(description);
                             iter.setShareDate(shareDate);
                             iter.setEditDate(updateDate);
+
+                            if(!description.equals("null")) {
+                                iter.setDescription(description);
+                            }
 
                             if(!iterWaypoints.isEmpty())
                                 iter.setWayPoints(iterWaypoints);

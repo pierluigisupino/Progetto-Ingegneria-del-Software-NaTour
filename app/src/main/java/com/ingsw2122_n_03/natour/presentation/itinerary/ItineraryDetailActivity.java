@@ -59,7 +59,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         String description = itinerary.getDescription();
 
-        if(!description.equals("null")) {
+        if(description != null) {
             textViewDescription.setText(description);
         }else{
             textViewDescription.setVisibility(View.GONE);
@@ -74,7 +74,7 @@ public class ItineraryDetailActivity extends BaseActivity {
     public void onSuccess(String msg) {
 
         Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ContextCompat.getColor(this, R.color.success))
+                .setBackgroundTint(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success))
                 .show();
 
     }
@@ -83,7 +83,7 @@ public class ItineraryDetailActivity extends BaseActivity {
     public void onFail(String msg) {
 
         Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ContextCompat.getColor(this, R.color.error))
+                .setBackgroundTint(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.error))
                 .show();
 
     }
