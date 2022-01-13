@@ -23,13 +23,16 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
 
     private FragmentMainBinding binding;
-
+    private RecyclerView recyclerView;
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
     private final IterController iterController;
 
 
-    public MainFragment(IterController controller) { iterController = controller; }
+    public MainFragment(IterController controller) {
+        iterController = controller;
+        iterController.setMainFragment(this);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,11 +57,16 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
         }
 
-        RecyclerView recyclerView = binding.itinerary;
+        recyclerView = binding.itinerary;
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new ItineraryAdapter(itineraries, this));
 
+    }
+
+    public void updateItineraries(ArrayList<Itinerary> itineraries) {
+        this.itineraries = itineraries;
+        recyclerView.setAdapter(new ItineraryAdapter(itineraries, this));
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.ingsw2122_n_03.natour.presentation.itinerary.ItineraryDetailActivity;
 import com.ingsw2122_n_03.natour.presentation.LoadingDialog;
 import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.SplashActivity;
+import com.ingsw2122_n_03.natour.presentation.main.MainFragment;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -28,7 +29,9 @@ public class IterController extends Controller {
 
     private SplashActivity splashActivity;
     private MainActivity mainActivity;
+    private MainFragment mainFragment;
     private AddItineraryActivity addItineraryActivity;
+    private ItineraryDetailActivity detailActivity;
     private LoadingDialog loadingDialog;
 
     private final ItineraryDaoInterface itineraryDao;
@@ -108,7 +111,7 @@ public class IterController extends Controller {
             currentIter.setWayPoints(wayPointArrayList);
 
         //itineraryDao.postItinerary(currentIter);
-        onItineraryInsertComplete(true); /* TO DELETE, FOR TEST USAGE**/
+        onItineraryInsertComplete(false); /* TO DELETE, FOR TEST USAGE**/
 
     }
 
@@ -130,19 +133,20 @@ public class IterController extends Controller {
 
     }
 
-    //TODO NAVIGATION
     public void onItineraryInsertComplete(boolean success) {
 
         loadingDialog.dismissDialog();
         itineraries.add(currentIter);
 
-        mainActivity.finish();
-        goToActivityAndFinish(addItineraryActivity, MainActivity.class, itineraries);
+        mainFragment.updateItineraries(itineraries);
+        addItineraryActivity.finish();
+        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
 
-        if(!success)
-            mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
+        //ERRORI QUI SOTTO (forse binding layout in itinerary detail?)
+        /*if(!success)
+            detailActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
         else
-            mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));
+            detailActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));*/
 
     }
 
@@ -186,6 +190,13 @@ public class IterController extends Controller {
     public void setAddItineraryActivity(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
     }
+
+    public void setItineraryDetailActivity(ItineraryDetailActivity detailActivity) {
+        this.detailActivity = detailActivity;
+    }
+
+    public void setMainFragment(MainFragment mainFragment) { this.mainFragment = mainFragment;}
+
 }
 
 

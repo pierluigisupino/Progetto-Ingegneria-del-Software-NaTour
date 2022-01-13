@@ -3,7 +3,6 @@ package com.ingsw2122_n_03.natour.presentation.itinerary;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +39,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         itinerary = (Itinerary) intent.getSerializableExtra("itinerary");
 
         iterController = IterController.getInstance();
+        iterController.setItineraryDetailActivity(this);
 
         layout = binding.layout;
         MaterialToolbar materialToolbar = binding.topAppBar;
