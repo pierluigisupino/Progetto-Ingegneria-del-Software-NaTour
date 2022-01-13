@@ -62,7 +62,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         if(!description.equals("null")) {
             textViewDescription.setText(description);
         }else{
-            textViewDescription.setVisibility(View.GONE);
+            textViewDescription.setVisibility(View.INVISIBLE);
         }
 
         textViewDuration.setText(itinerary.getHoursDuration() + "h & " + itinerary.getMinutesDuration() + "m");
