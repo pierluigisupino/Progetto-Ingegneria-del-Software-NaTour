@@ -46,7 +46,6 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         TextView textViewName = binding.textViewName;
         TextView textViewCreator = binding.textViewCreator;
-        ImageView imageView = binding.image;
         TextView textViewDescription = binding.textViewDescription;
         TextView textViewDuration = binding.textViewDuration;
         TextView textViewDifficulty = binding.textViewDifficulty;

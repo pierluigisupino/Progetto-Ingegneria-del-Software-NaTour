@@ -55,30 +55,20 @@
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
-    <LinearLayout
-        android:id="@+id/imageLayout"
+    <TextView
+        android:id="@+id/warning"
         android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/error"
+        android:gravity="center_vertical"
+        android:fontFamily="@font/euclid_circular_regular"
+        android:drawablePadding="8dp"
+        android:layout_marginTop="10dp"
+        android:text="Edited by admin (test)"
+        app:drawableLeftCompat="@drawable/ic_warning"
         app:layout_constraintTop_toBottomOf="@id/textViewCreator"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cardCornerRadius="15dp">
-
-        <ImageView
-            android:id="@+id/image"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/itinerary_item_image_description" />
-
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="@id/leftGuideline"/>
 
     <TextView
         android:id="@+id/textViewDescription"
@@ -90,7 +80,7 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/warning" />
 
     <TextView
         android:id="@+id/textViewDifficulty"
