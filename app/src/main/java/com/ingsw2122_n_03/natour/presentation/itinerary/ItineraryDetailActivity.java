@@ -40,7 +40,6 @@ public class ItineraryDetailActivity extends BaseActivity {
         itinerary = (Itinerary) intent.getSerializableExtra("itinerary");
 
         iterController = IterController.getInstance();
-        iterController.setItineraryDetailActivity(this);
 
         layout = binding.layout;
         MaterialToolbar materialToolbar = binding.topAppBar;

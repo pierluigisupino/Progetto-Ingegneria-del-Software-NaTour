@@ -30,7 +30,6 @@ public class IterController extends Controller {
     private MainActivity mainActivity;
     private AddItineraryActivity addItineraryActivity;
     private LoadingDialog loadingDialog;
-    private ItineraryDetailActivity itineraryDetailActivity;
 
     private final ItineraryDaoInterface itineraryDao;
     private final UserDaoInterface userDao;
@@ -186,11 +185,6 @@ public class IterController extends Controller {
     public void setAddItineraryActivity(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
     }
-
-    public void setItineraryDetailActivity(ItineraryDetailActivity itineraryDetailActivity) {
-        this.itineraryDetailActivity = itineraryDetailActivity;
-    }
-
 }
 
 
