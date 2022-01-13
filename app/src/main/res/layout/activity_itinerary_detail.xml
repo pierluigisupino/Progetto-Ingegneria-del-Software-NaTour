@@ -134,6 +134,8 @@
             android:layout_height="wrap_content"
             android:text="@string/feedback"
             android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
             android:fontFamily="@font/euclid_circular_regular"
             android:textSize="15sp"
             android:textColor="@color/primary"
