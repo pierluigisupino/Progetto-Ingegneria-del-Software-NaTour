@@ -109,8 +109,7 @@ public class IterController extends Controller {
         if(!wayPointArrayList.isEmpty())
             currentIter.setWayPoints(wayPointArrayList);
 
-        //itineraryDao.postItinerary(currentIter);
-        onItineraryInsertComplete(true);
+        itineraryDao.postItinerary(currentIter);
 
     }
 
