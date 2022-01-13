@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +39,8 @@ public class ItineraryDetailActivity extends BaseActivity {
         Intent intent = getIntent();
         itinerary = (Itinerary) intent.getSerializableExtra("itinerary");
 
+        IterController controller = IterController.getInstance();
+
         iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
 
@@ -49,6 +52,8 @@ public class ItineraryDetailActivity extends BaseActivity {
         TextView textViewDescription = binding.textViewDescription;
         TextView textViewDuration = binding.textViewDuration;
         TextView textViewDifficulty = binding.textViewDifficulty;
+
+        Button startButton = binding.startButton;
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
@@ -65,6 +70,8 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         textViewDuration.setText(itinerary.getHoursDuration() + "h & " + itinerary.getMinutesDuration() + "m");
         textViewDifficulty.setText(itinerary.getDifficulty());
+
+        startButton.setOnClickListener(view1 -> controller.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary));
 
     }
 

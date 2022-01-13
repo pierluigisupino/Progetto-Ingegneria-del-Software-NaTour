@@ -1,10 +1,16 @@
 package com.ingsw2122_n_03.natour.presentation;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.databinding.ActivityWelcomeBinding;
 import com.ingsw2122_n_03.natour.presentation.signIn.SignInActivity;
@@ -14,6 +20,7 @@ import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 public class WelcomeActivity extends BaseActivity {
 
     private AuthController authController;
+    private ConstraintLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +32,8 @@ public class WelcomeActivity extends BaseActivity {
 
         authController = AuthController.getInstance();
         authController.setWelcomeActivity(WelcomeActivity.this);
+
+        layout = binding.layout;
 
         Button signUpButton = binding.signUpButton;
         Button signInButton = binding.signInButton;
@@ -38,8 +47,22 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     @Override
-    public void onSuccess(String msg) { }
+    public void onSuccess(String msg) {
+
+        runOnUiThread(() -> {
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.success))
+                    .show();
+        });
+    }
 
     @Override
-    public void onFail(String msg) { }
+    public void onFail(String msg) {
+
+        runOnUiThread(() -> {
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.error))
+                    .show();
+        });
+    }
 }
