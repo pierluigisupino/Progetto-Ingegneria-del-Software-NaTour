@@ -79,25 +79,25 @@
                             android:id="@+id/difficulty1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_line"/>
+                            android:src="@drawable/ic_difficulty"/>
 
                         <ImageView
                             android:id="@+id/difficulty2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_line"/>
+                            android:src="@drawable/ic_difficulty"/>
 
                         <ImageView
                             android:id="@+id/difficulty3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_line"/>
+                            android:src="@drawable/ic_difficulty"/>
 
                         <ImageView
                             android:id="@+id/difficulty4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_line"/>
+                            android:src="@drawable/ic_difficulty"/>
 
                     </LinearLayout>
 
