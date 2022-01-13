@@ -57,8 +57,10 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewName.setText(itinerary.getName());
         textViewCreator.setText(getResources().getString(R.string.by_text)+" "+itinerary.getCreator().getName());
 
-        if(itinerary.getDescription().equals("")) {
-            textViewDescription.setText(itinerary.getDescription());
+        String description = itinerary.getDescription();
+
+        if(!description.equals("null")) {
+            textViewDescription.setText(description);
         }else{
             textViewDescription.setVisibility(View.GONE);
         }
