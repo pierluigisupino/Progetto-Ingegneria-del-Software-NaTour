@@ -144,6 +144,8 @@
     <!--ITINERARY DETAIL-->
     <string name="detail_page_title">Dettagli dell\' Itinerario</string>
     <string name="by_text">da</string>
+    <string name="start">Inizia</string>
+    <string name="feedback"><u>Feeling different?</u></string>
 
 
     <!--DRAWER-->

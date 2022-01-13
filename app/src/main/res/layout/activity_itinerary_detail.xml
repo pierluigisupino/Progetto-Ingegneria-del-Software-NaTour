@@ -93,21 +93,6 @@
         app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
 
     <TextView
-        android:id="@+id/textViewDuration"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/euclid_circular_regular"
-        android:textSize="15sp"
-        android:textColor="@color/primary"
-        android:layout_marginTop="20dp"
-        android:gravity="center_vertical"
-        app:drawableLeftCompat="@drawable/ic_access_time"
-        android:drawablePadding="10dp"
-        app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
-
-    <TextView
         android:id="@+id/textViewDifficulty"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -120,6 +105,57 @@
         app:drawableLeftCompat="@drawable/ic_signal"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDuration" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
+
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDifficulty">
+
+        <TextView
+            android:id="@+id/textViewDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/euclid_circular_regular"
+            android:textSize="15sp"
+            android:textColor="@color/primary"
+            android:gravity="center_vertical"
+            app:drawableLeftCompat="@drawable/ic_access_time"
+            android:drawablePadding="10dp" />
+
+        <TextView
+            android:id="@+id/textViewFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/feedback"
+            android:layout_weight="1"
+            android:fontFamily="@font/euclid_circular_regular"
+            android:textSize="15sp"
+            android:textColor="@color/primary"
+            android:gravity="end"
+            app:drawableRightCompat="@drawable/ic_edit"
+            android:drawablePadding="10dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/sign_up_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_light_background"
+        android:fontFamily="@font/euclid_circular_semi_bold"
+        android:text="@string/start"
+        android:textAllCaps="false"
+        android:textColor="@color/primary"
+        android:layout_marginTop="15dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/layout1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
