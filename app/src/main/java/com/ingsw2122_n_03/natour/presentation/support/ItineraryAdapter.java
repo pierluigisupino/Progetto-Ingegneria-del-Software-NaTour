@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation.support;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,8 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
         void onItineraryClick(int position);
     }
 
-    private List<Itinerary> itineraries;
-    private OnItineraryListener mOnItineraryListener;
+    private final List<Itinerary> itineraries;
+    private final OnItineraryListener mOnItineraryListener;
 
     public ItineraryAdapter(List<Itinerary> itineraries, OnItineraryListener onItineraryListener) {
         this.itineraries = itineraries;
@@ -50,7 +51,7 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
         Itinerary iter = itineraries.get(position);
         holder.setNameText(iter.getName());
 
-        SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yyyy");
         String shareDate = dateFormat.format(iter.getShareDate());
         holder.setDateText(shareDate);
 
@@ -68,7 +69,7 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
     }
 
 
-    public class ItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    protected static class ItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView nameTextView;
         TextView dateTextView;

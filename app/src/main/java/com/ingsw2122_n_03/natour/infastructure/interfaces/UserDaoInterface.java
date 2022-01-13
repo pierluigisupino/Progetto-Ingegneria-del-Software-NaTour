@@ -6,5 +6,6 @@ public interface UserDaoInterface {
 
     String getCurrentUserId();
     void setCurrentUserName(User user);
+    void getNameFromId(User user);
 
 }

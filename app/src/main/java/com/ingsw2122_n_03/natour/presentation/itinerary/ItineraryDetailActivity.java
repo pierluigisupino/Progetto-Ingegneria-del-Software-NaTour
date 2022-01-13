@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,8 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.snackbar.Snackbar;
+import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
@@ -16,10 +21,12 @@ import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class ItineraryDetailActivity extends BaseActivity {
 
-    private IterController iterController;
+    private ConstraintLayout layout;
 
+    private IterController iterController;
     private Itinerary itinerary;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -29,11 +36,12 @@ public class ItineraryDetailActivity extends BaseActivity {
         setContentView(view);
 
         Intent intent = getIntent();
-        itinerary = (Itinerary) intent.getSerializableExtra("Itinerary");
+        itinerary = (Itinerary) intent.getSerializableExtra("itinerary");
 
         iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
 
+        layout = binding.layout;
         MaterialToolbar materialToolbar = binding.topAppBar;
 
         TextView textViewName = binding.textViewName;
@@ -46,9 +54,10 @@ public class ItineraryDetailActivity extends BaseActivity {
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
         textViewName.setText(itinerary.getName());
-        textViewCreator.setText("By " + itinerary.getCreator().getName());
-        textViewDescription.setText(itinerary.getDescription());
-        textViewDuration.setText(String.valueOf(itinerary.getHoursDuration()) + "h & " + String.valueOf(itinerary.getMinutesDuration()) + "m");
+        textViewCreator.setText(getResources().getString(R.string.by_text)+" "+itinerary.getCreator().getName());
+        if(itinerary.getDescription() != null)
+            textViewDescription.setText(itinerary.getDescription());
+        textViewDuration.setText(itinerary.getHoursDuration() + "h & " + itinerary.getMinutesDuration() + "m");
         textViewDifficulty.setText(itinerary.getDifficulty());
 
     }
@@ -56,10 +65,19 @@ public class ItineraryDetailActivity extends BaseActivity {
     @Override
     public void onSuccess(String msg) {
 
+        Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.success))
+                .show();
+
     }
 
     @Override
     public void onFail(String msg) {
 
+        Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.error))
+                .show();
+
     }
+
 }

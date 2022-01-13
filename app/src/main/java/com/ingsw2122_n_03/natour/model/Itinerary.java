@@ -27,7 +27,7 @@ public class Itinerary implements Serializable {
         this.name = name;
         this.difficulty = difficulty;
         hoursDuration = hours;
-        setMinutesDuration(minutes);
+        minutesDuration = minutes;
         this.startPoint = startPoint;
         this.creator = creator;
     }
@@ -65,7 +65,11 @@ public class Itinerary implements Serializable {
         return hoursDuration;
     }
 
-    public void setHoursDuration(int hoursDuration) { this.hoursDuration = hoursDuration; }
+    public void setHoursDuration(int hoursDuration) {
+        if(hoursDuration < 0)
+            throw  new IllegalArgumentException();
+        this.hoursDuration = hoursDuration;
+    }
 
     public int getMinutesDuration() {
         return minutesDuration;

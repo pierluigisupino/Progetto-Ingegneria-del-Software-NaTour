@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -17,6 +18,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
+import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -26,7 +28,6 @@ import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItinerar
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
-
 
     private AuthController authController;
     private IterController iterController;
@@ -43,7 +44,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         View view = binding.getRoot();
         setContentView(view);
 
-        this.mainFragment = new MainFragment();
+        authController = AuthController.getInstance();
+        authController.setMainActivity(this);
+
+        iterController = IterController.getInstance();
+        iterController.setMainActivity(this);
+
+        this.mainFragment = new MainFragment(iterController);
 
         Intent intent = getIntent();
         if(intent.hasExtra("itineraries")) {
@@ -56,12 +63,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer, mainFragment);
         fragmentTransaction.commit();
-
-        authController = AuthController.getInstance();
-        authController.setMainActivity(this);
-
-        iterController = IterController.getInstance();
-        iterController.setMainActivity(this);
 
         MaterialToolbar materialToolbar = binding.toolbar;
         drawerLayout = binding.layout;
@@ -104,10 +105,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onSuccess(String msg) {
 
+        Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.success))
+                .show();
+
     }
 
     @Override
     public void onFail(String msg) {
+
+        Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.error))
+                .show();
 
     }
 
@@ -143,4 +152,5 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

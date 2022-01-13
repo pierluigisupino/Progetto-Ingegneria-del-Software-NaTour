@@ -1,29 +1,18 @@
 package com.ingsw2122_n_03.natour.presentation.support;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 
 import androidx.exifinterface.media.ExifInterface;
-
-import com.amplifyframework.core.Amplify;
-import com.amplifyframework.predictions.models.LabelType;
-import com.amplifyframework.predictions.result.IdentifyLabelsResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+
 
 public class ImageUtilities {
 
-
-    /** USELESS IN CLASS?**/
-    public Bitmap getImageBitmap(byte[] bytes) {
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    }
 
     public byte[] getBytes(Context context, Uri imageUri) throws IOException {
 
@@ -38,6 +27,7 @@ public class ImageUtilities {
         }
         return byteBuffer.toByteArray();
     }
+
 
     public double[] getImageLocation(byte[] bytes)  {
 
@@ -59,22 +49,5 @@ public class ImageUtilities {
         return latLong;
 
     }
-
-    //@TODO VERIFY SYNC
-    private void isImageSafe(Bitmap image, ArrayList<Bitmap> bitmapArray){
-
-        Amplify.Predictions.identify(
-                LabelType.MODERATION_LABELS,
-                image,
-                result -> {
-                    IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
-                    if(!identifyResult.isUnsafeContent())
-                        bitmapArray.add(image);
-                        /** Set Adapter here is a good choice? **/
-                },
-                error -> { }
-        );
-    }
-
 
 }

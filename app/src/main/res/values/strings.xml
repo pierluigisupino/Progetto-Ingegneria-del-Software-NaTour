@@ -29,6 +29,7 @@
     <string name="new_password">New password</string>
     <string name="reset_password_button_text">Reset password</string>
 
+
     <!--GENERICS-->
     <string name="required_username_place_holder">Name*</string>
     <string name="username_place_holder">Name</string>
@@ -38,15 +39,19 @@
     <string name="yes_text">Yes</string>
     <string name="no_text">No</string>
     <string name="ok_text">OK</string>
+    <string name="current_user_name_text">you</string>
+
 
     <!--ERROR ACTIVITY-->
     <string name="exit">Exit</string>
+
 
     <!--VERIFY ACTIVITY-->
     <string name="verify_text">Enter the confirmation code send to</string>
     <string name="verify_button_text">Verify</string>
     <string name="verification_code">Verification Code</string>
     <string name="resend_verification_code"><u>resend verification code</u></string>
+
 
     <!--SUCCESSES-->
     <string name="login_success">Logged In</string>
@@ -55,6 +60,7 @@
     <string name="verify_success">Verified</string>
     <string name="verification_code_sent">Verification code sent</string>
     <string name="password_changed_success">Password changed</string>
+
 
     <!--ERRORS-->
     <string name="username_warning">Insert an username.</string>
@@ -91,18 +97,21 @@
     <string name="position_error">It seems the positions obtained from some photos are far away from the route. To continue delete these photos or change the route.</string>
     <string name="position_error_point">It seems the positions of some photos are in a radius greater than 10 km from the starting point. To continue, delete the photos or change the starting point.</string>
 
+    <string name="retrieve_itinerary_error">Failed to retrieve Itinerary details, try again.</string>
+    <string name="photo_upload_failed">Some photos have not been uploaded, try again</string>
 
     <!--IMAGES DESCRIPTION-->
     <string name="splash_image_description">Splash Image </string>
     <string name="welcome_page_image_description">Welcome page image</string>
     <string name="itinerary_item_image_description">Iter name description</string>
 
-    <!--ITINERARY-->
+
+    <!--ITINERARY INSERT-->
     <string name="add_itinerary_title">Add an Itinerary</string>
     <string name="next_button">Next</string>
     <string name="back_button">Back</string>
     <string name="add_button">Add</string>
-    <string name="name_itinerary_textHint">What\'s the name of?</string>
+    <string name="name_itinerary_textHint">What\'s its name?</string>
     <string name="description_itinerary_textHint">Want to tell more about?</string>
     <string name="description_place_holder">Description</string>
     <string name="difficulty_text">What is the Difficulty Level?</string>
@@ -128,6 +137,13 @@
     <string name="delete_photo_text">Delete photos</string>
     <string name="loading_screen_text">Please Wait, we are uploading your Itinerary.</string>
     <string name="itinerary_insert_failure">Failed to upload Itinerary, try again.</string>
+    <string name="itinerary_insert_success">Enjoy, your itinerary has been shared</string>
+
+
+    <!--ITINERARY DETAIL-->
+    <string name="detail_page_title">Itinerary Details</string>
+    <string name="by_text">by</string>
+
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

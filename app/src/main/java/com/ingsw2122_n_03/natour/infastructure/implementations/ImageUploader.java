@@ -1,7 +1,5 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
-import android.util.Log;
-
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -38,7 +36,7 @@ public class ImageUploader {
                 jsonObject.put("photo"+i, encodedStrings[i]);
             }
         } catch (JSONException e) {
-            controller.onItineraryInsertComplete(1);
+            controller.onItineraryInsertComplete(false);
             return;
         }
 
@@ -50,10 +48,15 @@ public class ImageUploader {
         Amplify.API.post(
                 options,
                 response-> {
-                    Log.i("RESPONSE", response.getData().asString());
-                    controller.onItineraryInsertSuccess(0);
+
+                    try {
+                        controller.onItineraryInsertComplete(response.getData().asJSONObject().getInt("Code") == 200);
+                    } catch (JSONException e) {
+                        controller.onItineraryInsertComplete(false);
+                    }
+
                 },
-                error -> {controller.onItineraryInsertComplete(1); Log.e("ERROR:", error.getMessage());}
+                error -> controller.onItineraryInsertComplete(false)
         );
 
     }

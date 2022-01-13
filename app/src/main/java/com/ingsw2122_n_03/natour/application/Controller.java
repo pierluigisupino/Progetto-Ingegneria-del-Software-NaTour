@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.ingsw2122_n_03.natour.model.Itinerary;
+import com.ingsw2122_n_03.natour.presentation.itinerary.ItineraryDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +13,16 @@ public class Controller {
 
     protected Controller() {}
 
+
     public void goToActivity(Activity source, Class<?> destination){
+
         Intent intent = new Intent(source, destination);
         source.startActivity(intent);
+
     }
 
     public void goToActivity(Activity source, Class<?> destination, HashMap<String, String> extras){
+
         Intent intent = new Intent(source, destination);
 
         for(String key : extras.keySet()){
@@ -25,15 +30,28 @@ public class Controller {
         }
 
         source.startActivity(intent);
+
     }
 
+    public void goToActivity(Activity source, Class<?> destination, Itinerary itinerary){
+
+        Intent intent = new Intent(source, destination);
+        intent.putExtra("itinerary", itinerary);
+        source.startActivity(intent);
+
+    }
+
+
     public void goToActivityAndFinish(Activity source, Class<?> destination){
+
         Intent intent = new Intent(source, destination);
         source.startActivity(intent);
         source.finish();
+
     }
 
     public void goToActivityAndFinish(Activity source, Class<?> destination, HashMap<String, String> extras){
+
         Intent intent = new Intent(source, destination);
 
         for(String key : extras.keySet()){
@@ -42,9 +60,19 @@ public class Controller {
 
         source.startActivity(intent);
         source.finish();
+
     }
 
-    public void goToActivityAndFinish(Activity source, Class<?> destination, ArrayList<Itinerary> itineraries) {
+    public void goToActivityAndFinish(Activity source, Class<?> destination, Itinerary itinerary){
+
+        Intent intent = new Intent(source, destination);
+        intent.putExtra("itinerary", itinerary);
+        source.startActivity(intent);
+        source.finish();
+
+    }
+
+    public void goToActivityAndFinish(Activity source, Class<?> destination, ArrayList<Itinerary> itineraries){
 
         Intent intent = new Intent(source, destination);
         intent.putExtra("itineraries", itineraries);

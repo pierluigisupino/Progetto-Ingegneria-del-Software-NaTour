@@ -62,7 +62,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         return bytes.size();
     }
 
-    static class ImageViewHolder extends RecyclerView.ViewHolder{
+    protected static class ImageViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
         ImageButton deleteButton;

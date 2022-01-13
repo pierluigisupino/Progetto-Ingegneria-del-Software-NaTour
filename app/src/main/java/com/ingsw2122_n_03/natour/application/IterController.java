@@ -46,7 +46,7 @@ public class IterController extends Controller {
     private IterController(){
 
         itineraryDao = new ItineraryDaoImplementation(this);
-        userDao = new UserDaoImplementation();
+        userDao = new UserDaoImplementation(this);
         imageUploader = new ImageUploader(this);
 
     }
@@ -65,7 +65,10 @@ public class IterController extends Controller {
      * SET UP
      *********/
 
+    //TODO DEFAULT NAME IS YOU, MAY BE CHANGED?
     public void setUp() {
+        currentUser = new User(userDao.getCurrentUserId());
+        currentUser.setName(splashActivity.getResources().getString(R.string.current_user_name_text));
         itineraryDao.getItineraries();
         //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
@@ -88,11 +91,6 @@ public class IterController extends Controller {
 
         loadingDialog = new LoadingDialog(addItineraryActivity);
         loadingDialog.startLoading();
-
-        if(currentUser == null) {
-            currentUser = new User(userDao.getCurrentUserId());
-            userDao.setCurrentUserName(currentUser);
-        }
 
         this.photos = imagesBytes;
 
@@ -120,7 +118,7 @@ public class IterController extends Controller {
         currentIter.setIterId(iterID);
 
         if(photos.isEmpty())
-            onItineraryInsertComplete(0);
+            onItineraryInsertComplete(true);
         else
             imageUploader.uploadImages(iterID, photos);
 
@@ -133,19 +131,46 @@ public class IterController extends Controller {
 
     }
 
-    public void onItineraryInsertComplete(int response) {
+    //TODO NAVIGATION
+    public void onItineraryInsertComplete(boolean success) {
 
         loadingDialog.dismissDialog();
         itineraries.add(currentIter);
 
         goToActivityAndFinish(addItineraryActivity, MainActivity.class, itineraries);
-        //OR (TO IMPLEMENT METHOD)
-        //goToActivityAndFinish(addItineraryActivity, ItineraryDetailActivity.class, currentIter);
+        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
 
-        //photos inserted? TODO
-        if(response != 0)
-            mainActivity.onFail("Itinerary inserted but photo uploading failed"); //CREATE STRING RES
+        if(!success)
+            itineraryDetailActivity.onFail(itineraryDetailActivity.getString(R.string.photo_upload_failed));
+        else
+            itineraryDetailActivity.onSuccess(itineraryDetailActivity.getString(R.string.itinerary_insert_success));
 
+    }
+
+    /*************
+     * NAVIGATION
+     ************/
+
+    public void onItineraryClick(Itinerary iter) {
+
+        if(iter.getCreator().getUid().equals(currentUser.getUid()))
+            iter.setCreator(currentUser);
+
+        currentIter = iter;
+
+        if(iter.getCreator().getName() != null)
+            goToActivity(mainActivity, ItineraryDetailActivity.class, iter);
+        else
+            userDao.getNameFromId(iter.getCreator());
+
+    }
+
+    public void onRetrieveUserSuccess() {
+        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
+    }
+
+    public void onRetrieveUserError() {
+        mainActivity.onFail(mainActivity.getString(R.string.retrieve_itinerary_error));
     }
 
 

@@ -29,6 +29,7 @@
     <string name="new_password">Nuova password</string>
     <string name="reset_password_button_text">Resetta la password</string>
 
+
     <!--GENERICS-->
     <string name="required_username_place_holder">Nome*</string>
     <string name="username_place_holder">Nome</string>
@@ -38,15 +39,19 @@
     <string name="yes_text">Si</string>
     <string name="no_text">No</string>
     <string name="ok_text">OK</string>
+    <string name="current_user_name_text">te</string>
+
 
     <!--ERROR ACTIVITY-->
     <string name="exit">Esci</string>
+
 
     <!--VERIFY ACTIVITY-->
     <string name="verify_text">Inserisci il codice di verifica inviato a</string>
     <string name="verify_button_text">Verifica</string>
     <string name="verification_code">Codice di verifica</string>
     <string name="resend_verification_code"><u>reinvia codice di verifica</u></string>
+
 
     <!--SUCCESSES-->
     <string name="login_success">Benvenuto</string>
@@ -55,6 +60,7 @@
     <string name="verify_success">Verificato</string>
     <string name="verification_code_sent">Codice di verifica inviato</string>
     <string name="password_changed_success">Password cambiata</string>
+
 
     <!--ERRORS-->
     <string name="username_warning">Inserisci uno username</string>
@@ -91,11 +97,15 @@
     <string name="position_error">Sembra che la posizione ricavata da alcune foto sia fuori linea col percorso. Per continuare elimina le foto o modifica il tracciato.</string>
     <string name="position_error_point">Sembra che la posizione di alcune foto siano in un raggio maggiore di 10 km dal punto iniziale. Per continuare elimina le foto o modifica il punto d\'inizio.</string>
 
+    <string name="retrieve_itinerary_error">Non siamo riusciti a recuperare le informazioni, riprova.</string>
+    <string name="photo_upload_failed">Alcune foto non sono state caricate, riprova.</string>
+
 
     <!--IMAGES DESCRIPTION-->
     <string name="splash_image_description">Splash Image </string>
     <string name="welcome_page_image_description">Welcome page image</string>
     <string name="itinerary_item_image_description">Iter name description</string>
+
 
     <!--ITINERARY-->
     <string name="add_itinerary_title">Aggiungi un Itinerario</string>
@@ -128,6 +138,13 @@
     <string name="delete_photo_text">Elimina foto</string>
     <string name="loading_screen_text">Stiamo Salvando il tuo Itinerario.</string>
     <string name="itinerary_insert_failure">Salvataggio fallito, riprova.</string>
+    <string name="itinerary_insert_success">Il tuo itinerario è stato condiviso.</string>
+
+
+    <!--ITINERARY DETAIL-->
+    <string name="detail_page_title">Dettagli dell\' Itinerario</string>
+    <string name="by_text">da</string>
+
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Apri il menu\' di navigazione</string>

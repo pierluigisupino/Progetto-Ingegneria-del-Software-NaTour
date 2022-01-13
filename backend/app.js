@@ -56,11 +56,11 @@ app.get('/items/itineraries', function(req, res) {
 });
 
 
-app.get('/items/users', function(req, res) {
+app.get('/items/user', function(req, res) {
   
   var params = {
     UserPoolId: process.env.USERPOOLID,
-    Username: req.query.id
+    Username: req.query.uid
   };
     
   cognito.adminGetUser(params, function(err, data) {
@@ -68,7 +68,7 @@ app.get('/items/users', function(req, res) {
     if (err)
       return res.json({Error: err.stack});
     else
-      return res.json(data.UserAttributes[2].Value);
+      return res.json({Name: data.UserAttributes[2].Value});
       
   });
   
