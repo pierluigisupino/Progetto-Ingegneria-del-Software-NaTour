@@ -88,10 +88,20 @@ public class AddItineraryFragment1 extends Fragment {
     }
 
     public String getName(){
-        return nameEditText.getText().toString();
+        String name = nameEditText.getText().toString();
+        name = name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
+
+        return name;
     }
 
     public String getDescription(){
-        return descriptionEditText.getText().toString();
+        String description = descriptionEditText.getText().toString();
+        description = description.substring(0,1).toUpperCase() + description.substring(1).toLowerCase();
+
+        if(description.charAt(description.length() - 1) != '.'){
+            description = description + ".";
+        }
+
+        return description;
     }
 }

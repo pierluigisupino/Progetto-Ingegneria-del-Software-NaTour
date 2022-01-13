@@ -98,7 +98,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/euclid_circular_regular"
         android:textSize="15sp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:textColor="@color/primary"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
@@ -111,7 +111,7 @@
         android:id="@+id/layout1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/textViewDifficulty">
