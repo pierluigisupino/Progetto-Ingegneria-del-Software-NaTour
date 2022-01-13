@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/description_place_holder"
         app:counterEnabled="true"
-        app:counterMaxLength="200"
+        app:counterMaxLength="150"
         android:layout_marginTop="10dp"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
@@ -111,11 +111,11 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descriptionEditText"
             android:layout_width="match_parent"
-            android:maxLength="200"
+            android:maxLength="150"
             android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:lines="4"
+            android:lines="5"
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
