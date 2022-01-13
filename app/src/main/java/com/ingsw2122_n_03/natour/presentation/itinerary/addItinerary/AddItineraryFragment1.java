@@ -2,9 +2,12 @@ package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +33,7 @@ public class AddItineraryFragment1 extends Fragment {
 
     private boolean isFirstSubmit = true;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +58,37 @@ public class AddItineraryFragment1 extends Fragment {
 
         descriptionEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         descriptionEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
+
+        descriptionEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+
+                String text = descriptionEditText.getText().toString();
+                InputFilter filter = (source, start1, end, dest, dstart, dend) -> {
+                    String stringSource = source.toString();
+                    String stringDest = dest.toString();
+                    if (stringSource.equals(" ")) {
+                        if (stringDest.length() == 0)
+                            return "";
+                        if (stringDest.length() >= 1)
+                            if ((dstart > 0 && text.charAt(dstart - 1) == ' ') || (text.length() >  dstart && text.charAt(dstart) == ' ') || dstart == 0)
+                                return "";
+                    }
+                    return null;
+                };
+                descriptionEditText.setFilters(new InputFilter[]{filter});
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         nameEditText.addTextChangedListener(new TextWatcher(){
 
@@ -111,9 +146,6 @@ public class AddItineraryFragment1 extends Fragment {
             if(description.charAt(description.length() - 1) != '.'){
                 description = description + ".";
             }
-
-            Log.i("DESCRIPTION", description);
-
         }
 
         return description;
