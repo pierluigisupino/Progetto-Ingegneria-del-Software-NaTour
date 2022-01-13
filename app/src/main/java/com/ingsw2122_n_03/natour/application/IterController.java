@@ -64,12 +64,11 @@ public class IterController extends Controller {
      * SET UP
      *********/
 
-    //TODO DEFAULT NAME IS YOU, MAY BE CHANGED?
     public void setUp() {
         currentUser = new User(userDao.getCurrentUserId());
         currentUser.setName(splashActivity.getResources().getString(R.string.current_user_name_text));
-        itineraryDao.getItineraries();
-        //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
+        //itineraryDao.getItineraries();
+        goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
     public void onSetUpSuccess(ArrayList<Itinerary> itineraries) {
@@ -108,7 +107,8 @@ public class IterController extends Controller {
         if(!wayPointArrayList.isEmpty())
             currentIter.setWayPoints(wayPointArrayList);
 
-        itineraryDao.postItinerary(currentIter);
+        //itineraryDao.postItinerary(currentIter);
+        onItineraryInsertComplete(true); /* TO DELETE, FOR TEST USAGE**/
 
     }
 

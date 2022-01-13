@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,23 +58,22 @@ public class AddItineraryFragment1 extends Fragment {
         descriptionEditText.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
         descriptionEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
 
                 String text = descriptionEditText.getText().toString();
-                InputFilter filter = (source, start1, end, dest, dstart, dend) -> {
+                InputFilter filter = (source, start1, end, dest, d_start, d_end) -> {
                     String stringSource = source.toString();
                     String stringDest = dest.toString();
                     if (stringSource.equals(" ")) {
                         if (stringDest.length() == 0)
                             return "";
-                        if (stringDest.length() >= 1)
-                            if ((dstart > 0 && text.charAt(dstart - 1) == ' ') || (text.length() >  dstart && text.charAt(dstart) == ' ') || dstart == 0)
+                        else
+                            if ((d_start > 0 && text.charAt(d_start - 1) == ' ') || (text.length() >  d_start && text.charAt(d_start) == ' ') || d_start == 0)
                                 return "";
                     }
                     return null;
@@ -85,17 +82,14 @@ public class AddItineraryFragment1 extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) { }
 
-            }
         });
 
         nameEditText.addTextChangedListener(new TextWatcher(){
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -103,11 +97,11 @@ public class AddItineraryFragment1 extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) { }
 
-            }
         });
     }
+
 
     public boolean isNameValid(){
 
@@ -128,10 +122,11 @@ public class AddItineraryFragment1 extends Fragment {
         return true;
     }
 
+
     public String getName(){
         String name = nameEditText.getText().toString();
+        name = name.trim();
         name = name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
-
         return name;
     }
 
@@ -139,15 +134,18 @@ public class AddItineraryFragment1 extends Fragment {
 
         String description = descriptionEditText.getText().toString();
 
-        if(description != null && description.length() > 0) {
+        Log.i("DESCRIPTION BEFORE", description);
 
-            description = description.substring(0,1).toUpperCase();
-
-            if(description.charAt(description.length() - 1) != '.'){
+        if(description.length() > 0) {
+            description = description.trim();
+            description = description.substring(0,1).toUpperCase()+description.substring(1);
+            if(description.charAt(description.length() - 1) != '.')
                 description = description + ".";
-            }
         }
+
+        Log.i("DESCRIPTION AFTER", description);
 
         return description;
     }
+
 }
