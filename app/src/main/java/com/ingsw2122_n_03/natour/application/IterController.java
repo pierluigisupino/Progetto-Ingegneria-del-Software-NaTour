@@ -136,7 +136,8 @@ public class IterController extends Controller {
         loadingDialog.dismissDialog();
         itineraries.add(currentIter);
 
-        addItineraryActivity.finish();
+        mainActivity.finish();
+        goToActivityAndFinish(addItineraryActivity, MainActivity.class, itineraries);
 
         if(!success)
             mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
