@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,15 +59,15 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         }
 
         recyclerView = binding.itinerary;
-        LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager =  new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new ItineraryAdapter(itineraries, this));
+        recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
 
     }
 
     public void updateItineraries(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
-        recyclerView.setAdapter(new ItineraryAdapter(itineraries, this));
+        recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
     }
 
     @Override

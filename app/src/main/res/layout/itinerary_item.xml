@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout android:layout_width="match_parent"
+<LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="150dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -13,19 +14,6 @@
         android:layout_marginHorizontal="5dp"
         android:layout_marginVertical="5dp"
         android:foreground="@drawable/button_light_background">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/image"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/itinerary_item_image_description" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,7 +47,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center_vertical"
@@ -76,19 +64,43 @@
                         android:fontFamily="@font/euclid_circular_regular"
                         android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/difficulty_textView"
-                        android:textColor="@color/primary"
-                        android:gravity="center_vertical"
-                        android:drawablePadding="8dp"
-                        app:drawableLeftCompat="@drawable/ic_signal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/euclid_circular_regular"
-                        android:textSize="14sp" />
+                    <LinearLayout
+                        android:id="@+id/difficultyLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_signal"/>
+
+                        <ImageView
+                            android:id="@+id/difficulty1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_line"/>
+
+                        <ImageView
+                            android:id="@+id/difficulty2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_line"/>
+
+                        <ImageView
+                            android:id="@+id/difficulty3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_line"/>
+
+                        <ImageView
+                            android:id="@+id/difficulty4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_line"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

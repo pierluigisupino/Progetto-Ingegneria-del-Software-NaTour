@@ -1,12 +1,18 @@
 package com.ingsw2122_n_03.natour.presentation.support;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ingsw2122_n_03.natour.R;
@@ -24,10 +30,12 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
 
     private final List<Itinerary> itineraries;
     private final OnItineraryListener mOnItineraryListener;
+    private final Context context;
 
-    public ItineraryAdapter(List<Itinerary> itineraries, OnItineraryListener onItineraryListener) {
+    public ItineraryAdapter(List<Itinerary> itineraries, OnItineraryListener onItineraryListener, Context context) {
         this.itineraries = itineraries;
         this.mOnItineraryListener = onItineraryListener;
+        this.context = context;
     }
 
     @NonNull
@@ -69,19 +77,26 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
     }
 
 
-    protected static class ItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
+    protected class ItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        LinearLayout difficultyLayout;
         TextView nameTextView;
         TextView dateTextView;
-        TextView difficultyTextView;
+        ImageView difficulty1;
+        ImageView difficulty2;
+        ImageView difficulty3;
+        ImageView difficulty4;
         TextView durationTextView;
         OnItineraryListener onItineraryListener;
 
         public ItineraryViewHolder(@NonNull View itemView, OnItineraryListener onItineraryListener) {
             super(itemView);
+            difficultyLayout = itemView.findViewById(R.id.difficultyLayout);
             nameTextView = itemView.findViewById(R.id.name_textView);
             dateTextView = itemView.findViewById(R.id.date_textView);
-            difficultyTextView = itemView.findViewById(R.id.difficulty_textView);
+            difficulty1 = itemView.findViewById(R.id.difficulty1);
+            difficulty2 = itemView.findViewById(R.id.difficulty2);
+            difficulty3 = itemView.findViewById(R.id.difficulty3);
+            difficulty4 = itemView.findViewById(R.id.difficulty4);
             durationTextView = itemView.findViewById(R.id.duration_textView);
             this.onItineraryListener = onItineraryListener;
 
@@ -96,7 +111,35 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
             dateTextView.setText(date);
         }
 
-        public void setDifficultyText(String difficulty) { difficultyTextView.setText(difficulty); }
+        @SuppressLint("ClickableViewAccessibility")
+        public void setDifficultyText(String difficulty) {
+
+            switch (difficulty) {
+                case "Touristic (T)":
+                    difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    break;
+                case "Hiking (E)":
+                    difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    difficulty2.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    break;
+                case "for Experienced Hikers (EE)":
+                    difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    difficulty2.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    difficulty3.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    break;
+                default:
+                    difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    difficulty2.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    difficulty3.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    difficulty4.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
+                    break;
+            }
+
+            difficultyLayout.setOnTouchListener((view, motionEvent) -> {
+                Toast.makeText(view.getContext(), difficulty, Toast.LENGTH_SHORT).show();
+                return true;
+            });
+        }
 
         public void setDurationText(String duration) { durationTextView.setText(duration); }
 
