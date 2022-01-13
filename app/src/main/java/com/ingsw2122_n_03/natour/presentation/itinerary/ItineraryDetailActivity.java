@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.presentation.itinerary;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,8 +56,13 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         textViewName.setText(itinerary.getName());
         textViewCreator.setText(getResources().getString(R.string.by_text)+" "+itinerary.getCreator().getName());
-        if(itinerary.getDescription() != null)
+
+        if(itinerary.getDescription().equals("")) {
             textViewDescription.setText(itinerary.getDescription());
+        }else{
+            textViewDescription.setVisibility(View.GONE);
+        }
+
         textViewDuration.setText(itinerary.getHoursDuration() + "h & " + itinerary.getMinutesDuration() + "m");
         textViewDifficulty.setText(itinerary.getDifficulty());
 

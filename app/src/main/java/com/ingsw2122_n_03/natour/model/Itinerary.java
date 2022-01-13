@@ -8,7 +8,7 @@ import java.util.Date;
 public class Itinerary implements Serializable {
 
     private String name;
-    private String description;
+    private String description = "";
     private String difficulty;
     private int hoursDuration;
     private int minutesDuration;
