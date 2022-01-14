@@ -79,9 +79,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<Itinerary> getItineraries(boolean isUpdating) {
-
-        ArrayList<Itinerary> iters = new ArrayList<>();
+    public void getItineraries(boolean isUpdating) {
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/itineraries")
@@ -91,9 +89,10 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 options,
 
                 response -> {
-                    Log.i("RESPONSE", response.getData().asString());
 
                     try {
+
+                        ArrayList<Itinerary> iters = new ArrayList<>();
                         JSONArray result = response.getData().asJSONObject().getJSONArray("Result");
 
                         for(int i = 0; i < result.length(); ++i) {
@@ -163,7 +162,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                         if(!isUpdating) {
                             controller.onSetUpSuccess(iters);
                         }else{
-                            controller.onUpdateSuccess();
+                            controller.onUpdateSuccess(iters);
                         }
 
 
@@ -179,7 +178,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 error -> controller.onSetUpError()
 
         );
-        return iters;
+
     }
 
 }

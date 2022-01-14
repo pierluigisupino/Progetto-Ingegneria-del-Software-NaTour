@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         iterController = IterController.getInstance();
         iterController.setMainActivity(this);
 
-        this.mainFragment = new MainFragment(this, iterController);
+        this.mainFragment = new MainFragment();
 
         Intent intent = getIntent();
         if(intent.hasExtra("itineraries")) {

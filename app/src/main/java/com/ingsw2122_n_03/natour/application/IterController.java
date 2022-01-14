@@ -62,7 +62,6 @@ public class IterController extends Controller {
 
     }
 
-
     /*********
      * SET UP
      *********/
@@ -87,13 +86,16 @@ public class IterController extends Controller {
         mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 
-    public void onUpdateSuccess(){
-        mainActivity.onFail("Update");
+    public void onUpdateSuccess(ArrayList<Itinerary> iters){
+        itineraries.clear();
+        mainActivity.onSuccess("Update");
+        itineraries = iters;
+        mainFragment.updateItineraries(itineraries);
     }
 
 
-    public ArrayList<Itinerary> getItineraries(){
-        return itineraryDao.getItineraries(true);
+    public void getUpdatedItineraries(){
+        itineraryDao.getItineraries(true);
     }
 
 
@@ -147,9 +149,8 @@ public class IterController extends Controller {
     public void onItineraryInsertComplete(boolean success) {
 
         loadingDialog.dismissDialog();
-        //itineraries.add(currentIter);
-        //mainFragment.updateItineraries(itineraries);
-        mainFragment.getItineraries();
+        itineraries.add(currentIter);
+        mainFragment.updateItineraries(itineraries);
         addItineraryActivity.finish();
 
     }
