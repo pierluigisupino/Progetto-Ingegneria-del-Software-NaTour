@@ -88,7 +88,7 @@ public class IterController extends Controller {
 
     public void onUpdateSuccess(ArrayList<Itinerary> iters){
         itineraries.clear();
-        mainActivity.onSuccess("Update");
+        mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
     }

@@ -24,6 +24,8 @@
         android:id="@+id/update"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
@@ -33,8 +35,6 @@
             android:id="@+id/itinerary"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:scrollbarThumbVertical="@color/primary"
             android:scrollbars="vertical" />
 
