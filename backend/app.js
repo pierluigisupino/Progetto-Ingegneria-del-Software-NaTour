@@ -105,7 +105,7 @@ app.get('/items/photos', function(req, res) {
         };
         
         try{
-          response['photo'+i] = (await (s3.getObject(downloadParams).promise())).Body.toString('base64');
+          response['photo'+i] = (await (s3.getObject(downloadParams).promise())).Body.toString();
           response.lastkey = data.Contents[i].Key;
         }catch(error) {
           response.count--;
