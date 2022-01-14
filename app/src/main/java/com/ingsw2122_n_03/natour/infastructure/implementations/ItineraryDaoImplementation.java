@@ -79,7 +79,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<Itinerary> getItineraries() {
+    public ArrayList<Itinerary> getItineraries(boolean isUpdating) {
 
         ArrayList<Itinerary> iters = new ArrayList<>();
 
@@ -160,21 +160,22 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                         }
 
-                        controller.onSetUpSuccess(iters);
+                        if(!isUpdating) controller.onSetUpSuccess(iters);
 
 
                     } catch (JSONException e) {
-                        controller.onSetUpError();
+                        if(!isUpdating) {
+                            controller.onSetUpError();
+                        }else{
+                            controller.onUpdateError();
+                        }
                     }
-
                 },
 
                 error -> controller.onSetUpError()
 
         );
-
         return iters;
-
     }
 
 }

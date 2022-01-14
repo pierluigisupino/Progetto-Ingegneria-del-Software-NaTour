@@ -7,6 +7,6 @@ import java.util.ArrayList;
 public interface ItineraryDaoInterface {
 
     void postItinerary(Itinerary iter);
-    ArrayList<Itinerary> getItineraries();
+    ArrayList<Itinerary> getItineraries(boolean isUpdating);
 
 }

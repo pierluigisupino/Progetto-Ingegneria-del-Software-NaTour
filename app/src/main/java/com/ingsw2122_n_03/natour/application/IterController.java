@@ -70,7 +70,7 @@ public class IterController extends Controller {
     public void setUp() {
         currentUser = new User(userDao.getCurrentUserId());
         currentUser.setName(splashActivity.getResources().getString(R.string.current_user_name_text));
-        itineraryDao.getItineraries();
+        itineraryDao.getItineraries(false);
         //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
@@ -83,8 +83,13 @@ public class IterController extends Controller {
         goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
 
+    public void onUpdateError(){
+        mainActivity.onFail(mainActivity.getString(R.string.generic_error));
+    }
+
+
     public ArrayList<Itinerary> getItineraries(){
-        return itineraryDao.getItineraries();
+        return itineraryDao.getItineraries(true);
     }
 
 
@@ -138,8 +143,7 @@ public class IterController extends Controller {
     public void onItineraryInsertComplete(boolean success) {
 
         loadingDialog.dismissDialog();
-        itineraries.add(currentIter);
-
+        //itineraries.add(currentIter);
         //mainFragment.updateItineraries(itineraries);
         mainFragment.getItineraries();
         addItineraryActivity.finish();

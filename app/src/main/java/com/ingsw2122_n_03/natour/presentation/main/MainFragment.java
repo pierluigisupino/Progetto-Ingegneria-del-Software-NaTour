@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,9 +29,11 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
     private final IterController iterController;
+    private final MainActivity mainActivity;
 
 
-    public MainFragment(IterController controller) {
+    public MainFragment(MainActivity mainActivity, IterController controller) {
+        this.mainActivity = mainActivity;
         iterController = controller;
         iterController.setMainFragment(this);
     }
@@ -58,10 +61,21 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
         }
 
+        SwipeRefreshLayout pullToRefresh = binding.update;
+
         recyclerView = binding.itinerary;
         LinearLayoutManager layoutManager =  new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
+
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getItineraries();
+                mainActivity.onSuccess("Updated");
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
     }
 
