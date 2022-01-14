@@ -160,7 +160,11 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                         }
 
-                        if(!isUpdating) controller.onSetUpSuccess(iters);
+                        if(!isUpdating) {
+                            controller.onSetUpSuccess(iters);
+                        }else{
+                            controller.onUpdateSuccess();
+                        }
 
 
                     } catch (JSONException e) {

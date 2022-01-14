@@ -87,6 +87,10 @@ public class IterController extends Controller {
         mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 
+    public void onUpdateSuccess(){
+        mainActivity.onFail("Update");
+    }
+
 
     public ArrayList<Itinerary> getItineraries(){
         return itineraryDao.getItineraries(true);

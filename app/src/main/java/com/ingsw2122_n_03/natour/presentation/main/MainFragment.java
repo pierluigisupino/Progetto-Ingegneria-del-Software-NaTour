@@ -72,7 +72,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             @Override
             public void onRefresh() {
                 getItineraries();
-                mainActivity.onSuccess("Updated");
                 pullToRefresh.setRefreshing(false);
             }
         });
