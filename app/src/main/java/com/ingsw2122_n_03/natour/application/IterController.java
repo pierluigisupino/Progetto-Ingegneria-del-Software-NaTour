@@ -83,6 +83,10 @@ public class IterController extends Controller {
         goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
 
+    public ArrayList<Itinerary> getItineraries(){
+        return itineraryDao.getItineraries();
+    }
+
 
     /*****************
      * POST ITINERARY
@@ -110,9 +114,7 @@ public class IterController extends Controller {
         if(!wayPointArrayList.isEmpty())
             currentIter.setWayPoints(wayPointArrayList);
 
-        //itineraryDao.postItinerary(currentIter);
-        onItineraryInsertComplete(false); /* TO DELETE, FOR TEST USAGE**/
-
+        itineraryDao.postItinerary(currentIter);
     }
 
     public void onItineraryInsertSuccess(int iterID) {
@@ -138,15 +140,9 @@ public class IterController extends Controller {
         loadingDialog.dismissDialog();
         itineraries.add(currentIter);
 
-        mainFragment.updateItineraries(itineraries);
+        //mainFragment.updateItineraries(itineraries);
+        mainFragment.getItineraries();
         addItineraryActivity.finish();
-        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
-
-        //ERRORI QUI SOTTO (forse binding layout in itinerary detail?)
-        /*if(!success)
-            detailActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
-        else
-            detailActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));*/
 
     }
 

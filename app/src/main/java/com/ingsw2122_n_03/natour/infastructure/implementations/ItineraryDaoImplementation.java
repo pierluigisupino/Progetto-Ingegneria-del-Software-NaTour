@@ -79,7 +79,9 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void getItineraries() {
+    public ArrayList<Itinerary> getItineraries() {
+
+        ArrayList<Itinerary> iters = new ArrayList<>();
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/itineraries")
@@ -92,9 +94,6 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                     Log.i("RESPONSE", response.getData().asString());
 
                     try {
-
-
-                        ArrayList<Itinerary> iters = new ArrayList<>();
                         JSONArray result = response.getData().asJSONObject().getJSONArray("Result");
 
                         for(int i = 0; i < result.length(); ++i) {
@@ -173,6 +172,8 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 error -> controller.onSetUpError()
 
         );
+
+        return iters;
 
     }
 

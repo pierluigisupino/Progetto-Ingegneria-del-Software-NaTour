@@ -75,4 +75,8 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         iterController.onItineraryClick(itineraries.get(position));
     }
 
+    public void getItineraries(){
+        itineraries = iterController.getItineraries();
+    }
+
 }
