@@ -16,7 +16,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -29,10 +28,10 @@ import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityFollowItineraryBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.WayPoint;
-import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
 import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 
@@ -45,7 +44,6 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -54,7 +52,10 @@ import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+
 
 public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener, IMyLocationConsumer {
 
@@ -74,6 +75,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private final ArrayList<Marker> markers = new ArrayList<>();
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
+    private IterController iterController;
+
     private static final int MULTIPLE_PERMISSION_REQUEST_CODE = 4;
 
     @Override
@@ -87,10 +90,13 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         View view = binding.getRoot();
         setContentView(view);
 
+        iterController = IterController.getInstance();
+
         Intent intent = getIntent();
         itinerary = (Itinerary) intent.getSerializableExtra("itinerary");
 
         MaterialToolbar materialToolbar = binding.topAppBar;
+        materialToolbar.setTitle(itinerary.getName());
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
@@ -147,7 +153,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MULTIPLE_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0) {
@@ -205,57 +211,62 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
 
     private void addWayPoints(){
-        for(WayPoint wayPoint : itinerary.getWayPoints()){
 
-            NaTourMarker marker = new NaTourMarker(map);
+        if(itinerary.getWayPoints() != null) {
 
-            if(markers.size() == 0) {
-                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
-            }else if(markers.size() == 1) {
-                markers.get(0).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
-                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
-            }else{
-                markers.get(markers.size() - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
-                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+            for(WayPoint wayPoint : itinerary.getWayPoints()){
+
+                NaTourMarker marker = new NaTourMarker(map);
+
+                if(markers.size() == 0) {
+                    marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
+                }else if(markers.size() == 1) {
+                    markers.get(0).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
+                    marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+                }else{
+                    markers.get(markers.size() - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
+                    marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+                }
+
+                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+                marker.setPosition(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
+
+                map.getOverlays().add(marker);
+                map.invalidate();
+                markers.add(marker);
+
+                NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
+                waypoints.add(naTourWaypoint);
             }
 
-            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-            marker.setPosition(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
-
-            map.getOverlays().add(marker);
-            map.invalidate();
-            markers.add(marker);
-
-            NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
-            waypoints.add(naTourWaypoint);
         }
+
     }
 
 
     private void addPointOfInterests(){
 
-        ImageUtilities imageUtilities = new ImageUtilities();
+        HashMap<byte[], GeoPoint> imagesPosition = iterController.calculatePhotoPosition();
 
-        for(byte[] imageBytes : itinerary.getIterImages()){
+        for(Map.Entry<byte[], GeoPoint> entry : imagesPosition.entrySet()){
 
-            double[] coordinates = imageUtilities.getImageLocation(imageBytes);
+            byte[] imageBytes = entry.getKey();
 
-            if(coordinates != null) {
-                GeoPoint geoPoint = new GeoPoint(coordinates[0], coordinates[1]);
-                BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-                PointOfInterest pointOfInterest = new PointOfInterest(map, imageBytes);
+            BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+            PointOfInterest pointOfInterest = new PointOfInterest(map, imageBytes);
 
-                pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
-                pointOfInterest.setImage(drawable);
+            pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
+            pointOfInterest.setImage(drawable);
 
-                pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-                pointOfInterest.setPosition(geoPoint);
+            pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+            pointOfInterest.setPosition(entry.getValue());
 
-                pointOfInterest.setOnMarkerClickListener(this);
+            pointOfInterest.setOnMarkerClickListener(this);
 
-                map.getOverlays().add(pointOfInterest);
-            }
+            map.getOverlays().add(pointOfInterest);
+
         }
+
     }
 
     private void makeRoads(){

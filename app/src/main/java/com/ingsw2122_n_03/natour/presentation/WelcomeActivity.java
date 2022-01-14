@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -49,20 +48,20 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     public void onSuccess(String msg) {
 
-        runOnUiThread(() -> {
+        runOnUiThread(() ->
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                     .setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.success))
-                    .show();
-        });
+                    .show()
+        );
     }
 
     @Override
     public void onFail(String msg) {
 
-        runOnUiThread(() -> {
+        runOnUiThread(() ->
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                     .setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.error))
-                    .show();
-        });
+                    .show()
+        );
     }
 }

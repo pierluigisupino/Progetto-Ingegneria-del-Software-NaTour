@@ -16,11 +16,14 @@ import com.ingsw2122_n_03.natour.presentation.LoadingDialog;
 import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.SplashActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainFragment;
+import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+
 
 public class IterController extends Controller {
 
@@ -171,21 +174,25 @@ public class IterController extends Controller {
 
         currentIter = iter;
 
-        if(iter.getCreator().getUid().equals(currentUser.getUid())) {
-            iter.setCreator(currentUser);
-            onRetrieveUserSuccess();
-        }
-
         if(iter.getCreator().getName() != null)
-            goToActivity(mainActivity, ItineraryDetailActivity.class, iter);
-        else
-            userDao.getNameFromId(iter.getCreator());
+            onRetrieveUserSuccess();
+        else {
+
+            if(iter.getCreator().getUid().equals(currentUser.getUid())) {
+                iter.setCreator(currentUser);
+                onRetrieveUserSuccess();
+            }else
+                userDao.setUserName(iter.getCreator());
+
+        }
 
     }
 
     public void onRetrieveUserSuccess() {
         imageUploader.ResetSession(currentIter.getIterId());
         imageUploader.downloadImages();
+        photos = new ArrayList<>();
+        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
     }
 
     public void onRetrieveUserError() {
@@ -193,19 +200,43 @@ public class IterController extends Controller {
     }
 
     public void onRetrievePhotosSuccess(ArrayList<byte[]> images) {
-        for(byte[] image : images)
-            currentIter.getIterImages().add(image);
-        if(detailActivity != null) //IS VISIBLE?
-            goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
+        photos.addAll(images);
+        detailActivity.updateImages(images);
     }
 
     public void onRetrievePhotosError(){
-        //SHOW ERROR
-        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
+
     }
 
     public void onRetrievePhotosFinish(){
-        //NOTHING TO DO?
+
+    }
+
+    /**************
+     * PHOTO UTILS
+     *************/
+
+    public HashMap<byte[], GeoPoint> calculatePhotoPosition() {
+
+        ImageUtilities imageUtilities = new ImageUtilities();
+        HashMap<byte[], GeoPoint> pointOfInterests = new HashMap<>();
+
+        for(byte[] imageBytes : photos){
+
+            double[] coordinates = imageUtilities.getImageLocation(imageBytes);
+
+            if(coordinates != null) {
+                pointOfInterests.put(imageBytes, new GeoPoint(coordinates[0], coordinates[1]));
+            }
+        }
+
+        return pointOfInterests;
+
+    }
+
+    public HashMap<byte[], GeoPoint> calculatePhotoPosition(ArrayList<byte[]> imagesBytes) {
+        photos = imagesBytes;
+        return calculatePhotoPosition();
     }
 
 

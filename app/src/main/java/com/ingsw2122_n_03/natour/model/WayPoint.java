@@ -1,11 +1,13 @@
 package com.ingsw2122_n_03.natour.model;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class WayPoint implements Serializable {
 
-    private double latitude;
-    private double longitude;
+    private final double latitude;
+    private final double longitude;
 
     /**CONSTRUCTORS
      */
@@ -24,19 +26,12 @@ public class WayPoint implements Serializable {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
     public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
 
-
+    @NonNull
     @Override
     public String toString() {
         return "{\"Latitude\": " + "\"" + latitude + "\", \"Longitude\": "  + "\"" + longitude + "\"}";

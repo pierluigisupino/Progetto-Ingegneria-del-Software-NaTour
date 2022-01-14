@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
 import android.os.Build;
-import android.util.Log;
 
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
@@ -94,8 +93,10 @@ public class ImageUploader {
                         JSONObject result = response.getData().asJSONObject().getJSONObject("Result");
                         int photoCount = result.getInt("count");
 
-                        if(photoCount == 0)
+                        if(photoCount == 0){
                             controller.onRetrievePhotosFinish();
+                            return;
+                        }
 
                         ArrayList<byte[]> images = new ArrayList<>();
                         for(int i = 0; i < photoCount; ++i){

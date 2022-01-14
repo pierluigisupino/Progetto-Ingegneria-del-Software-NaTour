@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -20,12 +19,15 @@ import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
+import java.util.ArrayList;
+
 public class ItineraryDetailActivity extends BaseActivity {
 
     private ConstraintLayout layout;
 
     private IterController iterController;
     private Itinerary itinerary;
+    private final ArrayList<byte[]> images = new ArrayList<>();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -92,5 +94,15 @@ public class ItineraryDetailActivity extends BaseActivity {
                 .show();
 
     }
+
+    private void setAdapter(){
+
+    }
+
+    public void updateImages(ArrayList<byte[]> images) {
+        this.images.addAll(images);
+        setAdapter();
+    }
+
 
 }

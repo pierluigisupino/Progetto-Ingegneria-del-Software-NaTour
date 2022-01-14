@@ -19,8 +19,6 @@ public class Itinerary implements Serializable {
     private Date editDate;
     private int iterId;
 
-    private ArrayList<byte[]> iterImages = new ArrayList<>();
-
 
     /**CONSTRUCTORS
      */
@@ -122,13 +120,5 @@ public class Itinerary implements Serializable {
     public Date getShareDate() { return shareDate; }
 
     public void setShareDate(Date shareDate) { this.shareDate = shareDate; }
-
-    public ArrayList<byte[]> getIterImages() {
-        return iterImages;
-    }
-
-    public void setIterImages(ArrayList<byte[]> iterImages) {
-        this.iterImages = iterImages;
-    }
 
 }

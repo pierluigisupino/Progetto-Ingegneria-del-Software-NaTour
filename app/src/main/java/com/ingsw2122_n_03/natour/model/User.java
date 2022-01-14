@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    private String userId;
+    private final String userId;
     private String name;
 
     /**CONSTRUCTORS
@@ -21,10 +21,6 @@ public class User implements Serializable {
 
     public String getUid() {
         return userId;
-    }
-
-    public void setUid(String uid) {
-        userId = uid;
     }
 
     public String getName() {

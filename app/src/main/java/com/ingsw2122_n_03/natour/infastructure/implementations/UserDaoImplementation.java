@@ -26,18 +26,7 @@ public final class UserDaoImplementation implements UserDaoInterface {
 
 
     @Override
-    public void setCurrentUserName(User user) {
-
-        Amplify.Auth.fetchUserAttributes(
-                attributes -> user.setName(attributes.get(2).getValue()),
-                error -> {}
-        );
-
-    }
-
-
-    @Override
-    public void getNameFromId(User user) {
+    public void setUserName(User user) {
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("uid", user.getUid());

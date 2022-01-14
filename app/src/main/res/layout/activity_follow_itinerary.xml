@@ -14,8 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_left"
-        app:title="Follow itinerary" />
+        app:navigationIcon="@drawable/ic_arrow_left" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
