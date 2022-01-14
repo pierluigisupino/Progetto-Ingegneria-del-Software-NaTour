@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.util.Log;
+
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -9,6 +11,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ImageUploader {
 
@@ -57,6 +61,25 @@ public class ImageUploader {
 
                 },
                 error -> controller.onItineraryInsertComplete(false)
+        );
+
+    }
+
+    /** TO MODIFY, FOR TESTING INSERT THE ITER ID TO SHOW ITS PHOTOS **/
+    public void downloadImagesByIter() {
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("iterid", "18");
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/items/photos")
+                .addQueryParameters(queryParams)
+                .build();
+
+        Amplify.API.get(
+                options,
+                response -> Log.i("Response", response.getData().asString()),
+                error -> Log.e("Error", error.getMessage())
         );
 
     }

@@ -75,6 +75,45 @@ app.get('/items/user', function(req, res) {
 });
 
 
+app.get('/items/photos', function(req, res) {
+  
+  var prefix = 'iter'+req.query.iterid+'/';
+  var listParams = {
+    Bucket: process.env.BUCKETNAME,
+    Prefix: prefix,
+    MaxKeys: 10
+  };
+  
+  s3.listObjectsV2(listParams, async function(err, data) {
+    
+    if (err)
+      return res.json({Error: err.stack});
+    
+    else{
+      
+      var response = new Object();
+      response.count = data.KeyCount;
+      
+      for(var i = 0; i < data.Contents.length; ++i){
+        
+        var downloadParams = {
+          Bucket: process.env.BUCKETNAME, 
+          Key: data.Contents[0].Key
+        };
+        
+        response['photo'+i] = (await (s3.getObject(downloadParams).promise())).Body.toString('base64');
+        
+      }
+      
+      return res.json({Result: response});
+      
+    } 
+              
+  });
+  
+});
+
+
 /****************************
 * post methods *
 ****************************/
