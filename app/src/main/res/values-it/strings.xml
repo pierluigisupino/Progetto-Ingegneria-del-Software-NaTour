@@ -131,11 +131,6 @@
         <item>con Attrezzatura Alpina (EEA)</item>
     </string-array>
 
-    <string name="difficulty1">Turistico (T)</string>
-    <string name="difficulty2">Escursionistico (E)</string>
-    <string name="difficulty3">Escursionisti Esperti (EE)</string>
-    <string name="difficulty4">con Attrezzatura Alpina (EEA)</string>
-
     <string name="no_photo_selected_text">Nessuna foto selezionata</string>
     <string name="photo_selected_text">/5 foto selezionate</string>
     <string name="photo_added_success">Foto aggiunte</string>

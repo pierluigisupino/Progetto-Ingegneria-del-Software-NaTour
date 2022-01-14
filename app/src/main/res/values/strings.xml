@@ -130,11 +130,6 @@
         <item>Skilled Equipped Hikers (EEA)</item>
     </string-array>
 
-    <string name="difficulty1">Touristic (T)</string>
-    <string name="difficulty2">Hiking (E)</string>
-    <string name="difficulty3">for Experienced Hikers (EE)</string>
-    <string name="difficulty4">Skilled Equipped Hikers (EEA)</string>
-
     <string name="no_photo_selected_text">No photo selected</string>
     <string name="photo_selected_text">/5 photo selected</string>
     <string name="photo_added_success">Photo added</string>

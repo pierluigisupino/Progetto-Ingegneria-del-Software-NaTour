@@ -113,16 +113,16 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
 
         @SuppressLint("ClickableViewAccessibility")
         public void setDifficultyText(String difficulty) {
-            if(difficulty.equals(context.getString(R.string.difficulty1))) {
+            if(difficulty.equals(context.getResources().getStringArray(R.array.difficulties)[0])) {
                 difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
-            }else if(difficulty.equals(context.getString(R.string.difficulty2))) {
+            }else if(difficulty.equals(context.getResources().getStringArray(R.array.difficulties)[1])) {
                 difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty2.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
-            } else if(difficulty.equals(context.getString(R.string.difficulty3))) {
+            } else if(difficulty.equals(context.getResources().getStringArray(R.array.difficulties)[2])) {
                 difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty2.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty3.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
-            }else if(difficulty.equals(context.getString(R.string.difficulty4))) {
+            }else if(difficulty.equals(context.getResources().getStringArray(R.array.difficulties)[3])) {
                 difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty2.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty3.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
