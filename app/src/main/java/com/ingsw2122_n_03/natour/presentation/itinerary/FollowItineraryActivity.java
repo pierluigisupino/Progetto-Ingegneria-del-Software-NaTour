@@ -186,13 +186,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         gpsMyLocationProvider = new GpsMyLocationProvider(getApplicationContext());
         gpsMyLocationProvider.startLocationProvider(this);
 
-        gpsMyLocationProvider.startLocationProvider(new IMyLocationConsumer() {
-            @Override
-            public void onLocationChanged(Location location, IMyLocationProvider source) {
-
-            }
-        });
-
         oMapLocationOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
         oMapLocationOverlay.enableFollowLocation();
         oMapLocationOverlay.enableMyLocation();
