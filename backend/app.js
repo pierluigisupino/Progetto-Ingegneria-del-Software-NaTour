@@ -78,11 +78,14 @@ app.get('/items/user', function(req, res) {
 app.get('/items/photos', function(req, res) {
   
   var prefix = 'iter'+req.query.iterid+'/';
+  
   var listParams = {
     Bucket: process.env.BUCKETNAME,
     Prefix: prefix,
-    MaxKeys: 10
+    MaxKeys: 10,
+    StartAfter: req.query.lastkey
   };
+  
   
   s3.listObjectsV2(listParams, async function(err, data) {
     
@@ -98,10 +101,15 @@ app.get('/items/photos', function(req, res) {
         
         var downloadParams = {
           Bucket: process.env.BUCKETNAME, 
-          Key: data.Contents[0].Key
+          Key: data.Contents[i].Key
         };
         
-        response['photo'+i] = (await (s3.getObject(downloadParams).promise())).Body.toString('base64');
+        try{
+          response['photo'+i] = (await (s3.getObject(downloadParams).promise())).Body.toString('base64');
+          response.lastkey = data.Contents[i].Key;
+        }catch(error) {
+          response.count--;
+        }
         
       }
       

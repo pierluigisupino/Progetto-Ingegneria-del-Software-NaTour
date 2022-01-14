@@ -17,6 +17,7 @@ import java.util.Map;
 public class ImageUploader {
 
     private final IterController controller;
+    private String lastkey;
 
     public ImageUploader(IterController controller) {
         this.controller = controller;
@@ -66,10 +67,12 @@ public class ImageUploader {
     }
 
     /** TO MODIFY, FOR TESTING INSERT THE ITER ID TO SHOW ITS PHOTOS **/
-    public void downloadImagesByIter() {
+    public void downloadImagesByIter(int id) {
 
         Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("iterid", "18");
+        queryParams.put("iterid", String.valueOf(id));
+        if(lastkey != null)
+            queryParams.put("lastkey", lastkey);
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/photos")
@@ -78,7 +81,29 @@ public class ImageUploader {
 
         Amplify.API.get(
                 options,
-                response -> Log.i("Response", response.getData().asString()),
+                response -> {
+
+                    try {
+                        JSONObject result = response.getData().asJSONObject().getJSONObject("Result");
+                        int photoCount = result.getInt("count");
+                        if(photoCount == 0){
+                            //return
+                            //NO PHOTO TO DOWNLOAD
+                        }else{
+                            for(int i = 0; i < photoCount; ++i){
+                                Log.i("PHOTO0", result.getString("photo0"));
+                                Log.i("PHOTO1", result.getString("photo1"));
+                                Log.i("PHOTO2", result.getString("photo2"));
+                                //etc
+                            }
+                            lastkey = result.getString("lastkey");
+                        }
+
+                    } catch (JSONException e) {
+                        Log.i("exc", e.getMessage());
+                    }
+
+                },
                 error -> Log.e("Error", error.getMessage())
         );
 
