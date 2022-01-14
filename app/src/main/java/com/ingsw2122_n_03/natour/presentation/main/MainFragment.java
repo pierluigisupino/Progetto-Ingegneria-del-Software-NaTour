@@ -68,12 +68,9 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
 
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getItineraries();
-                pullToRefresh.setRefreshing(false);
-            }
+        pullToRefresh.setOnRefreshListener(() -> {
+            getItineraries();
+            pullToRefresh.setRefreshing(false);
         });
 
     }
