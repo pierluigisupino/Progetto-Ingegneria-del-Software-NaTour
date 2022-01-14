@@ -7,19 +7,32 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.ActivityFollowItineraryBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.WayPoint;
+import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
+import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -36,8 +49,9 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class FollowItineraryActivity extends AppCompatActivity {
+public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener {
 
     private ActivityFollowItineraryBinding binding;
 
@@ -69,6 +83,10 @@ public class FollowItineraryActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         itinerary = (Itinerary) intent.getSerializableExtra("itinerary");
+
+        MaterialToolbar materialToolbar = binding.topAppBar;
+
+        materialToolbar.setNavigationOnClickListener(v -> finish());
 
         checkPermissionsState();
     }
@@ -172,8 +190,13 @@ public class FollowItineraryActivity extends AppCompatActivity {
         addItinerary();
     }
 
-
     private void addItinerary(){
+        addWayPoints();
+        addPointOfInterests();
+        makeRoads();
+    }
+
+    private void addWayPoints(){
         for(WayPoint wayPoint : itinerary.getWayPoints()){
 
             NaTourMarker marker = new NaTourMarker(map);
@@ -198,8 +221,33 @@ public class FollowItineraryActivity extends AppCompatActivity {
             NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
             waypoints.add(naTourWaypoint);
         }
+    }
 
-        makeRoads();
+
+    private void addPointOfInterests(){
+
+        ImageUtilities imageUtilities = new ImageUtilities();
+
+        for(byte[] imageBytes : itinerary.getIterImages()){
+
+            double[] coordinates = imageUtilities.getImageLocation(imageBytes);
+
+            if(coordinates != null) {
+                GeoPoint geoPoint = new GeoPoint(coordinates[0], coordinates[1]);
+                BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+                PointOfInterest pointOfInterest = new PointOfInterest(map, imageBytes);
+
+                pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
+                pointOfInterest.setImage(drawable);
+
+                pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+                pointOfInterest.setPosition(geoPoint);
+
+                pointOfInterest.setOnMarkerClickListener(this);
+
+                map.getOverlays().add(pointOfInterest);
+            }
+        }
     }
 
     private void makeRoads(){
@@ -226,5 +274,35 @@ public class FollowItineraryActivity extends AppCompatActivity {
                 map.getOverlays().remove(roadOverlay);
             }
         }).start();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker, MapView mapView) {
+
+        if(marker instanceof PointOfInterest)
+            showImage(marker.getImage());
+
+        return true;
+    }
+
+    public void showImage(Drawable drawable) {
+
+        Dialog builder = new Dialog(this);
+        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        builder.getWindow().setBackgroundDrawable(
+                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        builder.setOnDismissListener(dialogInterface -> {
+
+        });
+
+        ImageView imageView = new ImageView(this);
+        imageView.setImageDrawable(drawable);
+        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        builder.show();
+
     }
 }

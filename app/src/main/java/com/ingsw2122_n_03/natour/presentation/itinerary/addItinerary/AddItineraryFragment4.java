@@ -301,7 +301,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
             p.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
             p.setImage(drawable);
-            p.setDrawable(drawable);
 
             p.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
             p.setPosition(geoPoint);
@@ -347,7 +346,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     public boolean onMarkerClick(Marker marker, MapView mapView) {
 
         if(marker instanceof PointOfInterest)
-            showImage(((PointOfInterest) marker).getDrawable());
+            showImage(marker.getImage());
         else{
 
             int index = markers.indexOf(marker);

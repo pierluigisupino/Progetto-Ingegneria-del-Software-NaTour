@@ -1,6 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
 import android.os.Build;
+import android.util.Log;
 
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;

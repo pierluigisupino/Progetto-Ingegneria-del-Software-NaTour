@@ -169,10 +169,12 @@ public class IterController extends Controller {
 
     public void onItineraryClick(Itinerary iter) {
 
-        if(iter.getCreator().getUid().equals(currentUser.getUid()))
-            iter.setCreator(currentUser);
-
         currentIter = iter;
+
+        if(iter.getCreator().getUid().equals(currentUser.getUid())) {
+            iter.setCreator(currentUser);
+            onRetrieveUserSuccess();
+        }
 
         if(iter.getCreator().getName() != null)
             goToActivity(mainActivity, ItineraryDetailActivity.class, iter);
