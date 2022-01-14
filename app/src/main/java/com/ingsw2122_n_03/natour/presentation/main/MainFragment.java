@@ -71,10 +71,13 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
    public void updateItineraries(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
-        requireActivity().runOnUiThread(()->{
-            recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
-            pullToRefresh.setRefreshing(false);
-        });
+        requireActivity().runOnUiThread(()->
+            recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()))
+        );
+    }
+
+    public void stopRefreshing(){
+        pullToRefresh.setRefreshing(false);
     }
 
     @Override

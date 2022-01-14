@@ -75,33 +75,35 @@ public class IterController extends Controller {
         //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
+
     public void onSetUpSuccess(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
         goToActivityAndFinish(splashActivity, MainActivity.class, itineraries);
     }
 
-    public void onSetUpError() {
-        goToActivityAndFinish(splashActivity, ErrorActivity.class);
-    }
+
+    public void onSetUpError() { goToActivityAndFinish(splashActivity, ErrorActivity.class); }
 
 
     /******************
      * GET ITINERARIES
      ******************/
 
-    public void getUpdatedItineraries(){
-        itineraryDao.getRecentItineraries();
-    }
+    public void getUpdatedItineraries(){ itineraryDao.getRecentItineraries(); }
+
 
     public void onUpdateError(){
+        mainFragment.stopRefreshing();
         mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 
+
     public void onUpdateSuccess(ArrayList<Itinerary> iters){
         itineraries.clear();
-        mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
+        mainFragment.stopRefreshing();
+        mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
     }
 
 
@@ -120,10 +122,8 @@ public class IterController extends Controller {
         for(GeoPoint g : waypoints){
             wayPointArrayList.add(new WayPoint(g.getLatitude(), g.getLongitude()));
         }
-        currentIter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), currentUser);
+        currentIter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), currentUser, new Date());
         wayPointArrayList.remove(0);
-
-        currentIter.setShareDate(new Date());
 
         if(description.length() > 0)
            currentIter.setDescription(description);
@@ -132,7 +132,9 @@ public class IterController extends Controller {
             currentIter.setWayPoints(wayPointArrayList);
 
         itineraryDao.postItinerary(currentIter);
+
     }
+
 
     public void onItineraryInsertSuccess(int iterID) {
 
@@ -145,12 +147,12 @@ public class IterController extends Controller {
 
     }
 
-    public void onItineraryInsertError() {
 
+    public void onItineraryInsertError() {
         loadingDialog.dismissDialog();
         addItineraryActivity.onFail(addItineraryActivity.getString(R.string.itinerary_insert_failure));
-
     }
+
 
     public void onItineraryInsertComplete(boolean success) {
 
@@ -165,6 +167,7 @@ public class IterController extends Controller {
             mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
 
     }
+
 
     /*************
      * NAVIGATION
@@ -185,8 +188,8 @@ public class IterController extends Controller {
                 userDao.setUserName(iter.getCreator());
 
         }
-
     }
+
 
     public void onRetrieveUserSuccess() {
         imageUploader.ResetSession(currentIter.getIterId());
@@ -195,22 +198,27 @@ public class IterController extends Controller {
         goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
     }
 
+
     public void onRetrieveUserError() {
         mainActivity.onFail(mainActivity.getString(R.string.retrieve_itinerary_error));
     }
+
 
     public void onRetrievePhotosSuccess(ArrayList<byte[]> images) {
         photos.addAll(images);
         detailActivity.updateImages(images);
     }
 
+
     public void onRetrievePhotosError(){
 
     }
 
+
     public void onRetrievePhotosFinish(){
 
     }
+
 
     /**************
      * PHOTO UTILS
@@ -233,6 +241,7 @@ public class IterController extends Controller {
         return pointOfInterests;
 
     }
+
 
     public HashMap<byte[], GeoPoint> calculatePhotoPosition(ArrayList<byte[]> imagesBytes) {
         photos = imagesBytes;

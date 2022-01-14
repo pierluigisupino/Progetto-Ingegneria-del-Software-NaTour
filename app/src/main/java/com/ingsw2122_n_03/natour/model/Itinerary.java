@@ -20,16 +20,17 @@ public class Itinerary implements Serializable {
     private int iterId;
 
 
-    /**CONSTRUCTORS
+    /**CONSTRUCTOR
      */
 
-    public Itinerary(String name, String difficulty, int hours, int minutes, WayPoint startPoint, User creator) {
+    public Itinerary(String name, String difficulty, int hours, int minutes, WayPoint startPoint, User creator, Date shareDate) {
         this.name = name;
         this.difficulty = difficulty;
         hoursDuration = hours;
         minutesDuration = minutes;
         this.startPoint = startPoint;
         this.creator = creator;
+        this.shareDate = shareDate;
     }
 
     /**GETTERS
@@ -41,9 +42,6 @@ public class Itinerary implements Serializable {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getDescription() {
         return description;
@@ -53,6 +51,7 @@ public class Itinerary implements Serializable {
         this.description = description;
     }
 
+
     public String getDifficulty() {
         return difficulty;
     }
@@ -60,6 +59,7 @@ public class Itinerary implements Serializable {
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
     }
+
 
     public int getHoursDuration() {
         return hoursDuration;
@@ -71,6 +71,7 @@ public class Itinerary implements Serializable {
         this.hoursDuration = hoursDuration;
     }
 
+
     public int getMinutesDuration() {
         return minutesDuration;
     }
@@ -81,13 +82,11 @@ public class Itinerary implements Serializable {
         this.minutesDuration = minutesDuration;
     }
 
+
     public WayPoint getStartPoint() {
         return startPoint;
     }
 
-    public void setStartPoint(WayPoint startPoint) {
-        this.startPoint = startPoint;
-    }
 
     public ArrayList<WayPoint> getWayPoints() {
         return wayPoints;
@@ -97,6 +96,7 @@ public class Itinerary implements Serializable {
         this.wayPoints = wayPoints;
     }
 
+
     public int getIterId() {
         return iterId;
     }
@@ -104,6 +104,7 @@ public class Itinerary implements Serializable {
     public void setIterId(int iterId) {
         this.iterId = iterId;
     }
+
 
     public User getCreator() {
         return creator;
@@ -113,12 +114,13 @@ public class Itinerary implements Serializable {
         this.creator = creator;
     }
 
+
     public Date getEditDate() { return editDate; }
 
     public void setEditDate(Date editDate) { this.editDate = editDate; }
 
+
     public Date getShareDate() { return shareDate; }
 
-    public void setShareDate(Date shareDate) { this.shareDate = shareDate; }
 
 }

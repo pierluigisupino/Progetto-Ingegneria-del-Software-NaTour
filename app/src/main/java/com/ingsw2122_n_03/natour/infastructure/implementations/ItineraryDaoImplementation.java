@@ -140,10 +140,9 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                             }
 
-                            Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator);
+                            Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator, shareDate);
 
                             iter.setIterId(id);
-                            iter.setShareDate(shareDate);
                             iter.setEditDate(updateDate);
 
                             if(!description.equals("null")) {
@@ -236,10 +235,9 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                             }
 
-                            Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator);
+                            Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator, shareDate);
 
                             iter.setIterId(id);
-                            iter.setShareDate(shareDate);
                             iter.setEditDate(updateDate);
 
                             if(!description.equals("null")) {
