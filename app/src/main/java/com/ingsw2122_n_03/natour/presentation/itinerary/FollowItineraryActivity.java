@@ -15,6 +15,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -43,15 +45,18 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
+import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener {
+public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener, IMyLocationConsumer {
 
     private ActivityFollowItineraryBinding binding;
 
@@ -60,6 +65,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private IMapController mapController;
     private RoadManager roadManager;
     private Polyline roadOverlay;
+    private GpsMyLocationProvider gpsMyLocationProvider;
     private MyLocationNewOverlay oMapLocationOverlay;
     private double myLatitude;
     private double myLongitude;
@@ -177,24 +183,33 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
 
-        oMapLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), map);
-        map.getOverlays().add(oMapLocationOverlay);
+        gpsMyLocationProvider = new GpsMyLocationProvider(getApplicationContext());
+        gpsMyLocationProvider.startLocationProvider(this);
+
+        gpsMyLocationProvider.startLocationProvider(new IMyLocationConsumer() {
+            @Override
+            public void onLocationChanged(Location location, IMyLocationProvider source) {
+
+            }
+        });
+
+        oMapLocationOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
         oMapLocationOverlay.enableFollowLocation();
         oMapLocationOverlay.enableMyLocation();
-        oMapLocationOverlay.enableFollowLocation();
+
+        oMapLocationOverlay.runOnFirstFix(() ->  {
+            addWayPoints();
+            addPointOfInterests();
+            makeRoads();
+        });
+
+        map.getOverlays().add(oMapLocationOverlay);
 
         CompassOverlay compassOverlay = new CompassOverlay(this, map);
         compassOverlay.enableCompass();
         map.getOverlays().add(compassOverlay);
-
-        addItinerary();
     }
 
-    private void addItinerary(){
-        addWayPoints();
-        addPointOfInterests();
-        makeRoads();
-    }
 
     private void addWayPoints(){
         for(WayPoint wayPoint : itinerary.getWayPoints()){
@@ -251,29 +266,24 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     }
 
     private void makeRoads(){
+        if(waypoints.size() >= 1){
 
-        new Thread(()-> {
-            if(waypoints.size() >= 1){
+            if(myGeoPoint != null) waypoints.remove(myGeoPoint);
 
-                while(oMapLocationOverlay.getMyLocation() == null){
+            myLatitude = oMapLocationOverlay.getMyLocation().getLatitude();
+            myLongitude = oMapLocationOverlay.getMyLocation().getLongitude();
 
-                }
+            myGeoPoint = new GeoPoint(myLatitude, myLongitude);
+            waypoints.add(0, myGeoPoint);
 
-                myLatitude = oMapLocationOverlay.getMyLocation().getLatitude();
-                myLongitude = oMapLocationOverlay.getMyLocation().getLongitude();
-
-                myGeoPoint = new GeoPoint(myLatitude, myLongitude);
-                waypoints.add(0, myGeoPoint);
-
-                Road road = roadManager.getRoad(waypoints);
-                map.getOverlays().remove(roadOverlay);
-                roadOverlay = RoadManager.buildRoadOverlay(road);
-                map.getOverlays().add(roadOverlay);
-                map.invalidate();
-            }else {
-                map.getOverlays().remove(roadOverlay);
-            }
-        }).start();
+            Road road = roadManager.getRoad(waypoints);
+            map.getOverlays().remove(roadOverlay);
+            roadOverlay = RoadManager.buildRoadOverlay(road);
+            map.getOverlays().add(roadOverlay);
+            map.invalidate();
+        }else {
+            map.getOverlays().remove(roadOverlay);
+        }
     }
 
     @Override
@@ -304,5 +314,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 ViewGroup.LayoutParams.MATCH_PARENT));
         builder.show();
 
+    }
+
+    @Override
+    public void onLocationChanged(Location location, IMyLocationProvider source) {
+        Log.e("test", "si");
     }
 }
