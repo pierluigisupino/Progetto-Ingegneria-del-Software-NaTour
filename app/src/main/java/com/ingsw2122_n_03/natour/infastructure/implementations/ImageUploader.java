@@ -1,6 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
-import android.util.Log;
+import android.os.Build;
 
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
@@ -17,21 +17,26 @@ import java.util.Map;
 public class ImageUploader {
 
     private final IterController controller;
-    private String lastkey;
+
+    private int delimiter;
+    private String lastPhotoKey;
 
     public ImageUploader(IterController controller) {
         this.controller = controller;
     }
 
+
     public void uploadImages(int iterID, ArrayList<byte[]> imagesBytes) {
 
         int photoCount = imagesBytes.size();
         String[] encodedStrings = new String[photoCount];
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            for(int i=0; i<photoCount; ++i) {
+
+        for(int i=0; i<photoCount; ++i) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 encodedStrings[i] = Base64.getEncoder().encodeToString(imagesBytes.get(i));
             }
         }
+
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -66,13 +71,13 @@ public class ImageUploader {
 
     }
 
-    /** TO MODIFY, FOR TESTING INSERT THE ITER ID TO SHOW ITS PHOTOS **/
-    public void downloadImagesByIter(int id) {
+
+    public void downloadImages() {
 
         Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("iterid", String.valueOf(id));
-        if(lastkey != null)
-            queryParams.put("lastkey", lastkey);
+        queryParams.put("iterid", String.valueOf(delimiter));
+        if(lastPhotoKey != null)
+            queryParams.put("lastkey", lastPhotoKey);
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/photos")
@@ -84,29 +89,35 @@ public class ImageUploader {
                 response -> {
 
                     try {
+
                         JSONObject result = response.getData().asJSONObject().getJSONObject("Result");
                         int photoCount = result.getInt("count");
-                        if(photoCount == 0){
-                            //return
-                            //NO PHOTO TO DOWNLOAD
-                        }else{
-                            for(int i = 0; i < photoCount; ++i){
-                                Log.i("PHOTO0", result.getString("photo0"));
-                                Log.i("PHOTO1", result.getString("photo1"));
-                                Log.i("PHOTO2", result.getString("photo2"));
-                                //etc
+
+                        if(photoCount == 0)
+                            controller.onRetrievePhotosFinish();
+
+                        ArrayList<byte[]> images = new ArrayList<>();
+                        for(int i = 0; i < photoCount; ++i){
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                images.add(Base64.getDecoder().decode(result.getString("photo"+i)));
                             }
-                            lastkey = result.getString("lastkey");
                         }
+                        lastPhotoKey = result.getString("lastkey");
+                        controller.onRetrievePhotosSuccess(images);
 
                     } catch (JSONException e) {
-                        Log.i("exc", e.getMessage());
+                        controller.onRetrievePhotosError();
                     }
 
                 },
-                error -> Log.e("Error", error.getMessage())
+                error -> controller.onRetrievePhotosError()
         );
 
+    }
+
+    public void ResetSession(int delimiter) {
+        this.delimiter = delimiter;
+        lastPhotoKey = null;
     }
 
 }

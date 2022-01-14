@@ -166,7 +166,7 @@ public class IterController extends Controller {
     /*************
      * NAVIGATION
      ************/
-    //TODO HERE MAY BE CALL GETIMAGESBYITER
+
     public void onItineraryClick(Itinerary iter) {
 
         if(iter.getCreator().getUid().equals(currentUser.getUid()))
@@ -182,11 +182,28 @@ public class IterController extends Controller {
     }
 
     public void onRetrieveUserSuccess() {
-        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
+        imageUploader.ResetSession(currentIter.getIterId());
+        imageUploader.downloadImages();
     }
 
     public void onRetrieveUserError() {
         mainActivity.onFail(mainActivity.getString(R.string.retrieve_itinerary_error));
+    }
+
+    public void onRetrievePhotosSuccess(ArrayList<byte[]> images) {
+        for(byte[] image : images)
+            currentIter.getIterImages().add(image);
+        if(detailActivity != null) //IS VISIBLE?
+            goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
+    }
+
+    public void onRetrievePhotosError(){
+        //SHOW ERROR
+        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
+    }
+
+    public void onRetrievePhotosFinish(){
+        //NOTHING TO DO?
     }
 
 
