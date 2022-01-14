@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -79,7 +78,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void getItineraries(boolean isUpdating) {
+    public void getSetUpItineraries() {
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/itineraries")
@@ -87,13 +86,12 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
         Amplify.API.get(
                 options,
-
                 response -> {
 
                     try {
 
-                        ArrayList<Itinerary> iters = new ArrayList<>();
                         JSONArray result = response.getData().asJSONObject().getJSONArray("Result");
+                        ArrayList<Itinerary> iters = new ArrayList<>();
 
                         for(int i = 0; i < result.length(); ++i) {
 
@@ -159,23 +157,111 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                         }
 
-                        if(!isUpdating) {
-                            controller.onSetUpSuccess(iters);
-                        }else{
-                            controller.onUpdateSuccess(iters);
-                        }
-
+                        controller.onSetUpSuccess(iters);
 
                     } catch (JSONException e) {
-                        if(!isUpdating) {
-                            controller.onSetUpError();
-                        }else{
-                            controller.onUpdateError();
-                        }
+                        controller.onSetUpError();
                     }
+
                 },
 
                 error -> controller.onSetUpError()
+
+        );
+
+    }
+
+    //TODO CREATE LAMBDA FUNCTION TO INVOKE
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void getRecentItineraries() {
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/items/itineraries")
+                .build();
+
+        Amplify.API.get(
+                options,
+                response -> {
+
+                    try {
+
+                        JSONArray result = response.getData().asJSONObject().getJSONArray("Result");
+                        ArrayList<Itinerary> iters = new ArrayList<>();
+
+                        for(int i = 0; i < result.length(); ++i) {
+
+                            JSONObject jsonObject = result.getJSONObject(i);
+
+                            int id = jsonObject.getInt("iterid");
+
+                            String name = jsonObject.getString("itername");
+                            String description = jsonObject.getString("description");
+                            String difficulty = jsonObject.getString("difficulty");
+
+                            int hours = jsonObject.getInt("hours");
+                            int minutes = jsonObject.getInt("minutes");
+
+                            String creatorID = jsonObject.getString("creatorid");
+                            User creator = new User(creatorID);
+
+                            DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
+                            TemporalAccessor accessor;
+
+                            accessor = timeFormatter.parse(jsonObject.getString("sharedate"));
+                            Date shareDate = Date.from(Instant.from(accessor));
+
+                            Date updateDate = null;
+                            if(!jsonObject.isNull("updatedate")) {
+                                accessor = timeFormatter.parse(jsonObject.getString("updatedate"));
+                                updateDate = Date.from(Instant.from(accessor));
+                            }
+
+                            JSONObject startPointJSON = jsonObject.getJSONObject("startpoint");
+                            double x = startPointJSON.getDouble("x");
+                            double y = startPointJSON.getDouble("y");
+                            WayPoint startPoint = new WayPoint(x, y);
+
+                            ArrayList<WayPoint> iterWaypoints = new ArrayList<>();
+
+                            if(!jsonObject.isNull("waypoints")){
+
+                                JSONArray path = jsonObject.getJSONArray("waypoints");
+
+                                for(int j = 0; j < path.length(); ++j) {
+                                    double latitude = Double.parseDouble(path.getJSONObject(j).getString("Latitude"));
+                                    double longitude = Double.parseDouble(path.getJSONObject(j).getString("Longitude"));
+                                    iterWaypoints.add(new WayPoint(latitude, longitude));
+                                }
+
+                            }
+
+                            Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator);
+
+                            iter.setIterId(id);
+                            iter.setShareDate(shareDate);
+                            iter.setEditDate(updateDate);
+
+                            if(!description.equals("null")) {
+                                iter.setDescription(description);
+                            }
+
+                            if(!iterWaypoints.isEmpty())
+                                iter.setWayPoints(iterWaypoints);
+
+                            iters.add(iter);
+
+                        }
+
+                        controller.onUpdateSuccess(iters);
+
+                    } catch (JSONException e) {
+                        controller.onUpdateError();
+                    }
+
+                },
+
+                error -> controller.onUpdateError()
 
         );
 

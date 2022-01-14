@@ -22,7 +22,6 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 public class IterController extends Controller {
 
     private static IterController instance = null;
@@ -69,7 +68,7 @@ public class IterController extends Controller {
     public void setUp() {
         currentUser = new User(userDao.getCurrentUserId());
         currentUser.setName(splashActivity.getResources().getString(R.string.current_user_name_text));
-        itineraryDao.getItineraries(false);
+        itineraryDao.getSetUpItineraries();
         //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
@@ -82,6 +81,15 @@ public class IterController extends Controller {
         goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
 
+
+    /******************
+     * GET ITINERARIES
+     ******************/
+
+    public void getUpdatedItineraries(){
+        itineraryDao.getRecentItineraries();
+    }
+
     public void onUpdateError(){
         mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
@@ -91,11 +99,6 @@ public class IterController extends Controller {
         mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
-    }
-
-
-    public void getUpdatedItineraries(){
-        itineraryDao.getItineraries(true);
     }
 
 
@@ -149,16 +152,21 @@ public class IterController extends Controller {
     public void onItineraryInsertComplete(boolean success) {
 
         loadingDialog.dismissDialog();
-        itineraries.add(currentIter);
+        itineraries.add(0, currentIter);
         mainFragment.updateItineraries(itineraries);
         addItineraryActivity.finish();
+
+        if(success)
+            mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));
+        else
+            mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
 
     }
 
     /*************
      * NAVIGATION
      ************/
-
+    //TODO HERE MAY BE CALL GETIMAGESBYITER
     public void onItineraryClick(Itinerary iter) {
 
         if(iter.getCreator().getUid().equals(currentUser.getUid()))
@@ -192,6 +200,8 @@ public class IterController extends Controller {
         this.mainActivity = mainActivity;
     }
 
+    public void setMainFragment(MainFragment mainFragment) { this.mainFragment = mainFragment;}
+
     public void setAddItineraryActivity(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
     }
@@ -199,8 +209,6 @@ public class IterController extends Controller {
     public void setItineraryDetailActivity(ItineraryDetailActivity detailActivity) {
         this.detailActivity = detailActivity;
     }
-
-    public void setMainFragment(MainFragment mainFragment) { this.mainFragment = mainFragment;}
 
 }
 

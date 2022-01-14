@@ -29,9 +29,11 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
     private final IterController iterController = IterController.getInstance();
 
+
     public MainFragment(){
         iterController.setMainFragment(this);
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
             pullToRefresh.setRefreshing(false);
         });
-
     }
 
     @Override
