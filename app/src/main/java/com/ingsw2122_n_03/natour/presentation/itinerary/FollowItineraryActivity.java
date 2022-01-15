@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -9,9 +11,11 @@ import androidx.core.location.LocationListenerCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -20,8 +24,10 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +36,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -81,8 +94,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     private IterController iterController;
 
-    private static final int MULTIPLE_PERMISSION_REQUEST_CODE = 4;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +115,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
-        checkPermissionsState();
+        setupMap();
     }
 
     @Override
@@ -119,75 +130,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         if(map != null) map.onPause();
     }
 
-
-    /********************
-     * CHECK PERMISSIONS
-     *******************/
-
-    private void checkPermissionsState() {
-        int internetPermissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.INTERNET);
-
-        int networkStatePermissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_NETWORK_STATE);
-
-        int coarseLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        int fineLocationPermissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-
-        int wifiStatePermissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_WIFI_STATE);
-
-        if (internetPermissionCheck == PackageManager.PERMISSION_GRANTED &&
-                networkStatePermissionCheck == PackageManager.PERMISSION_GRANTED &&
-                coarseLocationPermissionCheck == PackageManager.PERMISSION_GRANTED &&
-                fineLocationPermissionCheck == PackageManager.PERMISSION_GRANTED &&
-                wifiStatePermissionCheck == PackageManager.PERMISSION_GRANTED) {
-
-            setupMap();
-
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{
-                            Manifest.permission.INTERNET,
-                            Manifest.permission.ACCESS_NETWORK_STATE,
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_WIFI_STATE
-                    },
-                    MULTIPLE_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MULTIPLE_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0) {
-                boolean somePermissionWasDenied = false;
-                for (int result : grantResults) {
-                    if (result == PackageManager.PERMISSION_DENIED) {
-                        somePermissionWasDenied = true;
-                        break;
-                    }
-                }
-                if (somePermissionWasDenied) {
-                    Toast.makeText(this, "Cant load maps without all the permissions granted", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    setupMap();
-                }
-            } else {
-                Toast.makeText(this, "Cant load maps without all the permissions granted", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
-
-
     /************
      * MAP UTILS
      ************/
@@ -199,14 +141,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         map.setClickable(true);
         map.setMultiTouchControls(true);
 
-        map.getController().setZoom(20.0);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-
-        map.setHorizontalMapRepetitionEnabled(false);
-        map.setVerticalMapRepetitionEnabled(false);
-        map.setScrollableAreaLimitLatitude(MapView.getTileSystem().getMaxLatitude(), MapView.getTileSystem().getMinLatitude(), 0);
-        map.setScrollableAreaLimitLongitude(MapView.getTileSystem().getMaxLongitude(), MapView.getTileSystem().getMinLongitude(), 0);
-
+        map.getController().setZoom(20.0);
 
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
@@ -266,7 +202,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     }
 
-
     private void addPointOfInterests(){
 
         HashMap<byte[], GeoPoint> imagesPosition = iterController.calculatePhotoPosition();
@@ -291,7 +226,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         }
 
     }
-
 
     private void makeRoads(){
 

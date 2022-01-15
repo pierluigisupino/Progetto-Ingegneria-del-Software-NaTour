@@ -104,7 +104,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         Context ctx = requireActivity().getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-       Fragment4AddItineraryBinding binding = Fragment4AddItineraryBinding.inflate(inflater, container, false);
+        Fragment4AddItineraryBinding binding = Fragment4AddItineraryBinding.inflate(inflater, container, false);
 
         map = binding.map;
         searchView = binding.searchView;
@@ -112,12 +112,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         FloatingActionButton addGPX = binding.gpxButton;
 
         map.setMultiTouchControls(true);
-        map.setTileSource(TileSourceFactory.MAPNIK);
-
-        map.setHorizontalMapRepetitionEnabled(false);
-        map.setVerticalMapRepetitionEnabled(false);
-        map.setScrollableAreaLimitLatitude(MapView.getTileSystem().getMaxLatitude(), MapView.getTileSystem().getMinLatitude(), 0);
-        map.setScrollableAreaLimitLongitude(MapView.getTileSystem().getMaxLongitude(), MapView.getTileSystem().getMinLongitude(), 0);
+        map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
         mapController = map.getController();
         mapController.setZoom(6.5);

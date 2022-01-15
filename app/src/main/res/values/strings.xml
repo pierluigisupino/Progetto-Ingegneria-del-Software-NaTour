@@ -159,6 +159,12 @@
     <!--MAIN ACTIVITY-->
     <string name="update">Updated itineraries</string>
 
+    <!--PERMISSIONS-->
+    <string name="required_permission">Required permission</string>
+    <string name="required_permission_description">We need to access your location to provide our service.</string>
+    <string name="open_settings">Open settings</string>
+    <string name="cancel">Cancel</string>
+
 
 
 

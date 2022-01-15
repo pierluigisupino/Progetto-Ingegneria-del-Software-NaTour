@@ -161,5 +161,11 @@
     <!--MAIN ACTIVITY-->
     <string name="update">Itinerari aggiornati</string>
 
+    <!--PERMISSIONS-->
+    <string name="required_permission">Permesso necessario</string>
+    <string name="required_permission_description">Abbiamo bisogno di accedere alla tua posizone per fornirti il nostro servizio.</string>
+    <string name="open_settings">Apri impostazioni</string>
+    <string name="cancel">Annulla</string>
+
 
 </resources>
