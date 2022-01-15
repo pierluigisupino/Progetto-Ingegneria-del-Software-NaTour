@@ -66,7 +66,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private double myLatitude;
     private double myLongitude;
     private GeoPoint myGeoPoint;
-    private LocationManager locationManager;
     private Location lastLocation;
 
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
@@ -120,8 +119,9 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         map = binding.map;
         map.setClickable(true);
         map.setMultiTouchControls(true);
+        mapController = map.getController();
 
-        map.getController().setZoom(20.0);
+        mapController.setZoom(20.0);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
         map.setHorizontalMapRepetitionEnabled(false);
@@ -134,7 +134,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         gpsMyLocationProvider = new GpsMyLocationProvider(this);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         oMapLocationOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
