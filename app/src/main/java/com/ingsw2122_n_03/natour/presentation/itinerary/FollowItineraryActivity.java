@@ -141,8 +141,12 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         map.setClickable(true);
         map.setMultiTouchControls(true);
 
-        map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
         map.getController().setZoom(20.0);
+        map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+
+        map.setHorizontalMapRepetitionEnabled(false);
+        map.setVerticalMapRepetitionEnabled(false);
+        map.setScrollableAreaLimitLatitude(MapView.getTileSystem().getMaxLatitude(), MapView.getTileSystem().getMinLatitude(), 0);
 
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);

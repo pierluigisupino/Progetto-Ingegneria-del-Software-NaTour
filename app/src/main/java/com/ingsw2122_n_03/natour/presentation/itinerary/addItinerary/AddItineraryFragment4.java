@@ -112,7 +112,11 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         FloatingActionButton addGPX = binding.gpxButton;
 
         map.setMultiTouchControls(true);
-        map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+        map.setTileSource(TileSourceFactory.MAPNIK);
+
+        map.setHorizontalMapRepetitionEnabled(false);
+        map.setVerticalMapRepetitionEnabled(false);
+        map.setScrollableAreaLimitLatitude(MapView.getTileSystem().getMaxLatitude(), MapView.getTileSystem().getMinLatitude(), 0);
 
         mapController = map.getController();
         mapController.setZoom(6.5);
