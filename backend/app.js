@@ -1,4 +1,3 @@
-
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
@@ -42,7 +41,26 @@ app.get('/items/itineraries', function(req, res) {
   const client = new Client(clientParams);
   client.connect();
   
-  client.query('SELECT * FROM ITINERARY ORDER BY Iterid DESC', (err, data) => {
+  client.query('SELECT * FROM ITINERARY ORDER BY iterID DESC LIMIT 8', (err, data) => {
+    
+    client.end();
+    
+    if(err) 
+      return res.json({Error: err.stack});
+    else 
+      return res.json({Result: data.rows});
+    
+  });
+  
+});
+
+
+app.get('/items/itineraries/older', function(req, res) {
+  
+  const client = new Client(clientParams);
+  client.connect();
+  
+  client.query('SELECT * FROM ITINERARY WHERE ITERID < '+ req.query.iterid +'ORDER BY iterID DESC LIMIT 8', (err, data) => {
     
     client.end();
     
@@ -181,7 +199,7 @@ app.post('/items/photos', async function(req, res) {
     
   }
     
-  if( i != count + 1)
+  if(i != count + 1)
     return res.json({Code: 200});
   else
     return res.json({Code: 400});

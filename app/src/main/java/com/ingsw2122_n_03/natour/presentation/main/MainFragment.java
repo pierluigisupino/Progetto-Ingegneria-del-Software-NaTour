@@ -65,6 +65,17 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                    iterController.getOlderItineraries();
+                    pullToRefresh.setRefreshing(true);
+                }
+            }
+        });
+
         pullToRefresh.setOnRefreshListener(iterController::getUpdatedItineraries);
 
     }

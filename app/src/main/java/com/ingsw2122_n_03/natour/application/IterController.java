@@ -92,18 +92,35 @@ public class IterController extends Controller {
     public void getUpdatedItineraries(){ itineraryDao.getRecentItineraries(); }
 
 
-    public void onUpdateError(){
-        mainFragment.stopRefreshing();
-        mainActivity.onFail(mainActivity.getString(R.string.generic_error));
-    }
-
-
-    public void onUpdateSuccess(ArrayList<Itinerary> iters){
+    public void onUpdateItinerariesSuccess(ArrayList<Itinerary> iters){
         itineraries.clear();
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
         mainFragment.stopRefreshing();
         mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
+    }
+
+
+    public void getOlderItineraries() {
+        int lastIndex = itineraries.size()-1;
+        if(lastIndex >= 0) {
+            itineraryDao.getOlderItineraries(itineraries.get(lastIndex).getIterId());
+        }
+    }
+
+
+    public void onRetrieveItinerarySuccess(ArrayList<Itinerary> iters) {
+        if(iters.size() > 0){
+            itineraries.addAll(iters);
+            mainFragment.updateItineraries(itineraries);
+        }
+        mainFragment.stopRefreshing();
+    }
+
+
+    public void onUpdateError(){
+        mainFragment.stopRefreshing();
+        mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 
 

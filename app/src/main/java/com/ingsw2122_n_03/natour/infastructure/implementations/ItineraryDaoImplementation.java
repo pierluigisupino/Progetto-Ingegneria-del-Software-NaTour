@@ -1,8 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
+import android.annotation.SuppressLint;
 
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
@@ -21,6 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
@@ -77,7 +77,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
     public void getSetUpItineraries() {
 
         RestOptions options = RestOptions.builder()
@@ -89,75 +89,8 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 response -> {
 
                     try {
-
-                        JSONArray result = response.getData().asJSONObject().getJSONArray("Result");
-                        ArrayList<Itinerary> iters = new ArrayList<>();
-
-                        for(int i = 0; i < result.length(); ++i) {
-
-                            JSONObject jsonObject = result.getJSONObject(i);
-
-                            int id = jsonObject.getInt("iterid");
-
-                            String name = jsonObject.getString("itername");
-                            String description = jsonObject.getString("description");
-                            String difficulty = jsonObject.getString("difficulty");
-
-                            int hours = jsonObject.getInt("hours");
-                            int minutes = jsonObject.getInt("minutes");
-
-                            String creatorID = jsonObject.getString("creatorid");
-                            User creator = new User(creatorID);
-
-                            DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
-                            TemporalAccessor accessor;
-
-                            accessor = timeFormatter.parse(jsonObject.getString("sharedate"));
-                            Date shareDate = Date.from(Instant.from(accessor));
-
-                            Date updateDate = null;
-                            if(!jsonObject.isNull("updatedate")) {
-                                accessor = timeFormatter.parse(jsonObject.getString("updatedate"));
-                                updateDate = Date.from(Instant.from(accessor));
-                            }
-
-                            JSONObject startPointJSON = jsonObject.getJSONObject("startpoint");
-                            double x = startPointJSON.getDouble("x");
-                            double y = startPointJSON.getDouble("y");
-                            WayPoint startPoint = new WayPoint(x, y);
-
-                            ArrayList<WayPoint> iterWaypoints = new ArrayList<>();
-
-                            if(!jsonObject.isNull("waypoints")){
-
-                                JSONArray path = jsonObject.getJSONArray("waypoints");
-
-                                for(int j = 0; j < path.length(); ++j) {
-                                    double latitude = Double.parseDouble(path.getJSONObject(j).getString("Latitude"));
-                                    double longitude = Double.parseDouble(path.getJSONObject(j).getString("Longitude"));
-                                    iterWaypoints.add(new WayPoint(latitude, longitude));
-                                }
-
-                            }
-
-                            Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator, shareDate);
-
-                            iter.setIterId(id);
-                            iter.setEditDate(updateDate);
-
-                            if(!description.equals("null")) {
-                                iter.setDescription(description);
-                            }
-
-                            if(!iterWaypoints.isEmpty())
-                                iter.setWayPoints(iterWaypoints);
-
-                            iters.add(iter);
-
-                        }
-
+                        ArrayList<Itinerary> iters = parseItineraries(response.getData().asJSONObject().getJSONArray("Result"));
                         controller.onSetUpSuccess(iters);
-
                     } catch (JSONException e) {
                         controller.onSetUpError();
                     }
@@ -170,8 +103,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
     }
 
-    //TODO CREATE LAMBDA FUNCTION TO INVOKE
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     public void getRecentItineraries() {
 
@@ -184,75 +116,8 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 response -> {
 
                     try {
-
-                        JSONArray result = response.getData().asJSONObject().getJSONArray("Result");
-                        ArrayList<Itinerary> iters = new ArrayList<>();
-
-                        for(int i = 0; i < result.length(); ++i) {
-
-                            JSONObject jsonObject = result.getJSONObject(i);
-
-                            int id = jsonObject.getInt("iterid");
-
-                            String name = jsonObject.getString("itername");
-                            String description = jsonObject.getString("description");
-                            String difficulty = jsonObject.getString("difficulty");
-
-                            int hours = jsonObject.getInt("hours");
-                            int minutes = jsonObject.getInt("minutes");
-
-                            String creatorID = jsonObject.getString("creatorid");
-                            User creator = new User(creatorID);
-
-                            DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
-                            TemporalAccessor accessor;
-
-                            accessor = timeFormatter.parse(jsonObject.getString("sharedate"));
-                            Date shareDate = Date.from(Instant.from(accessor));
-
-                            Date updateDate = null;
-                            if(!jsonObject.isNull("updatedate")) {
-                                accessor = timeFormatter.parse(jsonObject.getString("updatedate"));
-                                updateDate = Date.from(Instant.from(accessor));
-                            }
-
-                            JSONObject startPointJSON = jsonObject.getJSONObject("startpoint");
-                            double x = startPointJSON.getDouble("x");
-                            double y = startPointJSON.getDouble("y");
-                            WayPoint startPoint = new WayPoint(x, y);
-
-                            ArrayList<WayPoint> iterWaypoints = new ArrayList<>();
-
-                            if(!jsonObject.isNull("waypoints")){
-
-                                JSONArray path = jsonObject.getJSONArray("waypoints");
-
-                                for(int j = 0; j < path.length(); ++j) {
-                                    double latitude = Double.parseDouble(path.getJSONObject(j).getString("Latitude"));
-                                    double longitude = Double.parseDouble(path.getJSONObject(j).getString("Longitude"));
-                                    iterWaypoints.add(new WayPoint(latitude, longitude));
-                                }
-
-                            }
-
-                            Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator, shareDate);
-
-                            iter.setIterId(id);
-                            iter.setEditDate(updateDate);
-
-                            if(!description.equals("null")) {
-                                iter.setDescription(description);
-                            }
-
-                            if(!iterWaypoints.isEmpty())
-                                iter.setWayPoints(iterWaypoints);
-
-                            iters.add(iter);
-
-                        }
-
-                        controller.onUpdateSuccess(iters);
-
+                        ArrayList<Itinerary> iters = parseItineraries(response.getData().asJSONObject().getJSONArray("Result"));
+                        controller.onUpdateItinerariesSuccess(iters);
                     } catch (JSONException e) {
                         controller.onUpdateError();
                     }
@@ -264,5 +129,110 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
         );
 
     }
+
+
+    @Override
+    public void getOlderItineraries(int iterId) {
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("iterid", String.valueOf(iterId));
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/items/itineraries/older")
+                .addQueryParameters(queryParams)
+                .build();
+
+        Amplify.API.get(
+                options,
+                response -> {
+
+                    try {
+                        ArrayList<Itinerary> iters = parseItineraries(response.getData().asJSONObject().getJSONArray("Result"));
+                        controller.onRetrieveItinerarySuccess(iters);
+                    } catch (JSONException e) {
+                        controller.onUpdateError();
+                    }
+
+                },
+
+                error -> controller.onUpdateError()
+
+        );
+
+    }
+
+
+    @SuppressLint("NewApi")
+    private ArrayList<Itinerary> parseItineraries(JSONArray result) throws JSONException {
+
+            ArrayList<Itinerary> iters = new ArrayList<>();
+
+            for(int i = 0; i < result.length(); ++i) {
+
+                JSONObject jsonObject = result.getJSONObject(i);
+
+                int id = jsonObject.getInt("iterid");
+
+                String name = jsonObject.getString("itername");
+                String description = jsonObject.getString("description");
+                String difficulty = jsonObject.getString("difficulty");
+
+                int hours = jsonObject.getInt("hours");
+                int minutes = jsonObject.getInt("minutes");
+
+                String creatorID = jsonObject.getString("creatorid");
+                User creator = new User(creatorID);
+
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
+                TemporalAccessor accessor;
+
+                accessor = timeFormatter.parse(jsonObject.getString("sharedate"));
+                Date shareDate = Date.from(Instant.from(accessor));
+
+                Date updateDate = null;
+                if(!jsonObject.isNull("updatedate")) {
+                    accessor = timeFormatter.parse(jsonObject.getString("updatedate"));
+                    updateDate = Date.from(Instant.from(accessor));
+                }
+
+                JSONObject startPointJSON = jsonObject.getJSONObject("startpoint");
+                double x = startPointJSON.getDouble("x");
+                double y = startPointJSON.getDouble("y");
+                WayPoint startPoint = new WayPoint(x, y);
+
+                ArrayList<WayPoint> iterWaypoints = new ArrayList<>();
+
+                if(!jsonObject.isNull("waypoints")){
+
+                    JSONArray path = jsonObject.getJSONArray("waypoints");
+
+                    for(int j = 0; j < path.length(); ++j) {
+                        double latitude = Double.parseDouble(path.getJSONObject(j).getString("Latitude"));
+                        double longitude = Double.parseDouble(path.getJSONObject(j).getString("Longitude"));
+                        iterWaypoints.add(new WayPoint(latitude, longitude));
+                    }
+
+                }
+
+                Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator, shareDate);
+
+                iter.setIterId(id);
+                iter.setEditDate(updateDate);
+
+                if(!description.equals("null")) {
+                    iter.setDescription(description);
+                }
+
+                if(!iterWaypoints.isEmpty())
+                    iter.setWayPoints(iterWaypoints);
+
+                iters.add(iter);
+
+            }
+
+            return iters;
+
+    }
+
 
 }

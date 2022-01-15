@@ -7,5 +7,6 @@ public interface ItineraryDaoInterface {
     void postItinerary(Itinerary iter);
     void getSetUpItineraries();
     void getRecentItineraries();
+    void getOlderItineraries(int iterId);
 
 }
