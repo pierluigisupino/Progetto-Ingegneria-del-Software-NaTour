@@ -63,7 +63,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private MyLocationNewOverlay oMapLocationOverlay;
     private final GeoPoint myGeoPoint = new GeoPoint(0.0, 0.0);
     private Location lastLocation;
-    private DirectedLocationOverlay myLocationOverlay;
 
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
@@ -131,10 +130,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         oMapLocationOverlay.enableFollowLocation();
         oMapLocationOverlay.enableMyLocation();
         oMapLocationOverlay.setEnabled(false);
-
-        myLocationOverlay = new DirectedLocationOverlay(this);
-        map.getOverlays().add(myLocationOverlay);
-        myLocationOverlay.setEnabled(false);
 
         oMapLocationOverlay.runOnFirstFix(() ->  {
             addWayPoints();
@@ -269,15 +264,13 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         if(lastLocation == null){
             lastLocation = location;
         }else {
-            GeoPoint prevLocation = myLocationOverlay.getLocation();
             GeoPoint newLocation = new GeoPoint(location);
 
             if (!oMapLocationOverlay.isEnabled()) {
                 oMapLocationOverlay.setEnabled(true);
-                myLocationOverlay.setEnabled(true);
                 map.getController().animateTo(newLocation);
             }
-            if(!newLocation.equals(prevLocation)) makeRoads(newLocation);
+            if(!lastLocation.equals(location)) makeRoads(newLocation);
         }
     }
 }
