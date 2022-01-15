@@ -246,12 +246,14 @@ public class IterController extends Controller {
         ImageUtilities imageUtilities = new ImageUtilities();
         HashMap<byte[], GeoPoint> pointOfInterests = new HashMap<>();
 
-        for(byte[] imageBytes : photos){
+        if(photos.size() > 0) {
+            for (byte[] imageBytes : photos) {
 
-            double[] coordinates = imageUtilities.getImageLocation(imageBytes);
+                double[] coordinates = imageUtilities.getImageLocation(imageBytes);
 
-            if(coordinates != null) {
-                pointOfInterests.put(imageBytes, new GeoPoint(coordinates[0], coordinates[1]));
+                if (coordinates != null) {
+                    pointOfInterests.put(imageBytes, new GeoPoint(coordinates[0], coordinates[1]));
+                }
             }
         }
 

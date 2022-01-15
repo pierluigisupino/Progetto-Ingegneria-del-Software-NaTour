@@ -147,6 +147,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         map.setHorizontalMapRepetitionEnabled(false);
         map.setVerticalMapRepetitionEnabled(false);
         map.setScrollableAreaLimitLatitude(MapView.getTileSystem().getMaxLatitude(), MapView.getTileSystem().getMinLatitude(), 0);
+        map.setScrollableAreaLimitLongitude(MapView.getTileSystem().getMinLongitude(), MapView.getTileSystem().getMaxLongitude(), 0);
 
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
@@ -210,25 +211,26 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         HashMap<byte[], GeoPoint> imagesPosition = iterController.calculatePhotoPosition();
 
-        for(Map.Entry<byte[], GeoPoint> entry : imagesPosition.entrySet()){
+        if(imagesPosition.size() > 0) {
+            for (Map.Entry<byte[], GeoPoint> entry : imagesPosition.entrySet()) {
 
-            byte[] imageBytes = entry.getKey();
+                byte[] imageBytes = entry.getKey();
 
-            BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-            PointOfInterest pointOfInterest = new PointOfInterest(map, imageBytes);
+                BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+                PointOfInterest pointOfInterest = new PointOfInterest(map, imageBytes);
 
-            pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
-            pointOfInterest.setImage(drawable);
+                pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
+                pointOfInterest.setImage(drawable);
 
-            pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-            pointOfInterest.setPosition(entry.getValue());
+                pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+                pointOfInterest.setPosition(entry.getValue());
 
-            pointOfInterest.setOnMarkerClickListener(this);
+                pointOfInterest.setOnMarkerClickListener(this);
 
-            map.getOverlays().add(pointOfInterest);
+                map.getOverlays().add(pointOfInterest);
 
+            }
         }
-
     }
 
     private void makeRoads(){
