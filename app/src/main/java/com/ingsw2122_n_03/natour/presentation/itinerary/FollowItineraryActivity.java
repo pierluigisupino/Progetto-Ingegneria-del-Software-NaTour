@@ -17,7 +17,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -72,7 +71,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     private IterController iterController;
 
-    private boolean isMyLocationSetted = false;
+    private boolean isMyLocationSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,11 +123,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         map.getController().setZoom(20.0);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
-        map.setHorizontalMapRepetitionEnabled(false);
-        map.setVerticalMapRepetitionEnabled(false);
-        map.setScrollableAreaLimitLatitude(MapView.getTileSystem().getMaxLatitude(), MapView.getTileSystem().getMinLatitude(), 0);
-        map.setScrollableAreaLimitLongitude(MapView.getTileSystem().getMinLongitude(), MapView.getTileSystem().getMaxLongitude(), 0);
-
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
 
@@ -142,7 +136,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         oMapLocationOverlay.enableMyLocation();
 
         oMapLocationOverlay.runOnFirstFix(() ->  {
-            isMyLocationSetted = true;
+            isMyLocationSet = true;
             addWayPoints();
             addPointOfInterests();
         });
@@ -228,6 +222,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
                 Road road = roadManager.getRoad(waypoints);
 
+                map.getOverlays().removeAll(roadMarkers);
+                map.getOverlays().remove(roadOverlay);
+                roadMarkers.clear();
+
                 for (int i=0; i<road.mNodes.size(); i++){
                     RoadNode node = road.mNodes.get(i);
                     Marker nodeMarker = new Marker(map);
@@ -246,12 +244,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                     roadMarkers.add(nodeMarker);
                 }
 
-                map.getOverlays().removeAll(roadMarkers);
-                map.getOverlays().remove(roadOverlay);
                 roadOverlay = RoadManager.buildRoadOverlay(road);
+
                 map.getOverlays().add(roadOverlay);
                 map.getOverlays().addAll(roadMarkers);
-                roadMarkers.clear();
                 map.invalidate();
 
             }else {
@@ -299,15 +295,14 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @SuppressLint("MissingPermission")
     @Override
     public void onLocationChanged(@NonNull Location location) {
-
-        Log.e("test", "tets");
-
-        if(isMyLocationSetted) {
+        if(isMyLocationSet) {
             if (lastLocation == null) {
                 lastLocation = location;
+                gpsMyLocationProvider.onLocationChanged(location);
                 makeRoads();
-            } else if (lastLocation.getLatitude() != location.getLatitude() && lastLocation.getLongitude() != location.getLongitude()) {
+            } else if (!lastLocation.equals(location)) {
                 lastLocation = location;
+                gpsMyLocationProvider.onLocationChanged(location);
                 makeRoads();
             }
         }
