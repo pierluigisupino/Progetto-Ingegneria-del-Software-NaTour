@@ -1,3 +1,4 @@
+
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
@@ -41,7 +42,14 @@ app.get('/items/itineraries', function(req, res) {
   const client = new Client(clientParams);
   client.connect();
   
-  client.query('SELECT * FROM ITINERARY ORDER BY iterID DESC LIMIT 8', (err, data) => {
+  var queryParams = 'SELECT * FROM ITINERARY ORDER BY iterID DESC LIMIT 8';
+  
+  var lastIter = req.query.iterid;
+  if(lastIter != null){
+    queryParams = 'SELECT * FROM ITINERARY WHERE ITERID < '+ lastIter +'ORDER BY iterID DESC LIMIT 8';
+  }
+  
+  client.query(queryParams, (err, data) => {
     
     client.end();
     
@@ -50,44 +58,6 @@ app.get('/items/itineraries', function(req, res) {
     else 
       return res.json({Result: data.rows});
     
-  });
-  
-});
-
-
-app.get('/items/itineraries/older', function(req, res) {
-  
-  const client = new Client(clientParams);
-  client.connect();
-  
-  client.query('SELECT * FROM ITINERARY WHERE ITERID < '+ req.query.iterid +'ORDER BY iterID DESC LIMIT 8', (err, data) => {
-    
-    client.end();
-    
-    if(err) 
-      return res.json({Error: err.stack});
-    else 
-      return res.json({Result: data.rows});
-    
-  });
-  
-});
-
-
-app.get('/items/user', function(req, res) {
-  
-  var params = {
-    UserPoolId: process.env.USERPOOLID,
-    Username: req.query.uid
-  };
-    
-  cognito.adminGetUser(params, function(err, data) {
-    
-    if (err)
-      return res.json({Error: err.stack});
-    else
-      return res.json({Name: data.UserAttributes[2].Value});
-      
   });
   
 });
@@ -140,12 +110,31 @@ app.get('/items/photos', function(req, res) {
 });
 
 
+app.get('/items/user', function(req, res) {
+  
+  var params = {
+    UserPoolId: process.env.USERPOOLID,
+    Username: req.query.uid
+  };
+    
+  cognito.adminGetUser(params, function(err, data) {
+    
+    if (err)
+      return res.json({Error: err.stack});
+    else
+      return res.json({Name: data.UserAttributes[2].Value});
+      
+  });
+  
+});
+
+
 /****************************
 * post methods *
 ****************************/
 
 
-app.post('/items/itineraries', function(req, res) {
+app.post('/items/itinerary', function(req, res) {
   
   const client = new Client(clientParams);
   const startPoint = JSON.parse(req.body.startPoint);
@@ -176,6 +165,7 @@ app.post('/items/itineraries', function(req, res) {
 app.post('/items/photos', async function(req, res) {
   
   var i = 0;
+  var errno;
   const count = req.body.photo_count;
   
   for(; i < count; i++){
@@ -191,10 +181,10 @@ app.post('/items/photos', async function(req, res) {
     };
     
     await s3.putObject(uploadParams, (err, dataUp) => {
-      
-      if (err)
+      if (err){
+        errno = err.stack;
         i = count + 1;
-      
+      }
     }).promise();
     
   }
@@ -202,7 +192,7 @@ app.post('/items/photos', async function(req, res) {
   if(i != count + 1)
     return res.json({Code: 200});
   else
-    return res.json({Code: 400});
+    return res.json({Code: 400, Error: errno});
   
 });
 

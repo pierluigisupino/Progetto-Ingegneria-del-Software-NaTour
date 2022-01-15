@@ -54,7 +54,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
         }
 
         RestOptions options = RestOptions.builder()
-                .addPath("/items/itineraries")
+                .addPath("/items/itinerary")
                 .addBody(jsonObject.toString().getBytes())
                 .build();
 
@@ -138,7 +138,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
         queryParams.put("iterid", String.valueOf(iterId));
 
         RestOptions options = RestOptions.builder()
-                .addPath("/items/itineraries/older")
+                .addPath("/items/itineraries")
                 .addQueryParameters(queryParams)
                 .build();
 
