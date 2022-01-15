@@ -42,7 +42,7 @@ app.get('/items/itineraries', function(req, res) {
   const client = new Client(clientParams);
   client.connect();
   
-  client.query('SELECT * FROM ITINERARY', (err, data) => {
+  client.query('SELECT * FROM ITINERARY ORDER BY Iterid DESC', (err, data) => {
     
     client.end();
     
