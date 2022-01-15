@@ -72,6 +72,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     private IterController iterController;
 
+    private boolean isMyLocationSetted = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +142,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         oMapLocationOverlay.enableMyLocation();
 
         oMapLocationOverlay.runOnFirstFix(() ->  {
+            isMyLocationSetted = true;
             addWayPoints();
             addPointOfInterests();
             makeRoads();
@@ -298,13 +301,11 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @Override
     public void onLocationChanged(@NonNull Location location) {
 
-        if(lastLocation == null){
+        if(lastLocation == null && isMyLocationSetted){
             lastLocation = location;
-            gpsMyLocationProvider.onLocationChanged(location);
             makeRoads();
-        }else if(!lastLocation.equals(location)){
+        }else if(lastLocation.getLatitude() != location.getLatitude() && lastLocation.getLongitude() != location.getLongitude()){
             lastLocation = location;
-            gpsMyLocationProvider.onLocationChanged(location);
             makeRoads();
         }
     }
