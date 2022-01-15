@@ -60,16 +60,12 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private RoadManager roadManager;
     private Road road;
     private Polyline roadOverlay;
-    private GpsMyLocationProvider gpsMyLocationProvider;
     private MyLocationNewOverlay oMapLocationOverlay;
-    private double myLatitude;
-    private double myLongitude;
-    private GeoPoint myGeoPoint = new GeoPoint(0.0, 0.0);
+    private final GeoPoint myGeoPoint = new GeoPoint(0.0, 0.0);
     private Location lastLocation;
     private DirectedLocationOverlay myLocationOverlay;
 
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
-    private final ArrayList<Marker> roadMarkers = new ArrayList<>();
 
     private IterController iterController;
 
@@ -126,7 +122,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
 
-        gpsMyLocationProvider = new GpsMyLocationProvider(this);
+        GpsMyLocationProvider gpsMyLocationProvider = new GpsMyLocationProvider(this);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
