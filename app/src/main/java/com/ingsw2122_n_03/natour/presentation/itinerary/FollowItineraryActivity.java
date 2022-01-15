@@ -35,6 +35,7 @@ import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
+import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -64,8 +65,11 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private Location lastLocation;
 
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
+    private final ArrayList<Marker> roadMarkers = new ArrayList<>();
 
     private IterController iterController;
+
+    private boolean isRoadMade = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,20 +207,37 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private void makeRoads(GeoPoint geoPoint){
 
         new Thread(()-> {
-                myGeoPoint.setLatitude(geoPoint.getLatitude());
-                myGeoPoint.setLongitude(geoPoint.getLongitude());
+            myGeoPoint.setLatitude(geoPoint.getLatitude());
+            myGeoPoint.setLongitude(geoPoint.getLongitude());
 
-                if(!waypoints.contains(myGeoPoint)){
-                    waypoints.add(0, myGeoPoint);
+            if(!waypoints.contains(myGeoPoint)){
+                waypoints.add(0, myGeoPoint);
+            }
+
+            road = roadManager.getRoad(waypoints);
+            roadOverlay = RoadManager.buildRoadOverlay(road);
+
+            for (int i = 0; i < road.mNodes.size(); i++){
+                RoadNode node = road.mNodes.get(i);
+                Marker nodeMarker = new Marker(map);
+                nodeMarker.setPosition(node.mLocation);
+
+                if(i == 0){
+                    nodeMarker.setIcon(null);
+                    nodeMarker.setTextIcon("Click on the dots to show indications");
+                }else{
+                    nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_indications, null));
                 }
 
-                map.getOverlays().remove(roadOverlay); // TODO: 15/01/2022 non funziona se la posizione dell'utente cambia la vecchia strada non viene eliminata
+                nodeMarker.setTitle("Step "+i);
+                nodeMarker.setSnippet(node.mInstructions);
+                nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
+                roadMarkers.add(nodeMarker);
+            }
 
-                road = roadManager.getRoad(waypoints);
-                roadOverlay = RoadManager.buildRoadOverlay(road);
-
-                map.getOverlays().add(roadOverlay);
-                map.invalidate();
+            map.getOverlays().addAll(roadMarkers);
+            map.getOverlays().add(roadOverlay);
+            map.invalidate();
         }).start();
 
     }
@@ -260,16 +281,19 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @Override
     public void onLocationChanged(@NonNull Location location) {
 
-        if(lastLocation == null){
-            lastLocation = location;
-        }else {
-            GeoPoint newLocation = new GeoPoint(location);
+        if (!isRoadMade) {
+            if (lastLocation == null) {
+                lastLocation = location;
+            } else {
+                GeoPoint newLocation = new GeoPoint(location);
 
-            if (!myLocationNewOverlay.isEnabled()) {
-                myLocationNewOverlay.setEnabled(true);
-                map.getController().animateTo(newLocation);
+                if (!myLocationNewOverlay.isEnabled()) {
+                    myLocationNewOverlay.setEnabled(true);
+                    map.getController().animateTo(newLocation);
+                }
+                makeRoads(newLocation);
+                isRoadMade = true;
             }
-            if(!lastLocation.equals(location)) makeRoads(newLocation);
         }
     }
 }
