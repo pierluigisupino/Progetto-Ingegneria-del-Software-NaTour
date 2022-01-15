@@ -42,7 +42,6 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
-import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -60,7 +59,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private RoadManager roadManager;
     private Road road;
     private Polyline roadOverlay;
-    private MyLocationNewOverlay oMapLocationOverlay;
+    private MyLocationNewOverlay myLocationNewOverlay;
     private final GeoPoint myGeoPoint = new GeoPoint(0.0, 0.0);
     private Location lastLocation;
 
@@ -126,17 +125,17 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-        oMapLocationOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
-        oMapLocationOverlay.enableFollowLocation();
-        oMapLocationOverlay.enableMyLocation();
-        oMapLocationOverlay.setEnabled(false);
+        myLocationNewOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
+        myLocationNewOverlay.enableFollowLocation();
+        myLocationNewOverlay.enableMyLocation();
+        myLocationNewOverlay.setEnabled(false);
 
-        oMapLocationOverlay.runOnFirstFix(() ->  {
+        myLocationNewOverlay.runOnFirstFix(() ->  {
             addWayPoints();
             addPointOfInterests();
         });
 
-        map.getOverlays().add(oMapLocationOverlay);
+        map.getOverlays().add(myLocationNewOverlay);
 
         CompassOverlay compassOverlay = new CompassOverlay(this, map);
         compassOverlay.enableCompass();
@@ -266,8 +265,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         }else {
             GeoPoint newLocation = new GeoPoint(location);
 
-            if (!oMapLocationOverlay.isEnabled()) {
-                oMapLocationOverlay.setEnabled(true);
+            if (!myLocationNewOverlay.isEnabled()) {
+                myLocationNewOverlay.setEnabled(true);
                 map.getController().animateTo(newLocation);
             }
             if(!lastLocation.equals(location)) makeRoads(newLocation);
