@@ -118,7 +118,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         map.setClickable(true);
         map.setMultiTouchControls(true);
 
-        map.getController().setZoom(20.0);
+        map.getController().setZoom(18.0);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
         roadManager = new OSRMRoadManager(this, null);
