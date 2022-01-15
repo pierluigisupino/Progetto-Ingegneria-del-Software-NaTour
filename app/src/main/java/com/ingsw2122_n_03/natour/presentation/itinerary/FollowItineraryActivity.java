@@ -220,11 +220,11 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 myGeoPoint = new GeoPoint(myLatitude, myLongitude);
                 waypoints.add(0, myGeoPoint);
 
-                Road road = roadManager.getRoad(waypoints);
-
                 map.getOverlays().removeAll(roadMarkers);
                 map.getOverlays().remove(roadOverlay);
                 roadMarkers.clear();
+
+                Road road = roadManager.getRoad(waypoints);
 
                 for (int i=0; i<road.mNodes.size(); i++){
                     RoadNode node = road.mNodes.get(i);
