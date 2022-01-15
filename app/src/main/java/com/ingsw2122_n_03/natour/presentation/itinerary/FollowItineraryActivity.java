@@ -216,6 +216,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
             road = roadManager.getRoad(waypoints);
             roadOverlay = RoadManager.buildRoadOverlay(road);
+            roadOverlay.getOutlinePaint().setStrokeWidth(8);
 
             for (int i = 0; i < road.mNodes.size(); i++){
                 RoadNode node = road.mNodes.get(i);
