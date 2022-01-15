@@ -58,7 +58,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     private Itinerary itinerary;
     private MapView map;
-    private IMapController mapController;
     private RoadManager roadManager;
     private Polyline roadOverlay;
     private GpsMyLocationProvider gpsMyLocationProvider;
@@ -119,9 +118,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         map = binding.map;
         map.setClickable(true);
         map.setMultiTouchControls(true);
-        mapController = map.getController();
 
-        mapController.setZoom(20.0);
+        map.getController().setZoom(20.0);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
         map.setHorizontalMapRepetitionEnabled(false);
