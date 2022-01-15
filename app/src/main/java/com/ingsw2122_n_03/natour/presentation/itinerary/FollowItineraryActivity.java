@@ -145,7 +145,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             isMyLocationSetted = true;
             addWayPoints();
             addPointOfInterests();
-            makeRoads();
         });
 
         map.getOverlays().add(oMapLocationOverlay);
@@ -301,12 +300,16 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @Override
     public void onLocationChanged(@NonNull Location location) {
 
-        if(lastLocation == null) {
-            lastLocation = location;
-            makeRoads();
-        }else if(isMyLocationSetted && lastLocation.getLatitude() != location.getLatitude() && lastLocation.getLongitude() != location.getLongitude()){
-            lastLocation = location;
-            makeRoads();
+        Log.e("test", "tets");
+
+        if(isMyLocationSetted) {
+            if (lastLocation == null) {
+                lastLocation = location;
+                makeRoads();
+            } else if (lastLocation.getLatitude() != location.getLatitude() && lastLocation.getLongitude() != location.getLongitude()) {
+                lastLocation = location;
+                makeRoads();
+            }
         }
     }
 }
