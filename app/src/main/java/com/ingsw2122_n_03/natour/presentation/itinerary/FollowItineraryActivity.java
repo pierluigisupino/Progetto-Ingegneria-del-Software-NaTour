@@ -301,10 +301,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @Override
     public void onLocationChanged(@NonNull Location location) {
 
-        if(lastLocation == null && isMyLocationSetted){
+        if(lastLocation == null) {
             lastLocation = location;
             makeRoads();
-        }else if(lastLocation.getLatitude() != location.getLatitude() && lastLocation.getLongitude() != location.getLongitude()){
+        }else if(isMyLocationSetted && lastLocation.getLatitude() != location.getLatitude() && lastLocation.getLongitude() != location.getLongitude()){
             lastLocation = location;
             makeRoads();
         }
