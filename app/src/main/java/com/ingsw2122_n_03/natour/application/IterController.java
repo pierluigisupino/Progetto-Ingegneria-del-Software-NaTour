@@ -197,13 +197,12 @@ public class IterController extends Controller {
         if(iter.getCreator().getName() != null)
             onRetrieveUserSuccess();
         else {
-
             if(iter.getCreator().getUid().equals(currentUser.getUid())) {
                 iter.setCreator(currentUser);
                 onRetrieveUserSuccess();
-            }else
+            }else {
                 userDao.setUserName(iter.getCreator());
-
+            }
         }
     }
 

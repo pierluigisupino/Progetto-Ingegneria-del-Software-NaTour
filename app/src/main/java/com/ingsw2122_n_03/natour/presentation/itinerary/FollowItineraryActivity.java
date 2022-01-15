@@ -228,7 +228,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 pointOfInterest.setOnMarkerClickListener(this);
 
                 map.getOverlays().add(pointOfInterest);
-
             }
         }
     }
