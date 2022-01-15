@@ -235,47 +235,48 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private void makeRoads(){
 
         new Thread(()-> {
-        if(waypoints.size() >= 1){
+            if(waypoints.size() >= 1){
 
-            if(myGeoPoint != null)
-                waypoints.remove(myGeoPoint);
+                if(myGeoPoint != null)
+                    waypoints.remove(myGeoPoint);
 
-            myLatitude = oMapLocationOverlay.getMyLocation().getLatitude();
-            myLongitude = oMapLocationOverlay.getMyLocation().getLongitude();
+                myLatitude = oMapLocationOverlay.getMyLocation().getLatitude();
+                myLongitude = oMapLocationOverlay.getMyLocation().getLongitude();
 
-            myGeoPoint = new GeoPoint(myLatitude, myLongitude);
-            waypoints.add(0, myGeoPoint);
+                myGeoPoint = new GeoPoint(myLatitude, myLongitude);
+                waypoints.add(0, myGeoPoint);
 
-            Road road = roadManager.getRoad(waypoints);
+                Road road = roadManager.getRoad(waypoints);
 
-            for (int i=0; i<road.mNodes.size(); i++){
-                RoadNode node = road.mNodes.get(i);
-                Marker nodeMarker = new Marker(map);
-                nodeMarker.setPosition(node.mLocation);
+                for (int i=0; i<road.mNodes.size(); i++){
+                    RoadNode node = road.mNodes.get(i);
+                    Marker nodeMarker = new Marker(map);
+                    nodeMarker.setPosition(node.mLocation);
 
-                if(i == 0){
-                    nodeMarker.setIcon(null);
-                    nodeMarker.setTextIcon("Click on the dots to show indications");
-                }else{
-                    nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_indications, null));
+                    if(i == 0){
+                        nodeMarker.setIcon(null);
+                        nodeMarker.setTextIcon("Click on the dots to show indications");
+                    }else{
+                        nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_indications, null));
+                    }
+
+                    nodeMarker.setTitle("Step "+i);
+                    nodeMarker.setSnippet(node.mInstructions);
+                    nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
+                    roadMarkers.add(nodeMarker);
                 }
 
-                nodeMarker.setTitle("Step "+i);
-                nodeMarker.setSnippet(node.mInstructions);
-                nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
-                roadMarkers.add(nodeMarker);
+                map.getOverlays().removeAll(roadMarkers);
+                map.getOverlays().remove(roadOverlay);
+                roadOverlay = RoadManager.buildRoadOverlay(road);
+                map.getOverlays().add(roadOverlay);
+                map.getOverlays().addAll(roadMarkers);
+                roadMarkers.clear();
+                map.invalidate();
+
+            }else {
+                map.getOverlays().remove(roadOverlay);
             }
-
-            map.getOverlays().removeAll(roadMarkers);
-            map.getOverlays().remove(roadOverlay);
-            roadOverlay = RoadManager.buildRoadOverlay(road);
-            map.getOverlays().add(roadOverlay);
-            map.getOverlays().addAll(roadMarkers);
-            roadMarkers.clear();
-            map.invalidate();
-
-        }else
-            map.getOverlays().remove(roadOverlay);
         }).start();
 
     }
