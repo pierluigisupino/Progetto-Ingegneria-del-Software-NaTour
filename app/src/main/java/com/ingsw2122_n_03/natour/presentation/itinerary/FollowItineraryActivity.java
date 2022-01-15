@@ -16,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -32,6 +33,7 @@ import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityFollowItineraryBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.WayPoint;
+import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
 import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 
@@ -44,6 +46,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -52,9 +55,9 @@ import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener, IMyLocationConsumer {
 
@@ -71,9 +74,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private double myLongitude;
     private GeoPoint myGeoPoint;
 
-    private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
-
     private IterController iterController;
+
+    private final ArrayList<Marker> markers = new ArrayList<>();
+    private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
     private static final int MULTIPLE_PERMISSION_REQUEST_CODE = 4;
 
@@ -112,7 +116,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         super.onPause();
         if(map != null) map.onPause();
     }
-
 
     /********************
      * CHECK PERMISSIONS
@@ -155,7 +158,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         }
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -181,10 +183,9 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         }
     }
 
-
     /************
      * MAP UTILS
-     ************/
+     ***********/
 
     private void setupMap() {
 
@@ -219,23 +220,19 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     }
 
 
-    private void addWayPoints() {
-
-        ArrayList<WayPoint> wayPoints = new ArrayList<>();
-        wayPoints.add(itinerary.getStartPoint());
-        if(itinerary.getWayPoints() != null)
-            wayPoints.addAll(itinerary.getWayPoints());
-
-        for(WayPoint wayPoint : wayPoints){
+    private void addWayPoints(){
+        for(WayPoint wayPoint : itinerary.getWayPoints()){
 
             NaTourMarker marker = new NaTourMarker(map);
 
-            if(wayPoints.indexOf(wayPoint) == 0) {
+            if(markers.size() == 0) {
                 marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
-            }else if(wayPoints.indexOf(wayPoint) == wayPoints.size()-1){
+            }else if(markers.size() == 1) {
+                markers.get(0).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
                 marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
             }else{
-                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
+                markers.get(markers.size() - 1).setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
+                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
             }
 
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
@@ -243,12 +240,11 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
             map.getOverlays().add(marker);
             map.invalidate();
+            markers.add(marker);
 
             NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
-            this.waypoints.add(naTourWaypoint);
-
+            waypoints.add(naTourWaypoint);
         }
-
     }
 
 
@@ -274,16 +270,12 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             map.getOverlays().add(pointOfInterest);
 
         }
-
     }
 
-
     private void makeRoads(){
+        if(waypoints.size() >= 1){
 
-        if(waypoints.size() > 1){
-
-            if(myGeoPoint != null)
-                waypoints.remove(myGeoPoint);
+            if(myGeoPoint != null) waypoints.remove(myGeoPoint);
 
             myLatitude = oMapLocationOverlay.getMyLocation().getLatitude();
             myLongitude = oMapLocationOverlay.getMyLocation().getLongitude();
@@ -296,22 +288,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             roadOverlay = RoadManager.buildRoadOverlay(road);
             map.getOverlays().add(roadOverlay);
             map.invalidate();
-
-        }else
+        }else {
             map.getOverlays().remove(roadOverlay);
-
+        }
     }
-
-
-    @Override
-    public void onLocationChanged(Location location, IMyLocationProvider source) {
-        Log.e("test", "si");
-    }
-
-
-    /*******************
-     * MARKER LISTENERS
-     ******************/
 
     @Override
     public boolean onMarkerClick(Marker marker, MapView mapView) {
@@ -321,7 +301,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         return true;
     }
-
 
     public void showImage(Drawable drawable) {
 
@@ -344,4 +323,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     }
 
+    @Override
+    public void onLocationChanged(Location location, IMyLocationProvider source) {
+        Log.e("test", "si");
+    }
 }
