@@ -35,7 +35,6 @@ import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -43,6 +42,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -58,20 +58,20 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private Itinerary itinerary;
     private MapView map;
     private RoadManager roadManager;
+    private Road road;
     private Polyline roadOverlay;
     private GpsMyLocationProvider gpsMyLocationProvider;
     private MyLocationNewOverlay oMapLocationOverlay;
     private double myLatitude;
     private double myLongitude;
-    private GeoPoint myGeoPoint;
+    private GeoPoint myGeoPoint = new GeoPoint(0.0, 0.0);
     private Location lastLocation;
+    private DirectedLocationOverlay myLocationOverlay;
 
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
     private final ArrayList<Marker> roadMarkers = new ArrayList<>();
 
     private IterController iterController;
-
-    private boolean isMyLocationSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,9 +134,13 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         oMapLocationOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
         oMapLocationOverlay.enableFollowLocation();
         oMapLocationOverlay.enableMyLocation();
+        oMapLocationOverlay.setEnabled(false);
+
+        myLocationOverlay = new DirectedLocationOverlay(this);
+        map.getOverlays().add(myLocationOverlay);
+        myLocationOverlay.setEnabled(false);
 
         oMapLocationOverlay.runOnFirstFix(() ->  {
-            isMyLocationSet = true;
             addWayPoints();
             addPointOfInterests();
         });
@@ -206,53 +210,23 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         }
     }
 
-    private void makeRoads(){
+    private void makeRoads(GeoPoint geoPoint){
 
         new Thread(()-> {
-            if(waypoints.size() >= 1){
+                myGeoPoint.setLatitude(geoPoint.getLatitude());
+                myGeoPoint.setLongitude(geoPoint.getLongitude());
 
-                if(myGeoPoint != null)
-                    waypoints.remove(myGeoPoint);
-
-                myLatitude = oMapLocationOverlay.getMyLocation().getLatitude();
-                myLongitude = oMapLocationOverlay.getMyLocation().getLongitude();
-
-                myGeoPoint = new GeoPoint(myLatitude, myLongitude);
-                waypoints.add(0, myGeoPoint);
-
-                map.getOverlays().removeAll(roadMarkers);
-                map.getOverlays().remove(roadOverlay);
-                roadMarkers.clear();
-
-                Road road = roadManager.getRoad(waypoints);
-
-                for (int i=0; i<road.mNodes.size(); i++){
-                    RoadNode node = road.mNodes.get(i);
-                    Marker nodeMarker = new Marker(map);
-                    nodeMarker.setPosition(node.mLocation);
-
-                    if(i == 0){
-                        nodeMarker.setIcon(null);
-                        nodeMarker.setTextIcon("Click on the dots to show indications");
-                    }else{
-                        nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_indications, null));
-                    }
-
-                    nodeMarker.setTitle("Step "+i);
-                    nodeMarker.setSnippet(node.mInstructions);
-                    nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
-                    roadMarkers.add(nodeMarker);
+                if(!waypoints.contains(myGeoPoint)){
+                    waypoints.add(0, myGeoPoint);
                 }
 
+                map.getOverlays().remove(roadOverlay); // TODO: 15/01/2022 non funziona se la posizione dell'utente cambia la vecchia strada non viene eliminata
+
+                road = roadManager.getRoad(waypoints);
                 roadOverlay = RoadManager.buildRoadOverlay(road);
 
                 map.getOverlays().add(roadOverlay);
-                map.getOverlays().addAll(roadMarkers);
                 map.invalidate();
-
-            }else {
-                map.getOverlays().remove(roadOverlay);
-            }
         }).start();
 
     }
@@ -295,16 +269,19 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @SuppressLint("MissingPermission")
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        if(isMyLocationSet) {
-            if (lastLocation == null) {
-                lastLocation = location;
-                gpsMyLocationProvider.onLocationChanged(location);
-                makeRoads();
-            } else if (!lastLocation.equals(location)) {
-                lastLocation = location;
-                gpsMyLocationProvider.onLocationChanged(location);
-                makeRoads();
+
+        if(lastLocation == null){
+            lastLocation = location;
+        }else {
+            GeoPoint prevLocation = myLocationOverlay.getLocation();
+            GeoPoint newLocation = new GeoPoint(location);
+
+            if (!oMapLocationOverlay.isEnabled()) {
+                oMapLocationOverlay.setEnabled(true);
+                myLocationOverlay.setEnabled(true);
+                map.getController().animateTo(newLocation);
             }
+            if(!newLocation.equals(prevLocation)) makeRoads(newLocation);
         }
     }
 }
