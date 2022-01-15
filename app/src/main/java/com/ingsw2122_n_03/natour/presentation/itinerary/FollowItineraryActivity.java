@@ -17,6 +17,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -297,7 +298,11 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @Override
     public void onLocationChanged(@NonNull Location location) {
 
-        if(lastLocation != null && !lastLocation.equals(location)){
+        if(lastLocation == null){
+            lastLocation = location;
+            gpsMyLocationProvider.onLocationChanged(location);
+            makeRoads();
+        }else if(!lastLocation.equals(location)){
             lastLocation = location;
             gpsMyLocationProvider.onLocationChanged(location);
             makeRoads();
