@@ -117,7 +117,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
         map.setHorizontalMapRepetitionEnabled(false);
         map.setVerticalMapRepetitionEnabled(false);
         map.setScrollableAreaLimitLatitude(MapView.getTileSystem().getMaxLatitude(), MapView.getTileSystem().getMinLatitude(), 0);
-        map.setScrollableAreaLimitLongitude(MapView.getTileSystem().getMaxLongitude(), MapView.getTileSystem().getMinLongitude(), 0);
 
         mapController = map.getController();
         mapController.setZoom(6.5);
