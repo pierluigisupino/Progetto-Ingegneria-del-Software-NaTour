@@ -134,7 +134,7 @@ app.get('/items/user', function(req, res) {
 ****************************/
 
 
-app.post('/items/itinerary', function(req, res) {
+app.post('/items/itineraries', function(req, res) {
   
   const client = new Client(clientParams);
   const startPoint = JSON.parse(req.body.startPoint);

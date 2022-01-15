@@ -54,7 +54,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
         }
 
         RestOptions options = RestOptions.builder()
-                .addPath("/items/itinerary")
+                .addPath("/items/itineraries")
                 .addBody(jsonObject.toString().getBytes())
                 .build();
 

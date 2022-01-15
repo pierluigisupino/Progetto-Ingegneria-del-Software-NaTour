@@ -1,6 +1,7 @@
 package com.ingsw2122_n_03.natour.presentation.main;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,15 @@ import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.presentation.support.ItineraryAdapter;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainFragment extends Fragment implements ItineraryAdapter.OnItineraryListener {
 
     private FragmentMainBinding binding;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout pullToRefresh;
+    private Parcelable recyclerViewState;
+
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
     private final IterController iterController = IterController.getInstance();
@@ -65,15 +69,18 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
 
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                recyclerViewState = Objects.requireNonNull(recyclerView.getLayoutManager()).onSaveInstanceState();
+                if(newState==RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastCompletelyVisibleItemPosition() == Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1)) {
                     iterController.getOlderItineraries();
-                    pullToRefresh.setRefreshing(true);
                 }
             }
+
         });
 
         pullToRefresh.setOnRefreshListener(iterController::getUpdatedItineraries);
@@ -82,9 +89,10 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
    public void updateItineraries(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
-        requireActivity().runOnUiThread(()->
-            recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()))
-        );
+        requireActivity().runOnUiThread(()->{
+            recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
+            Objects.requireNonNull(recyclerView.getLayoutManager()).onRestoreInstanceState(recyclerViewState);
+        });
     }
 
     public void stopRefreshing(){
