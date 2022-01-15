@@ -205,8 +205,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         map.setHorizontalMapRepetitionEnabled(false);
         map.setVerticalMapRepetitionEnabled(false);
         map.setScrollableAreaLimitLatitude(MapView.getTileSystem().getMaxLatitude(), MapView.getTileSystem().getMinLatitude(), 0);
-        map.setScrollableAreaLimitLongitude(MapView.getTileSystem().getMaxLongitude(), MapView.getTileSystem().getMinLongitude(), 0);
-
 
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
