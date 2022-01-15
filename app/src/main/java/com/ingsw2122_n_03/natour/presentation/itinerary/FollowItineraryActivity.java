@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.location.LocationListenerCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -39,6 +43,7 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
+import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -47,8 +52,6 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
-import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
@@ -56,7 +59,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener, IMyLocationConsumer {
+public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener, LocationListener {
 
     private ActivityFollowItineraryBinding binding;
 
@@ -70,8 +73,11 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private double myLatitude;
     private double myLongitude;
     private GeoPoint myGeoPoint;
+    private LocationManager locationManager;
+    private Location lastLocation;
 
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
+    private final ArrayList<Marker> roadMarkers = new ArrayList<>();
 
     private IterController iterController;
 
@@ -186,20 +192,23 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
      * MAP UTILS
      ************/
 
+    @SuppressLint("MissingPermission")
     private void setupMap() {
 
         map = binding.map;
         map.setClickable(true);
         map.setMultiTouchControls(true);
 
-        map.getController().setZoom(15.0);
+        map.getController().setZoom(20.0);
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
 
-        gpsMyLocationProvider = new GpsMyLocationProvider(getApplicationContext());
-        gpsMyLocationProvider.startLocationProvider(this);
+        gpsMyLocationProvider = new GpsMyLocationProvider(this);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         oMapLocationOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
         oMapLocationOverlay.enableFollowLocation();
@@ -280,6 +289,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     private void makeRoads(){
 
+        new Thread(()-> {
         if(waypoints.size() >= 1){
 
             if(myGeoPoint != null)
@@ -292,22 +302,38 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             waypoints.add(0, myGeoPoint);
 
             Road road = roadManager.getRoad(waypoints);
+
+            for (int i=0; i<road.mNodes.size(); i++){
+                RoadNode node = road.mNodes.get(i);
+                Marker nodeMarker = new Marker(map);
+                nodeMarker.setPosition(node.mLocation);
+
+                if(i == 0){
+                    nodeMarker.setIcon(null);
+                    nodeMarker.setTextIcon("Click on the dots to show indications");
+                }else{
+                    nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_indications, null));
+                }
+
+                nodeMarker.setTitle("Step "+i);
+                nodeMarker.setSnippet(node.mInstructions);
+                nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
+                roadMarkers.add(nodeMarker);
+            }
+
+            map.getOverlays().removeAll(roadMarkers);
             map.getOverlays().remove(roadOverlay);
             roadOverlay = RoadManager.buildRoadOverlay(road);
             map.getOverlays().add(roadOverlay);
+            map.getOverlays().addAll(roadMarkers);
+            roadMarkers.clear();
             map.invalidate();
 
         }else
             map.getOverlays().remove(roadOverlay);
+        }).start();
 
     }
-
-
-    @Override
-    public void onLocationChanged(Location location, IMyLocationProvider source) {
-        Log.e("test", "si");
-    }
-
 
     /*******************
      * MARKER LISTENERS
@@ -344,4 +370,14 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     }
 
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+
+        if(lastLocation != location){
+            lastLocation = location;
+            gpsMyLocationProvider.onLocationChanged(location);
+            makeRoads();
+        }
+    }
 }
