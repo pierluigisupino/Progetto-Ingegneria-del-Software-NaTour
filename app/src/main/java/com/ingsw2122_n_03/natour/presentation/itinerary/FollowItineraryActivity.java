@@ -2,6 +2,7 @@ package com.ingsw2122_n_03.natour.presentation.itinerary;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.annotation.SuppressLint;
@@ -17,13 +18,17 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityFollowItineraryBinding;
@@ -42,6 +47,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -58,18 +64,22 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private Itinerary itinerary;
     private MapView map;
     private RoadManager roadManager;
-    private Road road;
-    private Polyline roadOverlay;
+    private Polyline myPolyline;
     private MyLocationNewOverlay myLocationNewOverlay;
-    private final GeoPoint myGeoPoint = new GeoPoint(0.0, 0.0);
     private Location lastLocation;
 
-    private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
-    private final ArrayList<Marker> roadMarkers = new ArrayList<>();
+    private final ArrayList<GeoPoint> itineraryWaypoints = new ArrayList<>();
+
+    private final ArrayList<Marker> itineraryIndications = new ArrayList<>();
+    private final ArrayList<Marker> myRoadIndications = new ArrayList<>();
 
     private IterController iterController;
 
+    private boolean wantsRoadsToStart = false;
+    private boolean wantsDirections = false;
     private boolean isRoadMade = false;
+    private CardView cardView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +100,36 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         MaterialToolbar materialToolbar = binding.topAppBar;
         materialToolbar.setTitle(itinerary.getName());
 
+        cardView = binding.cardView;
+        progressBar = binding.progressBar;
+        SwitchMaterial directionsSwitchMaterial = binding.directionsSwitch;
+        SwitchMaterial toStartSwitchMaterial = binding.toStartSwitch;
+
         materialToolbar.setNavigationOnClickListener(v -> finish());
+
+        directionsSwitchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                Toast.makeText(view.getContext(), "Click on the dots for directions", Toast.LENGTH_SHORT).show();
+                wantsDirections = true;
+                map.getOverlays().addAll(itineraryIndications);
+                if(wantsRoadsToStart) map.getOverlays().addAll(myRoadIndications);
+            }else{
+                wantsDirections = false;
+                map.getOverlays().removeAll(itineraryIndications);
+                map.getOverlays().removeAll(myRoadIndications);
+            }
+        });
+
+        toStartSwitchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                makeIndicationToStartingPoint();
+                wantsRoadsToStart = true;
+            }else{
+                wantsRoadsToStart = false;
+                map.getOverlays().remove(myPolyline);
+                map.getOverlays().removeAll(myRoadIndications);
+            }
+        });
 
         setupMap();
     }
@@ -107,10 +146,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         if(map != null) map.onPause();
     }
 
-    /************
-     * MAP UTILS
-     ************/
-
     @SuppressLint("MissingPermission")
     private void setupMap() {
 
@@ -118,7 +153,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         map.setClickable(true);
         map.setMultiTouchControls(true);
 
-        map.getController().setZoom(18.0);
+        map.getController().setZoom(12.0);
+        map.getController().animateTo(new GeoPoint(itinerary.getStartPoint().getLatitude(), itinerary.getStartPoint().getLongitude()));
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
         roadManager = new OSRMRoadManager(this, null);
@@ -130,13 +166,12 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         myLocationNewOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
-        myLocationNewOverlay.enableFollowLocation();
         myLocationNewOverlay.enableMyLocation();
-        myLocationNewOverlay.setEnabled(false);
 
         myLocationNewOverlay.runOnFirstFix(() ->  {
             addWayPoints();
             addPointOfInterests();
+            makeRoads();
         });
 
         map.getOverlays().add(myLocationNewOverlay);
@@ -144,6 +179,14 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         CompassOverlay compassOverlay = new CompassOverlay(this, map);
         compassOverlay.enableCompass();
         map.getOverlays().add(compassOverlay);
+
+        final Context context = this;
+        final DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        ScaleBarOverlay scaleBarOverlay = new ScaleBarOverlay(map);
+        scaleBarOverlay.setCentred(true);
+
+        scaleBarOverlay.setScaleBarOffset(dm.widthPixels / 2, 10);
+        map.getOverlays().add(scaleBarOverlay);
     }
 
 
@@ -173,7 +216,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             map.invalidate();
 
             NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
-            this.waypoints.add(naTourWaypoint);
+            this.itineraryWaypoints.add(naTourWaypoint);
 
         }
 
@@ -204,48 +247,57 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         }
     }
 
-    private void makeRoads(GeoPoint geoPoint){
+    private void makeRoads(){
 
         new Thread(()-> {
-            myGeoPoint.setLatitude(geoPoint.getLatitude());
-            myGeoPoint.setLongitude(geoPoint.getLongitude());
 
-            if(!waypoints.contains(myGeoPoint)){
-                waypoints.add(0, myGeoPoint);
-            }
+            Road road = roadManager.getRoad(itineraryWaypoints);
+            Polyline polyline = RoadManager.buildRoadOverlay(road);
+            polyline.getOutlinePaint().setStrokeWidth(8);
 
-            road = roadManager.getRoad(waypoints);
-            roadOverlay = RoadManager.buildRoadOverlay(road);
-            roadOverlay.getOutlinePaint().setStrokeWidth(8);
+            makeDirections(road, itineraryIndications);
 
-            for (int i = 0; i < road.mNodes.size(); i++){
-                RoadNode node = road.mNodes.get(i);
-                Marker nodeMarker = new Marker(map);
-                nodeMarker.setPosition(node.mLocation);
-
-                if(i == 0){
-                    nodeMarker.setIcon(null);
-                    nodeMarker.setTextIcon("Click on the dots to show indications");
-                }else{
-                    nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_indications, null));
-                }
-
-                nodeMarker.setTitle("Step "+i);
-                nodeMarker.setSnippet(node.mInstructions);
-                nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
-                roadMarkers.add(nodeMarker);
-            }
-
-            map.getOverlays().addAll(roadMarkers);
-            map.getOverlays().add(roadOverlay);
+            map.getOverlays().add(polyline);
             map.invalidate();
         }).start();
-
     }
 
-    /*******************
-     * MARKER LISTENERS
-     ******************/
+    private void makeIndicationToStartingPoint(){
+        new Thread(()-> {
+            ArrayList<GeoPoint> myRoadWaypoints = new ArrayList<>(itineraryWaypoints);
+            myRoadWaypoints.add(0, myLocationNewOverlay.getMyLocation());
+
+            Road road = roadManager.getRoad(myRoadWaypoints);
+            myPolyline = RoadManager.buildRoadOverlay(road);
+            myPolyline.getOutlinePaint().setStrokeWidth(8);
+
+            makeDirections(road, myRoadIndications);
+
+            map.getOverlays().add(myPolyline);
+            map.invalidate();
+
+            cardView.post(() -> {
+                map.getController().animateTo(myLocationNewOverlay.getMyLocation());
+                if(wantsDirections) map.getOverlays().addAll(myRoadIndications);
+            });
+        }).start();
+    }
+
+    public void makeDirections(Road road, ArrayList<Marker> indications){
+
+        indications.clear();
+
+        for (int i = 0; i < road.mNodes.size(); i++){
+            RoadNode node = road.mNodes.get(i);
+            Marker nodeMarker = new Marker(map);
+            nodeMarker.setPosition(node.mLocation);
+            nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_directions, null));
+            nodeMarker.setTitle("Step "+i);
+            nodeMarker.setSnippet(node.mInstructions);
+            nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
+            indications.add(nodeMarker);
+        }
+    }
 
     @Override
     public boolean onMarkerClick(Marker marker, MapView mapView) {
@@ -286,15 +338,27 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             if (lastLocation == null) {
                 lastLocation = location;
             } else {
-                GeoPoint newLocation = new GeoPoint(location);
-
-                if (!myLocationNewOverlay.isEnabled()) {
-                    myLocationNewOverlay.setEnabled(true);
-                    map.getController().animateTo(newLocation);
-                }
-                makeRoads(newLocation);
+                progressBar.setVisibility(View.GONE);
+                cardView.setVisibility(View.VISIBLE);
                 isRoadMade = true;
             }
         }
     }
 }
+    /*for (int i = 0; i < road.mNodes.size(); i++){
+        RoadNode node = road.mNodes.get(i);
+        Marker nodeMarker = new Marker(map);
+        nodeMarker.setPosition(node.mLocation);
+
+        if(i == 0){
+        nodeMarker.setIcon(null);
+        nodeMarker.setTextIcon("Click on the dots to show indications");
+        }else{
+        nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_indications, null));
+        }
+
+        nodeMarker.setTitle("Step "+i);
+        nodeMarker.setSnippet(node.mInstructions);
+        nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
+        roadMarkers.add(nodeMarker);
+        }*/
