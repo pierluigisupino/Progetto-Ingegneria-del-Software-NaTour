@@ -35,16 +35,10 @@ public class ImageUtilities {
 
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            ExifInterface exifInterface = null;
-            try {
-                exifInterface = new ExifInterface(bis);
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-            assert exifInterface != null;
+        try {
+            ExifInterface exifInterface = new ExifInterface(bis);
             latLong = exifInterface.getLatLong();
-        }
+        } catch (IOException ignored) { }
 
         return latLong;
 
