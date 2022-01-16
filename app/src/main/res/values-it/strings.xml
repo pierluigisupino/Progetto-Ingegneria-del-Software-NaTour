@@ -147,8 +147,8 @@
     <string name="detail_page_title">Dettagli dell\' Itinerario</string>
     <string name="by_text">da</string>
     <string name="start">Inizia</string>
-    <string name="feedback"><u>Feeling different?</u></string>
-
+    <string name="feedback1">Non come previsto?</string>
+    <string name="feedback2"><u>Mandaci un feedback!</u></string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Apri il menu\' di navigazione</string>

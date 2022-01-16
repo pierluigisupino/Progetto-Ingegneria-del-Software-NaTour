@@ -8,12 +8,15 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.application.IterController;
+import com.ingsw2122_n_03.natour.model.Itinerary;
 
 public class FeedBackDialog extends AppCompatDialogFragment {
 
@@ -29,24 +32,34 @@ public class FeedBackDialog extends AppCompatDialogFragment {
 
         TimePicker timePicker = view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
-        timePicker.setHour(1);
-        timePicker.setMinute(0);
+
+        assert getArguments() != null;
+        Itinerary itinerary = (Itinerary) getArguments().getSerializable("itinerary");
+
+        timePicker.setHour(itinerary.getHoursDuration());
+        timePicker.setMinute(itinerary.getMinutesDuration());
 
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.difficultyAutoComplete);
 
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(view.getContext(), R.array.difficulties, R.layout.difficult_list_item);
         autoCompleteTextView.setAdapter(arrayAdapter);
-        autoCompleteTextView.setText(autoCompleteTextView.getAdapter().getItem(0).toString(), false);
+        autoCompleteTextView.setText(itinerary.getDifficulty(), false);
 
 
         builder.setView(view)
-                .setNegativeButton("Back", (dialog, which) -> {
-
-                })
-                .setPositiveButton("Confirm", (dialog, which) -> {
+                .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dismiss())
+                .setPositiveButton(getString(R.string.continue_button_text), (dialog, which) -> {
+                    int hours = timePicker.getHour();
+                    int minutes = timePicker.getMinute();
+                    if(hours !=0 || minutes !=0)
+                        IterController.getInstance().manageFeedback(hours, minutes, autoCompleteTextView.getText().toString());
+                    else
+                        Toast.makeText(requireContext(), getString(R.string.duration_error), Toast.LENGTH_SHORT).show();
 
                 });
 
+
         return builder.create();
+
     }
 }

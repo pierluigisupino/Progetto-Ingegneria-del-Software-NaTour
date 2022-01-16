@@ -195,6 +195,15 @@ public class IterController extends Controller {
     }
 
 
+    /****************
+     * PUT ITINERARY
+     ***************/
+
+    public void manageFeedback(int newHours, int newMinutes, String newDifficulty) {
+
+    }
+
+
     /*************
      * NAVIGATION
      ************/

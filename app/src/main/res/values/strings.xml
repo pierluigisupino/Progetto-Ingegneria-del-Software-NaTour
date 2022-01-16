@@ -146,7 +146,8 @@
     <string name="detail_page_title">Itinerary Details</string>
     <string name="by_text">by</string>
     <string name="start">Start</string>
-    <string name="feedback"><u>Feeling different?</u></string>
+    <string name="feedback1">Not as expected?</string>
+    <string name="feedback2"><u>Send us a feedback!</u></string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

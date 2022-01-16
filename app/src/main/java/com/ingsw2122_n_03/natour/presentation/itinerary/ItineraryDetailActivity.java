@@ -34,6 +34,7 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
+import com.ingsw2122_n_03.natour.presentation.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class ItineraryDetailActivity extends BaseActivity {
     private Itinerary itinerary;
     private final ArrayList<byte[]> images = new ArrayList<>();
 
-    private ActivityResultLauncher<String> requestPermissionLauncher =
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
                     checkSettingsAndStartLocationUpdates();
@@ -81,6 +82,8 @@ public class ItineraryDetailActivity extends BaseActivity {
         TextView textViewDuration = binding.textViewDuration;
         TextView textViewDifficulty = binding.textViewDifficulty;
 
+        TextView textViewFeedback = binding.textViewFeedBack2;
+
         Button startButton = binding.startButton;
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
@@ -89,12 +92,10 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewCreator.setText(getResources().getString(R.string.by_text)+" "+itinerary.getCreator().getName());
 
         String description = itinerary.getDescription();
-
-        if(description != null) {
+        if(description != null)
             textViewDescription.setText(description);
-        }else{
+        else
             textViewDescription.setVisibility(View.GONE);
-        }
 
         textViewDuration.setText(itinerary.getHoursDuration() + "h & " + itinerary.getMinutesDuration() + "m");
         textViewDifficulty.setText(itinerary.getDifficulty());
@@ -105,6 +106,14 @@ public class ItineraryDetailActivity extends BaseActivity {
             } else {
                 askLocationPermission();
             }
+        });
+
+        textViewFeedback.setOnClickListener(view12 -> {
+            Bundle args = new Bundle();
+            args.putSerializable("itinerary", itinerary);
+            FeedBackDialog dialog = new FeedBackDialog();
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(), "FeedbackDialog");
         });
 
     }
