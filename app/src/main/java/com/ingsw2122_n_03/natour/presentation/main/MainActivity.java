@@ -53,9 +53,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         this.mainFragment = new MainFragment();
 
         Intent intent = getIntent();
+
         if(intent.hasExtra("itineraries")) {
             Bundle bundle = new Bundle();
             bundle.putSerializable("itineraries", intent.getSerializableExtra("itineraries"));
+            mainFragment.setArguments(bundle);
+        }
+
+        if(intent.hasExtra("isResolvableError")){
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isResolvableError", intent.getBooleanExtra("isResolvableError", false));
             mainFragment.setArguments(bundle);
         }
 

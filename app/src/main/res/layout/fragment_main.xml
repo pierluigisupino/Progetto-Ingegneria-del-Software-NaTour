@@ -31,12 +31,60 @@
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/itinerary"
+        <LinearLayout
+            android:id="@+id/errorLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbarThumbVertical="@color/primary"
-            android:scrollbars="vertical" />
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/itinerary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbarThumbVertical="@color/primary"
+                android:scrollbars="vertical"/>
+
+            <TextView
+                android:id="@+id/error1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Oh no!"
+                android:fontFamily="@font/euclid_circular_bold"
+                android:textSize="38sp"
+                android:textColor="@color/error"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/error2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Something went wrong"
+                android:fontFamily="@font/euclid_circular_bold"
+                android:textSize="20sp"
+                android:textColor="@color/error"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/error3"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:layout_constraintDimensionRatio="1.44"
+                app:srcCompat="@drawable/ic_generic_error_screen"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/error4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/euclid_circular_bold"
+                android:text="Pull to try again"
+                android:textColor="@color/error"
+                android:textSize="20sp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

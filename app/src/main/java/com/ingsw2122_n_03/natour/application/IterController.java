@@ -24,6 +24,7 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class IterController extends Controller {
@@ -88,6 +89,10 @@ public class IterController extends Controller {
 
     public void onSetUpError() { goToActivityAndFinish(splashActivity, ErrorActivity.class); }
 
+    public void onResolvableSetUpError(boolean isResolvableError){
+        goToActivityAndFinish(splashActivity, MainActivity.class, itineraries, isResolvableError);
+    }
+
 
     /******************
      * GET ITINERARIES
@@ -101,6 +106,7 @@ public class IterController extends Controller {
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
         mainFragment.stopRefreshing();
+        mainFragment.onGetItinerarySuccess();
         mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
     }
 
@@ -119,11 +125,13 @@ public class IterController extends Controller {
             mainFragment.updateItineraries(itineraries);
         }
         mainFragment.stopRefreshing();
+        mainFragment.onGetItinerarySuccess();
     }
 
 
     public void onUpdateError(){
         mainFragment.stopRefreshing();
+        mainFragment.onGetItineraryError();
         mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 

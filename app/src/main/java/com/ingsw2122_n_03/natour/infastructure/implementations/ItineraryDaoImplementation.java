@@ -1,6 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
@@ -98,7 +99,14 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                 },
 
-                error -> controller.onSetUpError()
+                error -> {
+
+                    if(error.getCause().toString().contains("timeout")){
+                        controller.onResolvableSetUpError(true);
+                    }else {
+                        controller.onSetUpError();
+                    }
+                }
 
         );
 
