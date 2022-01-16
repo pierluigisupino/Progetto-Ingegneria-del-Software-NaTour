@@ -42,11 +42,12 @@ app.get('/items/itineraries', function(req, res) {
   const client = new Client(clientParams);
   client.connect();
   
-  var queryParams = 'SELECT * FROM ITINERARY ORDER BY iterID DESC LIMIT 8';
+  const limitRows = 8;
+  var queryParams = 'SELECT * FROM ITINERARY ORDER BY iterID DESC LIMIT'+limitRows;
   
   var lastIter = req.query.iterid;
   if(lastIter != null){
-    queryParams = 'SELECT * FROM ITINERARY WHERE ITERID < '+ lastIter +'ORDER BY iterID DESC LIMIT 8';
+    queryParams = 'SELECT * FROM ITINERARY WHERE ITERID < '+ lastIter +'ORDER BY iterID DESC LIMIT'+limitRows;
   }
   
   client.query(queryParams, (err, data) => {
@@ -66,6 +67,7 @@ app.get('/items/itineraries', function(req, res) {
 app.get('/items/photos', function(req, res) {
   
   var prefix = 'iter'+req.query.iterid+'/';
+  const limitSize = 10000000;
   
   var listParams = {
     Bucket: process.env.BUCKETNAME,
@@ -83,9 +85,14 @@ app.get('/items/photos', function(req, res) {
     else{
       
       var response = new Object();
-      response.count = data.KeyCount;
+      response.count = 0;
+      var accumulatedSize = 0;
       
       for(var i = 0; i < data.Contents.length; ++i){
+        
+        accumulatedSize += data.Contents[i].Size;
+        if(accumulatedSize > limitSize)
+          break;
         
         var downloadParams = {
           Bucket: process.env.BUCKETNAME, 
@@ -95,9 +102,8 @@ app.get('/items/photos', function(req, res) {
         try{
           response['photo'+i] = (await (s3.getObject(downloadParams).promise())).Body.toString();
           response.lastkey = data.Contents[i].Key;
-        }catch(error) {
-          response.count--;
-        }
+          response.count++;
+        }catch(error) {}
         
       }
       
@@ -164,11 +170,9 @@ app.post('/items/itineraries', function(req, res) {
 
 app.post('/items/photos', async function(req, res) {
   
-  var i = 0;
-  var errno;
   const count = req.body.photo_count;
   
-  for(; i < count; i++){
+  for(var i = 0; i < count; i++){
     
     var filename = Math.random().toString(36).slice(2);
     var photoBody = 'photo'+i;
@@ -182,17 +186,13 @@ app.post('/items/photos', async function(req, res) {
     
     await s3.putObject(uploadParams, (err, dataUp) => {
       if (err){
-        errno = err.stack;
-        i = count + 1;
+        return res.json({Code: 400, Error: err.stack});
       }
     }).promise();
     
   }
     
-  if(i != count + 1)
-    return res.json({Code: 200});
-  else
-    return res.json({Code: 400, Error: errno});
+  return res.json({Code: 200});
   
 });
 

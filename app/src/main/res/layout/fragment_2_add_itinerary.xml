@@ -29,7 +29,7 @@
         android:text="@string/difficulty_text"
         android:textAlignment="viewStart"
         android:textColor="@color/primary"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +54,7 @@
         android:text="@string/duration_text"
         android:textAlignment="center"
         android:textColor="@color/primary"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/timePicker"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
         app:layout_constraintTop_toTopOf="@+id/timePicker" />

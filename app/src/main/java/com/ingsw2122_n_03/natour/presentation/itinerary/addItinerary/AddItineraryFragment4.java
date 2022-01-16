@@ -119,7 +119,10 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
         mapController = map.getController();
         mapController.setZoom(6.5);
-        mapController.animateTo(new GeoPoint(40.863, 14.2767));
+        if(waypoints.isEmpty())
+            mapController.animateTo(new GeoPoint(40.863, 14.2767));
+        else
+            mapController.animateTo(waypoints.get(0));
 
         geocoder = new Geocoder(addItineraryActivity);
 
