@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     private final String userId;
-    private String name;
+    private       String name;
 
     /**CONSTRUCTORS
      */

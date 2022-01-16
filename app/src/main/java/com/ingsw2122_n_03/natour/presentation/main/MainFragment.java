@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,6 +23,7 @@ import com.ingsw2122_n_03.natour.presentation.support.ItineraryAdapter;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
 
 public class MainFragment extends Fragment implements ItineraryAdapter.OnItineraryListener {
 
@@ -66,10 +66,12 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = getArguments();
-        if(bundle != null) {
-            isResolvableError = bundle.getBoolean("isResolvableError");
+
+        if(bundle != null && bundle.containsKey("itineraries"))
             itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
-        }
+        else
+            isResolvableError = true;
+
 
         pullToRefresh = binding.update;
 
