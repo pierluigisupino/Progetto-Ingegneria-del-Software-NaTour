@@ -105,8 +105,7 @@ public class IterController extends Controller {
         itineraries.clear();
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
-        mainFragment.stopRefreshing();
-        mainFragment.onGetItinerarySuccess();
+        mainFragment.onSuccess();
         mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
     }
 
@@ -124,14 +123,12 @@ public class IterController extends Controller {
             itineraries.addAll(iters);
             mainFragment.updateItineraries(itineraries);
         }
-        mainFragment.stopRefreshing();
-        mainFragment.onGetItinerarySuccess();
+        mainFragment.onSuccess();
     }
 
 
     public void onUpdateError(){
-        mainFragment.stopRefreshing();
-        mainFragment.onGetItineraryError();
+        mainFragment.onError();
         mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 
