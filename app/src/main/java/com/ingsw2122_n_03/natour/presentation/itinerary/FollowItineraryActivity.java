@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -75,6 +76,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private final ArrayList<Marker> myRoadIndications = new ArrayList<>();
 
     private IterController iterController;
+    private LocationManager locationManager;
 
     private boolean wantsRoadsToStart = false;
     private boolean wantsDirections = false;
@@ -169,7 +171,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         GpsMyLocationProvider gpsMyLocationProvider = new GpsMyLocationProvider(this);
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         myLocationNewOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
@@ -341,6 +344,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @Override
     public void onLocationChanged(@NonNull Location location) {
 
+        Log.e("test", "test");
+
         if (!isRoadMade) {
             if (lastLocation == null) {
                 lastLocation = location;
@@ -352,5 +357,20 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 isRoadMade = true;
             }
         }
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
     }
 }
