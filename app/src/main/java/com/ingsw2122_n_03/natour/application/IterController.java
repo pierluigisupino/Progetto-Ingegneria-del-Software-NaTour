@@ -1,6 +1,7 @@
 package com.ingsw2122_n_03.natour.application;
 
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.infastructure.implementations.ImageDownloader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageUploader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ItineraryDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.implementations.UserDaoImplementation;
@@ -40,18 +41,21 @@ public class IterController extends Controller {
     private final UserDaoInterface userDao;
 
     private final ImageUploader imageUploader;
+    private final ImageDownloader imageDownloader;
+
+    private ArrayList<byte[]> photos = new ArrayList<>();
 
     private User currentUser;
     private Itinerary currentIter;
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
-    private ArrayList<byte[]> photos;
 
     private IterController(){
 
         itineraryDao = new ItineraryDaoImplementation(this);
         userDao = new UserDaoImplementation(this);
         imageUploader = new ImageUploader(this);
+        imageDownloader = new ImageDownloader(this);
 
     }
 
@@ -89,7 +93,7 @@ public class IterController extends Controller {
      * GET ITINERARIES
      ******************/
 
-    public void getUpdatedItineraries(){ itineraryDao.getRecentItineraries(); }
+    public void updateItineraries(){ itineraryDao.getRecentItineraries(); }
 
 
     public void onUpdateItinerariesSuccess(ArrayList<Itinerary> iters){
@@ -101,7 +105,7 @@ public class IterController extends Controller {
     }
 
 
-    public void getOlderItineraries() {
+    public void retrieveItineraries() {
         int lastIndex = itineraries.size()-1;
         if(lastIndex >= 0) {
             itineraryDao.getOlderItineraries(itineraries.get(lastIndex).getIterId());
@@ -158,7 +162,7 @@ public class IterController extends Controller {
         currentIter.setIterId(iterID);
 
         if(photos.isEmpty())
-            onItineraryInsertComplete(true);
+            onItineraryInsertFinish(true);
         else
             imageUploader.uploadImages(iterID, photos);
 
@@ -171,14 +175,14 @@ public class IterController extends Controller {
     }
 
 
-    public void onItineraryInsertComplete(boolean success) {
+    public void onItineraryInsertFinish(boolean arePhotosUploaded) {
 
         loadingDialog.dismissDialog();
         itineraries.add(0, currentIter);
         mainFragment.updateItineraries(itineraries);
         addItineraryActivity.finish();
 
-        if(success)
+        if(arePhotosUploaded)
             mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));
         else
             mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
@@ -193,6 +197,8 @@ public class IterController extends Controller {
     public void onItineraryClick(Itinerary iter) {
 
         currentIter = iter;
+        photos.clear();
+        imageDownloader.ResetSession(iter.getIterId());
 
         if(iter.getCreator().getName() != null)
             onRetrieveUserSuccess();
@@ -208,9 +214,7 @@ public class IterController extends Controller {
 
 
     public void onRetrieveUserSuccess() {
-        imageUploader.ResetSession(currentIter.getIterId());
-        imageUploader.downloadImages();
-        photos = new ArrayList<>();
+        imageDownloader.downloadImages();
         goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
     }
 
@@ -226,12 +230,12 @@ public class IterController extends Controller {
     }
 
 
-    public void onRetrievePhotosError(){
+    public void onRetrievePhotosError() {
 
     }
 
 
-    public void onRetrievePhotosFinish(){
+    public void onRetrievePhotosEnd() {
 
     }
 
@@ -245,14 +249,11 @@ public class IterController extends Controller {
         ImageUtilities imageUtilities = new ImageUtilities();
         HashMap<byte[], GeoPoint> pointOfInterests = new HashMap<>();
 
-        if(photos.size() > 0) {
-            for (byte[] imageBytes : photos) {
 
-                double[] coordinates = imageUtilities.getImageLocation(imageBytes);
-
-                if (coordinates != null) {
+        for (byte[] imageBytes : photos) {
+            double[] coordinates = imageUtilities.getImageLocation(imageBytes);
+            if (coordinates != null) {
                     pointOfInterests.put(imageBytes, new GeoPoint(coordinates[0], coordinates[1]));
-                }
             }
         }
 

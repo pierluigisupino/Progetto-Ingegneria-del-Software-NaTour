@@ -13,7 +13,7 @@ public class Itinerary implements Serializable {
     private int hoursDuration;
     private int minutesDuration;
     private WayPoint startPoint;
-    private ArrayList<WayPoint> wayPoints;
+    private ArrayList<WayPoint> wayPoints = new ArrayList<>();
     private User creator;
     private Date shareDate;
     private Date editDate;

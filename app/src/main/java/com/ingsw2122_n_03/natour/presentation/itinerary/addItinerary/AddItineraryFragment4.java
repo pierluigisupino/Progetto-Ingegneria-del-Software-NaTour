@@ -80,8 +80,8 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     private final ArrayList<Marker> markers = new ArrayList<>();
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
     private final ArrayList<PointOfInterest> pointOfInterests = new ArrayList<>();
-    private ArrayList<byte[]> imagesBytes;
-    private HashMap<byte[], GeoPoint> rawPointOfInterests;
+    private ArrayList<byte[]> imagesBytes = new ArrayList<>();
+    private HashMap<byte[], GeoPoint> rawPointOfInterests = new HashMap<>();
 
     private ActivityResultLauncher<Intent> getGPXLauncher;
 

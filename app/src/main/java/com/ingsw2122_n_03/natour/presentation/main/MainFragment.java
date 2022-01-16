@@ -69,7 +69,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
 
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -77,13 +76,13 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
                 super.onScrollStateChanged(recyclerView, newState);
                 recyclerViewState = Objects.requireNonNull(recyclerView.getLayoutManager()).onSaveInstanceState();
                 if(newState==RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastCompletelyVisibleItemPosition() == Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1)) {
-                    iterController.getOlderItineraries();
+                    iterController.retrieveItineraries();
                 }
             }
 
         });
 
-        pullToRefresh.setOnRefreshListener(iterController::getUpdatedItineraries);
+        pullToRefresh.setOnRefreshListener(iterController::updateItineraries);
 
     }
 

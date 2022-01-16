@@ -45,7 +45,8 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
             jsonObject.put("minutes", iter.getMinutesDuration());
             jsonObject.put("creator", iter.getCreator().getUid());
             jsonObject.put("startPoint", iter.getStartPoint());
-            jsonObject.put("waypoints", iter.getWayPoints());
+            if(!iter.getWayPoints().isEmpty())
+                jsonObject.put("waypoints", iter.getWayPoints());
             jsonObject.put("date", iter.getShareDate());
 
         } catch (JSONException e) {
@@ -174,7 +175,11 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 int id = jsonObject.getInt("iterid");
 
                 String name = jsonObject.getString("itername");
-                String description = jsonObject.getString("description");
+                
+                String description = null;
+                if(!jsonObject.isNull("description"))
+                    description = jsonObject.getString("description");
+                
                 String difficulty = jsonObject.getString("difficulty");
 
                 int hours = jsonObject.getInt("hours");
@@ -217,15 +222,10 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator, shareDate);
 
                 iter.setIterId(id);
+                iter.setWayPoints(iterWaypoints);
+                iter.setDescription(description);
                 iter.setEditDate(updateDate);
-
-                if(!description.equals("null")) {
-                    iter.setDescription(description);
-                }
-
-                if(!iterWaypoints.isEmpty())
-                    iter.setWayPoints(iterWaypoints);
-
+                
                 iters.add(iter);
 
             }

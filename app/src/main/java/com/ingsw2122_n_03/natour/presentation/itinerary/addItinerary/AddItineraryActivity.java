@@ -45,8 +45,8 @@ public class AddItineraryActivity extends BaseActivity {
     private String difficulty;
     private int hours;
     private int minutes;
-    private ArrayList <byte[]> imagesBytes;
-    private ArrayList<GeoPoint> waypoints;
+    private ArrayList <byte[]> imagesBytes = new ArrayList<>();
+    private ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
     private IterController iterController;
 

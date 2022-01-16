@@ -151,8 +151,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         ArrayList<WayPoint> wayPoints = new ArrayList<>();
         wayPoints.add(itinerary.getStartPoint());
-        if(itinerary.getWayPoints() != null)
-            wayPoints.addAll(itinerary.getWayPoints());
+
+        wayPoints.addAll(itinerary.getWayPoints());
 
         for(WayPoint wayPoint : wayPoints){
 
