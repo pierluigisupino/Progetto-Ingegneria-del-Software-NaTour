@@ -10,12 +10,12 @@ import com.ingsw2122_n_03.natour.infastructure.interfaces.UserDaoInterface;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
-import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
-import com.ingsw2122_n_03.natour.presentation.itinerary.ItineraryDetailActivity;
 import com.ingsw2122_n_03.natour.presentation.LoadingDialog;
-import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.SplashActivity;
+import com.ingsw2122_n_03.natour.presentation.itinerary.ItineraryDetailActivity;
+import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
+import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainFragment;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 
@@ -24,7 +24,6 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class IterController extends Controller {
@@ -87,10 +86,11 @@ public class IterController extends Controller {
     }
 
 
-    public void onSetUpError() { goToActivityAndFinish(splashActivity, ErrorActivity.class); }
-
-    public void onResolvableSetUpError(boolean isResolvableError){
-        goToActivityAndFinish(splashActivity, MainActivity.class, itineraries, isResolvableError);
+    public void onSetUpError(boolean isResolvableError) {
+        if(isResolvableError)
+            goToActivityAndFinish(splashActivity, MainActivity.class);
+        else
+            goToActivityAndFinish(splashActivity, ErrorActivity.class);
     }
 
 
@@ -105,8 +105,7 @@ public class IterController extends Controller {
         itineraries.clear();
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
-        mainFragment.stopRefreshing();
-        mainFragment.onGetItinerarySuccess();
+        mainFragment.onSuccess();
         mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
     }
 
@@ -124,14 +123,12 @@ public class IterController extends Controller {
             itineraries.addAll(iters);
             mainFragment.updateItineraries(itineraries);
         }
-        mainFragment.stopRefreshing();
-        mainFragment.onGetItinerarySuccess();
+        mainFragment.onSuccess();
     }
 
 
     public void onUpdateError(){
-        mainFragment.stopRefreshing();
-        mainFragment.onGetItineraryError();
+        mainFragment.onError();
         mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 

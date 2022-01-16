@@ -40,6 +40,12 @@ public final class UserDaoImplementation implements UserDaoInterface {
                 options,
                 response -> {
 
+                    if(response.getData().asString().contains("UserNotFoundException")){
+                        user.setName("Unknown");
+                        controller.onRetrieveUserSuccess();
+                        return;
+                    }
+
                     try {
                         String name = response.getData().asJSONObject().getString("Name");
                         user.setName(name);

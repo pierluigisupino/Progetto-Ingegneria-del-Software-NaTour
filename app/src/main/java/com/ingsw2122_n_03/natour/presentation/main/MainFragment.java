@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +24,7 @@ import com.ingsw2122_n_03.natour.presentation.support.ItineraryAdapter;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
 public class MainFragment extends Fragment implements ItineraryAdapter.OnItineraryListener {
 
     private FragmentMainBinding binding;
@@ -36,7 +36,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private ImageView imageView;
     private TextView textView3;
 
-    private boolean isResolvableError;
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
     private final IterController iterController = IterController.getInstance();
@@ -65,32 +64,30 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            isResolvableError = bundle.getBoolean("isResolvableError");
-            itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
-        }
-
-        pullToRefresh = binding.update;
-
-        recyclerView = binding.itinerary;
-        LinearLayoutManager layoutManager =  new GridLayoutManager(getActivity(), 2);
-        recyclerView.setLayoutManager(layoutManager);
-
         textView1 = binding.error1;
         textView2 = binding.error2;
         imageView = binding.error3;
         textView3 = binding.error4;
 
-        if(!isResolvableError){
-            recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
-        }else{
+        pullToRefresh = binding.update;
+        recyclerView = binding.itinerary;
+
+        Bundle bundle = getArguments();
+
+        if(bundle != null && bundle.containsKey("itineraries"))
+            itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
+        else{
             recyclerView.setVisibility(View.GONE);
             textView1.setVisibility(View.VISIBLE);
             textView2.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.VISIBLE);
             textView3.setVisibility(View.VISIBLE);
         }
+
+        LinearLayoutManager layoutManager =  new GridLayoutManager(getActivity(), 2);
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -117,32 +114,32 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         });
     }
 
-    public void stopRefreshing(){
-        pullToRefresh.setRefreshing(false);
-    }
 
     @Override
     public void onItineraryClick(int position) {
         iterController.onItineraryClick(itineraries.get(position));
     }
 
-    public void onGetItinerarySuccess(){
+    
+    public void onSuccess(){
         requireActivity().runOnUiThread(()-> {
             recyclerView.setVisibility(View.VISIBLE);
             textView1.setVisibility(View.GONE);
             textView2.setVisibility(View.GONE);
             imageView.setVisibility(View.GONE);
             textView3.setVisibility(View.GONE);
+            pullToRefresh.setRefreshing(false);
         });
     }
 
-    public void onGetItineraryError(){
+    public void onError(){
         requireActivity().runOnUiThread(()-> {
             recyclerView.setVisibility(View.GONE);
             textView1.setVisibility(View.VISIBLE);
             textView2.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.VISIBLE);
             textView3.setVisibility(View.VISIBLE);
+            pullToRefresh.setRefreshing(false);
         });
     }
 

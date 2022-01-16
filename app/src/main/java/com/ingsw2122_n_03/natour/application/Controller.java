@@ -71,15 +71,5 @@ public class Controller {
         source.startActivity(intent);
         source.finish();
     }
-
-    public void goToActivityAndFinish(Activity source, Class<?> destination, ArrayList<Itinerary> itineraries, boolean isResolvableError){
-
-        Intent intent = new Intent(source, destination);
-        intent.putExtra("isResolvableError", isResolvableError);
-        intent.putExtra("itineraries", itineraries);
-
-        source.startActivity(intent);
-        source.finish();
-    }
     
 }

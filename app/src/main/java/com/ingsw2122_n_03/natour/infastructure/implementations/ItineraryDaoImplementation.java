@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
@@ -22,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
@@ -94,19 +94,12 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                         ArrayList<Itinerary> iters = parseItineraries(response.getData().asJSONObject().getJSONArray("Result"));
                         controller.onSetUpSuccess(iters);
                     } catch (JSONException e) {
-                        controller.onSetUpError();
+                        controller.onSetUpError(false);
                     }
 
                 },
 
-                error -> {
-
-                    if(error.getCause().toString().contains("timeout")){
-                        controller.onResolvableSetUpError(true);
-                    }else {
-                        controller.onSetUpError();
-                    }
-                }
+                error -> controller.onSetUpError(Objects.requireNonNull(error.getCause()).toString().contains("timeout"))
 
         );
 

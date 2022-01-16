@@ -3,21 +3,22 @@ package com.ingsw2122_n_03.natour.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class Itinerary implements Serializable {
 
-    private String name;
-    private String description;
-    private String difficulty;
-    private int hoursDuration;
-    private int minutesDuration;
-    private WayPoint startPoint;
-    private ArrayList<WayPoint> wayPoints = new ArrayList<>();
-    private User creator;
-    private Date shareDate;
-    private Date editDate;
-    private int iterId;
+    private        String          name;
+    private        String          description;
+    private        String          difficulty;
+    private        int             hoursDuration;
+    private        int             minutesDuration;
+    private final  WayPoint        startPoint;
+    private        List<WayPoint>  wayPoints = new ArrayList<>();
+    private        User            creator;
+    private final  Date            shareDate;
+    private        Date            editDate;
+    private        int             iterId;
 
 
     /**CONSTRUCTOR
@@ -88,7 +89,7 @@ public class Itinerary implements Serializable {
     }
 
 
-    public ArrayList<WayPoint> getWayPoints() {
+    public List<WayPoint> getWayPoints() {
         return wayPoints;
     }
 
