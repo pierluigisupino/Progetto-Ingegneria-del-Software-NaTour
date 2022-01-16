@@ -287,7 +287,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             map.invalidate();
 
             cardView.post(() -> {
-                map.getController().setZoom(15.0);
+                map.getController().setZoom(16.50);
                 map.getController().animateTo(myLocationNewOverlay.getMyLocation());
                 if(wantsDirections) map.getOverlays().addAll(myRoadIndications);
             });
