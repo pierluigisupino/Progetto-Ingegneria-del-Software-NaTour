@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -80,6 +81,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private boolean isRoadMade = false;
     private CardView cardView;
     private ProgressBar progressBar;
+    private LinearLayout directionsLayout;
+    private LinearLayout toStartLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +105,12 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         cardView = binding.cardView;
         progressBar = binding.progressBar;
+
         SwitchMaterial directionsSwitchMaterial = binding.directionsSwitch;
         SwitchMaterial toStartSwitchMaterial = binding.toStartSwitch;
+
+        directionsLayout = binding.directionsLayout;
+        toStartLayout = binding.toStartLayout;
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
@@ -340,25 +347,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             } else {
                 progressBar.setVisibility(View.GONE);
                 cardView.setVisibility(View.VISIBLE);
+                directionsLayout.setVisibility(View.VISIBLE);
+                toStartLayout.setVisibility(View.VISIBLE);
                 isRoadMade = true;
             }
         }
     }
 }
-    /*for (int i = 0; i < road.mNodes.size(); i++){
-        RoadNode node = road.mNodes.get(i);
-        Marker nodeMarker = new Marker(map);
-        nodeMarker.setPosition(node.mLocation);
-
-        if(i == 0){
-        nodeMarker.setIcon(null);
-        nodeMarker.setTextIcon("Click on the dots to show indications");
-        }else{
-        nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_indications, null));
-        }
-
-        nodeMarker.setTitle("Step "+i);
-        nodeMarker.setSnippet(node.mInstructions);
-        nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
-        roadMarkers.add(nodeMarker);
-        }*/

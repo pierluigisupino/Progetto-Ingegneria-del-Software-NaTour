@@ -60,10 +60,12 @@
         android:gravity="center_horizontal">
 
         <LinearLayout
+            android:id="@+id/directionsLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:visibility="invisible">
 
             <TextView
                 android:textColor="@color/primary"
@@ -80,10 +82,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/toStartLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:visibility="invisible">
 
             <TextView
                 android:textColor="@color/primary"
