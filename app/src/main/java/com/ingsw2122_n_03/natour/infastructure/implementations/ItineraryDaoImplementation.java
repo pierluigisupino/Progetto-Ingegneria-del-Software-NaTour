@@ -165,6 +165,51 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
     }
 
 
+    @Override
+    public void putItineraryFromFeedback(Itinerary iter) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            jsonObject.put("iterid", iter.getIterId());
+            jsonObject.put("difficulty", iter.getDifficulty());
+            jsonObject.put("hours", iter.getDuration().getHourOfDay());
+            jsonObject.put("minutes", iter.getDuration().getMinuteOfHour());
+
+        } catch (JSONException e) {
+            controller.onItineraryUpdateError();
+            return;
+        }
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/items/feedback")
+                .addBody(jsonObject.toString().getBytes())
+                .build();
+
+        Amplify.API.put(
+                options,
+                response ->{
+
+                    try {
+                        if(response.getData().asJSONObject().getInt("Code") == 200)
+                            controller.onItineraryUpdateSuccess();
+                        else
+                            controller.onItineraryUpdateError();
+                    } catch (JSONException e) {
+                        controller.onItineraryUpdateError();
+                    }
+
+                },
+                error -> controller.onItineraryUpdateError()
+        );
+
+    }
+
+
+    /**
+     * JSON PARSER
+     ***/
+
     @SuppressLint("NewApi")
     private ArrayList<Itinerary> parseItineraries(JSONArray result) throws JSONException {
 

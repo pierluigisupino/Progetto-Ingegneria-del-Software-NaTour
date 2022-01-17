@@ -204,6 +204,13 @@ public class IterController extends NavigationController {
 
     }
 
+    public void onItineraryUpdateSuccess() {
+
+    }
+
+    public void onItineraryUpdateError() {
+
+    }
 
     /*************
      * NAVIGATION

@@ -201,8 +201,23 @@ app.post('/items/photos', async function(req, res) {
 * put methods *
 ****************************/
 
+app.put('/items/feedback', function(req,res) {
+  
+  const client = new Client(clientParams);
+  
+  const query = 'UPDATE TABLE ITINERARY SET difficulty ='+req.body.difficulty+', hours ='+req.body.hours+', minutes ='+req.body.minutes+'WHERE iterid ='+req.body.iterid;
+  
+  client.query(query, (err, suc)=>{
+    if(err)
+      return res.json({Code:500, Error: err.stack});
+    else
+      return res.json({Code: 200});
+  });
+  
+});
 
-app.put('/items', function(req, res) {
+
+app.put('/items/itineraries', function(req, res) {
   // Add your code here
   res.json({success: 'put call succeed!', url: req.url, body: req.body});
 });
