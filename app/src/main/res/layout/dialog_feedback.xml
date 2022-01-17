@@ -31,10 +31,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="Difficulty"
+        android:text="@string/difficulty_feedback"
         android:textAlignment="center"
         android:textColor="@color/primary"
         android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toTopOf="@+id/difficultGuideLine" />
 
@@ -62,10 +63,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
-        android:text="Duration"
+        android:text="@string/duration_feedback"
         android:textAlignment="center"
         android:textColor="@color/primary"
         android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/menu" />
 

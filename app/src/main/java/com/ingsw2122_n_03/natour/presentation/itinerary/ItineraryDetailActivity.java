@@ -97,10 +97,10 @@ public class ItineraryDetailActivity extends BaseActivity {
         else
             textViewDescription.setVisibility(View.GONE);
 
-        textViewDuration.setText(itinerary.getHoursDuration() + "h & " + itinerary.getMinutesDuration() + "m");
+        textViewDuration.setText(itinerary.getDuration().getHourOfDay() + "h & " + itinerary.getDuration().getMinuteOfHour() + "m");
         textViewDifficulty.setText(itinerary.getDifficulty());
 
-        startButton.setOnClickListener(view1 -> {
+        startButton.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 controller.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary);
             } else {
@@ -108,7 +108,7 @@ public class ItineraryDetailActivity extends BaseActivity {
             }
         });
 
-        textViewFeedback.setOnClickListener(view12 -> {
+        textViewFeedback.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putSerializable("itinerary", itinerary);
             FeedBackDialog dialog = new FeedBackDialog();

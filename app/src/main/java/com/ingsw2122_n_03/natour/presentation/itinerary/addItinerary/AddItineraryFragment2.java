@@ -16,6 +16,8 @@ import android.widget.TimePicker;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment2AddItineraryBinding;
 
+import org.joda.time.LocalTime;
+
 
 public class AddItineraryFragment2 extends Fragment {
 
@@ -24,10 +26,11 @@ public class AddItineraryFragment2 extends Fragment {
     private final AddItineraryActivity addItineraryActivity;
     private View view;
     private AutoCompleteTextView difficultyTextView;
-    private TimePicker timePicker;
-    private int hour = 1;
-    private int minutes = 0;
+
     private String difficulty;
+    private int hours = 1;
+    private int minutes = 0;
+
 
     public AddItineraryFragment2(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
@@ -49,12 +52,17 @@ public class AddItineraryFragment2 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         this.view = view;
-        timePicker = binding.timePicker;
+        TimePicker timePicker = binding.timePicker;
         difficultyTextView = binding.difficultyAutoComplete;
 
         timePicker.setIs24HourView(true);
-        timePicker.setHour(hour);
+        timePicker.setHour(hours);
         timePicker.setMinute(minutes);
+
+        timePicker.setOnTimeChangedListener((picker, newHours, newMinutes) -> {
+            hours = newHours;
+            minutes = newMinutes;
+        });
 
     }
 
@@ -71,7 +79,7 @@ public class AddItineraryFragment2 extends Fragment {
 
 
     public boolean isDurationValid(){
-        if(getHours()!=0 || getMinutes()!=0)
+        if(hours !=0 || minutes !=0)
             return true;
         else{
             addItineraryActivity.onFail(getString(R.string.duration_error));
@@ -85,14 +93,7 @@ public class AddItineraryFragment2 extends Fragment {
         return difficulty;
     }
 
-    public int getHours(){
-        hour = timePicker.getHour();
-        return hour;
-    }
 
-    public int getMinutes(){
-        minutes = timePicker.getMinute();
-        return minutes;
-    }
+    public LocalTime getDuration(){ return new LocalTime(hours, minutes); }
 
 }

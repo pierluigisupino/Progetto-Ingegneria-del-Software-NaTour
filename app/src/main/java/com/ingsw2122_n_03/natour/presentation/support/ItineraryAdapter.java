@@ -64,7 +64,7 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
 
         holder.setDifficultyText(iter.getDifficulty());
 
-        String duration = iter.getHoursDuration() + "h & " + iter.getMinutesDuration()+"m";
+        String duration = iter.getDuration().getHourOfDay() + "h & " + iter.getDuration().getMinuteOfHour()+"m";
         holder.setDurationText(duration);
 
     }

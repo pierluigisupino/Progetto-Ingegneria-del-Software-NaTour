@@ -9,9 +9,9 @@ import com.ingsw2122_n_03.natour.model.Itinerary;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Controller {
+public class NavigationController {
 
-    protected Controller() {}
+    protected NavigationController() {}
 
 
     public void goToActivity(Activity source, Class<?> destination){

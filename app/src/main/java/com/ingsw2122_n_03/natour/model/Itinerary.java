@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.model;
 
+import org.joda.time.LocalTime;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,8 +13,7 @@ public class Itinerary implements Serializable {
     private        String          name;
     private        String          description;
     private        String          difficulty;
-    private        int             hoursDuration;
-    private        int             minutesDuration;
+    private        LocalTime       duration;
     private final  WayPoint        startPoint;
     private        List<WayPoint>  wayPoints = new ArrayList<>();
     private        User            creator;
@@ -24,11 +25,10 @@ public class Itinerary implements Serializable {
     /**CONSTRUCTOR
      */
 
-    public Itinerary(String name, String difficulty, int hours, int minutes, WayPoint startPoint, User creator, Date shareDate) {
+    public Itinerary(String name, String difficulty, LocalTime duration, WayPoint startPoint, User creator, Date shareDate) {
         this.name = name;
         this.difficulty = difficulty;
-        hoursDuration = hours;
-        minutesDuration = minutes;
+        this.duration = duration;
         this.startPoint = startPoint;
         this.creator = creator;
         this.shareDate = shareDate;
@@ -62,25 +62,10 @@ public class Itinerary implements Serializable {
     }
 
 
-    public int getHoursDuration() {
-        return hoursDuration;
-    }
+    public LocalTime getDuration() { return duration; }
 
-    public void setHoursDuration(int hoursDuration) {
-        if(hoursDuration < 0)
-            throw  new IllegalArgumentException();
-        this.hoursDuration = hoursDuration;
-    }
-
-
-    public int getMinutesDuration() {
-        return minutesDuration;
-    }
-
-    public void setMinutesDuration(int minutesDuration) {
-        if(minutesDuration < 0 || minutesDuration > 59)
-            throw  new IllegalArgumentException();
-        this.minutesDuration = minutesDuration;
+    public void setDuration(LocalTime duration) {
+        this.duration = duration;
     }
 
 
@@ -122,6 +107,5 @@ public class Itinerary implements Serializable {
 
 
     public Date getShareDate() { return shareDate; }
-
 
 }

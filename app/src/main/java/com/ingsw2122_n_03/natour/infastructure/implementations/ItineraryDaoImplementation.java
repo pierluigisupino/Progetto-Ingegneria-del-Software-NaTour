@@ -10,6 +10,7 @@ import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
 
+import org.joda.time.LocalTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,8 +43,8 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
             jsonObject.put("name", iter.getName());
             jsonObject.put("iterDescription", iter.getDescription());
             jsonObject.put("difficulty", iter.getDifficulty());
-            jsonObject.put("hours", iter.getHoursDuration());
-            jsonObject.put("minutes", iter.getMinutesDuration());
+            jsonObject.put("hours", iter.getDuration().getHourOfDay());
+            jsonObject.put("minutes", iter.getDuration().getMinuteOfHour());
             jsonObject.put("creator", iter.getCreator().getUid());
             jsonObject.put("startPoint", iter.getStartPoint());
             if(!iter.getWayPoints().isEmpty())
@@ -183,8 +184,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 
                 String difficulty = jsonObject.getString("difficulty");
 
-                int hours = jsonObject.getInt("hours");
-                int minutes = jsonObject.getInt("minutes");
+                LocalTime duration = new LocalTime(jsonObject.getInt("hours"),jsonObject.getInt("minutes"));
 
                 String creatorID = jsonObject.getString("creatorid");
                 User creator = new User(creatorID);
@@ -195,10 +195,10 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 accessor = timeFormatter.parse(jsonObject.getString("sharedate"));
                 Date shareDate = Date.from(Instant.from(accessor));
 
-                Date updateDate = null;
+                Date editDate = null;
                 if(!jsonObject.isNull("updatedate")) {
                     accessor = timeFormatter.parse(jsonObject.getString("updatedate"));
-                    updateDate = Date.from(Instant.from(accessor));
+                    editDate = Date.from(Instant.from(accessor));
                 }
 
                 JSONObject startPointJSON = jsonObject.getJSONObject("startpoint");
@@ -220,12 +220,12 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                 }
 
-                Itinerary iter = new Itinerary(name, difficulty, hours, minutes, startPoint, creator, shareDate);
+                Itinerary iter = new Itinerary(name, difficulty, duration, startPoint, creator, shareDate);
 
                 iter.setIterId(id);
                 iter.setWayPoints(iterWaypoints);
                 iter.setDescription(description);
-                iter.setEditDate(updateDate);
+                iter.setEditDate(editDate);
                 
                 iters.add(iter);
 

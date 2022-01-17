@@ -148,6 +148,8 @@
     <string name="start">Start</string>
     <string name="feedback1">Not as expected?</string>
     <string name="feedback2"><u>Send us a feedback!</u></string>
+    <string name="difficulty_feedback">What difficulty got for you?</string>
+    <string name="duration_feedback">How long have you done it?</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

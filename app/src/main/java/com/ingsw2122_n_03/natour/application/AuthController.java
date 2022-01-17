@@ -17,7 +17,7 @@ import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
 
 import java.util.HashMap;
 
-public final class AuthController extends Controller {
+public final class AuthController extends NavigationController {
 
     private static AuthController instance = null;
     private final AuthInterface authInterface;

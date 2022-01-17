@@ -19,6 +19,7 @@ import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainFragment;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 
+import org.joda.time.LocalTime;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 
-public class IterController extends Controller {
+public class IterController extends NavigationController {
 
     private static IterController instance = null;
 
@@ -137,7 +138,7 @@ public class IterController extends Controller {
      * POST ITINERARY
      ****************/
 
-    public void insertItinerary(String name, String description, String difficulty, int hours, int minutes, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
+    public void insertItinerary(String name, String description, String difficulty, LocalTime duration, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
 
         loadingDialog = new LoadingDialog(addItineraryActivity);
         loadingDialog.startLoading();
@@ -148,7 +149,7 @@ public class IterController extends Controller {
         for(GeoPoint g : waypoints){
             wayPointArrayList.add(new WayPoint(g.getLatitude(), g.getLongitude()));
         }
-        currentIter = new Itinerary(name, difficulty, hours, minutes, wayPointArrayList.get(0), currentUser, new Date());
+        currentIter = new Itinerary(name, difficulty, duration, wayPointArrayList.get(0), currentUser, new Date());
         wayPointArrayList.remove(0);
 
         if(description.length() > 0)

@@ -20,6 +20,7 @@ import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.shuhart.stepview.StepView;
 
+import org.joda.time.LocalTime;
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
@@ -43,8 +44,7 @@ public class AddItineraryActivity extends BaseActivity {
     private String name;
     private String description;
     private String difficulty;
-    private int hours;
-    private int minutes;
+    private LocalTime duration;
     private ArrayList <byte[]> imagesBytes = new ArrayList<>();
     private ArrayList<GeoPoint> waypoints = new ArrayList<>();
 
@@ -103,8 +103,7 @@ public class AddItineraryActivity extends BaseActivity {
                 changeFragment();
             }else if(stepIndex == 1 && addItineraryFragment2.isDurationValid()){
                 difficulty = addItineraryFragment2.getDifficulty();
-                hours = addItineraryFragment2.getHours();
-                minutes = addItineraryFragment2.getMinutes();
+                duration = addItineraryFragment2.getDuration();
                 stepIndex++;
                 changeFragment();
             }else if(stepIndex == 2){
@@ -115,7 +114,7 @@ public class AddItineraryActivity extends BaseActivity {
                 changeFragment();
             } else if(stepIndex == 3 && addItineraryFragment4.isStartPointInserted() && addItineraryFragment4.arePositionsCorrect()){
                 waypoints = addItineraryFragment4.getWaypoints();
-                iterController.insertItinerary(name, description, difficulty, hours, minutes, imagesBytes, waypoints);
+                iterController.insertItinerary(name, description, difficulty, duration, imagesBytes, waypoints);
             }
 
         });
