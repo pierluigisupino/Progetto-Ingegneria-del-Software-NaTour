@@ -58,7 +58,7 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
         Itinerary iter = itineraries.get(position);
         holder.setNameText(iter.getName());
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd MMMM yyyy");
         String shareDate = dateFormat.format(iter.getShareDate());
         holder.setDateText(shareDate);
 
