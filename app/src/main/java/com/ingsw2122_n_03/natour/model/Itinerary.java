@@ -34,6 +34,19 @@ public class Itinerary implements Serializable {
         this.shareDate = shareDate;
     }
 
+    public Itinerary(Itinerary itinerary) {
+        this.name = itinerary.getName();
+        this.description = itinerary.getDescription();
+        this.difficulty = itinerary.getDifficulty();
+        this.duration = itinerary.getDuration();
+        this.startPoint = itinerary.getStartPoint();
+        this.wayPoints = itinerary.getWayPoints();
+        this.creator = itinerary.getCreator();
+        this.shareDate = itinerary.getShareDate();
+        this.editDate = itinerary.getEditDate();
+        this.iterId = itinerary.getIterId();
+    }
+
     /**GETTERS
        &
     SETTERS

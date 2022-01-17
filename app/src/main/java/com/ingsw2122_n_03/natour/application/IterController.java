@@ -48,6 +48,7 @@ public class IterController extends NavigationController {
 
     private User currentUser;
     private Itinerary currentIter;
+    private Itinerary updatedIter;
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
 
@@ -76,7 +77,7 @@ public class IterController extends NavigationController {
     public void setUp() {
         currentUser = new User(userDao.getCurrentUserId());
         currentUser.setName(splashActivity.getResources().getString(R.string.current_user_name_text));
-        itineraryDao.getSetUpItineraries();
+        //itineraryDao.getSetUpItineraries();
         //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
@@ -200,16 +201,47 @@ public class IterController extends NavigationController {
      * PUT ITINERARY
      ***************/
 
-    public void manageFeedback(int newHours, int newMinutes, String newDifficulty) {
+    public void manageFeedback(int newDurationMinutes, String newDifficulty) {
+
+        boolean toUpdate = false;
+        Itinerary itineraryToUpdate = new Itinerary(currentIter);
+
+        int currentAccumulatedMinutes = currentIter.getDuration().getMinuteOfHour()+(currentIter.getDuration().getHourOfDay()*60);
+
+        if(currentAccumulatedMinutes != newDurationMinutes) {
+            toUpdate = true;
+            int averageAccumulatedMinutes = (newDurationMinutes + currentAccumulatedMinutes) / 2;
+            int averageHours = (averageAccumulatedMinutes / 60);
+            int averageMinutes = averageAccumulatedMinutes - (60 * averageHours);
+            LocalTime averageDuration = new LocalTime(averageHours, averageMinutes);
+            itineraryToUpdate.setDuration(averageDuration);
+        }
+
+        if(!currentIter.getDifficulty().equals(newDifficulty)) {
+            toUpdate = true;
+            //CALCULATE AVERAGE DIFFICULTY
+        }
+
+        if(toUpdate){
+            this.updatedIter = itineraryToUpdate;
+            itineraryDao.putItineraryFromFeedback(updatedIter);
+            //START LOADING
+        }else
+            detailActivity.onSuccess("NOTHING TO DO BRUH");
 
     }
 
     public void onItineraryUpdateSuccess() {
-
+        itineraries.remove(currentIter);
+        itineraries.add(updatedIter);
+        //UPDATE ITER IN DETAIL ACTIVITY
+        //STOP LOADING
+        detailActivity.onSuccess("THANKS FOR FEEDBACK BRO");
     }
 
     public void onItineraryUpdateError() {
-
+        //STOP LOADING
+        detailActivity.onSuccess("SORRY BRO, SHITTY PROBLEMS");
     }
 
     /*************

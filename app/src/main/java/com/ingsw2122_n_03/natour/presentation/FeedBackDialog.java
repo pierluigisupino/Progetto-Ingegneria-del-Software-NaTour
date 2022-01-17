@@ -36,8 +36,11 @@ public class FeedBackDialog extends AppCompatDialogFragment {
         assert getArguments() != null;
         Itinerary itinerary = (Itinerary) getArguments().getSerializable("itinerary");
 
-        timePicker.setHour(itinerary.getDuration().getHourOfDay());
-        timePicker.setMinute(itinerary.getDuration().getMinuteOfHour());
+        int currentHours = itinerary.getDuration().getHourOfDay();
+        int currentMinutes = itinerary.getDuration().getMinuteOfHour();
+
+        timePicker.setHour(currentHours);
+        timePicker.setMinute(currentMinutes);
 
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.difficultyAutoComplete);
 
@@ -52,7 +55,7 @@ public class FeedBackDialog extends AppCompatDialogFragment {
                     int hours = timePicker.getHour();
                     int minutes = timePicker.getMinute();
                     if(hours !=0 || minutes !=0)
-                        IterController.getInstance().manageFeedback(hours, minutes, autoCompleteTextView.getText().toString());
+                        IterController.getInstance().manageFeedback((hours*60)+minutes, autoCompleteTextView.getText().toString());
                     else
                         Toast.makeText(requireContext(), getString(R.string.duration_error), Toast.LENGTH_SHORT).show();
 
