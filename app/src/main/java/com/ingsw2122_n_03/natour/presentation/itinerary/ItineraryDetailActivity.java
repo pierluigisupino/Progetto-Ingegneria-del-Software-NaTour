@@ -6,12 +6,14 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -29,6 +31,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -43,7 +46,6 @@ public class ItineraryDetailActivity extends BaseActivity {
 
     private ConstraintLayout layout;
 
-    private IterController iterController;
     private Itinerary itinerary;
     private final ArrayList<byte[]> images = new ArrayList<>();
 
@@ -70,7 +72,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         IterController controller = IterController.getInstance();
 
-        iterController = IterController.getInstance();
+        IterController iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
 
         layout = binding.layout;
@@ -85,6 +87,8 @@ public class ItineraryDetailActivity extends BaseActivity {
         TextView textViewFeedback = binding.textViewFeedBack2;
 
         Button startButton = binding.startButton;
+        FloatingActionButton cancelEditButton = binding.cancelEditButton;
+        FloatingActionButton editButton = binding.editButton;
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
@@ -114,6 +118,40 @@ public class ItineraryDetailActivity extends BaseActivity {
             FeedBackDialog dialog = new FeedBackDialog();
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "FeedbackDialog");
+        });
+
+        if(itinerary.getCreator().getIsAdmin()){
+            editButton.setClickable(true);
+            editButton.setVisibility(View.VISIBLE);
+        }
+
+        editButton.setOnClickListener(view12 -> {
+
+            if(cancelEditButton.getVisibility() == View.INVISIBLE){
+                cancelEditButton.setClickable(true);
+                cancelEditButton.setVisibility(View.VISIBLE);
+                editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success)));
+                editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_done));
+
+                Toast.makeText(view12.getContext(), "Fa la stessa cosa del feed back?", Toast.LENGTH_SHORT).show();
+
+            }else{
+                cancelEditButton.setClickable(false);
+                cancelEditButton.setVisibility(View.INVISIBLE);
+                editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.primary)));
+                editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_edit));
+
+                Toast.makeText(view12.getContext(), "Edit salvato", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        cancelEditButton.setOnClickListener(view1 -> {
+            cancelEditButton.setClickable(false);
+            cancelEditButton.setVisibility(View.INVISIBLE);
+            editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.primary)));
+            editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_edit));
+
+            Toast.makeText(view1.getContext(), "Edit cancellato", Toast.LENGTH_SHORT).show();
         });
 
     }
