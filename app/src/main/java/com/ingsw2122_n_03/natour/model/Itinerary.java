@@ -121,4 +121,20 @@ public class Itinerary implements Serializable {
 
     public Date getShareDate() { return shareDate; }
 
+
+    public int getDifficultyLevel() {
+
+        if(difficulty.contains("(T)"))
+            return 0;
+
+        if(difficulty.contains("(E)"))
+            return 1;
+
+        if(difficulty.contains("(EE)"))
+            return 2;
+
+        return 3;
+
+    }
+
 }

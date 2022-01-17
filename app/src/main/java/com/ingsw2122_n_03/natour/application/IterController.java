@@ -201,33 +201,35 @@ public class IterController extends NavigationController {
      * PUT ITINERARY
      ***************/
 
-    public void manageFeedback(int newDurationMinutes, String newDifficulty) {
+    public void manageFeedback(int newDurationMinutes, int newDifficultyLevel) {
 
         boolean toUpdate = false;
         Itinerary itineraryToUpdate = new Itinerary(currentIter);
 
-        int currentAccumulatedMinutes = currentIter.getDuration().getMinuteOfHour()+(currentIter.getDuration().getHourOfDay()*60);
-
-        if(currentAccumulatedMinutes != newDurationMinutes) {
+        int currAccumulatedMinutes = currentIter.getDuration().getMinuteOfHour()+(currentIter.getDuration().getHourOfDay()*60);
+        if(currAccumulatedMinutes != newDurationMinutes) {
             toUpdate = true;
-            int averageAccumulatedMinutes = (newDurationMinutes + currentAccumulatedMinutes) / 2;
+            int averageAccumulatedMinutes = (newDurationMinutes + currAccumulatedMinutes) / 2;
             int averageHours = (averageAccumulatedMinutes / 60);
             int averageMinutes = averageAccumulatedMinutes - (60 * averageHours);
             LocalTime averageDuration = new LocalTime(averageHours, averageMinutes);
             itineraryToUpdate.setDuration(averageDuration);
         }
 
-        if(!currentIter.getDifficulty().equals(newDifficulty)) {
+        int currDifficultyLevel = currentIter.getDifficultyLevel();
+        if(currDifficultyLevel != newDifficultyLevel) {
             toUpdate = true;
-            //CALCULATE AVERAGE DIFFICULTY
+            int averageDifficultyLevel = (currDifficultyLevel+newDifficultyLevel)/2;
+            itineraryToUpdate.setDifficulty(detailActivity.getResources().getStringArray(R.array.difficulties)[averageDifficultyLevel]);
         }
 
         if(toUpdate){
             this.updatedIter = itineraryToUpdate;
             itineraryDao.putItineraryFromFeedback(updatedIter);
             //START LOADING
-        }else
+        }else{
             detailActivity.onSuccess("NOTHING TO DO BRUH");
+        }
 
     }
 
@@ -241,7 +243,7 @@ public class IterController extends NavigationController {
 
     public void onItineraryUpdateError() {
         //STOP LOADING
-        detailActivity.onSuccess("SORRY BRO, SHITTY PROBLEMS");
+        detailActivity.onFail("SORRY BRO, SHITTY PROBLEMS");
     }
 
     /*************
