@@ -83,20 +83,6 @@
         app:layout_constraintTop_toBottomOf="@+id/warning" />
 
     <TextView
-        android:id="@+id/textViewDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/euclid_circular_regular"
-        android:textSize="15sp"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/primary"
-        android:gravity="center_vertical"
-        app:drawableLeftCompat="@drawable/ic_access_time"
-        android:drawablePadding="10dp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
-
-    <TextView
         android:id="@+id/textViewDifficulty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -108,34 +94,45 @@
         android:gravity="center_vertical"
         app:drawableLeftCompat="@drawable/ic_signal"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDuration" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
 
-    <TextView
-        android:id="@+id/textViewFeedBack1"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/feedbackLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/feedback1"
-        android:fontFamily="@font/euclid_circular_regular"
-        android:textSize="12sp"
         android:layout_marginTop="15dp"
-        android:textColor="@color/primary"
-        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="@id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDifficulty"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-        app:layout_constraintTop_toTopOf="@+id/textViewDuration" />
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/textViewFeedBack2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:fontFamily="@font/euclid_circular_regular"
-        android:gravity="center_vertical"
-        android:text="@string/feedback2"
-        android:textColor="@color/primary"
-        android:clickable="true"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFeedBack1" />
+        <TextView
+            android:id="@+id/textViewDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/euclid_circular_regular"
+            android:textSize="15sp"
+            android:textColor="@color/primary"
+            android:gravity="center_vertical"
+            app:drawableLeftCompat="@drawable/ic_access_time"
+            android:drawablePadding="10dp"
+            android:layout_weight="1"
+            android:layout_gravity="left|center_vertical"/>
+
+
+        <TextView
+            android:id="@+id/textViewFeedBack2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/euclid_circular_regular"
+            android:gravity="center_vertical"
+            android:text="@string/feedback2"
+            android:textColor="@color/primary"
+            android:clickable="true"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/textViewFeedBack1" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/startButton"
@@ -150,6 +147,6 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDifficulty" />
+        app:layout_constraintTop_toBottomOf="@+id/feedbackLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
