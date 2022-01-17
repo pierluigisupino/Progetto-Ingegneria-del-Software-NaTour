@@ -27,17 +27,31 @@
         app:layout_constraintGuide_percent="0.05"/>
 
     <TextView
+        android:id="@+id/feedBackWelcome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primary"
+        android:textSize="22sp"
+        android:textAlignment="center"
+        android:fontFamily="@font/euclid_circular_semi_bold"
+        android:text="@string/feedback1"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="@+id/difficultGuideLine"/>
+
+    <TextView
         android:id="@+id/difficulty"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/euclid_circular_semi_bold"
         android:text="@string/difficulty_feedback"
         android:textAlignment="center"
         android:textColor="@color/primary"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toTopOf="@+id/difficultGuideLine" />
+        app:layout_constraintTop_toBottomOf="@+id/feedBackWelcome" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/menu"
@@ -66,7 +80,7 @@
         android:text="@string/duration_feedback"
         android:textAlignment="center"
         android:textColor="@color/primary"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/menu" />
