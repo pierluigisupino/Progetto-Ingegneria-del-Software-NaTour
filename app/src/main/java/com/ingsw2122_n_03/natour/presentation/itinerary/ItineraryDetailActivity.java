@@ -36,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
+import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.presentation.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
@@ -120,7 +121,7 @@ public class ItineraryDetailActivity extends BaseActivity {
             dialog.show(getSupportFragmentManager(), "FeedbackDialog");
         });
 
-        if(itinerary.getCreator().getIsAdmin()){
+        if(itinerary.getCreator() instanceof Admin){
             editButton.setClickable(true);
             editButton.setVisibility(View.VISIBLE);
         }
