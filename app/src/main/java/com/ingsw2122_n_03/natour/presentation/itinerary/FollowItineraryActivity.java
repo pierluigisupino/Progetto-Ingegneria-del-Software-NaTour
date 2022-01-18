@@ -258,28 +258,35 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         wayPoints.addAll(itinerary.getWayPoints());
 
         for(WayPoint wayPoint : wayPoints){
-
-            NaTourMarker marker = new NaTourMarker(map);
-
-            if(wayPoints.indexOf(wayPoint) == 0) {
-                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
-            }else if(wayPoints.indexOf(wayPoint) == wayPoints.size()-1){
-                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+            if(wayPoints.indexOf(wayPoint) == 0){
+                addMarker(wayPoint, wayPoints);
+            }else if(wayPoints.indexOf(wayPoint) == wayPoints.size() - 1){
+                addMarker(wayPoint, wayPoints);
             }else{
-                marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
+                itineraryWaypoints.add(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
             }
+        }
+    }
 
-            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-            marker.setPosition(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
+    private void addMarker(WayPoint wayPoint, ArrayList<WayPoint> wayPoints){
+        NaTourMarker marker = new NaTourMarker(map);
 
-            map.getOverlays().add(marker);
-            map.invalidate();
-
-            NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
-            this.itineraryWaypoints.add(naTourWaypoint);
-
+        if(wayPoints.indexOf(wayPoint) == 0) {
+            marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
+        }else if(wayPoints.indexOf(wayPoint) == wayPoints.size()-1){
+            marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+        }else{
+            marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
         }
 
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+        marker.setPosition(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
+
+        map.getOverlays().add(marker);
+        map.invalidate();
+
+        NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
+        this.itineraryWaypoints.add(naTourWaypoint);
     }
 
     private void addPointOfInterests(){
