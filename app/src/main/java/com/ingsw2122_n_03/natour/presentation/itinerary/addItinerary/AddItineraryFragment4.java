@@ -168,16 +168,22 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                         Uri uri = data.getData();
                         Gpx parsedGpx;
 
-                        InputStream is = getInputStream(uri);
-                        parsedGpx = parsGpx(is);
+                        if(uri.toString().endsWith(".gpx")){
 
-                        if (parsedGpx != null) {
-                            clearMap();
-                            addGpxWaypoints(parsedGpx);
-                            makeRoads();
-                        } else {
-                            addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
-                        }
+                            InputStream is = getInputStream(uri);
+                            parsedGpx = parsGpx(is);
+
+                            if (parsedGpx != null) {
+                                clearMap();
+                                addGpxWaypoints(parsedGpx);
+                                makeRoads();
+                            } else
+                                addItineraryActivity.onFail(addItineraryActivity.getResources().getString(R.string.generic_error));
+
+
+                        }else
+                            addItineraryActivity.onFail(getString(R.string.file_not_supported_text));
+
                     }
                 });
 

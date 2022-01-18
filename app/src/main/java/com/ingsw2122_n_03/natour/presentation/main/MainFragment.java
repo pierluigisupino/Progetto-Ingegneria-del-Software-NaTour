@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -39,6 +38,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
     private final IterController iterController = IterController.getInstance();
+    private Bundle bundle;
 
 
     public MainFragment(){
@@ -72,7 +72,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         pullToRefresh = binding.update;
         recyclerView = binding.itinerary;
 
-        Bundle bundle = getArguments();
+        bundle = getArguments();
 
         if(bundle != null && bundle.containsKey("itineraries"))
             itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
@@ -83,6 +83,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             imageView.setVisibility(View.VISIBLE);
             textView3.setVisibility(View.VISIBLE);
         }
+
 
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);;
         recyclerView.setLayoutManager(layoutManager);
@@ -106,7 +107,13 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
     }
 
-   public void updateItineraries(ArrayList<Itinerary> itineraries) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bundle.putSerializable("itineraries", itineraries);
+    }
+
+    public void updateItineraries(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
         requireActivity().runOnUiThread(()->{
             recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));

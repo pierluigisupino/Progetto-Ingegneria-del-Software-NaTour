@@ -34,7 +34,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private DrawerLayout drawerLayout;
 
-    private MainFragment mainFragment;
+    private final MainFragment mainFragment = new MainFragment();
     private final MessagesFragment messagesFragment = new MessagesFragment();
 
     @Override
@@ -49,8 +49,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         iterController = IterController.getInstance();
         iterController.setMainActivity(this);
-
-        this.mainFragment = new MainFragment();
 
         Intent intent = getIntent();
 
