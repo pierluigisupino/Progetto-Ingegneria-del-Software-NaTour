@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Directions"/>
+                android:text="@string/directions_text"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/directionsSwitch"
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="To start"/>
+                android:text="@string/to_start_text"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/toStartSwitch"

@@ -148,7 +148,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         directionsSwitchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
-                Toast.makeText(view.getContext(), "Click on the dots for directions", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), getString(R.string.info_directions_text), Toast.LENGTH_SHORT).show();
                 wantsDirections = true;
                 map.getOverlays().addAll(itineraryIndications);
                 if(wantsRoadsToStart) map.getOverlays().addAll(myRoadIndications);
@@ -252,35 +252,35 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     private void addWayPoints() {
 
-        ArrayList<WayPoint> wayPoints = new ArrayList<>();
-        wayPoints.add(itinerary.getStartPoint());
+        addMarker(itinerary.getStartPoint(), true);
 
-        wayPoints.addAll(itinerary.getWayPoints());
-
-        for(WayPoint wayPoint : wayPoints){
-            if(wayPoints.indexOf(wayPoint) == 0){
-                addMarker(wayPoint, wayPoints);
-            }else if(wayPoints.indexOf(wayPoint) == wayPoints.size() - 1){
-                addMarker(wayPoint, wayPoints);
-            }else{
+        ArrayList<WayPoint> mItineraryWaypoints = (ArrayList<WayPoint>) itinerary.getWayPoints();
+        for(WayPoint wayPoint : itinerary.getWayPoints()){
+            if(itinerary.getWayPoints().indexOf(wayPoint) == mItineraryWaypoints.size() -1)
+                addMarker(wayPoint, false);
+            else
                 itineraryWaypoints.add(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
-            }
+
         }
     }
 
-    private void addMarker(WayPoint wayPoint, ArrayList<WayPoint> wayPoints){
+    private void addMarker(WayPoint wayPoint, boolean isFirst){
         NaTourMarker marker = new NaTourMarker(map);
 
-        if(wayPoints.indexOf(wayPoint) == 0) {
+        if(isFirst){
             marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
-        }else if(wayPoints.indexOf(wayPoint) == wayPoints.size()-1){
+            marker.setTitle(getString(R.string.start_point_text));
+        }else {
             marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
-        }else{
-            marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle, null));
+            marker.setTitle(getString(R.string.end_point_text));
         }
+
+
 
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
         marker.setPosition(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
+
+
 
         map.getOverlays().add(marker);
         map.invalidate();

@@ -152,6 +152,13 @@
     <string name="difficulty_feedback">What difficulty got for you?</string>
     <string name="duration_feedback">How long have you done it?</string>
 
+    <!--FOLLOW ITINERARY-->
+    <string name="start_point_text">Start Point</string>
+    <string name="end_point_text">End Point</string>
+    <string name="directions_text">Directions</string>
+    <string name="to_start_text">To Start Point</string>
+    <string name="info_directions_text">Click on the dots for directions</string>
+
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
