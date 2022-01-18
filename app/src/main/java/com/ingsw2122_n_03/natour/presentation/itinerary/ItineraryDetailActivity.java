@@ -50,15 +50,6 @@ public class ItineraryDetailActivity extends BaseActivity {
     private Itinerary itinerary;
     private final ArrayList<byte[]> images = new ArrayList<>();
 
-    private final ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    checkSettingsAndStartLocationUpdates();
-                } else {
-                    showAlertGpsPermissionNeeded();
-                }
-            });
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,11 +97,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewDifficulty.setText(itinerary.getDifficulty());
 
         startButton.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                controller.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary);
-            } else {
-                askLocationPermission();
-            }
+            controller.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary);
         });
 
         textViewFeedback.setOnClickListener(v -> {
@@ -155,62 +142,6 @@ public class ItineraryDetailActivity extends BaseActivity {
             Toast.makeText(view1.getContext(), "Edit cancellato", Toast.LENGTH_SHORT).show();
         });
 
-    }
-
-    private void checkSettingsAndStartLocationUpdates(){
-        LocationSettingsRequest request = new LocationSettingsRequest.Builder().addLocationRequest(LocationRequest.create()).build();
-
-        SettingsClient client = LocationServices.getSettingsClient(this);
-
-        Task<LocationSettingsResponse> locationSettingsResponseTask = client.checkLocationSettings(request);
-
-        locationSettingsResponseTask.addOnSuccessListener(locationSettingsResponse -> {
-
-            IterController controller = IterController.getInstance();
-            controller.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary);
-        });
-
-        locationSettingsResponseTask.addOnFailureListener(e -> {
-            if (e instanceof ResolvableApiException){
-                ResolvableApiException apiException = (ResolvableApiException) e;
-                try {
-                    apiException.startResolutionForResult(this, 10001);
-                } catch (IntentSender.SendIntentException sendIntentException) {
-                    sendIntentException.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void showAlertGpsPermissionNeeded(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-        alertDialogBuilder.setTitle(getString(R.string.required_permission));
-        alertDialogBuilder.setIcon(AppCompatResources.getDrawable(this, R.drawable.ic_warning));
-        alertDialogBuilder.setMessage(getString(R.string.required_permission_description));
-        alertDialogBuilder.setPositiveButton(getString(R.string.open_settings), (dialogInterface, i) -> {
-            Intent intent = new Intent();
-            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            Uri uri = Uri.fromParts("package", this.getPackageName(), null);
-            intent.setData(uri);
-            this.startActivity(intent);
-        });
-        alertDialogBuilder.setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> dialogInterface.dismiss());
-
-        AlertDialog dialog = alertDialogBuilder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-
-    }
-
-    private void askLocationPermission(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
-                showAlertGpsPermissionNeeded();
-            } else {
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-            }
-        }
     }
 
     @Override

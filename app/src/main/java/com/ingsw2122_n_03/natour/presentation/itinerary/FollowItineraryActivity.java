@@ -1,14 +1,23 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -16,8 +25,10 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +40,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.ingsw2122_n_03.natour.R;
@@ -80,11 +98,22 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     private boolean wantsRoadsToStart = false;
     private boolean wantsDirections = false;
-    private boolean isRoadMade = false;
-    private CardView cardView;
+    private boolean isAcquiringPosition = false;
+    private boolean isPositionAcquired = false;
+
     private ProgressBar progressBar;
+    private CardView cardView;
     private LinearLayout directionsLayout;
     private LinearLayout toStartLayout;
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    checkSettingsAndStartLocationUpdates();
+                } else {
+                    showAlertGpsPermissionNeeded();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +134,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         MaterialToolbar materialToolbar = binding.topAppBar;
         materialToolbar.setTitle(itinerary.getName());
 
-        cardView = binding.cardView;
         progressBar = binding.progressBar;
+        cardView = binding.cardView;
 
         SwitchMaterial directionsSwitchMaterial = binding.directionsSwitch;
         SwitchMaterial toStartSwitchMaterial = binding.toStartSwitch;
@@ -129,12 +158,24 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             }
         });
 
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         toStartSwitchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
             if(isChecked){
-                makeIndicationToStartingPoint();
                 wantsRoadsToStart = true;
+
+                if(isPositionAcquired){
+                    makeIndicationToStartingPoint();
+                }else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                    askLocationPermission();
+                }else {
+                    enableMyLocation();
+                }
+
             }else{
                 wantsRoadsToStart = false;
+                map.getController().animateTo(itineraryWaypoints.get(0));
                 map.getOverlays().remove(myPolyline);
                 map.getOverlays().removeAll(myRoadIndications);
             }
@@ -169,22 +210,9 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
 
-        GpsMyLocationProvider gpsMyLocationProvider = new GpsMyLocationProvider(this);
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-
-        myLocationNewOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
-        myLocationNewOverlay.enableMyLocation();
-
-        myLocationNewOverlay.runOnFirstFix(() ->  {
-            addWayPoints();
-            addPointOfInterests();
-            makeRoads();
-        });
-
-        map.getOverlays().add(myLocationNewOverlay);
+        addWayPoints();
+        addPointOfInterests();
+        makeRoads();
 
         CompassOverlay compassOverlay = new CompassOverlay(this, map);
         compassOverlay.enableCompass();
@@ -232,6 +260,23 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     }
 
+    @SuppressLint("MissingPermission")
+    private void enableMyLocation(){
+
+        if(!isAcquiringPosition){
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            isAcquiringPosition = true;
+        }
+
+        GpsMyLocationProvider gpsMyLocationProvider = new GpsMyLocationProvider(this);
+
+        myLocationNewOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
+        myLocationNewOverlay.enableMyLocation();
+
+        map.getOverlays().add(myLocationNewOverlay);
+    }
+
     private void addPointOfInterests(){
 
         HashMap<byte[], GeoPoint> imagesPosition = iterController.calculatePhotoPosition();
@@ -266,25 +311,35 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             polyline.getOutlinePaint().setStrokeWidth(8);
 
             makeDirections(road, itineraryIndications);
-
             map.getOverlays().add(polyline);
-            map.invalidate();
+
+            cardView.post(() -> {
+                progressBar.setVisibility(View.GONE);
+                cardView.setVisibility(View.VISIBLE);
+
+                directionsLayout.setVisibility(View.VISIBLE);
+
+                if(locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)){
+                    toStartLayout.setVisibility(View.VISIBLE);
+                }
+            });
+
         }).start();
     }
 
     private void makeIndicationToStartingPoint(){
         new Thread(()-> {
             ArrayList<GeoPoint> myRoadWaypoints = new ArrayList<>(itineraryWaypoints);
-            myRoadWaypoints.add(0, myLocationNewOverlay.getMyLocation());
+
+            if(!myRoadWaypoints.contains(myLocationNewOverlay.getMyLocation()))
+                myRoadWaypoints.add(0, myLocationNewOverlay.getMyLocation());
 
             Road road = roadManager.getRoad(myRoadWaypoints);
             myPolyline = RoadManager.buildRoadOverlay(road);
             myPolyline.getOutlinePaint().setStrokeWidth(8);
 
             makeDirections(road, myRoadIndications);
-
             map.getOverlays().add(myPolyline);
-            map.invalidate();
 
             cardView.post(() -> {
                 map.getController().setZoom(16.50);
@@ -344,18 +399,64 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @SuppressLint("MissingPermission")
     @Override
     public void onLocationChanged(@NonNull Location location) {
-
-        Log.e("test", "test");
-
-        if (!isRoadMade) {
+        if (!isPositionAcquired) {
             if (lastLocation == null) {
                 lastLocation = location;
             } else {
-                progressBar.setVisibility(View.GONE);
-                cardView.setVisibility(View.VISIBLE);
-                directionsLayout.setVisibility(View.VISIBLE);
-                toStartLayout.setVisibility(View.VISIBLE);
-                isRoadMade = true;
+                isPositionAcquired = true;
+                makeIndicationToStartingPoint();
+            }
+        }
+    }
+
+    private void checkSettingsAndStartLocationUpdates(){
+        LocationSettingsRequest request = new LocationSettingsRequest.Builder().addLocationRequest(LocationRequest.create()).build();
+
+        SettingsClient client = LocationServices.getSettingsClient(this);
+
+        Task<LocationSettingsResponse> locationSettingsResponseTask = client.checkLocationSettings(request);
+
+        locationSettingsResponseTask.addOnSuccessListener(locationSettingsResponse -> enableMyLocation());
+
+        locationSettingsResponseTask.addOnFailureListener(e -> {
+            if (e instanceof ResolvableApiException){
+                ResolvableApiException apiException = (ResolvableApiException) e;
+                try {
+                    apiException.startResolutionForResult(this, 10001);
+                } catch (IntentSender.SendIntentException sendIntentException) {
+                    sendIntentException.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void showAlertGpsPermissionNeeded(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setTitle(getString(R.string.required_permission));
+        alertDialogBuilder.setIcon(AppCompatResources.getDrawable(this, R.drawable.ic_warning));
+        alertDialogBuilder.setMessage(getString(R.string.required_permission_description));
+        alertDialogBuilder.setPositiveButton(getString(R.string.open_settings), (dialogInterface, i) -> {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", this.getPackageName(), null);
+            intent.setData(uri);
+            this.startActivity(intent);
+        });
+        alertDialogBuilder.setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> dialogInterface.dismiss());
+
+        AlertDialog dialog = alertDialogBuilder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+    }
+
+    private void askLocationPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
+                showAlertGpsPermissionNeeded();
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
     }
