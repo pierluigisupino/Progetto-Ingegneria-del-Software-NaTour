@@ -77,7 +77,7 @@ public class IterController extends NavigationController {
     public void setUp() {
         currentUser = new User(userDao.getCurrentUserId());
         currentUser.setName(splashActivity.getResources().getString(R.string.current_user_name_text));
-        //itineraryDao.getSetUpItineraries();
+        itineraryDao.getSetUpItineraries();
         //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
     }
 
