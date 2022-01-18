@@ -85,7 +85,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         }
 
 
-        LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);;
+        LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
