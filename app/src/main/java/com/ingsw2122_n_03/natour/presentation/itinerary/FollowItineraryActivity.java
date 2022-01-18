@@ -165,8 +165,8 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         toStartSwitchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-            bottomProgressBar.setVisibility(View.VISIBLE);
             if(isChecked){
+                bottomProgressBar.setVisibility(View.VISIBLE);
                 wantsRoadsToStart = true;
 
                 if(isPositionAcquired){
@@ -182,6 +182,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 map.getController().animateTo(itineraryWaypoints.get(0));
                 map.getOverlays().remove(myPolyline);
                 map.getOverlays().removeAll(myRoadIndications);
+                bottomProgressBar.setVisibility(View.INVISIBLE);
             }
         });
 
