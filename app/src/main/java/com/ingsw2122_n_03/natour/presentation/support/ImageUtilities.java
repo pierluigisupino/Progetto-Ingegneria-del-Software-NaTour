@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.presentation.support;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.exifinterface.media.ExifInterface;
@@ -21,6 +22,11 @@ public class ImageUtilities {
 
 
     public byte[] getBytes(Context context, Uri imageUri) throws IOException {
+
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+
+        // TODO: 18/01/2022 sincronizzare e gestire
+        isImageSafe(bitmap);
 
         InputStream iStream = context.getContentResolver().openInputStream(imageUri);
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
