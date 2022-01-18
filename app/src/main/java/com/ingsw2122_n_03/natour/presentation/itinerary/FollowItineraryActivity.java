@@ -78,7 +78,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener, LocationListener {
+public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener {
 
     private ActivityFollowItineraryBinding binding;
 
@@ -87,7 +87,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private RoadManager roadManager;
     private Polyline myPolyline;
     private MyLocationNewOverlay myLocationNewOverlay;
-    private Location lastLocation;
 
     private final ArrayList<GeoPoint> itineraryWaypoints = new ArrayList<>();
 
@@ -99,8 +98,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     private boolean wantsRoadsToStart = false;
     private boolean wantsDirections = false;
-    private boolean isAcquiringPosition = false;
-    private boolean isPositionAcquired = false;
 
     private ProgressBar progressBar;
     private LinearProgressIndicator bottomProgressBar;
@@ -169,12 +166,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 bottomProgressBar.setVisibility(View.VISIBLE);
                 wantsRoadsToStart = true;
 
-                if(isPositionAcquired){
-                    makeIndicationToStartingPoint();
-                }else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                     askLocationPermission();
                 }else {
-                    enableMyLocation();
+                    makeIndicationToStartingPoint();
                 }
 
             }else{
@@ -218,6 +213,13 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         addWayPoints();
         addPointOfInterests();
         makeRoads();
+
+        GpsMyLocationProvider gpsMyLocationProvider = new GpsMyLocationProvider(this);
+
+        myLocationNewOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
+        myLocationNewOverlay.enableMyLocation();
+
+        map.getOverlays().add(myLocationNewOverlay);
 
         CompassOverlay compassOverlay = new CompassOverlay(this, map);
         compassOverlay.enableCompass();
@@ -263,23 +265,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         }
 
-    }
-
-    @SuppressLint("MissingPermission")
-    private void enableMyLocation(){
-
-        if(!isAcquiringPosition){
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            isAcquiringPosition = true;
-        }
-
-        GpsMyLocationProvider gpsMyLocationProvider = new GpsMyLocationProvider(this);
-
-        myLocationNewOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, map);
-        myLocationNewOverlay.enableMyLocation();
-
-        map.getOverlays().add(myLocationNewOverlay);
     }
 
     private void addPointOfInterests(){
@@ -402,19 +387,6 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        if (!isPositionAcquired) {
-            if (lastLocation == null) {
-                lastLocation = location;
-            } else {
-                isPositionAcquired = true;
-                makeIndicationToStartingPoint();
-            }
-        }
-    }
-
     private void checkSettingsAndStartLocationUpdates(){
         LocationSettingsRequest request = new LocationSettingsRequest.Builder().addLocationRequest(LocationRequest.create()).build();
 
@@ -422,7 +394,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         Task<LocationSettingsResponse> locationSettingsResponseTask = client.checkLocationSettings(request);
 
-        locationSettingsResponseTask.addOnSuccessListener(locationSettingsResponse -> enableMyLocation());
+        locationSettingsResponseTask.addOnSuccessListener(locationSettingsResponse -> makeIndicationToStartingPoint());
 
         locationSettingsResponseTask.addOnFailureListener(e -> {
             if (e instanceof ResolvableApiException){
@@ -465,20 +437,5 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
-    }
-
-    @Override
-    public void onProviderEnabled(@NonNull String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(@NonNull String provider) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 }
