@@ -68,7 +68,7 @@ public class ImageUtilities {
                     countDownLatch.countDown();
                 },
                 error -> {
-                    Log.e("NaTour", "errore");
+                    Log.e("NaTour", "predictions errore"); // TODO: 18/01/2022 da getsire
                     countDownLatch.countDown();
                 }
         );
