@@ -98,18 +98,23 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
     private boolean wantsRoadsToStart = false;
     private boolean wantsDirections = false;
+    private boolean isFirstRun = true;
 
     private ProgressBar progressBar;
     private LinearProgressIndicator bottomProgressBar;
     private CardView cardView;
+
     private LinearLayout directionsLayout;
     private LinearLayout toStartLayout;
+
+    private SwitchMaterial toStartSwitchMaterial;
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
                     checkSettingsAndStartLocationUpdates();
                 } else {
+                    toStartSwitchMaterial.setChecked(false);
                     showAlertGpsPermissionNeeded();
                 }
             });
@@ -138,7 +143,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         cardView = binding.cardView;
 
         SwitchMaterial directionsSwitchMaterial = binding.directionsSwitch;
-        SwitchMaterial toStartSwitchMaterial = binding.toStartSwitch;
+        toStartSwitchMaterial = binding.toStartSwitch;
 
         directionsLayout = binding.directionsLayout;
         toStartLayout = binding.toStartLayout;
@@ -163,13 +168,18 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         toStartSwitchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
-                bottomProgressBar.setVisibility(View.VISIBLE);
                 wantsRoadsToStart = true;
 
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                     askLocationPermission();
                 }else {
-                    makeIndicationToStartingPoint();
+                    bottomProgressBar.setVisibility(View.VISIBLE);
+
+                    if(myLocationNewOverlay.getMyLocation() != null){
+                        makeIndicationToStartingPoint();
+                    }else{
+                        myLocationNewOverlay.runOnFirstFix(this::makeIndicationToStartingPoint);
+                    }
                 }
 
             }else{
@@ -187,6 +197,15 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     @Override
     public void onResume() {
         super.onResume();
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && toStartSwitchMaterial.isChecked()){
+            toStartSwitchMaterial.setChecked(false);
+        }else if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && !toStartSwitchMaterial.isChecked() && !isFirstRun){
+            toStartSwitchMaterial.setChecked(true);
+        }
+
+        isFirstRun = false;
+
         if(map != null) map.onResume();
     }
 
@@ -328,13 +347,19 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
             myPolyline = RoadManager.buildRoadOverlay(road);
             myPolyline.getOutlinePaint().setStrokeWidth(8);
 
-            makeDirections(road, myRoadIndications);
-            map.getOverlays().add(myPolyline);
+            if(wantsRoadsToStart) {
+                makeDirections(road, myRoadIndications);
+                map.getOverlays().add(myPolyline);
+            }
 
             cardView.post(() -> {
-                map.getController().setZoom(16.50);
-                map.getController().animateTo(myLocationNewOverlay.getMyLocation());
+                if(wantsRoadsToStart) {
+                    map.getController().setZoom(16.50);
+                    map.getController().animateTo(myLocationNewOverlay.getMyLocation());
+                }
+
                 if(wantsDirections) map.getOverlays().addAll(myRoadIndications);
+
                 bottomProgressBar.setVisibility(View.INVISIBLE);
             });
         }).start();
@@ -394,7 +419,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         Task<LocationSettingsResponse> locationSettingsResponseTask = client.checkLocationSettings(request);
 
-        locationSettingsResponseTask.addOnSuccessListener(locationSettingsResponse -> makeIndicationToStartingPoint());
+        locationSettingsResponseTask.addOnSuccessListener(locationSettingsResponse -> {
+            bottomProgressBar.setVisibility(View.VISIBLE);
+            myLocationNewOverlay.runOnFirstFix(this::makeIndicationToStartingPoint);
+        });
 
         locationSettingsResponseTask.addOnFailureListener(e -> {
             if (e instanceof ResolvableApiException){
@@ -432,6 +460,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private void askLocationPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
+                toStartSwitchMaterial.setChecked(false);
                 showAlertGpsPermissionNeeded();
             } else {
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
