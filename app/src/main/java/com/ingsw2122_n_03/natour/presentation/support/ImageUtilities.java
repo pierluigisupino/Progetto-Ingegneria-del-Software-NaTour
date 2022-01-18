@@ -1,9 +1,15 @@
 package com.ingsw2122_n_03.natour.presentation.support;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.exifinterface.media.ExifInterface;
+
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.predictions.models.LabelType;
+import com.amplifyframework.predictions.result.IdentifyLabelsResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -42,6 +48,19 @@ public class ImageUtilities {
 
         return latLong;
 
+    }
+
+    public void isImageSafe(Bitmap image){
+
+        Amplify.Predictions.identify(
+                LabelType.MODERATION_LABELS,
+                image,
+                result -> {
+                    IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
+                    boolean isSafe = identifyResult.isUnsafeContent();
+                },
+                error -> { Log.e("NaTour", "errore"); }
+        );
     }
 
 }
