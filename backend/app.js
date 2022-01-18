@@ -43,11 +43,11 @@ app.get('/items/itineraries', function(req, res) {
   client.connect();
   
   const limitRows = 8;
-  var queryParams = 'SELECT * FROM ITINERARY ORDER BY iterID DESC LIMIT'+limitRows;
+  var queryParams = 'SELECT * FROM ITINERARY ORDER BY iterID DESC LIMIT '+limitRows;
   
   var lastIter = req.query.iterid;
   if(lastIter != null){
-    queryParams = 'SELECT * FROM ITINERARY WHERE ITERID < '+ lastIter +'ORDER BY iterID DESC LIMIT'+limitRows;
+    queryParams = 'SELECT * FROM ITINERARY WHERE ITERID < '+ lastIter +'ORDER BY iterID DESC LIMIT '+limitRows;
   }
   
   client.query(queryParams, (err, data) => {
