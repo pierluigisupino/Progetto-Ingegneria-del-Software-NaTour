@@ -48,6 +48,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
@@ -102,6 +103,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private boolean isPositionAcquired = false;
 
     private ProgressBar progressBar;
+    private LinearProgressIndicator bottomProgressBar;
     private CardView cardView;
     private LinearLayout directionsLayout;
     private LinearLayout toStartLayout;
@@ -135,6 +137,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         materialToolbar.setTitle(itinerary.getName());
 
         progressBar = binding.progressBar;
+        bottomProgressBar = binding.bottomProgressBar;
         cardView = binding.cardView;
 
         SwitchMaterial directionsSwitchMaterial = binding.directionsSwitch;
@@ -162,6 +165,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
 
         toStartSwitchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
+            bottomProgressBar.setVisibility(View.VISIBLE);
             if(isChecked){
                 wantsRoadsToStart = true;
 
@@ -345,6 +349,7 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 map.getController().setZoom(16.50);
                 map.getController().animateTo(myLocationNewOverlay.getMyLocation());
                 if(wantsDirections) map.getOverlays().addAll(myRoadIndications);
+                bottomProgressBar.setVisibility(View.INVISIBLE);
             });
         }).start();
     }
