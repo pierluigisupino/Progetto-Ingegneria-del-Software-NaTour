@@ -86,10 +86,14 @@ public class AddItineraryFragment3 extends Fragment {
 
                                     try {
 
-                                        byte[] photoByte = imageUtilities.getBytes(requireActivity(), imageUri);
-                                        imagesBytes.add(photoByte);
+                                        if(!imageUtilities.isImageUnsafe(requireActivity(), imageUri)) {
+                                            byte[] photoByte = imageUtilities.getBytes(requireActivity(), imageUri);
+                                            imagesBytes.add(photoByte);
+                                        }else{
+                                            addItineraryActivity.onFail(getString(R.string.explicit_content));
+                                        }
 
-                                    }catch (IOException e) {
+                                    }catch (IOException | InterruptedException e) {
                                         addItineraryActivity.onFail(getString(R.string.generic_error));
                                         break;
                                     }

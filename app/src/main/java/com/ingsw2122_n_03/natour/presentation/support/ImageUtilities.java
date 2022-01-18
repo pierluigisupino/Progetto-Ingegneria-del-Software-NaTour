@@ -16,17 +16,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.CountDownLatch;
 
 
 public class ImageUtilities {
 
+    private static boolean isUnsafe;
 
     public byte[] getBytes(Context context, Uri imageUri) throws IOException {
-
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
-
-        // TODO: 18/01/2022 sincronizzare e gestire
-        isImageSafe(bitmap);
 
         InputStream iStream = context.getContentResolver().openInputStream(imageUri);
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
@@ -56,17 +53,27 @@ public class ImageUtilities {
 
     }
 
-    public void isImageSafe(Bitmap image){
+    public boolean isImageUnsafe(Context context, Uri imageUri) throws InterruptedException, IOException {
+
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
 
         Amplify.Predictions.identify(
                 LabelType.MODERATION_LABELS,
-                image,
+                bitmap,
                 result -> {
                     IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
-                    boolean isUnsafe = identifyResult.isUnsafeContent();
+                    isUnsafe = identifyResult.isUnsafeContent();
+                    countDownLatch.countDown();
                 },
-                error -> { Log.e("NaTour", "errore"); }
+                error -> {
+                    Log.e("NaTour", "errore");
+                    countDownLatch.countDown();
+                }
         );
+        countDownLatch.await();
+        return isUnsafe;
     }
 
 }
