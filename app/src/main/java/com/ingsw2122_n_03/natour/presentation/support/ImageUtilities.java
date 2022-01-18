@@ -63,7 +63,7 @@ public class ImageUtilities {
                 image,
                 result -> {
                     IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
-                    boolean isSafe = identifyResult.isUnsafeContent();
+                    boolean isUnsafe = identifyResult.isUnsafeContent();
                 },
                 error -> { Log.e("NaTour", "errore"); }
         );
