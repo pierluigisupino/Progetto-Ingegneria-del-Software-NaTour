@@ -29,7 +29,8 @@
 
         <activity
             android:name="com.amplifyframework.auth.cognito.activities.HostedUIRedirectActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/noAnimTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
