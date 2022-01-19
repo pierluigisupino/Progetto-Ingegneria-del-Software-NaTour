@@ -152,10 +152,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
 
         Amplify.Auth.resetPassword(
                 email,
-                result -> {
-                    Log.e("NaTour", result.toString());
-                    controller.onResetPasswordSuccess(email);
-                },
+                result -> controller.onResetPasswordSuccess(email),
                 error -> {
 
                     String messageError = Objects.requireNonNull(error.getMessage());

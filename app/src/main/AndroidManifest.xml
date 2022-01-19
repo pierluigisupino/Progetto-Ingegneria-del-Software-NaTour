@@ -26,6 +26,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
+
+        <activity
+            android:name="com.amplifyframework.auth.cognito.activities.HostedUIRedirectActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="myapp" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.WelcomeActivity"
+            android:exported="true"
+            android:theme="@style/NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".presentation.main.MainActivity"
+            android:exported="true"
+            android:theme="@style/NoActionBar">
+        </activity>
+
         <activity
             android:name=".presentation.itinerary.FollowItineraryActivity"
             android:exported="false"
@@ -38,19 +62,6 @@
             android:name=".presentation.itinerary.addItinerary.AddItineraryActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".presentation.main.MainActivity"
-            android:exported="true"
-            android:theme="@style/NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="mainpage" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".presentation.signUp.VerifyAccountActivity"
             android:exported="false"
@@ -71,19 +82,6 @@
             android:name=".presentation.signIn.SignInActivity"
             android:exported="false"
             android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".presentation.WelcomeActivity"
-            android:exported="true"
-            android:theme="@style/NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="welcomepage" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".presentation.SplashActivity"
             android:exported="true"

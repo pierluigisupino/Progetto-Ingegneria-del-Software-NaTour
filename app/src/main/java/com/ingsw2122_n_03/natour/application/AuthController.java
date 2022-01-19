@@ -179,6 +179,7 @@ public final class AuthController extends NavigationController {
 
     public void onLoginWithGoogleSuccess(){
         welcomeActivity.onSuccess(welcomeActivity.getResources().getString(R.string.login_success));
+        goToActivityAndFinish(welcomeActivity, MainActivity.class);
     }
 
     public void onLoginWithGoogleFailure() {
