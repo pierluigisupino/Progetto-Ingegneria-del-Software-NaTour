@@ -47,9 +47,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             int pos = holder.getAdapterPosition();
             bytes.remove(pos);
             notifyItemRemoved(pos);
-            setPhotoCount(holder);
+            if(textView != null) setPhotoCount(holder);
         });
-        setPhotoCount(holder);
+        if(textView != null) setPhotoCount(holder);
     }
 
     @Override

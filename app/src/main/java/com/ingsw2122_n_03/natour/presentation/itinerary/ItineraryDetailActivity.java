@@ -22,6 +22,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -40,12 +41,14 @@ import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.presentation.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
+import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 
 import java.util.ArrayList;
 
 public class ItineraryDetailActivity extends BaseActivity {
 
     private ConstraintLayout layout;
+    private RecyclerView imagesRecyclerView;
 
     private Itinerary itinerary;
     private final ArrayList<byte[]> images = new ArrayList<>();
@@ -79,6 +82,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         TextView textViewFeedback = binding.textViewFeedBack2;
 
         Button startButton = binding.startButton;
+        imagesRecyclerView = binding.imagesRecyclerView;
         FloatingActionButton cancelEditButton = binding.cancelEditButton;
         FloatingActionButton editButton = binding.editButton;
 
@@ -99,6 +103,10 @@ public class ItineraryDetailActivity extends BaseActivity {
         startButton.setOnClickListener(v -> {
             controller.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary);
         });
+
+
+        // TODO: 19/01/2022 da dove prendiamo la lista di bitmap ?
+        //imagesRecyclerView.setAdapter(new ImageAdapter(null, List<byte[]> bitmaps));
 
         textViewFeedback.setOnClickListener(v -> {
             Bundle args = new Bundle();
