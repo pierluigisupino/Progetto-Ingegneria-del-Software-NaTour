@@ -106,7 +106,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
 
         // TODO: 19/01/2022 da dove prendiamo la lista di bitmap ?
-        //imagesRecyclerView.setAdapter(new ImageAdapter(null, List<byte[]> bitmaps));
+        //imagesRecyclerView.setAdapter(new ImageAdapter(List<byte[]> bitmaps));
 
         textViewFeedback.setOnClickListener(v -> {
             Bundle args = new Bundle();

@@ -19,11 +19,15 @@ import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
-    private final TextView textView;
+    private TextView textView = null;
     private final List<byte[]> bytes;
 
     public ImageAdapter(TextView textView, List<byte[]> bitmaps) {
         this.textView = textView;
+        this.bytes = bitmaps;
+    }
+
+    public ImageAdapter(List<byte[]> bitmaps) {
         this.bytes = bitmaps;
     }
 
