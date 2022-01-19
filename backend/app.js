@@ -1,4 +1,3 @@
-
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
@@ -66,7 +65,7 @@ app.get('/items/itineraries', function(req, res) {
 
 app.get('/items/photos', function(req, res) {
   
-  var prefix = 'iter'+req.query.iterid+'/';
+  const prefix = 'iter'+req.query.iterid+'/';
   const limitSize = 10000000;
   
   var listParams = {
@@ -171,22 +170,23 @@ app.post('/items/itineraries', function(req, res) {
 app.post('/items/photos', async function(req, res) {
   
   const count = req.body.photo_count;
+  const prefix = 'iter'+req.body.iterID+'/';
   
   for(var i = 0; i < count; i++){
     
-    var filename = Math.random().toString(36).slice(2);
+    var filename = prefix+Math.random().toString(36).slice(2);
     var photoBody = 'photo'+i;
     
     var uploadParams = {
       Bucket: process.env.BUCKETNAME, 
-      Key: 'iter'+req.body.iterID+'/'+filename, 
+      Key: filename, 
       Body: req.body[photoBody],
       ContentEncoding: 'base64'
     };
     
     await s3.putObject(uploadParams, (err, dataUp) => {
       if (err){
-        return res.json({Code: 400, Error: err.stack});
+        return res.json({Code: 500, Error: err.stack});
       }
     }).promise();
     
@@ -220,6 +220,30 @@ app.put('/items/feedback', function(req,res) {
 app.put('/items/itineraries', function(req, res) {
   // Add your code here
   res.json({success: 'put call succeed!', url: req.url, body: req.body});
+});
+
+
+app.put('/items/photo', function(req, res) {
+  
+  const prefix = 'iter'+req.body.iterID+'/';
+  const filename = prefix+Math.random().toString(36).slice(2);
+  
+  var uploadParams = {
+    Bucket: process.env.BUCKETNAME, 
+    Key: filename, 
+    Body: req.body.photo,
+    ContentEncoding: 'base64'
+  };
+    
+  s3.putObject(uploadParams, (err, dataUp) => {
+      
+    if (err)
+      return res.json({Code: 500, Error: err.stack});
+    else
+      return res.json({Code: 200});
+      
+  });
+  
 });
 
 
