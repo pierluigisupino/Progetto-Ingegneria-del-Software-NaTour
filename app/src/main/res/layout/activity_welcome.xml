@@ -205,7 +205,7 @@
         app:layout_constraintTop_toTopOf="@+id/fabTopGuideline"
         app:maxImageSize="28dp"
         app:rippleColor="@color/primary_light"
-        app:srcCompat="@drawable/ic_google"
+        app:srcCompat="@drawable/googleg_standard_color_18"
         app:tint="@null" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
