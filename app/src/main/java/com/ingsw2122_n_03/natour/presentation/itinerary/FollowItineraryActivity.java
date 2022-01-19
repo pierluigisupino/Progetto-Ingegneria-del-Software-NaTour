@@ -5,14 +5,17 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -25,6 +28,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -44,13 +48,18 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityFollowItineraryBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.WayPoint;
+import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
+import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
 import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 
@@ -69,12 +78,13 @@ import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class FollowItineraryActivity extends AppCompatActivity implements Marker.OnMarkerClickListener {
+public class FollowItineraryActivity extends BaseActivity implements Marker.OnMarkerClickListener {
 
     private ActivityFollowItineraryBinding binding;
 
@@ -96,14 +106,21 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
     private boolean wantsDirections = false;
     private boolean isFirstRun = true;
 
+
     private ProgressBar progressBar;
     private LinearProgressIndicator bottomProgressBar;
     private CardView cardView;
 
+    private ConstraintLayout mainLayout;
     private LinearLayout directionsLayout;
     private LinearLayout toStartLayout;
 
     private SwitchMaterial toStartSwitchMaterial;
+    private FloatingActionButton addPhotoButton;
+
+    private final ArrayList<byte[]> imagesBytes = new ArrayList<>();
+    private ActivityResultLauncher<Intent> getImages;
+    private ImageUtilities imageUtilities;
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -141,8 +158,10 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
         SwitchMaterial directionsSwitchMaterial = binding.directionsSwitch;
         toStartSwitchMaterial = binding.toStartSwitch;
 
+        mainLayout = binding.mainLayout;
         directionsLayout = binding.directionsLayout;
         toStartLayout = binding.toStartLayout;
+        addPhotoButton = binding.addPhotoButton;
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
@@ -186,6 +205,52 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 bottomProgressBar.setVisibility(View.INVISIBLE);
             }
         });
+
+        addPhotoButton.setOnClickListener(view1 -> {
+            Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent1.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+            getImages.launch(intent1);
+        });
+
+        getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        bottomProgressBar.setVisibility(View.VISIBLE);
+                        new Thread(() -> {
+                            Intent data = result.getData();
+                            assert data != null;
+                            ClipData clipData = data.getClipData();
+                            if (clipData != null) {
+                                for (int i = 0; i < clipData.getItemCount(); i++) {
+                                    Uri imageUri = clipData.getItemAt(i).getUri();
+
+                                    try {
+                                        if (!imageUtilities.isImageUnsafe(this, imageUri)) {
+                                            byte[] photoByte = imageUtilities.getBytes(this, imageUri);
+                                            imagesBytes.add(photoByte);
+
+                                            // TODO: 19/01/2022 aggiornare itinerario con la nuova foto / aggiungere la nuova foto nella mappa
+
+                                        } else {
+                                            onFail(getString(R.string.explicit_content));
+                                        }
+
+                                    } catch (IOException | InterruptedException e) {
+                                        onFail(getString(R.string.generic_error));
+                                        break;
+                                    }
+
+                                }
+                            }
+                            cardView.post(() -> {
+                                bottomProgressBar.setVisibility(View.INVISIBLE);
+                            });
+                        }).start();
+
+                    }else if(result.getResultCode() != Activity.RESULT_CANCELED){
+                        onFail(getString(R.string.generic_error));
+                    }
+                });
 
         setupMap();
     }
@@ -469,5 +534,29 @@ public class FollowItineraryActivity extends AppCompatActivity implements Marker
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
+    }
+
+    @Override
+    public void onSuccess(String msg) {
+
+        runOnUiThread(() -> {
+            bottomProgressBar.setVisibility(View.INVISIBLE);
+            Snackbar.make(mainLayout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.success))
+                    .show();
+        });
+
+    }
+
+    @Override
+    public void onFail(String msg) {
+
+        runOnUiThread(() -> {
+            bottomProgressBar.setVisibility(View.INVISIBLE);
+            Snackbar.make(mainLayout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.error))
+                    .show();
+        });
+
     }
 }
