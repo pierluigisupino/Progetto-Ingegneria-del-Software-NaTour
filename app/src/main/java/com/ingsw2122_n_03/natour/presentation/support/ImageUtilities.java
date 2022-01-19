@@ -4,24 +4,25 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.widget.Toast;
 
 import androidx.exifinterface.media.ExifInterface;
 
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.predictions.models.LabelType;
 import com.amplifyframework.predictions.result.IdentifyLabelsResult;
+import com.ingsw2122_n_03.natour.R;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class ImageUtilities {
 
-    private static boolean isUnsafe;
 
     public byte[] getBytes(Context context, Uri imageUri) throws IOException {
 
@@ -58,22 +59,24 @@ public class ImageUtilities {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
+        AtomicBoolean isUnsafe = new AtomicBoolean(true);
 
         Amplify.Predictions.identify(
                 LabelType.MODERATION_LABELS,
                 bitmap,
                 result -> {
                     IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
-                    isUnsafe = identifyResult.isUnsafeContent();
+                    isUnsafe.set(identifyResult.isUnsafeContent());
                     countDownLatch.countDown();
                 },
                 error -> {
-                    Log.e("NaTour", "predictions errore"); // TODO: 18/01/2022 da gestire
+                    Toast.makeText(context, context.getString(R.string.image_check_error), Toast.LENGTH_SHORT).show();
                     countDownLatch.countDown();
                 }
         );
+
         countDownLatch.await();
-        return isUnsafe;
+        return isUnsafe.get();
     }
 
 }
