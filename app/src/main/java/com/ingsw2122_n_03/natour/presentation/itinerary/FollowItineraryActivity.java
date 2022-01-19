@@ -126,7 +126,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                         ImageUtilities imageUtilities = new ImageUtilities();
 
                         try {
-                            if (!imageUtilities.isImageUnsafe(this, imageUri)) {
+                            if (imageUtilities.isImageSafe(this, imageUri)) {
                                 byte[] photoByte = imageUtilities.getBytes(this, imageUri);
                                 double[] photoPosition = imageUtilities.getImageLocation(photoByte);
                                 if(photoPosition != null) {

@@ -54,19 +54,19 @@ public class ImageUtilities {
 
     }
 
-    public boolean isImageUnsafe(Context context, Uri imageUri) throws InterruptedException, IOException {
+    public boolean isImageSafe(Context context, Uri imageUri) throws InterruptedException, IOException {
 
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        AtomicBoolean isUnsafe = new AtomicBoolean(true);
+        AtomicBoolean isSafe = new AtomicBoolean(false);
 
         Amplify.Predictions.identify(
                 LabelType.MODERATION_LABELS,
                 bitmap,
                 result -> {
                     IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
-                    isUnsafe.set(identifyResult.isUnsafeContent());
+                    isSafe.set(!identifyResult.isUnsafeContent());
                     countDownLatch.countDown();
                 },
                 error -> {
@@ -76,7 +76,8 @@ public class ImageUtilities {
         );
 
         countDownLatch.await();
-        return isUnsafe.get();
+        return isSafe.get();
+
     }
 
 }

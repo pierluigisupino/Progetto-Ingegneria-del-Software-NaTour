@@ -85,7 +85,7 @@ public class AddItineraryFragment3 extends Fragment {
                                     Uri imageUri = clipData.getItemAt(i).getUri();
 
                                     try {
-                                        if(!imageUtilities.isImageUnsafe(requireActivity(), imageUri)) {
+                                        if(imageUtilities.isImageSafe(requireActivity(), imageUri)) {
                                             byte[] photoByte = imageUtilities.getBytes(requireActivity(), imageUri);
                                             imagesBytes.add(photoByte);
                                         }else{
