@@ -13,6 +13,7 @@ import com.ingsw2122_n_03.natour.model.WayPoint;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.LoadingDialog;
 import com.ingsw2122_n_03.natour.presentation.SplashActivity;
+import com.ingsw2122_n_03.natour.presentation.itinerary.FollowItineraryActivity;
 import com.ingsw2122_n_03.natour.presentation.itinerary.ItineraryDetailActivity;
 import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
@@ -36,6 +37,7 @@ public class IterController extends NavigationController {
     private MainFragment mainFragment;
     private AddItineraryActivity addItineraryActivity;
     private ItineraryDetailActivity detailActivity;
+    private FollowItineraryActivity followItineraryActivity;
     private LoadingDialog loadingDialog;
 
     private final ItineraryDaoInterface itineraryDao;
@@ -45,6 +47,7 @@ public class IterController extends NavigationController {
     private final ImageDownloader imageDownloader;
 
     private ArrayList<byte[]> photos = new ArrayList<>();
+    private byte[] uploadingPhoto;
 
     private User currentUser;
     private Itinerary currentIter;
@@ -201,6 +204,7 @@ public class IterController extends NavigationController {
      * PUT ITINERARY
      ***************/
 
+    //TODO FINISH & CHECK
     public void manageFeedback(int newDurationMinutes, int newDifficultyLevel) {
 
         boolean toUpdate = false;
@@ -287,18 +291,37 @@ public class IterController extends NavigationController {
 
 
     public void onRetrievePhotosError() {
-
+        //TODO: SHOW ERROR ON DETAIL ACTIVITY
     }
 
 
     public void onRetrievePhotosEnd() {
-
+        //TODO: SHOW ON DETAIL ACTIVITY MESSAGE <NO MORE PHOTO FOUND>
     }
 
 
     /**************
      * PHOTO UTILS
      *************/
+
+    public void uploadPhoto(byte[] photo) {
+        uploadingPhoto = photo;
+        imageUploader.uploadImage(currentIter.getIterId(), photo);
+    }
+
+
+    public void onUploadPhotoFinish(boolean success) {
+
+        if(success){
+            photos.add(0, uploadingPhoto);
+            detailActivity.updateImages(photos);
+            followItineraryActivity.onPhotoUploadFinish(true);
+        }else{
+            followItineraryActivity.onPhotoUploadFinish(false);
+        }
+
+    }
+
 
     public HashMap<byte[], GeoPoint> calculatePhotoPosition() {
 
@@ -342,6 +365,10 @@ public class IterController extends NavigationController {
 
     public void setItineraryDetailActivity(ItineraryDetailActivity detailActivity) {
         this.detailActivity = detailActivity;
+    }
+
+    public void setFollowItineraryActivity(FollowItineraryActivity followItineraryActivity) {
+        this.followItineraryActivity = followItineraryActivity;
     }
 
 }

@@ -1,21 +1,10 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -40,6 +29,15 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -57,7 +55,6 @@ import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityFollowItineraryBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.WayPoint;
-import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
@@ -88,11 +85,13 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
     private ActivityFollowItineraryBinding binding;
 
-    private Itinerary itinerary;
     private MapView map;
     private RoadManager roadManager;
-    private Polyline myPolyline;
+    private Polyline roadOverlay;
     private MyLocationNewOverlay myLocationNewOverlay;
+
+    private Itinerary itinerary;
+    private final HashMap<byte[], GeoPoint> uploadingPhoto = new HashMap<>();
 
     private final ArrayList<GeoPoint> itineraryWaypoints = new ArrayList<>();
 
@@ -106,7 +105,6 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     private boolean wantsDirections = false;
     private boolean isFirstRun = true;
 
-
     private ProgressBar progressBar;
     private LinearProgressIndicator bottomProgressBar;
     private CardView cardView;
@@ -116,11 +114,46 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     private LinearLayout toStartLayout;
 
     private SwitchMaterial toStartSwitchMaterial;
-    private FloatingActionButton addPhotoButton;
 
-    private final ArrayList<byte[]> imagesBytes = new ArrayList<>();
-    private ActivityResultLauncher<Intent> getImages;
-    private ImageUtilities imageUtilities;
+    private final ActivityResultLauncher<Intent> getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    bottomProgressBar.setVisibility(View.VISIBLE);
+                    new Thread(() -> {
+
+                        assert result.getData() != null;
+                        Uri imageUri = result.getData().getData();
+                        ImageUtilities imageUtilities = new ImageUtilities();
+
+                        try {
+                            if (!imageUtilities.isImageUnsafe(this, imageUri)) {
+                                byte[] photoByte = imageUtilities.getBytes(this, imageUri);
+                                double[] photoPosition = imageUtilities.getImageLocation(photoByte);
+                                if(photoPosition != null) {
+                                    GeoPoint photoPoint = new GeoPoint(photoPosition[0], photoPosition[1]);
+                                    if(isPositionsCorrect(photoPoint)){
+                                        uploadingPhoto.put(photoByte, photoPoint);
+                                        iterController.uploadPhoto(photoByte);
+                                    }else{
+                                        onFail(getString(R.string.photo_position_error));
+                                    }
+                                }
+
+                            }else {
+                                onFail(getString(R.string.explicit_content));
+                            }
+
+                        } catch (IOException | InterruptedException e) {
+                            onFail(getString(R.string.generic_error));
+                        }
+
+                    }).start();
+
+                }else if(result.getResultCode() != Activity.RESULT_CANCELED){
+                    onFail(getString(R.string.generic_error));
+                }
+            });
+
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -132,21 +165,22 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                 }
             });
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Context ctx = getApplicationContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        Context context = getApplicationContext();
+        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
 
         binding = ActivityFollowItineraryBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
         iterController = IterController.getInstance();
+        iterController.setFollowItineraryActivity(this);
 
-        Intent intent = getIntent();
-        itinerary = (Itinerary) intent.getSerializableExtra("itinerary");
+        itinerary = (Itinerary) getIntent().getSerializableExtra("itinerary");
 
         MaterialToolbar materialToolbar = binding.topAppBar;
         materialToolbar.setTitle(itinerary.getName());
@@ -161,7 +195,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         mainLayout = binding.mainLayout;
         directionsLayout = binding.directionsLayout;
         toStartLayout = binding.toStartLayout;
-        addPhotoButton = binding.addPhotoButton;
+        FloatingActionButton addPhotoButton = binding.addPhotoButton;
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
@@ -200,7 +234,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
             }else{
                 wantsRoadsToStart = false;
                 map.getController().animateTo(itineraryWaypoints.get(0));
-                map.getOverlays().remove(myPolyline);
+                map.getOverlays().remove(roadOverlay);
                 map.getOverlays().removeAll(myRoadIndications);
                 bottomProgressBar.setVisibility(View.INVISIBLE);
             }
@@ -212,47 +246,8 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
             getImages.launch(intent1);
         });
 
-        getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        bottomProgressBar.setVisibility(View.VISIBLE);
-                        new Thread(() -> {
-                            Intent data = result.getData();
-                            assert data != null;
-                            ClipData clipData = data.getClipData();
-                            if (clipData != null) {
-                                for (int i = 0; i < clipData.getItemCount(); i++) {
-                                    Uri imageUri = clipData.getItemAt(i).getUri();
-
-                                    try {
-                                        if (!imageUtilities.isImageUnsafe(this, imageUri)) {
-                                            byte[] photoByte = imageUtilities.getBytes(this, imageUri);
-                                            imagesBytes.add(photoByte);
-
-                                            // TODO: 19/01/2022 aggiornare itinerario con la nuova foto / aggiungere la nuova foto nella mappa
-
-                                        } else {
-                                            onFail(getString(R.string.explicit_content));
-                                        }
-
-                                    } catch (IOException | InterruptedException e) {
-                                        onFail(getString(R.string.generic_error));
-                                        break;
-                                    }
-
-                                }
-                            }
-                            cardView.post(() -> {
-                                bottomProgressBar.setVisibility(View.INVISIBLE);
-                            });
-                        }).start();
-
-                    }else if(result.getResultCode() != Activity.RESULT_CANCELED){
-                        onFail(getString(R.string.generic_error));
-                    }
-                });
-
         setupMap();
+
     }
 
     @Override
@@ -276,6 +271,11 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         if(map != null) map.onPause();
     }
 
+
+    /***********
+     * MAP UTILS
+     ***********/
+
     @SuppressLint("MissingPermission")
     private void setupMap() {
 
@@ -291,7 +291,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
 
         addWayPoints();
-        addPointOfInterests();
+        addPointOfInterests(iterController.calculatePhotoPosition());
         makeRoads();
 
         GpsMyLocationProvider gpsMyLocationProvider = new GpsMyLocationProvider(this);
@@ -329,6 +329,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         }
     }
 
+
     private void addMarker(WayPoint wayPoint, boolean isFirst){
         NaTourMarker marker = new NaTourMarker(map);
 
@@ -340,44 +341,78 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
             marker.setTitle(getString(R.string.end_point_text));
         }
 
-
-
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
         marker.setPosition(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
-
-
 
         map.getOverlays().add(marker);
         map.invalidate();
 
         NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
         this.itineraryWaypoints.add(naTourWaypoint);
+
     }
 
-    private void addPointOfInterests(){
 
-        HashMap<byte[], GeoPoint> imagesPosition = iterController.calculatePhotoPosition();
+    private void addPointOfInterests(HashMap<byte[], GeoPoint> imagesPosition){
 
-        if(imagesPosition.size() > 0) {
-            for (Map.Entry<byte[], GeoPoint> entry : imagesPosition.entrySet()) {
+        for (Map.Entry<byte[], GeoPoint> entry : imagesPosition.entrySet()) {
 
-                byte[] imageBytes = entry.getKey();
+            byte[] imageBytes = entry.getKey();
 
-                BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-                PointOfInterest pointOfInterest = new PointOfInterest(map, imageBytes);
+            BitmapDrawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+            PointOfInterest pointOfInterest = new PointOfInterest(map, imageBytes);
 
-                pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
-                pointOfInterest.setImage(drawable);
+            pointOfInterest.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_image, null));
+            pointOfInterest.setImage(drawable);
 
-                pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-                pointOfInterest.setPosition(entry.getValue());
+            pointOfInterest.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+            pointOfInterest.setPosition(entry.getValue());
 
-                pointOfInterest.setOnMarkerClickListener(this);
+            pointOfInterest.setOnMarkerClickListener(this);
 
-                map.getOverlays().add(pointOfInterest);
-            }
+            map.getOverlays().add(pointOfInterest);
+
         }
+
     }
+
+
+    @Override
+    public boolean onMarkerClick(Marker marker, MapView mapView) {
+
+        if(marker instanceof PointOfInterest)
+            showImage(marker.getImage());
+
+        return true;
+
+    }
+
+
+    public void showImage(Drawable drawable) {
+
+        Dialog builder = new Dialog(this);
+        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        builder.getWindow().setBackgroundDrawable(
+                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        builder.setOnDismissListener(dialogInterface -> {
+
+        });
+
+        ImageView imageView = new ImageView(this);
+        imageView.setImageDrawable(drawable);
+        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        builder.show();
+
+    }
+
+
+    /*****************
+     * ROAD DIRECTIONS
+     *****************/
 
     private void makeRoads(){
 
@@ -404,6 +439,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         }).start();
     }
 
+
     private void makeIndicationToStartingPoint(){
         new Thread(()-> {
             ArrayList<GeoPoint> myRoadWaypoints = new ArrayList<>(itineraryWaypoints);
@@ -412,12 +448,12 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                 myRoadWaypoints.add(0, myLocationNewOverlay.getMyLocation());
 
             Road road = roadManager.getRoad(myRoadWaypoints);
-            myPolyline = RoadManager.buildRoadOverlay(road);
-            myPolyline.getOutlinePaint().setStrokeWidth(8);
+            roadOverlay = RoadManager.buildRoadOverlay(road);
+            roadOverlay.getOutlinePaint().setStrokeWidth(8);
 
             if(wantsRoadsToStart) {
                 makeDirections(road, myRoadIndications);
-                map.getOverlays().add(myPolyline);
+                map.getOverlays().add(roadOverlay);
             }
 
             cardView.post(() -> {
@@ -433,52 +469,27 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         }).start();
     }
 
-    public void makeDirections(Road road, ArrayList<Marker> indications){
+
+    public void makeDirections(Road road, ArrayList<Marker> indications) {
 
         indications.clear();
 
-        for (int i = 0; i < road.mNodes.size(); i++){
+        for (int i = 0; i < road.mNodes.size(); i++) {
             RoadNode node = road.mNodes.get(i);
             Marker nodeMarker = new Marker(map);
             nodeMarker.setPosition(node.mLocation);
             nodeMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_directions, null));
-            nodeMarker.setTitle("Step "+i);
+            nodeMarker.setTitle("Step " + i);
             nodeMarker.setSnippet(node.mInstructions);
             nodeMarker.setSubDescription(Road.getLengthDurationText(this, node.mLength, node.mDuration));
             indications.add(nodeMarker);
         }
     }
 
-    @Override
-    public boolean onMarkerClick(Marker marker, MapView mapView) {
 
-        if(marker instanceof PointOfInterest)
-            showImage(marker.getImage());
-
-        return true;
-    }
-
-
-    public void showImage(Drawable drawable) {
-
-        Dialog builder = new Dialog(this);
-        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        builder.getWindow().setBackgroundDrawable(
-                new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        builder.setOnDismissListener(dialogInterface -> {
-
-        });
-
-        ImageView imageView = new ImageView(this);
-        imageView.setImageDrawable(drawable);
-        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        builder.show();
-
-    }
+    /**************
+     * PERMISSIONS
+     *************/
 
     private void checkSettingsAndStartLocationUpdates(){
         LocationSettingsRequest request = new LocationSettingsRequest.Builder().addLocationRequest(LocationRequest.create()).build();
@@ -536,6 +547,35 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         }
     }
 
+
+    /*********************
+     * PHOTO UPLOAD UTILS
+     *******************/
+
+    public boolean isPositionsCorrect(GeoPoint position) {
+
+        if(itineraryWaypoints.size() > 1)
+            return roadOverlay.isCloseTo(position, 100, map);
+
+        else
+            return !(position.distanceToAsDouble(itineraryWaypoints.get(0)) > 10000);
+
+    }
+
+
+    public void onPhotoUploadFinish(boolean success) {
+        if(success){
+            addPointOfInterests(uploadingPhoto);
+            onSuccess(getString(R.string.photo_added_success));
+        }else
+            onFail(getString(R.string.photo_upload_failed));
+    }
+
+
+    /****************
+     * BASE ACTIVITY
+     ***************/
+
     @Override
     public void onSuccess(String msg) {
 
@@ -545,7 +585,6 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                     .setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.success))
                     .show();
         });
-
     }
 
     @Override
@@ -557,6 +596,6 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                     .setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.error))
                     .show();
         });
-
     }
+
 }

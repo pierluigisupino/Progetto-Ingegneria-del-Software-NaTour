@@ -160,6 +160,9 @@
     <string name="directions_text">Directions</string>
     <string name="to_start_text">To Start Point</string>
     <string name="info_directions_text">Click on the dots for directions</string>
+    <string name="photo_position_error">Cannot insert the photo because is too away from the Itinerary.</string>
+    <string name="photo_upload_success">Success to upload the photo.</string>
+    <string name="photo_upload_error">Failed to upload the photo, try again.</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

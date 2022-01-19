@@ -65,5 +65,39 @@ public class ImageUploader {
 
     }
 
+    //TODO CODE REVIEW
+    @SuppressLint("NewApi")
+    public void uploadImage(int iterID, byte[] photo) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("iterID", iterID);
+            jsonObject.put("photo", Base64.getEncoder().encodeToString(photo));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/items/photo")
+                .addBody(jsonObject.toString().getBytes())
+                .build();
+
+        Amplify.API.put(
+                options,
+                response-> {
+
+                    try {
+                        controller.onUploadPhotoFinish(response.getData().asJSONObject().getInt("Code") == 200);
+                    } catch (JSONException e) {
+                        controller.onUploadPhotoFinish(false);
+                    }
+
+                },
+                error -> controller.onUploadPhotoFinish(false)
+        );
+
+    }
+
 
 }

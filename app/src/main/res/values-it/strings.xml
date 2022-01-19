@@ -161,6 +161,9 @@
     <string name="directions_text">Indicazioni</string>
     <string name="to_start_text">Al Punto Iniziale</string>
     <string name="info_directions_text">Clicca sui punti per le indicazioni</string>
+    <string name="photo_position_error">Non puoi inserire la foto perchè è troppo lontana dall\'itinerario</string>
+    <string name="photo_upload_success">Foto condivisa</string>
+    <string name="photo_upload_error">Errore durante l\'upload, riprova.</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Apri il menu\' di navigazione</string>
