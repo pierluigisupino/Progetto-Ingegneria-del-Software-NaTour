@@ -131,7 +131,8 @@
             android:clickable="true"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/textViewFeedBack1" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewFeedBack1"
+            android:focusable="true" />
     </LinearLayout>
 
     <Button

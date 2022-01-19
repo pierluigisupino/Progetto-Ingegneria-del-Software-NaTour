@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;

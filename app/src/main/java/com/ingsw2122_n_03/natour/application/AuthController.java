@@ -75,10 +75,9 @@ public final class AuthController extends NavigationController {
 
         Activity callingActivity = null;
 
-        if(signInActivity != null){
-            signInActivity.onSuccess(signInActivity.getResources().getString(R.string.login_success));
+        if(signInActivity != null)
             callingActivity = signInActivity;
-        }
+
 
         if(verifyAccountActivity != null) {
             if(callingActivity != null) callingActivity.finish();
@@ -178,8 +177,7 @@ public final class AuthController extends NavigationController {
     }
 
     public void onLoginWithGoogleSuccess(){
-        welcomeActivity.onSuccess(welcomeActivity.getResources().getString(R.string.login_success));
-        goToActivityAndFinish(welcomeActivity, MainActivity.class);
+        goToActivityAndFinish(welcomeActivity, SplashActivity.class);
     }
 
     public void onLoginWithGoogleFailure() {
@@ -244,7 +242,6 @@ public final class AuthController extends NavigationController {
     public void signOut(){ authInterface.signOut(); }
 
     public void onSignOutSuccess(){
-        mainActivity.onSuccess(mainActivity.getResources().getString(R.string.logout_success));
         goToActivityAndFinish(mainActivity, WelcomeActivity.class);
     }
 
