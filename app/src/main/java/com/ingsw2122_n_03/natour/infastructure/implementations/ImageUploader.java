@@ -21,67 +21,52 @@ public class ImageUploader {
     }
 
 
-    @SuppressLint("NewApi")
     public void uploadImages(int iterID, ArrayList<byte[]> imagesBytes) {
 
-        int photoCount = imagesBytes.size();
-        String[] encodedStrings = new String[photoCount];
+        for(int i=0; i<imagesBytes.size(); ++i) {
 
-        for(int i=0; i<photoCount; ++i) {
-            encodedStrings[i] = Base64.getEncoder().encodeToString(imagesBytes.get(i));
-        }
+            int finalI = i+1;
+            RestOptions options;
 
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("iterID", iterID);
-            jsonObject.put("photo_count", photoCount);
-            for(int i=0; i<photoCount; ++i) {
-                jsonObject.put("photo"+i, encodedStrings[i]);
+            try {
+                options = getUploadingOptions(iterID, imagesBytes.get(i));
+            } catch (JSONException e) {
+                controller.onUploadPhotoError();
+                return;
             }
-        } catch (JSONException e) {
-            controller.onItineraryInsertFinish(false);
-            return;
+
+            Amplify.API.put(
+                    options,
+                    response-> {
+
+                        try {
+                            if(response.getData().asJSONObject().getInt("Code") == 200)
+                                controller.onItineraryInsertFinish(finalI);
+                            else
+                                controller.onUploadPhotoError();
+                        } catch (JSONException e) {
+                            controller.onUploadPhotoError();
+                        }
+
+                    },
+                    error -> controller.onUploadPhotoError()
+            );
+
         }
-
-        RestOptions options = RestOptions.builder()
-                .addPath("/items/photos")
-                .addBody(jsonObject.toString().getBytes())
-                .build();
-
-        Amplify.API.post(
-                options,
-                response-> {
-
-                    try {
-                        controller.onItineraryInsertFinish(response.getData().asJSONObject().getInt("Code") == 200);
-                    } catch (JSONException e) {
-                        controller.onItineraryInsertFinish(false);
-                    }
-
-                },
-                error -> controller.onItineraryInsertFinish(false)
-        );
 
     }
 
-    //TODO CODE REVIEW
-    @SuppressLint("NewApi")
+
     public void uploadImage(int iterID, byte[] photo) {
 
-        JSONObject jsonObject = new JSONObject();
+        RestOptions options;
+
         try {
-            jsonObject.put("iterID", iterID);
-            jsonObject.put("photo", Base64.getEncoder().encodeToString(photo));
+            options = getUploadingOptions(iterID, photo);
         } catch (JSONException e) {
-            e.printStackTrace();
+            controller.onUploadPhotoFinish(false);
             return;
         }
-
-        RestOptions options = RestOptions.builder()
-                .addPath("/items/photo")
-                .addBody(jsonObject.toString().getBytes())
-                .build();
 
         Amplify.API.put(
                 options,
@@ -96,6 +81,22 @@ public class ImageUploader {
                 },
                 error -> controller.onUploadPhotoFinish(false)
         );
+
+    }
+
+    @SuppressLint("NewApi")
+    private RestOptions getUploadingOptions(int iterID, byte[] photo) throws JSONException {
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("iterID", iterID);
+        jsonObject.put("photo", Base64.getEncoder().encodeToString(photo));
+
+
+        return RestOptions.builder()
+                .addPath("/items/photo")
+                .addBody(jsonObject.toString().getBytes())
+                .build();
 
     }
 

@@ -171,10 +171,17 @@ public class IterController extends NavigationController {
 
         currentIter.setIterId(iterID);
 
+        loadingDialog.dismissDialog();
+        itineraries.add(0, currentIter);
+        mainFragment.updateItineraries(itineraries);
+        addItineraryActivity.finish();
+
         if(photos.isEmpty())
-            onItineraryInsertFinish(true);
-        else
+            onItineraryInsertFinish(photos.size());
+        else{
+            //MAKE SNACKBAR IN MAIN ACTIVITY
             imageUploader.uploadImages(iterID, photos);
+        }
 
     }
 
@@ -185,18 +192,19 @@ public class IterController extends NavigationController {
     }
 
 
-    public void onItineraryInsertFinish(boolean arePhotosUploaded) {
+    public void onItineraryInsertFinish(int pivot) {
 
-        loadingDialog.dismissDialog();
-        itineraries.add(0, currentIter);
-        mainFragment.updateItineraries(itineraries);
-        addItineraryActivity.finish();
-
-        if(arePhotosUploaded)
+        if(pivot == photos.size()){
+            //DISMISS SNACKBAR
             mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));
-        else
-            mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
+        }
 
+    }
+
+
+    public void onUploadPhotoError() {
+        //DISMISS SNACKBAR
+        mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
     }
 
 
