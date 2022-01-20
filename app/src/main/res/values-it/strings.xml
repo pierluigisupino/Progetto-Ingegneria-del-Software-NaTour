@@ -139,9 +139,9 @@
     <string name="photo_added_success">Foto aggiunte</string>
     <string name="cancel_operation_title">Annullare l\' inserimento?</string>
     <string name="cancel_operation_msgText">Tutti i progressi andranno persi</string>
-    <string name="search">Cerca</string>
+    <string name="search">Cerca…</string>
     <string name="delete_photo_text">Elimina foto</string>
-    <string name="loading_screen_text">Stiamo Salvando il tuo Itinerario.</string>
+    <string name="loading_screen_text">Stiamo Salvando il tuo Itinerario…</string>
     <string name="itinerary_insert_failure">Salvataggio fallito, riprova.</string>
     <string name="itinerary_insert_success">Il tuo itinerario è stato condiviso.</string>
 
@@ -161,7 +161,7 @@
     <string name="directions_text">Indicazioni</string>
     <string name="to_start_text">Al Punto Iniziale</string>
     <string name="info_directions_text">Clicca sui punti per le indicazioni</string>
-    <string name="photo_position_error">Non puoi inserire la foto perchè è troppo lontana dall\'itinerario</string>
+    <string name="photo_position_error">Non puoi inserire la foto, è troppo distante dall\'itinerario</string>
     <string name="photo_upload_success">Foto condivisa</string>
     <string name="photo_upload_error">Errore durante l\'upload, riprova.</string>
 
