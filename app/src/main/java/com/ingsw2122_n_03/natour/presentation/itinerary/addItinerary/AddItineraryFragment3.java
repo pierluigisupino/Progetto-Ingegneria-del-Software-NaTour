@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
@@ -128,11 +129,33 @@ public class AddItineraryFragment3 extends Fragment {
         setAdapter();
     }
 
+    @SuppressLint("SetTextI18n")
     private void setAdapter(){
-        recyclerView.setAdapter(new ImageAdapter(countImageTextView, imagesBytes));
+
+        ImageAdapter imageAdapter = new ImageAdapter(imagesBytes);
+        recyclerView.setAdapter(imageAdapter);
+
+        if(imageAdapter.getItemCount() == 0)
+            countImageTextView.setText(getString(R.string.no_photo_selected_text));
+        else
+            countImageTextView.setText(imageAdapter.getItemCount()+getString(R.string.photo_selected_text));
+
+        RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if(imageAdapter.getItemCount() == 0)
+                    countImageTextView.setText(getString(R.string.no_photo_selected_text));
+                else
+                    countImageTextView.setText(imageAdapter.getItemCount()+getString(R.string.photo_selected_text));
+            }
+        };
+
+        imageAdapter.registerAdapterDataObserver(observer);
+
     }
 
-    public ArrayList<byte[]> getImagesBytes(){ return this.imagesBytes; }
 
+    public ArrayList<byte[]> getImagesBytes(){ return this.imagesBytes; }
 
 }
