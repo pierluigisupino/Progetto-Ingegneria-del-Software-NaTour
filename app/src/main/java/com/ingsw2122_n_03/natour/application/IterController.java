@@ -144,7 +144,7 @@ public class IterController extends NavigationController {
 
     public void insertItinerary(String name, String description, int difficulty, LocalTime duration, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
 
-        loadingDialog = new LoadingDialog(addItineraryActivity);
+        loadingDialog = new LoadingDialog(addItineraryActivity, addItineraryActivity.getString(R.string.loading_text_add_itinerary));
         loadingDialog.startLoading();
 
         this.photos = imagesBytes;
@@ -179,7 +179,7 @@ public class IterController extends NavigationController {
         if(photos.isEmpty())
             onItineraryInsertFinish(photos.size());
         else{
-            mainActivity.onWaitingBackgroundTask("Aspetta"); // TODO: 1/20/22  string
+            mainActivity.onWaitingBackgroundTask("WAIT"); // TODO: 1/20/22  string
             imageUploader.uploadImages(iterID, photos);
         }
 
@@ -208,54 +208,64 @@ public class IterController extends NavigationController {
     }
 
 
-    /****************
-     * PUT ITINERARY
-     ***************/
+    /***************
+     * PUT FEEDBACK
+     **************/
 
 
-    public void manageFeedback(int newDurationMinutes, int newDifficultyLevel) {
+    public void manageFeedback(int newDurationMinutes, int newDifficulty) {
 
         boolean toUpdate = false;
-        Itinerary itineraryToUpdate = new Itinerary(currentIter);
+        updatedIter = new Itinerary(currentIter);
 
-        int currAccumulatedMinutes = currentIter.getDuration().getMinuteOfHour()+(currentIter.getDuration().getHourOfDay()*60);
-        if(currAccumulatedMinutes != newDurationMinutes) {
+        int currDurationMinutes = currentIter.getDuration().getMinuteOfHour();
+        currDurationMinutes += (currentIter.getDuration().getHourOfDay()*60);
+
+        if(currDurationMinutes != newDurationMinutes) {
+
             toUpdate = true;
-            int averageAccumulatedMinutes = (newDurationMinutes + currAccumulatedMinutes) / 2;
-            int averageHours = (averageAccumulatedMinutes / 60);
-            int averageMinutes = averageAccumulatedMinutes - (60 * averageHours);
+            int averageMinutes = (newDurationMinutes + currDurationMinutes) / 2;
+            int averageHours = (averageMinutes / 60);
+            averageMinutes -= (60 * averageHours);
             LocalTime averageDuration = new LocalTime(averageHours, averageMinutes);
-            itineraryToUpdate.setDuration(averageDuration);
+            updatedIter.setDuration(averageDuration);
+
         }
 
-        int currDifficultyLevel = currentIter.getDifficulty();
-        if(currDifficultyLevel != newDifficultyLevel) {
+        int currDifficulty = currentIter.getDifficulty();
+
+        if(currDifficulty != newDifficulty) {
+
             toUpdate = true;
-            int averageDifficultyLevel = (currDifficultyLevel+newDifficultyLevel)/2;
-            itineraryToUpdate.setDifficulty(averageDifficultyLevel);
+            int averageDifficultyLevel = (currDifficulty + newDifficulty)/2;
+            updatedIter.setDifficulty(averageDifficultyLevel);
+
         }
 
         if(toUpdate){
-            this.updatedIter = itineraryToUpdate;
             itineraryDao.putItineraryFromFeedback(updatedIter);
-        }else{
-            detailActivity.onSuccess("NOTHING TO DO BRUH");
-        }
+            loadingDialog = new LoadingDialog(detailActivity, detailActivity.getString(R.string.loading_text_update_itinerary));
+            loadingDialog.startLoading();
+        } else
+            detailActivity.onSuccess(detailActivity.getString(R.string.feedback_no_changes));
 
     }
+
 
     public void onItineraryUpdateSuccess() {
         itineraries.remove(currentIter);
         itineraries.add(updatedIter);
-        //UPDATE ITER IN DETAIL ACTIVITY
-        //STOP LOADING
-        detailActivity.onSuccess("THANKS FOR FEEDBACK BRO");
+        detailActivity.updateItineraryView(updatedIter);
+        loadingDialog.dismissDialog();
+        detailActivity.onSuccess(detailActivity.getString(R.string.feedback_success_text));
     }
 
+
     public void onItineraryUpdateError() {
-        //STOP LOADING
-        detailActivity.onFail("SORRY BRO, SHITTY PROBLEMS");
+        loadingDialog.dismissDialog();
+        detailActivity.onFail(detailActivity.getString(R.string.generic_error));
     }
+
 
     /*************
      * NAVIGATION

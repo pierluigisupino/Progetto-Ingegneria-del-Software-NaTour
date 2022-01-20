@@ -1,36 +1,20 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -50,8 +34,14 @@ public class ItineraryDetailActivity extends BaseActivity {
     private ConstraintLayout layout;
     private RecyclerView imagesRecyclerView;
 
+    private TextView textViewName;
+    private TextView textViewDescription;
+    private TextView textViewDuration;
+    private TextView textViewDifficulty;
+
     private Itinerary itinerary;
     private final ArrayList<byte[]> images = new ArrayList<>();
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -73,11 +63,11 @@ public class ItineraryDetailActivity extends BaseActivity {
         layout = binding.layout;
         MaterialToolbar materialToolbar = binding.topAppBar;
 
-        TextView textViewName = binding.textViewName;
+        textViewName = binding.textViewName;
         TextView textViewCreator = binding.textViewCreator;
-        TextView textViewDescription = binding.textViewDescription;
-        TextView textViewDuration = binding.textViewDuration;
-        TextView textViewDifficulty = binding.textViewDifficulty;
+        textViewDescription = binding.textViewDescription;
+        textViewDuration = binding.textViewDuration;
+        textViewDifficulty = binding.textViewDifficulty;
 
         TextView textViewFeedback = binding.textViewFeedBack2;
 
@@ -106,7 +96,8 @@ public class ItineraryDetailActivity extends BaseActivity {
 
 
         // TODO: 19/01/2022 da dove prendiamo la lista di bitmap ?
-        //imagesRecyclerView.setAdapter(new ImageAdapter(List<byte[]> bitmaps));
+        //TODO: CI STA GIA, MA PERCHE SETTARE QUI L'ADAPTER? (VEDI SOTTO)
+        //imagesRecyclerView.setAdapter(new ImageAdapter(images));
 
         textViewFeedback.setOnClickListener(v -> {
             Bundle args = new Bundle();
@@ -152,6 +143,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
     }
 
+
     @Override
     public void onSuccess(String msg) {
 
@@ -160,6 +152,7 @@ public class ItineraryDetailActivity extends BaseActivity {
                 .show();
 
     }
+
 
     @Override
     public void onFail(String msg) {
@@ -170,14 +163,33 @@ public class ItineraryDetailActivity extends BaseActivity {
 
     }
 
+
     private void setAdapter(){
 
     }
+
 
     public void updateImages(ArrayList<byte[]> images) {
         this.images.addAll(images);
         setAdapter();
     }
 
+
+    public void updateItineraryView(Itinerary updatedItinerary) {
+
+        itinerary = updatedItinerary;
+
+        textViewName.setText(itinerary.getName());
+
+        String description = itinerary.getDescription();
+        if(description != null)
+            textViewDescription.setText(description);
+        else
+            textViewDescription.setVisibility(View.GONE);
+
+        textViewDuration.setText(itinerary.getDuration().getHourOfDay() + "h & " + itinerary.getDuration().getMinuteOfHour() + "m");
+        textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[itinerary.getDifficulty()]);
+
+    }
 
 }

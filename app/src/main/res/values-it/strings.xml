@@ -134,14 +134,14 @@
         <item>con Attrezzatura Alpina (EEA)</item>
     </string-array>
 
-    <string name="no_photo_selected_text">Nessuna foto selezionata</string>
+    <string name="no_photo_selected_text">Nessuna foto</string>
     <string name="photo_selected_text">/5 foto selezionate</string>
     <string name="photo_added_success">Foto aggiunte</string>
     <string name="cancel_operation_title">Annullare l\' inserimento?</string>
     <string name="cancel_operation_msgText">Tutti i progressi andranno persi</string>
     <string name="search">Cerca…</string>
     <string name="delete_photo_text">Elimina foto</string>
-    <string name="loading_screen_text">Stiamo Salvando il tuo Itinerario…</string>
+    <string name="loading_text_add_itinerary">Stiamo Salvando il tuo Itinerario…</string>
     <string name="itinerary_insert_failure">Salvataggio fallito, riprova.</string>
     <string name="itinerary_insert_success">Il tuo itinerario è stato condiviso.</string>
 
@@ -154,6 +154,9 @@
     <string name="feedback2"><u>Mandaci un feedback</u></string>
     <string name="difficulty_feedback">Qual è per te la difficoltà?</string>
     <string name="duration_feedback">In quanto tempo hai finito?</string>
+    <string name="feedback_no_changes">Nessun riscontro rilevato</string>
+    <string name="loading_text_update_itinerary">Aggiornamento dell\'itinerario…</string>
+    <string name="feedback_success_text">Grazie per il tuo feedback</string>
 
     <!--FOLLOW ITINERARY-->
     <string name="start_point_text">Punto iniziale</string>
