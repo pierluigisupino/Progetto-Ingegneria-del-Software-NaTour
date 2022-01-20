@@ -2,9 +2,14 @@ package com.ingsw2122_n_03.natour.presentation.main;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -33,6 +38,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private IterController iterController;
 
     private DrawerLayout drawerLayout;
+    private Snackbar waitingSnackbar;
 
     private final MainFragment mainFragment = new MainFragment();
     private final MessagesFragment messagesFragment = new MessagesFragment();
@@ -67,6 +73,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         MaterialToolbar materialToolbar = binding.toolbar;
         drawerLayout = binding.layout;
         NavigationView navigationView = binding.navView;
+
+        waitingSnackbar = Snackbar.make(drawerLayout, null, Snackbar.LENGTH_INDEFINITE)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
+
+        ViewGroup viewGroup = (ViewGroup) waitingSnackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text).getParent();
+        ProgressBar progressBar = new ProgressBar(this);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+        viewGroup.addView(progressBar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, materialToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -118,6 +132,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .setBackgroundTint(ContextCompat.getColor(this, R.color.error))
                 .show();
 
+    }
+
+    public void onWaitingBackgroundTask(String msg) {
+
+        waitingSnackbar.setText(msg);
+        waitingSnackbar.show();
+
+    }
+
+    public void onBackgroundTaskEnd() {
+        waitingSnackbar.dismiss();
     }
 
     @SuppressLint("NonConstantResourceId")

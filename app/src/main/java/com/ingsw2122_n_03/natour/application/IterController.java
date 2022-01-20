@@ -179,7 +179,7 @@ public class IterController extends NavigationController {
         if(photos.isEmpty())
             onItineraryInsertFinish(photos.size());
         else{
-            //MAKE SNACKBAR IN MAIN ACTIVITY
+            mainActivity.onWaitingBackgroundTask("Aspetta"); // TODO: 1/20/22  string
             imageUploader.uploadImages(iterID, photos);
         }
 
@@ -195,7 +195,7 @@ public class IterController extends NavigationController {
     public void onItineraryInsertFinish(int pivot) {
 
         if(pivot == photos.size()){
-            //DISMISS SNACKBAR
+            mainActivity.onBackgroundTaskEnd();
             mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));
         }
 
