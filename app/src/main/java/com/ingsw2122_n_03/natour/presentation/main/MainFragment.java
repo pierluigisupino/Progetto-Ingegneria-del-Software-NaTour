@@ -30,10 +30,10 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private RecyclerView recyclerView;
     private SwipeRefreshLayout pullToRefresh;
     private Parcelable recyclerViewState;
-    private TextView textView1;
-    private TextView textView2;
-    private ImageView imageView;
-    private TextView textView3;
+    private TextView textViewError1;
+    private TextView textViewError2;
+    private ImageView imageViewError;
+    private TextView textViewError3;
 
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
@@ -64,10 +64,10 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
         super.onViewCreated(view, savedInstanceState);
 
-        textView1 = binding.error1;
-        textView2 = binding.error2;
-        imageView = binding.error3;
-        textView3 = binding.error4;
+        textViewError1 = binding.error1;
+        textViewError2 = binding.error2;
+        imageViewError = binding.error3;
+        textViewError3 = binding.error4;
 
         pullToRefresh = binding.update;
         recyclerView = binding.itinerary;
@@ -78,10 +78,10 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
         else{
             recyclerView.setVisibility(View.GONE);
-            textView1.setVisibility(View.VISIBLE);
-            textView2.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
-            textView3.setVisibility(View.VISIBLE);
+            textViewError1.setVisibility(View.VISIBLE);
+            textViewError2.setVisibility(View.VISIBLE);
+            imageViewError.setVisibility(View.VISIBLE);
+            textViewError3.setVisibility(View.VISIBLE);
         }
 
 
@@ -131,10 +131,10 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     public void onSuccess(){
         requireActivity().runOnUiThread(()-> {
             recyclerView.setVisibility(View.VISIBLE);
-            textView1.setVisibility(View.GONE);
-            textView2.setVisibility(View.GONE);
-            imageView.setVisibility(View.GONE);
-            textView3.setVisibility(View.GONE);
+            textViewError1.setVisibility(View.GONE);
+            textViewError2.setVisibility(View.GONE);
+            imageViewError.setVisibility(View.GONE);
+            textViewError3.setVisibility(View.GONE);
             pullToRefresh.setRefreshing(false);
         });
     }
@@ -142,10 +142,10 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     public void onError(){
         requireActivity().runOnUiThread(()-> {
             recyclerView.setVisibility(View.GONE);
-            textView1.setVisibility(View.VISIBLE);
-            textView2.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
-            textView3.setVisibility(View.VISIBLE);
+            textViewError1.setVisibility(View.VISIBLE);
+            textViewError2.setVisibility(View.VISIBLE);
+            imageViewError.setVisibility(View.VISIBLE);
+            textViewError3.setVisibility(View.VISIBLE);
             pullToRefresh.setRefreshing(false);
         });
     }

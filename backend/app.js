@@ -1,3 +1,4 @@
+
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
@@ -107,9 +108,8 @@ app.get('/items/photos', function(req, res) {
       }
       
       return res.json({Result: response});
-      
+    
     } 
-              
   });
   
 });
@@ -167,35 +167,6 @@ app.post('/items/itineraries', function(req, res) {
 });
 
 
-app.post('/items/photos', async function(req, res) {
-  
-  const count = req.body.photo_count;
-  const prefix = 'iter'+req.body.iterID+'/';
-  
-  for(var i = 0; i < count; i++){
-    
-    var filename = prefix+Math.random().toString(36).slice(2);
-    var photoBody = 'photo'+i;
-    
-    var uploadParams = {
-      Bucket: process.env.BUCKETNAME, 
-      Key: filename, 
-      Body: req.body[photoBody],
-      ContentEncoding: 'base64'
-    };
-    
-    await s3.putObject(uploadParams, (err, dataUp) => {
-      if (err){
-        return res.json({Code: 500, Error: err.stack});
-      }
-    }).promise();
-    
-  }
-    
-  return res.json({Code: 200});
-  
-});
-
 
 /****************************
 * put methods *
@@ -205,21 +176,26 @@ app.put('/items/feedback', function(req,res) {
   
   const client = new Client(clientParams);
   
-  const query = 'UPDATE TABLE ITINERARY SET difficulty ='+req.body.difficulty+', hours ='+req.body.hours+', minutes ='+req.body.minutes+'WHERE iterid ='+req.body.iterid;
+  client.connect();
   
-  client.query(query, (err, suc)=>{
+  const query = 'UPDATE ITINERARY SET difficulty = $1, hours = $2, minutes = $3 WHERE iterid = $4';
+  
+  client.query(query, [req.body.difficulty, req.body.hours, req.body.minutes, req.body.iterid], (err, suc) => {
+    
+    client.end();
+    
     if(err)
       return res.json({Code:500, Error: err.stack});
     else
       return res.json({Code: 200});
+      
   });
   
 });
 
 
 app.put('/items/itineraries', function(req, res) {
-  // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body});
+  //PUT BY ADMIN
 });
 
 
@@ -252,9 +228,8 @@ app.put('/items/photo', function(req, res) {
 ****************************/
 
 
-app.delete('/items', function(req, res) {
-  // Add your code here
-  res.json({success: 'delete call succeed!', url: req.url});
+app.delete('/items/itineraries', function(req, res) {
+  //DELETE ITINERARY ON RDS & DIRECTORY FROM S3
 });
 
 

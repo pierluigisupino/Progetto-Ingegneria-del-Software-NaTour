@@ -12,7 +12,7 @@ public class Itinerary implements Serializable {
 
     private        String          name;
     private        String          description;
-    private        String          difficulty;
+    private        int             difficulty;
     private        LocalTime       duration;
     private final  WayPoint        startPoint;
     private        List<WayPoint>  wayPoints = new ArrayList<>();
@@ -25,9 +25,9 @@ public class Itinerary implements Serializable {
     /**CONSTRUCTOR
      */
 
-    public Itinerary(String name, String difficulty, LocalTime duration, WayPoint startPoint, User creator, Date shareDate) {
+    public Itinerary(String name, int difficulty, LocalTime duration, WayPoint startPoint, User creator, Date shareDate) {
         this.name = name;
-        this.difficulty = difficulty;
+        setDifficulty(difficulty);
         this.duration = duration;
         this.startPoint = startPoint;
         this.creator = creator;
@@ -66,11 +66,13 @@ public class Itinerary implements Serializable {
     }
 
 
-    public String getDifficulty() {
+    public int getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(int difficulty) {
+        if(difficulty < 0)
+            throw new IllegalArgumentException();
         this.difficulty = difficulty;
     }
 
@@ -121,20 +123,5 @@ public class Itinerary implements Serializable {
 
     public Date getShareDate() { return shareDate; }
 
-
-    public int getDifficultyLevel() {
-
-        if(difficulty.contains("(T)"))
-            return 0;
-
-        if(difficulty.contains("(E)"))
-            return 1;
-
-        if(difficulty.contains("(EE)"))
-            return 2;
-
-        return 3;
-
-    }
 
 }

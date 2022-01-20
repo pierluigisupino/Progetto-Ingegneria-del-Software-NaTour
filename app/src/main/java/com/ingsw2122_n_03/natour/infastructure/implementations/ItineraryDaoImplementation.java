@@ -227,7 +227,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 if(!jsonObject.isNull("description"))
                     description = jsonObject.getString("description");
                 
-                String difficulty = jsonObject.getString("difficulty");
+                int difficulty = jsonObject.getInt("difficulty");
 
                 LocalTime duration = new LocalTime(jsonObject.getInt("hours"),jsonObject.getInt("minutes"));
 

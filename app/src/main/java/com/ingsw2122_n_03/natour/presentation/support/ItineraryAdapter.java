@@ -111,17 +111,17 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
         }
 
         @SuppressLint("ClickableViewAccessibility")
-        public void setDifficultyText(String difficulty) {
-            if(difficulty.equals(context.getResources().getStringArray(R.array.difficulties)[0])) {
+        public void setDifficultyText(int difficulty) {
+            if(difficulty == 0) {
                 difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
-            }else if(difficulty.equals(context.getResources().getStringArray(R.array.difficulties)[1])) {
+            }else if(difficulty == 1) {
                 difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty2.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
-            } else if(difficulty.equals(context.getResources().getStringArray(R.array.difficulties)[2])) {
+            } else if(difficulty == 2) {
                 difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty2.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty3.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
-            }else if(difficulty.equals(context.getResources().getStringArray(R.array.difficulties)[3])) {
+            }else if(difficulty == 3) {
                 difficulty1.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty2.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);
                 difficulty3.setColorFilter(ContextCompat.getColor(context, R.color.error), android.graphics.PorterDuff.Mode.SRC_IN);

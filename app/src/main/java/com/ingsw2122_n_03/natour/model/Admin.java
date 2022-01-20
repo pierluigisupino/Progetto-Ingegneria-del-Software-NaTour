@@ -6,9 +6,9 @@ public class Admin extends User implements Serializable {
 
     /**
      * CONSTRUCTORS
-     *
-     * @param uid
+     * @param uid adminID
      */
+
     public Admin(String uid) {
         super(uid);
     }

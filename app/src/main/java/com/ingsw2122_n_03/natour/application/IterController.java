@@ -142,7 +142,7 @@ public class IterController extends NavigationController {
      * POST ITINERARY
      ****************/
 
-    public void insertItinerary(String name, String description, String difficulty, LocalTime duration, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
+    public void insertItinerary(String name, String description, int difficulty, LocalTime duration, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
 
         loadingDialog = new LoadingDialog(addItineraryActivity);
         loadingDialog.startLoading();
@@ -212,7 +212,7 @@ public class IterController extends NavigationController {
      * PUT ITINERARY
      ***************/
 
-    //TODO FINISH & CHECK
+
     public void manageFeedback(int newDurationMinutes, int newDifficultyLevel) {
 
         boolean toUpdate = false;
@@ -228,17 +228,16 @@ public class IterController extends NavigationController {
             itineraryToUpdate.setDuration(averageDuration);
         }
 
-        int currDifficultyLevel = currentIter.getDifficultyLevel();
+        int currDifficultyLevel = currentIter.getDifficulty();
         if(currDifficultyLevel != newDifficultyLevel) {
             toUpdate = true;
             int averageDifficultyLevel = (currDifficultyLevel+newDifficultyLevel)/2;
-            itineraryToUpdate.setDifficulty(detailActivity.getResources().getStringArray(R.array.difficulties)[averageDifficultyLevel]);
+            itineraryToUpdate.setDifficulty(averageDifficultyLevel);
         }
 
         if(toUpdate){
             this.updatedIter = itineraryToUpdate;
             itineraryDao.putItineraryFromFeedback(updatedIter);
-            //START LOADING
         }else{
             detailActivity.onSuccess("NOTHING TO DO BRUH");
         }

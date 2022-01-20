@@ -46,7 +46,7 @@ public class FeedBackDialog extends AppCompatDialogFragment {
 
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(view.getContext(), R.array.difficulties, R.layout.difficult_list_item);
         autoCompleteTextView.setAdapter(arrayAdapter);
-        autoCompleteTextView.setText(arrayAdapter.getItem(itinerary.getDifficultyLevel()).toString(), false);
+        autoCompleteTextView.setText(arrayAdapter.getItem(itinerary.getDifficulty()).toString(), false);
 
 
         builder.setView(view)
@@ -55,7 +55,7 @@ public class FeedBackDialog extends AppCompatDialogFragment {
                     int hours = timePicker.getHour();
                     int minutes = timePicker.getMinute();
                     if(hours !=0 || minutes !=0)
-                        IterController.getInstance().manageFeedback((hours*60)+minutes, arrayAdapter.getPosition(autoCompleteTextView.getText()));
+                        IterController.getInstance().manageFeedback((hours*60)+minutes, arrayAdapter.getPosition(autoCompleteTextView.getText().toString()));
                     else
                         Toast.makeText(requireContext(), getString(R.string.duration_error), Toast.LENGTH_SHORT).show();
 

@@ -98,7 +98,7 @@ public class ItineraryDetailActivity extends BaseActivity {
             textViewDescription.setVisibility(View.GONE);
 
         textViewDuration.setText(itinerary.getDuration().getHourOfDay() + "h & " + itinerary.getDuration().getMinuteOfHour() + "m");
-        textViewDifficulty.setText(itinerary.getDifficulty());
+        textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[itinerary.getDifficulty()]);
 
         startButton.setOnClickListener(v -> {
             controller.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary);

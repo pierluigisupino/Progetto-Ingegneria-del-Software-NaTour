@@ -43,7 +43,7 @@ public class AddItineraryActivity extends BaseActivity {
 
     private String name;
     private String description;
-    private String difficulty;
+    private int difficulty;
     private LocalTime duration;
     private ArrayList <byte[]> imagesBytes = new ArrayList<>();
     private ArrayList<GeoPoint> waypoints = new ArrayList<>();

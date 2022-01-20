@@ -26,6 +26,7 @@ public class AddItineraryFragment2 extends Fragment {
     private final AddItineraryActivity addItineraryActivity;
     private View view;
     private AutoCompleteTextView difficultyTextView;
+    private ArrayAdapter<CharSequence> arrayAdapter;
 
     private String difficulty;
     private int hours = 1;
@@ -69,7 +70,7 @@ public class AddItineraryFragment2 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(view.getContext(), R.array.difficulties, R.layout.difficult_list_item);
+        arrayAdapter = ArrayAdapter.createFromResource(view.getContext(), R.array.difficulties, R.layout.difficult_list_item);
         difficultyTextView.setAdapter(arrayAdapter);
         if(difficulty == null) {
             difficulty = arrayAdapter.getItem(0).toString();
@@ -88,9 +89,9 @@ public class AddItineraryFragment2 extends Fragment {
     }
 
 
-    public String getDifficulty(){
+    public int getDifficulty(){
         difficulty = difficultyTextView.getText().toString();
-        return difficulty;
+        return arrayAdapter.getPosition(difficulty);
     }
 
 

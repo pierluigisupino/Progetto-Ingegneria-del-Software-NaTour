@@ -2,8 +2,8 @@ CREATE TABLE ITINERARY(
 
   iterID SERIAL PRIMARY KEY,
   iterName VARCHAR(30) NOT NULL,
-  description VARCHAR(100),
-  difficulty VARCHAR(50) NOT NULL,
+  description VARCHAR(150),
+  difficulty SMALLINT NOT NULL,
   hours SMALLINT NOT NULL,
   minutes SMALLINT NOT NULL,
   startPoint POINT NOT NULL,
@@ -13,10 +13,10 @@ CREATE TABLE ITINERARY(
   updateDate DATE,
 
   CONSTRAINT check_iterName CHECK
-  (LENGTH(iterName) > 0),
+  (LENGTH(iterName) > 3),
 
   CONSTRAINT check_difficulty CHECK
-  (LENGTH(difficulty) > 0),
+  (difficulty >= 0),
 
   CONSTRAINT check_creatorID CHECK
   (LENGTH(creatorID) > 0),
