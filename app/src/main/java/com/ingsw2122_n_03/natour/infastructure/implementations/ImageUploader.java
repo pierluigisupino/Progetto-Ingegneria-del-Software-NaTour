@@ -9,9 +9,12 @@ import com.ingsw2122_n_03.natour.application.IterController;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ImageUploader {
 
@@ -22,49 +25,63 @@ public class ImageUploader {
     }
 
 
+    @SuppressLint("NewApi")
     public void uploadImages(int iterID, ArrayList<byte[]> imagesBytes) {
 
-        AtomicInteger pivot = new AtomicInteger(0);
+        RestOptions options;
 
-        for(int i=0; i<imagesBytes.size(); ++i) {
+        try {
+            options = getUploadingOptions(iterID, imagesBytes.size());
+        } catch (JSONException e) {
+            controller.onUploadPhotosError();
+            return;
+        }
 
-            RestOptions options;
+        Amplify.API.put(
+                options,
+                response -> {
 
-            try {
-                options = getUploadingOptions(iterID, imagesBytes.get(i));
-            } catch (JSONException e) {
-                controller.onUploadPhotoError();
-                return;
-            }
-
-            Amplify.API.put(
-                    options,
-                    response-> {
+                    for(int i = 0; i < imagesBytes.size(); ++i){
 
                         try {
-                            if(response.getData().asJSONObject().getInt("Code") == 200)
-                                controller.onItineraryInsertFinish(pivot.getAndIncrement());
-                            else
-                                controller.onUploadPhotoError();
-                        } catch (JSONException e) {
-                            controller.onUploadPhotoError();
+
+                            JSONObject result = response.getData().asJSONObject().getJSONObject("Urls");
+                            String urlString = result.getString("url"+i);
+                            URL url = new URL(urlString);
+                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                            connection.setDoOutput(true);
+                            connection.setRequestMethod("PUT");
+                            OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+                            out.write(Base64.getEncoder().encodeToString(imagesBytes.get(i)));
+                            out.close();
+                            if(connection.getResponseCode() != 200){
+                                controller.onUploadPhotosError();
+                            }
+
+                        } catch (IOException | JSONException e) {
+                            controller.onUploadPhotosError();
                         }
 
-                    },
-                    error -> controller.onUploadPhotoError()
-            );
+                    }
 
-        }
+                    controller.onItineraryInsertFinish();
+
+                },
+
+                error -> controller.onUploadPhotosError()
+        );
 
     }
 
 
+
+    @SuppressLint("NewApi")
     public void uploadImage(int iterID, byte[] photo) {
 
         RestOptions options;
 
         try {
-            options = getUploadingOptions(iterID, photo);
+            options = getUploadingOptions(iterID, 1);
         } catch (JSONException e) {
             controller.onUploadPhotoFinish(false);
             return;
@@ -75,24 +92,41 @@ public class ImageUploader {
                 response-> {
 
                     try {
-                        controller.onUploadPhotoFinish(response.getData().asJSONObject().getInt("Code") == 200);
-                    } catch (JSONException e) {
+
+                        JSONObject result = response.getData().asJSONObject().getJSONObject("Urls");
+                        String urlString = result.getString("url0");
+                        URL url = new URL(urlString);
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.setDoOutput(true);
+                        connection.setRequestMethod("PUT");
+                        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+                        out.write(Base64.getEncoder().encodeToString(photo));
+                        out.close();
+                        if(connection.getResponseCode() != 200){
+                            controller.onUploadPhotoFinish(false);
+                        }
+
+                    } catch (IOException | JSONException e) {
                         controller.onUploadPhotoFinish(false);
                     }
 
+                    controller.onUploadPhotoFinish(true);
+
                 },
+
                 error -> controller.onUploadPhotoFinish(false)
         );
 
     }
 
+
     @SuppressLint("NewApi")
-    private RestOptions getUploadingOptions(int iterID, byte[] photo) throws JSONException {
+    private RestOptions getUploadingOptions(int iterID, int photoCount) throws JSONException {
 
         JSONObject jsonObject = new JSONObject();
 
         jsonObject.put("iterID", iterID);
-        jsonObject.put("photo", Base64.getEncoder().encodeToString(photo));
+        jsonObject.put("photoCount", photoCount);
 
 
         return RestOptions.builder()

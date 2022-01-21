@@ -177,7 +177,7 @@ public class IterController extends NavigationController {
         addItineraryActivity.finish();
 
         if(photos.isEmpty())
-            onItineraryInsertFinish(photos.size());
+            onItineraryInsertFinish();
         else{
             mainActivity.onWaitingBackgroundTask(mainActivity.getString(R.string.photo_upload_wait));
             imageUploader.uploadImages(iterID, photos);
@@ -192,18 +192,14 @@ public class IterController extends NavigationController {
     }
 
 
-    public void onItineraryInsertFinish(int pivot) {
-
-        if(pivot == photos.size()){
-            mainActivity.onBackgroundTaskEnd();
-            mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));
-        }
-
+    public void onItineraryInsertFinish() {
+        mainActivity.onBackgroundTaskEnd();
+        mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_insert_success));
     }
 
 
-    public void onUploadPhotoError() {
-        //DISMISS SNACKBAR
+    public void onUploadPhotosError() {
+        mainActivity.onBackgroundTaskEnd();
         mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
     }
 
@@ -222,24 +218,20 @@ public class IterController extends NavigationController {
         currDurationMinutes += (currentIter.getDuration().getHourOfDay()*60);
 
         if(currDurationMinutes != newDurationMinutes) {
-
             toUpdate = true;
             int averageMinutes = (newDurationMinutes + currDurationMinutes) / 2;
             int averageHours = (averageMinutes / 60);
             averageMinutes -= (60 * averageHours);
             LocalTime averageDuration = new LocalTime(averageHours, averageMinutes);
             updatedIter.setDuration(averageDuration);
-
         }
 
         int currDifficulty = currentIter.getDifficulty();
 
         if(currDifficulty != newDifficulty) {
-
             toUpdate = true;
             int averageDifficultyLevel = (currDifficulty + newDifficulty)/2;
             updatedIter.setDifficulty(averageDifficultyLevel);
-
         }
 
         if(toUpdate){

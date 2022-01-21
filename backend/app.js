@@ -172,6 +172,7 @@ app.post('/items/itineraries', function(req, res) {
 * put methods *
 ****************************/
 
+
 app.put('/items/feedback', function(req,res) {
   
   const client = new Client(clientParams);
@@ -202,23 +203,26 @@ app.put('/items/itineraries', function(req, res) {
 app.put('/items/photo', function(req, res) {
   
   const prefix = 'iter'+req.body.iterID+'/';
-  const filename = prefix+Math.random().toString(36).slice(2);
+  var urls = new Object();
   
-  var uploadParams = {
-    Bucket: process.env.BUCKETNAME, 
-    Key: filename, 
-    Body: req.body.photo,
-    ContentEncoding: 'base64'
-  };
+  for(var i = 0; i < req.body.photoCount; ++i){
     
-  s3.putObject(uploadParams, (err, dataUp) => {
-      
-    if (err)
-      return res.json({Code: 500, Error: err.stack});
-    else
-      return res.json({Code: 200});
-      
-  });
+    var filename = prefix+Math.random().toString(36).slice(2);
+    
+    var uploadParams = {
+      Bucket: process.env.BUCKETNAME,
+      Key: filename
+    };
+    
+    try{
+      urls['url'+i] = s3.getSignedUrl('putObject', uploadParams);
+    }catch(err){
+      return res.json({Error: err.stack});
+    }
+    
+  }
+  
+  return res.json({Urls: urls});
   
 });
 

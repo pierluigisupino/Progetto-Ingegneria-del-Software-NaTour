@@ -140,6 +140,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         });
     }
 
+
     public void onError(){
         requireActivity().runOnUiThread(()-> {
             recyclerView.setVisibility(View.GONE);
