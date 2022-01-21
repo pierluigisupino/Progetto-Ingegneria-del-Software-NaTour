@@ -74,6 +74,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawerLayout = binding.layout;
         NavigationView navigationView = binding.navView;
 
+        waitingSnackbar = Snackbar.make(drawerLayout, "null", Snackbar.LENGTH_INDEFINITE)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
+
         ViewGroup viewGroup = (ViewGroup) waitingSnackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text).getParent();
         ProgressBar progressBar = new ProgressBar(this);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
@@ -134,8 +137,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     public void onWaitingBackgroundTask(String msg) {
-        waitingSnackbar = Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_INDEFINITE)
-                .setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
+        waitingSnackbar.setText(msg);
         waitingSnackbar.show();
     }
 

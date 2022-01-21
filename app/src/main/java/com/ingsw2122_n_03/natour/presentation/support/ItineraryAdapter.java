@@ -129,7 +129,7 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
             }
 
             difficultyLayout.setOnTouchListener((view, motionEvent) -> {
-                Toast.makeText(view.getContext(), difficulty, Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), context.getResources().getStringArray(R.array.difficulties)[difficulty], Toast.LENGTH_SHORT).show();
                 return true;
             });
         }

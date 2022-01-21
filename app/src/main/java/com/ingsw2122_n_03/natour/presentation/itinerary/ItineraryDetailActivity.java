@@ -97,14 +97,15 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         LinearLayoutManager layoutManager =  new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         imagesRecyclerView.setLayoutManager(layoutManager);
+        imagesRecyclerView.setAdapter(new ImageAdapter(images));
 
         imagesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                recyclerViewState = Objects.requireNonNull(recyclerView.getLayoutManager()).onSaveInstanceState();
-                if(newState==RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastCompletelyVisibleItemPosition() == Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1)) {
+                recyclerViewState = layoutManager.onSaveInstanceState();
+                if(newState == RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastCompletelyVisibleItemPosition() == Objects.requireNonNull(imagesRecyclerView.getAdapter()).getItemCount() - 1)) {
                     iterController.retrieveItineraryPhotos();
                 }
             }
@@ -182,9 +183,10 @@ public class ItineraryDetailActivity extends BaseActivity {
 
 
     private void setAdapter(){
-        imagesRecyclerView.setAdapter(new ImageAdapter(images));
-        //IF RECYCLER VIEW STATE != NULL
-        Objects.requireNonNull(imagesRecyclerView.getLayoutManager()).onRestoreInstanceState(recyclerViewState);
+        runOnUiThread(()->{
+            imagesRecyclerView.setAdapter(new ImageAdapter(images));
+            Objects.requireNonNull(imagesRecyclerView.getLayoutManager()).onRestoreInstanceState(recyclerViewState);
+        });
     }
 
 
@@ -197,18 +199,20 @@ public class ItineraryDetailActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     public void updateItineraryViews(Itinerary updatedItinerary) {
 
-        itinerary = updatedItinerary;
+        runOnUiThread(()->{
+            itinerary = updatedItinerary;
 
-        textViewName.setText(itinerary.getName());
+            textViewName.setText(updatedItinerary.getName());
 
-        String description = itinerary.getDescription();
-        if(description != null)
-            textViewDescription.setText(description);
-        else
-            textViewDescription.setVisibility(View.GONE);
+            String description = updatedItinerary.getDescription();
+            if(description != null)
+                textViewDescription.setText(description);
+            else
+                textViewDescription.setVisibility(View.GONE);
 
-        textViewDuration.setText(itinerary.getDuration().getHourOfDay() + "h & " + itinerary.getDuration().getMinuteOfHour() + "m");
-        textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[itinerary.getDifficulty()]);
+            textViewDuration.setText(updatedItinerary.getDuration().getHourOfDay() + "h & " + updatedItinerary.getDuration().getMinuteOfHour() + "m");
+            textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[updatedItinerary.getDifficulty()]);
+        });
 
     }
 
