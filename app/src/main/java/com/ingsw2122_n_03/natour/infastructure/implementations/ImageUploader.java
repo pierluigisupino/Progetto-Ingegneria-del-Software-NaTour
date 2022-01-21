@@ -31,7 +31,7 @@ public class ImageUploader {
         RestOptions options;
 
         try {
-            options = getUploadingOptions(iterID, imagesBytes.size());
+            options = buildUploadingOptions(iterID, imagesBytes.size());
         } catch (JSONException e) {
             controller.onUploadPhotosError();
             return;
@@ -54,14 +54,16 @@ public class ImageUploader {
                             OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
                             out.write(Base64.getEncoder().encodeToString(imagesBytes.get(i)));
                             out.close();
-                            if(connection.getResponseCode() != 200){
+
+                            if(connection.getResponseCode() != 200) {
                                 controller.onUploadPhotosError();
+                                return;
                             }
 
                         } catch (IOException | JSONException e) {
                             controller.onUploadPhotosError();
+                            return;
                         }
-
                     }
 
                     controller.onItineraryInsertFinish();
@@ -81,7 +83,7 @@ public class ImageUploader {
         RestOptions options;
 
         try {
-            options = getUploadingOptions(iterID, 1);
+            options = buildUploadingOptions(iterID, 1);
         } catch (JSONException e) {
             controller.onUploadPhotoFinish(false);
             return;
@@ -102,15 +104,12 @@ public class ImageUploader {
                         OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
                         out.write(Base64.getEncoder().encodeToString(photo));
                         out.close();
-                        if(connection.getResponseCode() != 200){
-                            controller.onUploadPhotoFinish(false);
-                        }
+
+                        controller.onUploadPhotoFinish(connection.getResponseCode() == 200);
 
                     } catch (IOException | JSONException e) {
                         controller.onUploadPhotoFinish(false);
                     }
-
-                    controller.onUploadPhotoFinish(true);
 
                 },
 
@@ -121,7 +120,7 @@ public class ImageUploader {
 
 
     @SuppressLint("NewApi")
-    private RestOptions getUploadingOptions(int iterID, int photoCount) throws JSONException {
+    private RestOptions buildUploadingOptions(int iterID, int photoCount) throws JSONException {
 
         JSONObject jsonObject = new JSONObject();
 

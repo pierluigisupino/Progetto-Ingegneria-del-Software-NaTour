@@ -111,7 +111,8 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     @Override
     public void onDestroy() {
         super.onDestroy();
-        bundle.putSerializable("itineraries", itineraries);
+        if(bundle != null && bundle.containsKey("itineraries"))
+            bundle.putSerializable("itineraries", itineraries);
     }
 
     public void updateItineraries(ArrayList<Itinerary> itineraries) {
