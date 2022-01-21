@@ -1,18 +1,20 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -28,6 +30,7 @@ import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ItineraryDetailActivity extends BaseActivity {
 
@@ -39,8 +42,12 @@ public class ItineraryDetailActivity extends BaseActivity {
     private TextView textViewDuration;
     private TextView textViewDifficulty;
 
+    private Parcelable recyclerViewState;
+
     private Itinerary itinerary;
     private final ArrayList<byte[]> images = new ArrayList<>();
+
+    private IterController iterController;
 
 
     @SuppressLint("SetTextI18n")
@@ -52,12 +59,9 @@ public class ItineraryDetailActivity extends BaseActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        Intent intent = getIntent();
-        itinerary = (Itinerary) intent.getSerializableExtra("itinerary");
+        itinerary = (Itinerary) getIntent().getSerializableExtra("itinerary");
 
-        IterController controller = IterController.getInstance();
-
-        IterController iterController = IterController.getInstance();
+        iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
 
         layout = binding.layout;
@@ -90,14 +94,25 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewDuration.setText(itinerary.getDuration().getHourOfDay() + "h & " + itinerary.getDuration().getMinuteOfHour() + "m");
         textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[itinerary.getDifficulty()]);
 
-        startButton.setOnClickListener(v -> {
-            controller.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary);
+
+        LinearLayoutManager layoutManager =  new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        imagesRecyclerView.setLayoutManager(layoutManager);
+
+        imagesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                recyclerViewState = Objects.requireNonNull(recyclerView.getLayoutManager()).onSaveInstanceState();
+                if(newState==RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastCompletelyVisibleItemPosition() == Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1)) {
+                    iterController.retrieveItineraryPhotos();
+                }
+            }
+
         });
 
 
-        // TODO: 19/01/2022 da dove prendiamo la lista di bitmap ?
-        //TODO: CI STA GIA, MA PERCHE SETTARE QUI L'ADAPTER? (VEDI SOTTO)
-        //imagesRecyclerView.setAdapter(new ImageAdapter(images));
+        startButton.setOnClickListener(v -> iterController.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary));
 
         textViewFeedback.setOnClickListener(v -> {
             Bundle args = new Bundle();
@@ -107,6 +122,8 @@ public class ItineraryDetailActivity extends BaseActivity {
             dialog.show(getSupportFragmentManager(), "FeedbackDialog");
         });
 
+
+        //TODO CURRENT USER
         if(itinerary.getCreator() instanceof Admin){
             editButton.setClickable(true);
             editButton.setVisibility(View.VISIBLE);
@@ -165,7 +182,9 @@ public class ItineraryDetailActivity extends BaseActivity {
 
 
     private void setAdapter(){
-
+        imagesRecyclerView.setAdapter(new ImageAdapter(images));
+        //IF RECYCLER VIEW STATE != NULL
+        Objects.requireNonNull(imagesRecyclerView.getLayoutManager()).onRestoreInstanceState(recyclerViewState);
     }
 
 
@@ -175,7 +194,8 @@ public class ItineraryDetailActivity extends BaseActivity {
     }
 
 
-    public void updateItineraryView(Itinerary updatedItinerary) {
+    @SuppressLint("SetTextI18n")
+    public void updateItineraryViews(Itinerary updatedItinerary) {
 
         itinerary = updatedItinerary;
 

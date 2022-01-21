@@ -255,7 +255,7 @@ public class IterController extends NavigationController {
     public void onItineraryUpdateSuccess() {
         itineraries.remove(currentIter);
         itineraries.add(updatedIter);
-        detailActivity.updateItineraryView(updatedIter);
+        detailActivity.updateItineraryViews(updatedIter);
         loadingDialog.dismissDialog();
         detailActivity.onSuccess(detailActivity.getString(R.string.feedback_success_text));
     }
@@ -291,13 +291,18 @@ public class IterController extends NavigationController {
 
 
     public void onRetrieveUserSuccess() {
-        imageDownloader.downloadImages();
+        retrieveItineraryPhotos();
         goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
     }
 
 
     public void onRetrieveUserError() {
         mainActivity.onFail(mainActivity.getString(R.string.retrieve_itinerary_error));
+    }
+
+
+    public void retrieveItineraryPhotos() {
+        imageDownloader.downloadImages();
     }
 
 

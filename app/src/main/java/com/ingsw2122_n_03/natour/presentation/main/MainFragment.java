@@ -30,6 +30,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private RecyclerView recyclerView;
     private SwipeRefreshLayout pullToRefresh;
     private Parcelable recyclerViewState;
+
     private TextView textViewError1;
     private TextView textViewError2;
     private ImageView imageViewError;
