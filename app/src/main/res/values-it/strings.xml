@@ -143,6 +143,7 @@
     <string name="delete_photo_text">Elimina foto</string>
     <string name="loading_text_add_itinerary">Stiamo Salvando il tuo Itinerario…</string>
     <string name="itinerary_insert_failure">Salvataggio fallito, riprova.</string>
+    <string name="photo_upload_wait">Upload delle foto in corso…</string>
     <string name="itinerary_insert_success">Il tuo itinerario è stato condiviso.</string>
 
 

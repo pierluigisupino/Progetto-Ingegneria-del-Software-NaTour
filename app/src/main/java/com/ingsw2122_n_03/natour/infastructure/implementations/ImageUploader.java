@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ImageUploader {
 
@@ -23,9 +24,10 @@ public class ImageUploader {
 
     public void uploadImages(int iterID, ArrayList<byte[]> imagesBytes) {
 
+        AtomicInteger pivot = new AtomicInteger(0);
+
         for(int i=0; i<imagesBytes.size(); ++i) {
 
-            int finalI = i+1;
             RestOptions options;
 
             try {
@@ -41,7 +43,7 @@ public class ImageUploader {
 
                         try {
                             if(response.getData().asJSONObject().getInt("Code") == 200)
-                                controller.onItineraryInsertFinish(finalI);
+                                controller.onItineraryInsertFinish(pivot.getAndIncrement());
                             else
                                 controller.onUploadPhotoError();
                         } catch (JSONException e) {

@@ -179,7 +179,7 @@ public class IterController extends NavigationController {
         if(photos.isEmpty())
             onItineraryInsertFinish(photos.size());
         else{
-            mainActivity.onWaitingBackgroundTask("WAIT"); // TODO: 1/20/22  string
+            mainActivity.onWaitingBackgroundTask(mainActivity.getString(R.string.photo_upload_wait));
             imageUploader.uploadImages(iterID, photos);
         }
 

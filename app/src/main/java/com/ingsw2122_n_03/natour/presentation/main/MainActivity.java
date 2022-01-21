@@ -2,7 +2,6 @@ package com.ingsw2122_n_03.natour.presentation.main;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -43,6 +42,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private final MainFragment mainFragment = new MainFragment();
     private final MessagesFragment messagesFragment = new MessagesFragment();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +73,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         MaterialToolbar materialToolbar = binding.toolbar;
         drawerLayout = binding.layout;
         NavigationView navigationView = binding.navView;
-
-        waitingSnackbar = Snackbar.make(drawerLayout, null, Snackbar.LENGTH_INDEFINITE)
-                .setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
 
         ViewGroup viewGroup = (ViewGroup) waitingSnackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text).getParent();
         ProgressBar progressBar = new ProgressBar(this);
@@ -125,6 +122,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+
     @Override
     public void onFail(String msg) {
 
@@ -134,16 +132,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+
     public void onWaitingBackgroundTask(String msg) {
-
-        waitingSnackbar.setText(msg);
+        waitingSnackbar = Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_INDEFINITE)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
         waitingSnackbar.show();
-
     }
+
 
     public void onBackgroundTaskEnd() {
         waitingSnackbar.dismiss();
     }
+
 
     @SuppressLint("NonConstantResourceId")
     @Override
