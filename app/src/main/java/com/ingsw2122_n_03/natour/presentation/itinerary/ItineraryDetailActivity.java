@@ -80,7 +80,10 @@ public class ItineraryDetailActivity extends BaseActivity {
         FloatingActionButton cancelEditButton = binding.cancelEditButton;
         FloatingActionButton editButton = binding.editButton;
 
-        materialToolbar.setNavigationOnClickListener(v -> finish());
+        materialToolbar.setNavigationOnClickListener(v -> {
+            finish();
+            iterController.interruptDownloadSession();
+        });
 
         textViewName.setText(itinerary.getName());
         textViewCreator.setText(getResources().getString(R.string.by_text)+" "+itinerary.getCreator().getName());
@@ -130,7 +133,7 @@ public class ItineraryDetailActivity extends BaseActivity {
             editButton.setVisibility(View.VISIBLE);
         }
 
-        editButton.setOnClickListener(view12 -> {
+        editButton.setOnClickListener(v -> {
 
             if(cancelEditButton.getVisibility() == View.INVISIBLE){
                 cancelEditButton.setClickable(true);
@@ -138,7 +141,7 @@ public class ItineraryDetailActivity extends BaseActivity {
                 editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success)));
                 editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_done));
 
-                Toast.makeText(view12.getContext(), "Fa la stessa cosa del feed back?", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "Fa la stessa cosa del feed back?", Toast.LENGTH_SHORT).show();
 
             }else{
                 cancelEditButton.setClickable(false);
@@ -146,39 +149,46 @@ public class ItineraryDetailActivity extends BaseActivity {
                 editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.primary)));
                 editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_edit));
 
-                Toast.makeText(view12.getContext(), "Edit salvato", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "Edit salvato", Toast.LENGTH_SHORT).show();
             }
         });
 
-        cancelEditButton.setOnClickListener(view1 -> {
+        cancelEditButton.setOnClickListener(v -> {
             cancelEditButton.setClickable(false);
             cancelEditButton.setVisibility(View.INVISIBLE);
             editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.primary)));
             editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_edit));
 
-            Toast.makeText(view1.getContext(), "Edit cancellato", Toast.LENGTH_SHORT).show();
+            Toast.makeText(v.getContext(), "Edit cancellato", Toast.LENGTH_SHORT).show();
         });
 
     }
 
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        iterController.interruptDownloadSession();
+    }
+
+
+    @Override
     public void onSuccess(String msg) {
-
-        Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success))
-                .show();
-
+        runOnUiThread(()->
+            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success))
+                    .show()
+        );
     }
 
 
     @Override
     public void onFail(String msg) {
-
-        Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
+        runOnUiThread(()->
+                Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.error))
-                .show();
-
+                .show()
+        );
     }
 
 
@@ -190,8 +200,8 @@ public class ItineraryDetailActivity extends BaseActivity {
     }
 
 
-    public void updateImages(ArrayList<byte[]> images) {
-        this.images.addAll(images);
+    public void updateImages(byte[] image) {
+        this.images.add(image);
         setAdapter();
     }
 

@@ -67,7 +67,6 @@ app.get('/items/itineraries', function(req, res) {
 app.get('/items/photos', function(req, res) {
   
   const prefix = 'iter'+req.query.iterid+'/';
-  const limitSize = 10000000;
   
   var listParams = {
     Bucket: process.env.BUCKETNAME,
@@ -77,39 +76,37 @@ app.get('/items/photos', function(req, res) {
   };
   
   
-  s3.listObjectsV2(listParams, async function(err, data) {
+  s3.listObjectsV2(listParams, function(err, data) {
     
     if (err)
       return res.json({Error: err.stack});
-    
+      
     else{
       
-      var response = new Object();
-      response.count = 0;
-      var accumulatedSize = 0;
+      var urls = new Object();
+      var lastPhotoKey;
       
-      for(var i = 0; i < data.Contents.length; ++i){
+      for(var i = 0; i < data.KeyCount; ++i) {
         
-        accumulatedSize += data.Contents[i].Size;
-        if(accumulatedSize > limitSize)
-          break;
-        
-        var downloadParams = {
-          Bucket: process.env.BUCKETNAME, 
-          Key: data.Contents[i].Key
+        var getParams = {
+          Bucket: process.env.BUCKETNAME,
+          Key: data.Contents[i].Key,
+          Expires: 60
         };
         
         try{
-          response['photo'+i] = (await (s3.getObject(downloadParams).promise())).Body.toString();
-          response.lastkey = data.Contents[i].Key;
-          response.count++;
-        }catch(error) {}
+          urls['url'+i] = s3.getSignedUrl('getObject', getParams);
+        }catch(err){
+          res.json({Error: err.stack});
+        }
+        
+        lastPhotoKey = data.Contents[i].Key;
         
       }
       
-      return res.json({Result: response});
-    
-    } 
+      return res.json({KeyCount: data.KeyCount, Urls: urls, LastKey: lastPhotoKey});
+      
+    }
   });
   
 });
@@ -207,7 +204,7 @@ app.put('/items/photo', function(req, res) {
   
   for(var i = 0; i < req.body.photoCount; ++i){
     
-    var filename = prefix+Math.random().toString(36).slice(2);
+    var filename = prefix + Math.random().toString(36).slice(2);
     
     var uploadParams = {
       Bucket: process.env.BUCKETNAME,

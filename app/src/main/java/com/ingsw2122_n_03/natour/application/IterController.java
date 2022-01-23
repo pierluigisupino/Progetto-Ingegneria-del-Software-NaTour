@@ -245,9 +245,12 @@ public class IterController extends NavigationController {
 
 
     public void onItineraryUpdateSuccess() {
+        int pos = itineraries.indexOf(currentIter);
         itineraries.remove(currentIter);
-        itineraries.add(updatedIter);
+        currentIter = updatedIter;
+        itineraries.add(pos, updatedIter);
         detailActivity.updateItineraryViews(updatedIter);
+        mainFragment.updateItineraries(itineraries);
         loadingDialog.dismissDialog();
         detailActivity.onSuccess(detailActivity.getString(R.string.feedback_success_text));
     }
@@ -267,7 +270,7 @@ public class IterController extends NavigationController {
 
         currentIter = iter;
         photos.clear();
-        imageDownloader.ResetSession(iter.getIterId());
+        imageDownloader.resetSession(iter.getIterId());
 
         if(iter.getCreator().getName() != null)
             onRetrieveUserSuccess();
@@ -292,25 +295,30 @@ public class IterController extends NavigationController {
         mainActivity.onFail(mainActivity.getString(R.string.retrieve_itinerary_error));
     }
 
-
+    //TODO : SHOW LOADING CIRCLE BAR
     public void retrieveItineraryPhotos() {
         imageDownloader.downloadImages();
     }
 
 
-    public void onRetrievePhotosSuccess(ArrayList<byte[]> images) {
-        photos.addAll(images);
-        detailActivity.updateImages(images);
+    public void onRetrievePhotosSuccess(byte[] image) {
+        photos.add(image);
+        detailActivity.updateImages(image);
     }
 
 
     public void onRetrievePhotosError() {
-        //TODO: SHOW ERROR ON DETAIL ACTIVITY
+        detailActivity.onFail("Failed to retrieve photos");//TODO: SHOW ERROR ON DETAIL ACTIVITY & HIDE LOADING CIRCLE BAR
     }
 
 
     public void onRetrievePhotosEnd() {
-        //TODO: SHOW ON DETAIL ACTIVITY MESSAGE <NO MORE PHOTO FOUND>
+        detailActivity.onSuccess("NO MORE PHOTOS!!!"); //TODO : CREATE STRING RES & HIDE LOADING CIRCLE BAR
+    }
+
+
+    public void interruptDownloadSession(){
+        imageDownloader.interruptSession();
     }
 
 
@@ -328,7 +336,7 @@ public class IterController extends NavigationController {
 
         if(success){
             photos.add(0, uploadingPhoto);
-            detailActivity.updateImages(photos);
+            detailActivity.updateImages(uploadingPhoto);
             followItineraryActivity.onPhotoUploadFinish(true);
         }else{
             followItineraryActivity.onPhotoUploadFinish(false);

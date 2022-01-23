@@ -126,24 +126,21 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                         ImageUtilities imageUtilities = new ImageUtilities();
 
                         try {
-                            if (imageUtilities.isImageSafe(this, imageUri)) {
-                                byte[] photoByte = imageUtilities.getBytes(this, imageUri);
-                                double[] photoPosition = imageUtilities.getImageLocation(photoByte);
-                                if(photoPosition != null) {
-                                    GeoPoint photoPoint = new GeoPoint(photoPosition[0], photoPosition[1]);
-                                    if(isPositionsCorrect(photoPoint)){
-                                        uploadingPhoto.put(photoByte, photoPoint);
-                                        iterController.uploadPhoto(photoByte);
-                                    }else{
-                                        onFail(getString(R.string.photo_position_error));
-                                    }
+
+                            byte[] photoByte = imageUtilities.getBytes(this, imageUri);
+                            double[] photoPosition = imageUtilities.getImageLocation(photoByte);
+                            if(photoPosition != null) {
+                                GeoPoint photoPoint = new GeoPoint(photoPosition[0], photoPosition[1]);
+                                if(isPositionsCorrect(photoPoint)){
+                                    uploadingPhoto.put(photoByte, photoPoint);
+                                    iterController.uploadPhoto(photoByte);
+                                }else{
+                                    onFail(getString(R.string.photo_position_error));
                                 }
+                            }else
+                                iterController.uploadPhoto(photoByte);
 
-                            }else {
-                                onFail(getString(R.string.explicit_content));
-                            }
-
-                        } catch (IOException | InterruptedException e) {
+                        } catch (IOException e) {
                             onFail(getString(R.string.generic_error));
                         }
 
@@ -241,6 +238,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         });
 
         addPhotoButton.setOnClickListener(view1 -> {
+            uploadingPhoto.clear();
             Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent1.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
             getImages.launch(intent1);
@@ -565,7 +563,8 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
     public void onPhotoUploadFinish(boolean success) {
         if(success){
-            addPointOfInterests(uploadingPhoto);
+            if(!uploadingPhoto.isEmpty())
+                addPointOfInterests(uploadingPhoto);
             onSuccess(getString(R.string.photo_added_success));
         }else
             onFail(getString(R.string.photo_upload_failed));

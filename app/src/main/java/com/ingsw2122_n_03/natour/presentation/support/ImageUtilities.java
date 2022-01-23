@@ -1,24 +1,14 @@
 package com.ingsw2122_n_03.natour.presentation.support;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.widget.Toast;
 
 import androidx.exifinterface.media.ExifInterface;
-
-import com.amplifyframework.core.Amplify;
-import com.amplifyframework.predictions.models.LabelType;
-import com.amplifyframework.predictions.result.IdentifyLabelsResult;
-import com.ingsw2122_n_03.natour.R;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class ImageUtilities {
@@ -29,13 +19,13 @@ public class ImageUtilities {
         InputStream iStream = context.getContentResolver().openInputStream(imageUri);
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 
-        byte[] buffer = new byte[1024];
         int len;
+        byte[] buffer = new byte[1024];
+        while ((len = iStream.read(buffer)) != -1) { byteBuffer.write(buffer, 0, len); }
+        byteBuffer.close();
 
-        while ((len = iStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
-        }
         return byteBuffer.toByteArray();
+
     }
 
 
@@ -51,32 +41,6 @@ public class ImageUtilities {
         } catch (IOException ignored) { }
 
         return latLong;
-
-    }
-
-    public boolean isImageSafe(Context context, Uri imageUri) throws InterruptedException, IOException {
-
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
-
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        AtomicBoolean isSafe = new AtomicBoolean(false);
-
-        Amplify.Predictions.identify(
-                LabelType.MODERATION_LABELS,
-                bitmap,
-                result -> {
-                    IdentifyLabelsResult identifyResult = (IdentifyLabelsResult) result;
-                    isSafe.set(!identifyResult.isUnsafeContent());
-                    countDownLatch.countDown();
-                },
-                error -> {
-                    Toast.makeText(context, context.getString(R.string.image_check_error), Toast.LENGTH_SHORT).show();
-                    countDownLatch.countDown();
-                }
-        );
-
-        countDownLatch.await();
-        return isSafe.get();
 
     }
 
