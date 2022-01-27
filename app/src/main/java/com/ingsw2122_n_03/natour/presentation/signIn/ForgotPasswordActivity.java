@@ -12,6 +12,7 @@ import android.widget.Button;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -55,6 +56,9 @@ public class ForgotPasswordActivity extends BaseActivity {
 
         continueButton = binding.continueButton;
         progressBar = binding.progressBar;
+
+        LottieAnimationView lottieAnimationView = binding.forgotPasswordAnimation;
+        lottieAnimationView.setMaxFrame(85);
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.FragmentMainBinding;
 import com.ingsw2122_n_03.natour.model.Itinerary;
@@ -33,7 +34,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
     private TextView textViewError1;
     private TextView textViewError2;
-    private ImageView imageViewError;
+    private LottieAnimationView lottieAnimationView;
     private TextView textViewError3;
 
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
@@ -67,11 +68,13 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
         textViewError1 = binding.error1;
         textViewError2 = binding.error2;
-        imageViewError = binding.error3;
         textViewError3 = binding.error4;
 
         pullToRefresh = binding.update;
         recyclerView = binding.itinerary;
+
+        lottieAnimationView = binding.errorAnimation;
+        lottieAnimationView.setMaxFrame(70);
 
         bundle = getArguments();
 
@@ -81,7 +84,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             recyclerView.setVisibility(View.GONE);
             textViewError1.setVisibility(View.VISIBLE);
             textViewError2.setVisibility(View.VISIBLE);
-            imageViewError.setVisibility(View.VISIBLE);
+            lottieAnimationView.setVisibility(View.VISIBLE);
             textViewError3.setVisibility(View.VISIBLE);
         }
 
@@ -135,7 +138,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             recyclerView.setVisibility(View.VISIBLE);
             textViewError1.setVisibility(View.GONE);
             textViewError2.setVisibility(View.GONE);
-            imageViewError.setVisibility(View.GONE);
+            lottieAnimationView.setVisibility(View.GONE);
             textViewError3.setVisibility(View.GONE);
             pullToRefresh.setRefreshing(false);
         });
@@ -147,7 +150,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             recyclerView.setVisibility(View.GONE);
             textViewError1.setVisibility(View.VISIBLE);
             textViewError2.setVisibility(View.VISIBLE);
-            imageViewError.setVisibility(View.VISIBLE);
+            lottieAnimationView.setVisibility(View.VISIBLE);
             textViewError3.setVisibility(View.VISIBLE);
             pullToRefresh.setRefreshing(false);
         });

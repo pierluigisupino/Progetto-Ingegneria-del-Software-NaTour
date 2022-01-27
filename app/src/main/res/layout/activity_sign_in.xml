@@ -163,8 +163,8 @@
         app:layout_constraintTop_toTopOf="@+id/buttonGuideline"
         tools:ignore="DuplicateSpeakableTextCheck" />
 
-    <ImageView
-        android:id="@+id/login_page_image"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/signInAnimation"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/welcome_page_image_description"
@@ -175,7 +175,9 @@
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/imageBottomGuideline"
         app:layout_constraintTop_toTopOf="@+id/imageTopGuideline"
-        app:srcCompat="@drawable/ic_login_screen" />
+        app:lottie_rawRes="@raw/animation_explore"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"/>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"

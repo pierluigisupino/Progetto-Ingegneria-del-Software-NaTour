@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -67,6 +68,9 @@ public class SignInActivity extends BaseActivity {
 
         signInButton = binding.signInButton;
         progressBar = binding.progressBar;
+
+        LottieAnimationView lottieAnimationView = binding.signInAnimation;
+        lottieAnimationView.setMaxFrame(85);
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 

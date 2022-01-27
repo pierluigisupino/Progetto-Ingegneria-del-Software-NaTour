@@ -65,13 +65,14 @@
                 android:textColor="@color/error"
                 android:visibility="gone"/>
 
-            <ImageView
-                android:id="@+id/error3"
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/errorAnimation"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                app:layout_constraintDimensionRatio="1.44"
-                app:srcCompat="@drawable/ic_generic_error_screen"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:lottie_rawRes="@raw/animation_error"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"/>
 
             <TextView
                 android:id="@+id/error4"

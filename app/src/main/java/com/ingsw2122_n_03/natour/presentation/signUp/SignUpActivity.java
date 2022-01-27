@@ -1,9 +1,11 @@
 package com.ingsw2122_n_03.natour.presentation.signUp;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -70,6 +73,9 @@ public class SignUpActivity extends BaseActivity {
 
         registerButton = binding.registerButton;
         progressBar = binding.progressBar;
+
+        LottieAnimationView lottieAnimationView = binding.signUpAnimation;
+        lottieAnimationView.setMaxFrame(85);
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
