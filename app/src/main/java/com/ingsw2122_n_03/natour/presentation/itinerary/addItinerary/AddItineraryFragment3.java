@@ -73,7 +73,7 @@ public class AddItineraryFragment3 extends Fragment {
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 int position = parent.getChildAdapterPosition(view);
                 int spanCount = 2;
-                int spacing = 20;//spazio tra gli items
+                int spacing = 30;//spazio tra gli items
 
                 if (position >= 0) {
                     int column = position % spanCount;
