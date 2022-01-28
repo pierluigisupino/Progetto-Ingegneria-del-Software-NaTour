@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,8 +65,34 @@ public class AddItineraryFragment3 extends Fragment {
         countImageTextView = binding.photoTextView2;
         Button selectPhotoButton = binding.selectPhotoButton;
         recyclerView = binding.image;
-        LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager =  new GridLayoutManager(addItineraryActivity, 2);
         recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                int position = parent.getChildAdapterPosition(view);
+                int spanCount = 2;
+                int spacing = 20;//spazio tra gli items
+
+                if (position >= 0) {
+                    int column = position % spanCount;
+
+                    outRect.left = spacing - column * spacing / spanCount;
+                    outRect.right = (column + 1) * spacing / spanCount;
+
+                    if (position < spanCount) {
+                        outRect.top = spacing;
+                    }
+                    outRect.bottom = spacing;
+                } else {
+                    outRect.left = 0;
+                    outRect.right = 0;
+                    outRect.top = 0;
+                    outRect.bottom = 0;
+                }
+            }
+        });
 
         imageUtilities = new ImageUtilities();
 
@@ -126,7 +154,7 @@ public class AddItineraryFragment3 extends Fragment {
     @SuppressLint("SetTextI18n")
     private void setAdapter(){
 
-        ImageAdapter imageAdapter = new ImageAdapter(imagesBytes);
+        ImageAdapter imageAdapter = new ImageAdapter(imagesBytes, true);
         recyclerView.setAdapter(imageAdapter);
 
         if(imageAdapter.getItemCount() == 0)

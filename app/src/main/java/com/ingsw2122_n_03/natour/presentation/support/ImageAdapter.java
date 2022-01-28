@@ -18,9 +18,11 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
     private final List<byte[]> bytes;
+    private boolean wantsToDelete;
 
-    public ImageAdapter(List<byte[]> bitmaps) {
+    public ImageAdapter(List<byte[]> bitmaps, Boolean wantsToDelete) {
         this.bytes = bitmaps;
+        this.wantsToDelete = wantsToDelete;
     }
 
     @NonNull
@@ -51,7 +53,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         return bytes.size();
     }
 
-    protected static class ImageViewHolder extends RecyclerView.ViewHolder{
+    protected class ImageViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
         ImageButton deleteButton;
@@ -60,6 +62,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             super(itemView);
             imageView = itemView.findViewById(R.id.image);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+
+            if(wantsToDelete){
+                deleteButton.setClickable(true);
+                deleteButton.setVisibility(View.VISIBLE);
+            }
+
         }
 
         private void setBitmap(byte[] bytes){

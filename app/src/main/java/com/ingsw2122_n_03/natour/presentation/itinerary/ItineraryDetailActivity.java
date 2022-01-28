@@ -2,9 +2,11 @@ package com.ingsw2122_n_03.natour.presentation.itinerary;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -98,9 +100,36 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[itinerary.getDifficulty()]);
 
 
-        LinearLayoutManager layoutManager =  new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager =  new GridLayoutManager(this, 2);
         imagesRecyclerView.setLayoutManager(layoutManager);
-        imagesRecyclerView.setAdapter(new ImageAdapter(images));
+
+        imagesRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                int position = parent.getChildAdapterPosition(view);
+                int spanCount = 2;
+                int spacing = 20;//spazio tra gli items
+
+                if (position >= 0) {
+                    int column = position % spanCount;
+
+                    outRect.left = spacing - column * spacing / spanCount;
+                    outRect.right = (column + 1) * spacing / spanCount;
+
+                    if (position < spanCount) {
+                        outRect.top = spacing;
+                    }
+                    outRect.bottom = spacing;
+                } else {
+                    outRect.left = 0;
+                    outRect.right = 0;
+                    outRect.top = 0;
+                    outRect.bottom = 0;
+                }
+            }
+        });
+
+        imagesRecyclerView.setAdapter(new ImageAdapter(images, false));
 
         imagesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -194,7 +223,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
     private void setAdapter(){
         runOnUiThread(()->{
-            imagesRecyclerView.setAdapter(new ImageAdapter(images));
+            imagesRecyclerView.setAdapter(new ImageAdapter(images, false));
             Objects.requireNonNull(imagesRecyclerView.getLayoutManager()).onRestoreInstanceState(recyclerViewState);
         });
     }
