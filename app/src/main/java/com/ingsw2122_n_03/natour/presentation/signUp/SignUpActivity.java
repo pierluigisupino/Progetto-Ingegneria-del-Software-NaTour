@@ -1,11 +1,9 @@
 package com.ingsw2122_n_03.natour.presentation.signUp;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -225,4 +223,5 @@ public class SignUpActivity extends BaseActivity {
         passwordTextInputLayout.setError(null);
         return true;
     }
+
 }
