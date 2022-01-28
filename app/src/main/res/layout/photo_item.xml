@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="5dp"
             android:paddingVertical="5dp"
-            android:gravity="right">
+            android:gravity="end">
 
             <ImageButton
                 android:id="@+id/deleteButton"
