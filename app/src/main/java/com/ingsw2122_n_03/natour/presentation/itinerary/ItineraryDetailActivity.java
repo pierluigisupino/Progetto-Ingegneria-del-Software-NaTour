@@ -29,6 +29,7 @@ import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.presentation.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
+import com.ingsw2122_n_03.natour.presentation.support.GridSpacingItemDecoration;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 
 import java.util.ArrayList;
@@ -102,32 +103,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         GridLayoutManager layoutManager =  new GridLayoutManager(this, 2);
         imagesRecyclerView.setLayoutManager(layoutManager);
-
-        imagesRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                int position = parent.getChildAdapterPosition(view);
-                int spanCount = 2;
-                int spacing = 30;//spazio tra gli items
-
-                if (position >= 0) {
-                    int column = position % spanCount;
-
-                    outRect.left = spacing - column * spacing / spanCount;
-                    outRect.right = (column + 1) * spacing / spanCount;
-
-                    if (position < spanCount) {
-                        outRect.top = spacing;
-                    }
-                    outRect.bottom = spacing;
-                } else {
-                    outRect.left = 0;
-                    outRect.right = 0;
-                    outRect.top = 0;
-                    outRect.bottom = 0;
-                }
-            }
-        });
+        imagesRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 30));
 
         imagesRecyclerView.setAdapter(new ImageAdapter(images, false));
 

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment3AddItineraryBinding;
+import com.ingsw2122_n_03.natour.presentation.support.GridSpacingItemDecoration;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 
@@ -65,34 +66,10 @@ public class AddItineraryFragment3 extends Fragment {
         countImageTextView = binding.photoTextView2;
         Button selectPhotoButton = binding.selectPhotoButton;
         recyclerView = binding.image;
+
         GridLayoutManager layoutManager =  new GridLayoutManager(addItineraryActivity, 2);
         recyclerView.setLayoutManager(layoutManager);
-
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                int position = parent.getChildAdapterPosition(view);
-                int spanCount = 2;
-                int spacing = 30;//spazio tra gli items
-
-                if (position >= 0) {
-                    int column = position % spanCount;
-
-                    outRect.left = spacing - column * spacing / spanCount;
-                    outRect.right = (column + 1) * spacing / spanCount;
-
-                    if (position < spanCount) {
-                        outRect.top = spacing;
-                    }
-                    outRect.bottom = spacing;
-                } else {
-                    outRect.left = 0;
-                    outRect.right = 0;
-                    outRect.top = 0;
-                    outRect.bottom = 0;
-                }
-            }
-        });
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 30));
 
         imageUtilities = new ImageUtilities();
 
