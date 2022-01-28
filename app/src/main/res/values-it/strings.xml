@@ -93,7 +93,7 @@
     <string name="duration_error">Inserisci una durata valida.</string>
     <string name="search_error">Nessun luogo trovato</string>
     <string name="start_point_error">Inserisci almeno un punto</string>
-    <string name="photo_limit">Limite di 5 foto superato</string>
+    <string name="photo_limit">Limite di 6 foto superato</string>
     <string name="explicit_content">Contenuto esplicito eliminato</string>
     <string name="position_error">Sembra che la posizione ricavata da alcune foto sia fuori linea col percorso. Per continuare elimina le foto o modifica il tracciato.</string>
     <string name="position_error_point">Sembra che la posizione di alcune foto siano in un raggio maggiore di 10 km dal punto iniziale. Per continuare elimina le foto o modifica il punto d\'inizio.</string>
@@ -135,7 +135,7 @@
     </string-array>
 
     <string name="no_photo_selected_text">Nessuna foto</string>
-    <string name="photo_selected_text">/5 foto selezionate</string>
+    <string name="photo_selected_text">/6 foto selezionate</string>
     <string name="photo_added_success">Foto aggiunte</string>
     <string name="cancel_operation_title">Annullare l\' inserimento?</string>
     <string name="cancel_operation_msgText">Tutti i progressi andranno persi</string>

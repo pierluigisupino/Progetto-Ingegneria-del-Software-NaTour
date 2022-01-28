@@ -45,7 +45,7 @@ public class AddItineraryFragment3 extends Fragment {
     private ActivityResultLauncher<Intent> getImages;
     private ImageUtilities imageUtilities;
 
-    private final int photoCount = 5;
+    private final int photoCount = 6;
 
     public AddItineraryFragment3(AddItineraryActivity addItineraryActivity) {
         this.addItineraryActivity = addItineraryActivity;
