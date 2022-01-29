@@ -31,6 +31,7 @@
 
 
     <!--GENERICS-->
+    <string name="name">Nome</string>
     <string name="required_username_place_holder">Nome*</string>
     <string name="username_place_holder">Nome</string>
     <string name="email_place_holder">Email</string>
