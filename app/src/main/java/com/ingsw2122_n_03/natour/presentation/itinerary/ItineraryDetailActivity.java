@@ -80,6 +80,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         Button startButton = binding.startButton;
         imagesRecyclerView = binding.imagesRecyclerView;
         FloatingActionButton editButton = binding.editButton;
+        FloatingActionButton deleteButton = binding.deleteButton;
 
         materialToolbar.setNavigationOnClickListener(v -> {
             finish();
@@ -140,8 +141,14 @@ public class ItineraryDetailActivity extends BaseActivity {
         if(getIntent().getSerializableExtra("user") instanceof Admin){
             editButton.setClickable(true);
             editButton.setVisibility(View.VISIBLE);
+
+            deleteButton.setClickable(true);
+            deleteButton.setVisibility(View.VISIBLE);
         }
 
+        deleteButton.setOnClickListener(view1 -> {
+            //TODO
+        });
 
         editButton.setOnClickListener(v -> {
 
