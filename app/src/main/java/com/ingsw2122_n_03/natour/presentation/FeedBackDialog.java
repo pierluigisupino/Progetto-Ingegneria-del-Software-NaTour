@@ -62,7 +62,9 @@ public class FeedBackDialog extends AppCompatDialogFragment {
                 });
 
 
-        return builder.create();
+        Dialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog);
+        return dialog;
 
     }
 }
