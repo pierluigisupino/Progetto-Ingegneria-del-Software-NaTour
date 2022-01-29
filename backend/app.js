@@ -112,6 +112,36 @@ app.get('/items/photos', function(req, res) {
 });
 
 
+app.get('/items/admin', function(req, res) {
+  
+  var params = {
+    UserPoolId: process.env.USERPOOLID,
+    Username: req.query.uid
+  };
+  
+  cognito.adminListGroupsForUser(params, function(err, data) {
+    
+    if (err)
+      return res.json({Error: err.stack}); 
+      
+    else
+    
+      var groups = data.Groups;
+    
+      for(var i = 0; i < groups.length; ++i) {
+        
+        if(groups[i].GroupName == "AdminGroup")
+          return res.json({isAdmin: true});
+          
+      }
+    
+      return res.json({isAdmin: false});
+           
+  });
+    
+});
+
+
 app.get('/items/user', function(req, res) {
   
   var params = {
