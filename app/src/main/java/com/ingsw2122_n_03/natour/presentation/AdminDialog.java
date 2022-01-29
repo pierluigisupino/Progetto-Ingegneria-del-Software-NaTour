@@ -18,6 +18,8 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 
+import java.util.Objects;
+
 public class AdminDialog extends AppCompatDialogFragment {
 
     @NonNull
@@ -56,8 +58,8 @@ public class AdminDialog extends AppCompatDialogFragment {
         builder.setView(view)
                 .setPositiveButton("Ok", (dialog, which) -> {
 
-                    String name = nameTextInputEditText.getText().toString();
-                    String description = descriptionInputEditText.getText().toString();
+                    String name = Objects.requireNonNull(nameTextInputEditText.getText()).toString();
+                    String description = Objects.requireNonNull(descriptionInputEditText.getText()).toString();
                     String difficulty = autoCompleteTextView.getText().toString();
                     int hours = timePicker.getHour();
                     int minutes = timePicker.getMinute();
