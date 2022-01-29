@@ -27,6 +27,7 @@ import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
+import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.GridSpacingItemDecoration;
@@ -51,6 +52,7 @@ public class ItineraryDetailActivity extends BaseActivity {
     private final ArrayList<byte[]> images = new ArrayList<>();
 
     private IterController iterController;
+    private User currentUser;
 
 
     @SuppressLint("SetTextI18n")
@@ -63,6 +65,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         setContentView(view);
 
         itinerary = (Itinerary) getIntent().getSerializableExtra("itinerary");
+        currentUser = (User) getIntent().getSerializableExtra("user");
 
         iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
@@ -77,6 +80,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewDifficulty = binding.textViewDifficulty;
 
         TextView textViewFeedback = binding.textViewFeedBack2;
+
 
         Button startButton = binding.startButton;
         imagesRecyclerView = binding.imagesRecyclerView;
@@ -132,8 +136,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         });
 
 
-        //TODO CURRENT USER
-        if(itinerary.getCreator() instanceof Admin){
+        if(currentUser instanceof Admin){
             editButton.setClickable(true);
             editButton.setVisibility(View.VISIBLE);
         }

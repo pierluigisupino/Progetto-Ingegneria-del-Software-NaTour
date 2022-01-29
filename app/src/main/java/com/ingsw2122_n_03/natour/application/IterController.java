@@ -287,7 +287,7 @@ public class IterController extends NavigationController {
 
     public void onRetrieveUserSuccess() {
         retrieveItineraryPhotos();
-        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter);
+        goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter, currentUser);
     }
 
 
