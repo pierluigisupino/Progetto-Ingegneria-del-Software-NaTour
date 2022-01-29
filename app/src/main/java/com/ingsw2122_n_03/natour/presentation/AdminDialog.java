@@ -3,12 +3,9 @@ package com.ingsw2122_n_03.natour.presentation;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -109,7 +106,7 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
             button.setOnClickListener(view1 -> {
                 isFirstSubmit = false;
 
-                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(button.getWindowToken(), 0);
 
                 String name = Objects.requireNonNull(nameEditText.getText()).toString();
