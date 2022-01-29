@@ -217,6 +217,17 @@ public class IterController extends NavigationController {
         mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
     }
 
+    /***************
+     * ADMIN
+     **************/
+
+    public void manageAdminEdit(String name, String description, String difficulty, int hours, int minutes){
+        detailActivity.setName(name);
+        detailActivity.setDescription(description);
+        detailActivity.setDifficulty(difficulty);
+        detailActivity.setDuration(hours, minutes);
+    }
+
 
     /***************
      * PUT FEEDBACK

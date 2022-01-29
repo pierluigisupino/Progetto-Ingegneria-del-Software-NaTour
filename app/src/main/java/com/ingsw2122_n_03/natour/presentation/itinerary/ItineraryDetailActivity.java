@@ -41,9 +41,11 @@ public class ItineraryDetailActivity extends BaseActivity {
     private RecyclerView imagesRecyclerView;
 
     private TextView textViewName;
+    private TextView textViewCreator;
     private TextView textViewDescription;
     private TextView textViewDuration;
     private TextView textViewDifficulty;
+    private TextView textViewWarning;
 
     private Parcelable recyclerViewState;
 
@@ -52,7 +54,6 @@ public class ItineraryDetailActivity extends BaseActivity {
 
     private IterController iterController;
     private User currentUser;
-
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -73,10 +74,11 @@ public class ItineraryDetailActivity extends BaseActivity {
         MaterialToolbar materialToolbar = binding.topAppBar;
 
         textViewName = binding.textViewName;
-        TextView textViewCreator = binding.textViewCreator;
+        textViewCreator = binding.textViewCreator;
         textViewDescription = binding.textViewDescription;
         textViewDuration = binding.textViewDuration;
         textViewDifficulty = binding.textViewDifficulty;
+        textViewWarning = binding.warning;
 
         TextView textViewFeedback = binding.textViewFeedBack2;
 
@@ -98,6 +100,10 @@ public class ItineraryDetailActivity extends BaseActivity {
             textViewDescription.setText(description);
         else
             textViewDescription.setVisibility(View.GONE);
+
+        if(itinerary.getEditDate() != null){
+            textViewWarning.setVisibility(View.VISIBLE);
+        }
 
         textViewDuration.setText(itinerary.getDuration().getHourOfDay() + "h & " + itinerary.getDuration().getMinuteOfHour() + "m");
         textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[itinerary.getDifficulty()]);
@@ -159,6 +165,7 @@ public class ItineraryDetailActivity extends BaseActivity {
                 editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.primary)));
                 editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_edit));
 
+                // TODO PUSH UPDATE ITINERARY
                 Toast.makeText(v.getContext(), "Edit salvato", Toast.LENGTH_SHORT).show();
             }
         });
@@ -169,7 +176,12 @@ public class ItineraryDetailActivity extends BaseActivity {
             editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.primary)));
             editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_edit));
 
-            Toast.makeText(v.getContext(), "Edit cancellato", Toast.LENGTH_SHORT).show();
+            textViewName.setText(itinerary.getName());
+            textViewDescription.setText(itinerary.getDescription());
+            textViewDuration.setText(itinerary.getDuration().getHourOfDay() + "h & " + itinerary.getDuration().getMinuteOfHour() + "m");
+            textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[itinerary.getDifficulty()]);
+
+            Toast.makeText(v.getContext(), getString(R.string.edit_deleted), Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -233,7 +245,22 @@ public class ItineraryDetailActivity extends BaseActivity {
             textViewDuration.setText(updatedItinerary.getDuration().getHourOfDay() + "h & " + updatedItinerary.getDuration().getMinuteOfHour() + "m");
             textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[updatedItinerary.getDifficulty()]);
         });
+    }
 
+    public void setName(String name){
+        textViewName.setText(name);
+    }
+
+    public void setDescription(String description){
+        textViewDescription.setText(description);
+    }
+
+    public void setDuration(int hours, int minutes){
+        textViewDuration.setText(hours + "h & " + minutes + "m");
+    }
+
+    public void setDifficulty(String difficulty){
+        textViewDifficulty.setText(difficulty);
     }
 
 }
