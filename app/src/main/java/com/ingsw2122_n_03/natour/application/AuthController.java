@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyAuthImplementation;
+import com.ingsw2122_n_03.natour.infastructure.implementations.UserDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.signIn.ForgotPasswordActivity;
@@ -51,7 +52,7 @@ public final class AuthController extends NavigationController {
         if(authInterface.configurePlugins(splashActivity)) {
 
             if (authInterface.checkUserLogged())
-                IterController.getInstance().setUp();
+                new UserDaoImplementation(IterController.getInstance()).getCurrentUser();
             else
                 goToActivityAndFinish(splashActivity, WelcomeActivity.class);
 
