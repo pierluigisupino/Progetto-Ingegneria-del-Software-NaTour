@@ -157,7 +157,7 @@
     <string name="difficulty_feedback">Qual è per te la difficoltà?</string>
     <string name="duration_feedback">In quanto tempo hai finito?</string>
     <string name="feedback_no_changes">Nessun riscontro rilevato</string>
-    <string name="loading_text_update_itinerary">Aggiornamento dell\'itinerario…</string>
+    <string name="loading_text_update_itinerary">Aggiornamento dell\'itinerario</string>
     <string name="feedback_success_text">Grazie per il tuo feedback</string>
     <string name="edited_admin">Modificato da un admin il</string>
     <string name="edit_deleted">Edit cancellato</string>
