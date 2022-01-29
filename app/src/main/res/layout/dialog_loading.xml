@@ -7,17 +7,22 @@
     android:gravity="center_horizontal"
     android:padding="50dp">
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_weight="1"
+        android:id="@+id/forgotPasswordAnimation"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:lottie_rawRes="@raw/animation_waiting"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
 
     <TextView
+        android:layout_weight="1"
         android:id="@+id/loadingTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="20sp" />
 
 </LinearLayout>

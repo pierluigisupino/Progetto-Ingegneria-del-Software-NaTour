@@ -140,7 +140,7 @@
     <string name="cancel_operation_msgText">All progress will be lost</string>
     <string name="search">Search…</string>
     <string name="delete_photo_text">Delete photos</string>
-    <string name="loading_text_add_itinerary">Uploading your Itinerary…</string>
+    <string name="loading_text_add_itinerary">Uploading your Itinerary</string>
     <string name="itinerary_insert_failure">Failed to upload Itinerary, try again.</string>
     <string name="photo_upload_wait">Photo uploading in progress…</string>
     <string name="itinerary_insert_success">Enjoy, your itinerary has been shared</string>
