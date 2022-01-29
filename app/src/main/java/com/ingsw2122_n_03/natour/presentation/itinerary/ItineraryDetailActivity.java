@@ -2,11 +2,9 @@ package com.ingsw2122_n_03.natour.presentation.itinerary;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +25,7 @@ import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
+import com.ingsw2122_n_03.natour.presentation.AdminDialog;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
@@ -80,7 +79,6 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewDifficulty = binding.textViewDifficulty;
 
         TextView textViewFeedback = binding.textViewFeedBack2;
-
 
         Button startButton = binding.startButton;
         imagesRecyclerView = binding.imagesRecyclerView;
@@ -149,7 +147,11 @@ public class ItineraryDetailActivity extends BaseActivity {
                 editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success)));
                 editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_done));
 
-                Toast.makeText(v.getContext(), "Fa la stessa cosa del feed back?", Toast.LENGTH_SHORT).show();
+                Bundle args = new Bundle();
+                args.putSerializable("itinerary", itinerary);
+                AdminDialog dialog = new AdminDialog();
+                dialog.setArguments(args);
+                dialog.show(getSupportFragmentManager(), "AdminDialog");
 
             }else{
                 cancelEditButton.setClickable(false);
