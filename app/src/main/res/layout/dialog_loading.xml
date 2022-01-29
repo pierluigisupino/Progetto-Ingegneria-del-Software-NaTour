@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textColor="@color/primary"
+        android:fontFamily="@font/euclid_circular_medium"
         android:textSize="20sp" />
 
 </LinearLayout>
