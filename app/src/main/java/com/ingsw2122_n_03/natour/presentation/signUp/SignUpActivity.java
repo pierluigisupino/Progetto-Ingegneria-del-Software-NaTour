@@ -22,6 +22,7 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.databinding.ActivitySignUpBinding;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
+import com.ingsw2122_n_03.natour.presentation.support.FormChecker;
 
 import java.util.Objects;
 
@@ -42,9 +43,9 @@ public class SignUpActivity extends BaseActivity {
     private TextInputLayout passwordTextInputLayout;
     private TextInputEditText passwordEditText;
 
+    private boolean isFirstSubmit = true;
     private Button registerButton;
 
-    private boolean isFirstSubmit = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,55 +81,46 @@ public class SignUpActivity extends BaseActivity {
         usernameEditText.addTextChangedListener(new TextWatcher(){
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isUsernameValid();
+                if(!isFirstSubmit) showNameFormError();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) {}
 
-            }
         });
 
         emailEditText.addTextChangedListener(new TextWatcher(){
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isEmailValid();
+                if(!isFirstSubmit) showMailFormError();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) {}
 
-            }
         });
 
         passwordEditText.addTextChangedListener(new TextWatcher(){
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isFirstSubmit) isPasswordValid();
+                if(!isFirstSubmit) showPasswordFormError();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) {}
 
-            }
         });
 
 
@@ -137,22 +129,39 @@ public class SignUpActivity extends BaseActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(registerButton.getWindowToken(), 0);
 
+            FormChecker formChecker = new FormChecker();
+            String username = Objects.requireNonNull(usernameEditText.getText()).toString();
+            String email = Objects.requireNonNull(emailEditText.getText()).toString();
+            String password = Objects.requireNonNull(passwordEditText.getText()).toString();
             isFirstSubmit = false;
+            boolean inputValid = true;
 
-            if(areInputValid()) {
-                String name = String.valueOf(usernameEditText.getText());
-                String email =  String.valueOf(emailEditText.getText());
-                String password = String.valueOf(passwordEditText.getText());
-                progressBar.setVisibility(View.VISIBLE);
-                authController.signUp(name, email, password);
+            if(!formChecker.isUsernameValid(username)) {
+                showNameFormError();
+                inputValid = false;
             }
+
+            if(!formChecker.isEmailValid(email)) {
+                showMailFormError();
+                inputValid = false;
+            }
+
+            if(!formChecker.isPasswordValid(password)) {
+                showPasswordFormError();
+                inputValid = false;
+            }
+
+            if(inputValid) {
+                progressBar.setVisibility(View.VISIBLE);
+                authController.signUp(username, email, password);
+            }
+
         });
 
     }
 
     @Override
     public void onSuccess(String msg) {
-
         runOnUiThread(() -> {
             progressBar.setVisibility(View.INVISIBLE);
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
@@ -163,7 +172,6 @@ public class SignUpActivity extends BaseActivity {
 
     @Override
     public void onFail(String msg) {
-
         runOnUiThread(() -> {
             progressBar.setVisibility(View.INVISIBLE);
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
@@ -172,56 +180,53 @@ public class SignUpActivity extends BaseActivity {
         });
     }
 
-    private boolean areInputValid() {
-        return isUsernameValid() & isEmailValid() & isPasswordValid();
-    }
 
-    private boolean isUsernameValid(){
-        if(usernameEditText.getText() == null || usernameEditText.getText().length() == 0) {
+    private void showNameFormError(){
+
+        if(usernameEditText.getText() == null || usernameEditText.getText().length() == 0)
             usernameTextInputLayout.setError(getString(R.string.username_warning));
-            return false;
-        }else if(usernameEditText.getText().length() < 4) {
+
+        else if(usernameEditText.getText().length() < 4)
             usernameTextInputLayout.setError(getString(R.string.username_length_error));
-            return false;
-        }else if(usernameEditText.getText().toString().matches("\\s+.*")) {
+
+        else if(usernameEditText.getText().toString().matches("\\s+.*"))
             usernameTextInputLayout.setError(getString(R.string.name_space_warning));
-            return false;
-        }
-        usernameTextInputLayout.setError(null);
-        return true;
+
+        else usernameTextInputLayout.setError(null);
+
     }
 
-    private boolean isEmailValid(){
-        if(emailEditText.getText() == null || emailEditText.getText().length() == 0) {
+    private void showMailFormError(){
+
+        if(emailEditText.getText() == null || emailEditText.getText().length() == 0)
             emailTextInputLayout.setError(getString(R.string.email_warning));
-            return false;
-        }else if(!Patterns.EMAIL_ADDRESS.matcher(Objects.requireNonNull(emailEditText.getText())).matches()) {
+
+        else if(!Patterns.EMAIL_ADDRESS.matcher(Objects.requireNonNull(emailEditText.getText())).matches())
             emailTextInputLayout.setError(getString(R.string.mail_error));
-            return false;
-        }
-        emailTextInputLayout.setError(null);
-        return true;
+
+        else emailTextInputLayout.setError(null);
+
     }
 
-    private boolean isPasswordValid(){
-        if(passwordEditText.getText() == null || passwordEditText.getText().length() == 0) {
+    private void showPasswordFormError(){
+
+        if(passwordEditText.getText() == null || passwordEditText.getText().length() == 0)
             passwordTextInputLayout.setError(getString(R.string.password_warning));
-            return false;
-        }else if(passwordEditText.getText().length() < 8) {
+
+        else if(passwordEditText.getText().length() < 8)
             passwordTextInputLayout.setError(getString(R.string.password_length_error));
-            return false;
-        }else if(passwordEditText.getText().length() > 20) {
+
+        else if(passwordEditText.getText().length() > 20)
             passwordTextInputLayout.setError(getString(R.string.password_length_error_max));
-            return false;
-        }else if(passwordEditText.getText().toString().matches(".*\\s+.*")) {
+
+        else if(passwordEditText.getText().toString().matches(".*\\s+.*"))
             passwordTextInputLayout.setError(getString(R.string.password_space_warning));
-            return false;
-        }else if(!passwordEditText.getText().toString().matches(".*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*")){
+
+        else if(!passwordEditText.getText().toString().matches(".*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*"))
             passwordTextInputLayout.setError(getString(R.string.password_regex_warning));
-            return false;
-        }
-        passwordTextInputLayout.setError(null);
-        return true;
+
+        else passwordTextInputLayout.setError(null);
+
     }
 
 }

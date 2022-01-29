@@ -5,17 +5,17 @@ import android.util.Patterns;
 public class FormChecker {
 
 
-    private boolean isUsernameValid(String username){
+    public boolean isUsernameValid(String username) {
         return username.length() >= 4 && username.length() <= 20 && !username.matches("\\s+.*");
     }
 
 
-    private boolean isEmailValid(String email){
-        return  Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    public boolean isEmailValid(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
 
-    private boolean isPasswordValid(String password){
+    public boolean isPasswordValid(String password) {
 
         if(password.length() < 8 || password.length() > 20)
             return false;
