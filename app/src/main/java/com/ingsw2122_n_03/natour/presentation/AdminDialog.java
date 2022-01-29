@@ -39,7 +39,7 @@ public class AdminDialog extends AppCompatDialogFragment {
         nameTextInputEditText.setText(itinerary.getName());
 
         TextInputEditText descriptionInputEditText = view.findViewById(R.id.descriptionEditText);
-        descriptionInputEditText.setText(itinerary.getName());
+        descriptionInputEditText.setText(itinerary.getDescription());
 
         int currentHours = itinerary.getDuration().getHourOfDay();
         int currentMinutes = itinerary.getDuration().getMinuteOfHour();
