@@ -250,6 +250,42 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
     }
 
 
+    @Override
+    public void deleteItinerary(int iterId) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("iterid", iterId);
+        }catch(JSONException e) {
+            controller.onDeleteItineraryError();
+        }
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/items/itineraries")
+                .addBody(jsonObject.toString().getBytes())
+                .build();
+
+        Amplify.API.delete(
+                options,
+                response -> {
+
+                    try {
+                        if(response.getData().asJSONObject().getInt("Code") == 200)
+                            controller.onDeleteItinerarySuccess();
+                        else
+                            controller.onDeleteItineraryError();
+                    } catch (JSONException e) {
+                        controller.onDeleteItineraryError();
+                    }
+
+                },
+                error -> controller.onDeleteItineraryError()
+
+        );
+
+    }
+
+
     /**
      * JSON PARSER
      ***/

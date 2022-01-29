@@ -10,5 +10,6 @@ public interface ItineraryDaoInterface {
     void getOlderItineraries(int iterId);
     void putItineraryFromFeedback(Itinerary iter);
     void putItineraryByAdmin(Itinerary iter);
+    void deleteItinerary(int iterId);
 
 }

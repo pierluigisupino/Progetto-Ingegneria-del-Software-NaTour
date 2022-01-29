@@ -1,9 +1,9 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -91,7 +91,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewCreator.setText(getResources().getString(R.string.by_text)+" "+itinerary.getCreator().getName());
 
         String description = itinerary.getDescription();
-        if(description != null && description.length() != 0)
+        if(description != null)
             textViewDescription.setText(description);
         else
             textViewDescription.setVisibility(View.GONE);
@@ -146,18 +146,22 @@ public class ItineraryDetailActivity extends BaseActivity {
             deleteButton.setVisibility(View.VISIBLE);
         }
 
-        deleteButton.setOnClickListener(view1 -> {
-            //TODO
-        });
+
+        deleteButton.setOnClickListener(v ->
+                new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_cancel)
+                .setMessage(R.string.itinerary_delete_confirm_text)
+                .setPositiveButton(R.string.yes_text, (dialog, which) -> iterController.deleteItinerary())
+                .setNegativeButton(R.string.no_text, null)
+                .show());
+
 
         editButton.setOnClickListener(v -> {
-
             Bundle args = new Bundle();
             args.putSerializable("itinerary", itinerary);
             AdminDialog dialog = new AdminDialog();
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "AdminDialog");
-
         });
 
     }

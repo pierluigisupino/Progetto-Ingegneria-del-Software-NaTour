@@ -205,7 +205,7 @@ public class IterController extends NavigationController {
 
 
     /****************
-     * PUT ITINERARY
+     * ADMIN ACTIONS
      ****************/
 
     public void putItineraryByAdmin(String name, String description, int difficulty, LocalTime duration) {
@@ -218,6 +218,26 @@ public class IterController extends NavigationController {
         loadingDialog = new LoadingDialog(detailActivity, detailActivity.getString(R.string.loading_text_update_itinerary));
         loadingDialog.startLoading();
         itineraryDao.putItineraryByAdmin(updatedIter);
+    }
+
+
+    public void deleteItinerary() {
+        loadingDialog = new LoadingDialog(mainActivity, mainActivity.getString(R.string.loading_text_delete_itinerary));
+        loadingDialog.startLoading();
+        itineraryDao.deleteItinerary(currentIter.getIterId());
+    }
+
+
+    public void onDeleteItinerarySuccess() {
+        detailActivity.finish();
+        loadingDialog.dismissDialog();
+        mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_deleted_text));
+    }
+
+
+    public void onDeleteItineraryError() {
+        loadingDialog.dismissDialog();
+        detailActivity.onFail(detailActivity.getString(R.string.itinerary_delete_failure));
     }
 
 

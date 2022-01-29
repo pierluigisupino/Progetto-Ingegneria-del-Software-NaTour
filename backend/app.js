@@ -277,9 +277,24 @@ app.put('/items/photo', function(req, res) {
 
 
 app.delete('/items/itineraries', function(req, res) {
-  //DELETE ITINERARY ON RDS & DIRECTORY FROM S3
+  
+  const client = new Client(clientParams);
+  const iterid = req.body.iterid;
+  
+  client.connect();
+  
+  client.query('DELETE FROM ITINERARY WHERE IterID = '+iterid, (err, suc) => {
+    
+    client.end();
+    
+    if(err)
+      return res.json({Code:500, Error: err.stack});
+    else
+      return res.json({Code: 200});
+    
+  });
+  
 });
-
 
 
 /****************************

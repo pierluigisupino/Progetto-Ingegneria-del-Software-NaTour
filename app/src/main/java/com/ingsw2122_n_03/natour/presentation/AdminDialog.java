@@ -74,10 +74,9 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
         autoCompleteTextView.setText(arrayAdapter.getItem(itinerary.getDifficulty()).toString(), false);
 
         nameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -86,10 +85,10 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
+            public void afterTextChanged(Editable editable) {}
 
-            }
         });
+
         descriptionEditText.addTextChangedListener(this);
         autoCompleteTextView.addTextChangedListener(this);
 
@@ -121,6 +120,7 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
                 }else if(!isChanged){
                     dialog.dismiss();
                 }
+
             });
         });
 
@@ -147,9 +147,7 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -157,7 +155,6 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
     }
 
     @Override
-    public void afterTextChanged(Editable editable) {
+    public void afterTextChanged(Editable editable) {}
 
-    }
 }

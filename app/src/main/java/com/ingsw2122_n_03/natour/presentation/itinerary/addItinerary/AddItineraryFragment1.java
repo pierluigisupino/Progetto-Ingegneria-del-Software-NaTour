@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,16 +133,12 @@ public class AddItineraryFragment1 extends Fragment {
 
         String description = descriptionEditText.getText().toString();
 
-        Log.i("DESCRIPTION BEFORE", description);
-
         if(description.length() > 0) {
             description = description.trim();
             description = description.substring(0,1).toUpperCase()+description.substring(1);
             if(description.charAt(description.length() - 1) != '.')
                 description = description + ".";
         }
-
-        Log.i("DESCRIPTION AFTER", description);
 
         return description;
     }
