@@ -18,6 +18,8 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 
+import org.joda.time.LocalTime;
+
 public class FeedBackDialog extends AppCompatDialogFragment {
 
 
@@ -55,7 +57,7 @@ public class FeedBackDialog extends AppCompatDialogFragment {
                     int hours = timePicker.getHour();
                     int minutes = timePicker.getMinute();
                     if(hours !=0 || minutes !=0)
-                        IterController.getInstance().manageFeedback((hours*60)+minutes, arrayAdapter.getPosition(autoCompleteTextView.getText().toString()));
+                        IterController.getInstance().manageFeedback(new LocalTime(hours, minutes), arrayAdapter.getPosition(autoCompleteTextView.getText().toString()));
                     else
                         Toast.makeText(requireContext(), getString(R.string.duration_error), Toast.LENGTH_SHORT).show();
 

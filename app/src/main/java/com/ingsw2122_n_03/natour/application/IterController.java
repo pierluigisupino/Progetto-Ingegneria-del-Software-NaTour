@@ -245,37 +245,20 @@ public class IterController extends NavigationController {
      * PUT FEEDBACK
      **************/
 
-    public void manageFeedback(int newDurationMinutes, int newDifficulty) {
+    public void manageFeedback(LocalTime newDuration, int newDifficulty) {
 
-        boolean toUpdate = false;
         updatedIter = new Itinerary(currentIter);
 
-        int currDurationMinutes = currentIter.getDuration().getMinuteOfHour();
-        currDurationMinutes += (currentIter.getDuration().getHourOfDay()*60);
+        updatedIter.setDuration(currentIter.calculateAverageDuration(newDuration));
+        updatedIter.setDifficulty(currentIter.calculateAverageDifficulty(newDifficulty));
 
-        if(currDurationMinutes != newDurationMinutes) {
-            toUpdate = true;
-            int averageMinutes = (newDurationMinutes + currDurationMinutes) / 2;
-            int averageHours = (averageMinutes / 60);
-            averageMinutes -= (60 * averageHours);
-            LocalTime averageDuration = new LocalTime(averageHours, averageMinutes);
-            updatedIter.setDuration(averageDuration);
-        }
-
-        int currDifficulty = currentIter.getDifficulty();
-
-        if(currDifficulty != newDifficulty) {
-            toUpdate = true;
-            int averageDifficultyLevel = (currDifficulty + newDifficulty)/2;
-            updatedIter.setDifficulty(averageDifficultyLevel);
-        }
-
-        if(toUpdate){
+        if((currentIter.getDifficulty() == updatedIter.getDifficulty()) && (currentIter.getDuration().compareTo(updatedIter.getDuration()) == 0))
+            detailActivity.onSuccess(detailActivity.getString(R.string.feedback_no_changes));
+        else {
             itineraryDao.putItineraryFromFeedback(updatedIter);
             loadingDialog = new LoadingDialog(detailActivity, detailActivity.getString(R.string.loading_text_update_itinerary));
             loadingDialog.startLoading();
-        } else
-            detailActivity.onSuccess(detailActivity.getString(R.string.feedback_no_changes));
+        }
 
     }
 

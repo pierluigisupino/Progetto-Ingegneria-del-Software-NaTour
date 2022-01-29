@@ -28,7 +28,7 @@ public class Itinerary implements Serializable {
     public Itinerary(String name, int difficulty, LocalTime duration, WayPoint startPoint, User creator, Date shareDate) {
         this.name = name;
         setDifficulty(difficulty);
-        this.duration = duration;
+        setDuration(duration);
         this.startPoint = startPoint;
         this.creator = creator;
         this.shareDate = shareDate;
@@ -82,6 +82,8 @@ public class Itinerary implements Serializable {
     public LocalTime getDuration() { return duration; }
 
     public void setDuration(LocalTime duration) {
+        if(duration.getHourOfDay() == 0 && duration.getMinuteOfHour() == 0)
+            throw new IllegalArgumentException();
         this.duration = duration;
     }
 
@@ -125,5 +127,37 @@ public class Itinerary implements Serializable {
 
     public Date getShareDate() { return shareDate; }
 
+
+    /**
+     * SERVICES
+     */
+
+    public LocalTime calculateAverageDuration(LocalTime duration) {
+
+        int newHours = duration.getHourOfDay();
+        int newMinutes = duration.getMinuteOfHour();
+
+        if(newHours == 0 && newMinutes == 0)
+            throw new IllegalArgumentException();
+
+        int newAccumulatedMinutes = newMinutes + (newHours * 60);
+        int currAccumulatedMinutes = this.duration.getMinuteOfHour() + (this.duration.getHourOfDay() * 60);
+
+        int averageMinutes = (newAccumulatedMinutes + currAccumulatedMinutes) / 2;
+        int averageHours = averageMinutes / 60;
+        averageMinutes -= (60 * averageHours);
+        return new LocalTime(averageHours, averageMinutes);
+
+    }
+
+
+    public int calculateAverageDifficulty(int difficulty) {
+
+        if(difficulty < 0)
+            throw new IllegalArgumentException();
+
+        return (this.difficulty + difficulty)/2;
+
+    }
 
 }
