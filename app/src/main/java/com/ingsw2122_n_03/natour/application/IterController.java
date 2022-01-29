@@ -7,6 +7,7 @@ import com.ingsw2122_n_03.natour.infastructure.implementations.ItineraryDaoImple
 import com.ingsw2122_n_03.natour.infastructure.implementations.UserDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.ItineraryDaoInterface;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.UserDaoInterface;
+import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
@@ -78,10 +79,23 @@ public class IterController extends NavigationController {
      *********/
 
     public void setUp() {
-        currentUser = new User(userDao.getCurrentUserId());
+
+        try {
+
+            if(userDao.isCurrentUserAdmin())
+                currentUser = new Admin(userDao.getCurrentUserId());
+            else
+                currentUser = new User(userDao.getCurrentUserId());
+
+        } catch (InterruptedException e) {
+            onSetUpError(false);
+            return;
+        }
+
         currentUser.setName(splashActivity.getResources().getString(R.string.current_user_name_text));
         itineraryDao.getSetUpItineraries();
         //goToActivityAndFinish(splashActivity, MainActivity.class, itineraries); /* TO DELETE, FOR TEST USAGE**/
+
     }
 
 

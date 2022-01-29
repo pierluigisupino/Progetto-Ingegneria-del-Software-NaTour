@@ -6,5 +6,6 @@ public interface UserDaoInterface {
 
     String getCurrentUserId();
     void setUserName(User user);
+    boolean isCurrentUserAdmin() throws InterruptedException;
 
 }
