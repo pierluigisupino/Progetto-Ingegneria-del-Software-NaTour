@@ -10,6 +10,8 @@ import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class UserDaoImplementation implements UserDaoInterface {
 
@@ -26,13 +28,48 @@ public final class UserDaoImplementation implements UserDaoInterface {
 
 
     @Override
+    public boolean isCurrentUserAdmin() throws InterruptedException {
+
+        AtomicBoolean isAdmin = new AtomicBoolean(false);
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("uid", Amplify.Auth.getCurrentUser().getUserId());
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/items/admin")
+                .addQueryParameters(queryParams)
+                .build();
+
+        Amplify.API.get(
+                options,
+                result -> {
+
+                    try {
+                        isAdmin.set(result.getData().asJSONObject().getBoolean("isAdmin"));
+                        countDownLatch.countDown();
+                    } catch (JSONException ignored) {}
+
+                },
+
+                error -> {}
+
+        );
+
+        countDownLatch.await();
+        return isAdmin.get();
+
+    }
+
+
+    @Override
     public void setUserName(User user) {
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("uid", user.getUid());
 
         RestOptions options = RestOptions.builder()
-                .addPath("items/user")
+                .addPath("/items/user")
                 .addQueryParameters(queryParams)
                 .build();
 
