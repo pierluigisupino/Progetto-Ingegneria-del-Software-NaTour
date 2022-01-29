@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.presentation.itinerary;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -89,7 +90,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewCreator.setText(getResources().getString(R.string.by_text)+" "+itinerary.getCreator().getName());
 
         String description = itinerary.getDescription();
-        if(description != null)
+        if(description != null && description.length() != 0)
             textViewDescription.setText(description);
         else
             textViewDescription.setVisibility(View.GONE);
@@ -164,10 +165,21 @@ public class ItineraryDetailActivity extends BaseActivity {
 
     @Override
     public void onSuccess(String msg) {
-        runOnUiThread(()->
+
+        runOnUiThread(()->{
+            String description = itinerary.getDescription();
+
+            if(description != null && description.length() != 0) {
+                textViewDescription.setText(description);
+                textViewDescription.setVisibility(View.VISIBLE);
+            }else {
+                textViewDescription.setVisibility(View.GONE);
+            }
+
             Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
                     .setBackgroundTint(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success))
-                    .show()
+                    .show();
+                }
         );
     }
 
