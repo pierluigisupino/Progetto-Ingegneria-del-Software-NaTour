@@ -217,22 +217,27 @@ public class IterController extends NavigationController {
         mainActivity.onFail(mainActivity.getString(R.string.photo_upload_failed));
     }
 
-    /***************
-     * ADMIN
-     **************/
 
-    public void manageAdminEdit(String name, String description, String difficulty, int hours, int minutes){
-        detailActivity.setName(name);
-        detailActivity.setDescription(description);
-        detailActivity.setDifficulty(difficulty);
-        detailActivity.setDuration(hours, minutes);
+    /****************
+     * PUT ITINERARY
+     ****************/
+
+    public void putItineraryByAdmin(String name, String description, int difficulty, LocalTime duration) {
+        updatedIter = new Itinerary(currentIter);
+        updatedIter.setName(name);
+        updatedIter.setDescription(description);
+        updatedIter.setDifficulty(difficulty);
+        updatedIter.setDuration(duration);
+        updatedIter.setEditDate(new Date());
+        loadingDialog = new LoadingDialog(detailActivity, detailActivity.getString(R.string.loading_text_update_itinerary));
+        loadingDialog.startLoading();
+        itineraryDao.putItineraryByAdmin(updatedIter);
     }
 
 
     /***************
      * PUT FEEDBACK
      **************/
-
 
     public void manageFeedback(int newDurationMinutes, int newDifficulty) {
 
@@ -291,20 +296,20 @@ public class IterController extends NavigationController {
      * NAVIGATION
      ************/
 
-    public void onItineraryClick(Itinerary iter) {
+    public void onItineraryClick(int position) {
 
-        currentIter = iter;
+        currentIter = itineraries.get(position);
         photos.clear();
-        imageDownloader.resetSession(iter.getIterId());
+        imageDownloader.resetSession(currentIter.getIterId());
 
-        if(iter.getCreator().getName() != null)
+        if(currentIter.getCreator().getName() != null)
             onRetrieveUserSuccess();
         else {
-            if(iter.getCreator().getUid().equals(currentUser.getUid())) {
-                iter.setCreator(currentUser);
+            if(currentIter.getCreator().getUid().equals(currentUser.getUid())) {
+                currentIter.setCreator(currentUser);
                 onRetrieveUserSuccess();
             }else {
-                userDao.setUserName(iter.getCreator());
+                userDao.setUserName(currentIter.getCreator());
             }
         }
     }

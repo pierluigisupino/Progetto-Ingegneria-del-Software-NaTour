@@ -1,17 +1,14 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -26,12 +23,12 @@ import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.presentation.AdminDialog;
-import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.GridSpacingItemDecoration;
 import com.ingsw2122_n_03.natour.presentation.support.ImageAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -41,7 +38,6 @@ public class ItineraryDetailActivity extends BaseActivity {
     private RecyclerView imagesRecyclerView;
 
     private TextView textViewName;
-    private TextView textViewCreator;
     private TextView textViewDescription;
     private TextView textViewDuration;
     private TextView textViewDifficulty;
@@ -53,7 +49,6 @@ public class ItineraryDetailActivity extends BaseActivity {
     private final ArrayList<byte[]> images = new ArrayList<>();
 
     private IterController iterController;
-    private User currentUser;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -65,7 +60,6 @@ public class ItineraryDetailActivity extends BaseActivity {
         setContentView(view);
 
         itinerary = (Itinerary) getIntent().getSerializableExtra("itinerary");
-        currentUser = (User) getIntent().getSerializableExtra("user");
 
         iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
@@ -74,7 +68,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         MaterialToolbar materialToolbar = binding.topAppBar;
 
         textViewName = binding.textViewName;
-        textViewCreator = binding.textViewCreator;
+        TextView textViewCreator = binding.textViewCreator;
         textViewDescription = binding.textViewDescription;
         textViewDuration = binding.textViewDuration;
         textViewDifficulty = binding.textViewDifficulty;
@@ -84,7 +78,6 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         Button startButton = binding.startButton;
         imagesRecyclerView = binding.imagesRecyclerView;
-        FloatingActionButton cancelEditButton = binding.cancelEditButton;
         FloatingActionButton editButton = binding.editButton;
 
         materialToolbar.setNavigationOnClickListener(v -> {
@@ -102,7 +95,10 @@ public class ItineraryDetailActivity extends BaseActivity {
             textViewDescription.setVisibility(View.GONE);
 
         if(itinerary.getEditDate() != null){
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd MMMM yyyy");
+            String shareDate = dateFormat.format(itinerary.getEditDate());
             textViewWarning.setVisibility(View.VISIBLE);
+            textViewWarning.setText(getString(R.string.edited_admin)+" "+shareDate);
         }
 
         textViewDuration.setText(itinerary.getDuration().getHourOfDay() + "h & " + itinerary.getDuration().getMinuteOfHour() + "m");
@@ -140,48 +136,20 @@ public class ItineraryDetailActivity extends BaseActivity {
         });
 
 
-        if(currentUser instanceof Admin){
+        if(getIntent().getSerializableExtra("user") instanceof Admin){
             editButton.setClickable(true);
             editButton.setVisibility(View.VISIBLE);
         }
 
+
         editButton.setOnClickListener(v -> {
 
-            if(cancelEditButton.getVisibility() == View.INVISIBLE){
-                cancelEditButton.setClickable(true);
-                cancelEditButton.setVisibility(View.VISIBLE);
-                editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success)));
-                editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_done));
+            Bundle args = new Bundle();
+            args.putSerializable("itinerary", itinerary);
+            AdminDialog dialog = new AdminDialog();
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(), "AdminDialog");
 
-                Bundle args = new Bundle();
-                args.putSerializable("itinerary", itinerary);
-                AdminDialog dialog = new AdminDialog();
-                dialog.setArguments(args);
-                dialog.show(getSupportFragmentManager(), "AdminDialog");
-
-            }else{
-                cancelEditButton.setClickable(false);
-                cancelEditButton.setVisibility(View.INVISIBLE);
-                editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.primary)));
-                editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_edit));
-
-                // TODO PUSH UPDATE ITINERARY
-                Toast.makeText(v.getContext(), "Edit salvato", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        cancelEditButton.setOnClickListener(v -> {
-            cancelEditButton.setClickable(false);
-            cancelEditButton.setVisibility(View.INVISIBLE);
-            editButton.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.primary)));
-            editButton.setImageDrawable(AppCompatResources.getDrawable(ItineraryDetailActivity.this, R.drawable.ic_edit));
-
-            textViewName.setText(itinerary.getName());
-            textViewDescription.setText(itinerary.getDescription());
-            textViewDuration.setText(itinerary.getDuration().getHourOfDay() + "h & " + itinerary.getDuration().getMinuteOfHour() + "m");
-            textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[itinerary.getDifficulty()]);
-
-            Toast.makeText(v.getContext(), getString(R.string.edit_deleted), Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -230,7 +198,6 @@ public class ItineraryDetailActivity extends BaseActivity {
 
     @SuppressLint("SetTextI18n")
     public void updateItineraryViews(Itinerary updatedItinerary) {
-
         runOnUiThread(()->{
             itinerary = updatedItinerary;
 
@@ -242,25 +209,17 @@ public class ItineraryDetailActivity extends BaseActivity {
             else
                 textViewDescription.setVisibility(View.GONE);
 
+            if(itinerary.getEditDate() != null){
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd MMMM yyyy");
+                String shareDate = dateFormat.format(itinerary.getEditDate());
+                textViewWarning.setVisibility(View.VISIBLE);
+                textViewWarning.setText(getString(R.string.edited_admin)+" "+shareDate);
+            }
+
             textViewDuration.setText(updatedItinerary.getDuration().getHourOfDay() + "h & " + updatedItinerary.getDuration().getMinuteOfHour() + "m");
             textViewDifficulty.setText(getResources().getStringArray(R.array.difficulties)[updatedItinerary.getDifficulty()]);
+
         });
-    }
-
-    public void setName(String name){
-        textViewName.setText(name);
-    }
-
-    public void setDescription(String description){
-        textViewDescription.setText(description);
-    }
-
-    public void setDuration(int hours, int minutes){
-        textViewDuration.setText(hours + "h & " + minutes + "m");
-    }
-
-    public void setDifficulty(String difficulty){
-        textViewDifficulty.setText(difficulty);
     }
 
 }

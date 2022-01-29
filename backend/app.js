@@ -223,7 +223,24 @@ app.put('/items/feedback', function(req,res) {
 
 
 app.put('/items/itineraries', function(req, res) {
-  //PUT BY ADMIN
+  
+  const client = new Client(clientParams);
+  
+  client.connect();
+  
+  const query = 'UPDATE ITINERARY SET iterName = $1, description = $2, difficulty = $3, hours = $4, minutes = $5, updateDate = $6 WHERE iterid = $7';
+  
+  client.query(query, [req.body.name, req.body.iterDescription, req.body.difficulty, req.body.hours, req.body.minutes, req.body.updateDate, req.body.iterid], (err, suc) => {
+    
+    client.end();
+    
+    if(err)
+      return res.json({Code:500, Error: err.stack});
+    else
+      return res.json({Code: 200});
+      
+  });
+  
 });
 
 

@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -129,7 +128,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
     @Override
     public void onItineraryClick(int position) {
-        iterController.onItineraryClick(itineraries.get(position));
+        iterController.onItineraryClick(position);
     }
 
     

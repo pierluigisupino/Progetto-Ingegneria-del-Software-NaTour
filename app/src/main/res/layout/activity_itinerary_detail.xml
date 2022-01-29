@@ -65,7 +65,6 @@
         android:drawablePadding="8dp"
         android:layout_marginTop="20dp"
         android:visibility="gone"
-        android:text="@string/admin"
         app:drawableLeftCompat="@drawable/ic_warning"
         app:layout_constraintTop_toBottomOf="@id/textViewCreator"
         app:layout_constraintEnd_toEndOf="@id/rightGuideline"
@@ -109,7 +108,7 @@
 
         <TextView
             android:id="@+id/textViewDuration"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/euclid_circular_regular"
             android:textSize="15sp"
@@ -118,7 +117,8 @@
             app:drawableLeftCompat="@drawable/ic_access_time"
             android:drawablePadding="10dp"
             android:layout_weight="1"
-            android:layout_gravity="left|center_vertical"/>
+            android:layout_gravity="left|center_vertical"
+            tools:ignore="RtlHardcoded" />
 
 
         <TextView
@@ -173,20 +173,6 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/cancelEditButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginBottom="16dp"
-            app:tint="@color/error"
-            app:rippleColor="@color/primary_light"
-            android:src="@drawable/ic_close"
-            android:visibility="invisible"
-            android:clickable="false"
-            android:focusable="false"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/editButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -197,7 +183,8 @@
             android:src="@drawable/ic_edit"
             android:visibility="invisible"
             android:clickable="false"
-            android:focusable="false"/>
+            android:focusable="false"
+            android:contentDescription="@string/description_itinerary_textHint" />
 
     </LinearLayout>
 

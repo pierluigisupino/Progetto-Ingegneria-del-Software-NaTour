@@ -18,6 +18,8 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 
+import org.joda.time.LocalTime;
+
 import java.util.Objects;
 
 public class AdminDialog extends AppCompatDialogFragment {
@@ -60,12 +62,13 @@ public class AdminDialog extends AppCompatDialogFragment {
 
                     String name = Objects.requireNonNull(nameTextInputEditText.getText()).toString();
                     String description = Objects.requireNonNull(descriptionInputEditText.getText()).toString();
-                    String difficulty = autoCompleteTextView.getText().toString();
+                    int difficulty = arrayAdapter.getPosition(autoCompleteTextView.getText().toString());
                     int hours = timePicker.getHour();
                     int minutes = timePicker.getMinute();
 
-                    IterController.getInstance().manageAdminEdit(name, description, difficulty, hours, minutes);
+                    IterController.getInstance().putItineraryByAdmin(name, description, difficulty, new LocalTime(hours, minutes));
                     dialog.dismiss();
+
                 });
 
         Dialog dialog = builder.create();

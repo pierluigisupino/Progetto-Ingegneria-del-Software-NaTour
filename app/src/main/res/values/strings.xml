@@ -158,7 +158,7 @@
     <string name="feedback_no_changes">No changes detected</string>
     <string name="loading_text_update_itinerary">Updating the Itinerary…</string>
     <string name="feedback_success_text">Thanks for your feedback</string>
-    <string name="admin">Edited by a Admin</string>
+    <string name="edited_admin">Edited by a Admin on</string>
     <string name="edit_deleted">Edit deleted</string>
 
     <!--FOLLOW ITINERARY-->
