@@ -20,6 +20,7 @@ import com.ingsw2122_n_03.natour.application.IterController;
 
 public class DeleteDialog extends AppCompatDialogFragment {
 
+    private boolean isFirstOpen = true;
 
     @NonNull
     @Override
@@ -31,6 +32,7 @@ public class DeleteDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_delete, null);
 
         LottieAnimationView lottieAnimationView = view.findViewById(R.id.deleteAnimation);
+        lottieAnimationView.setMaxFrame(30);
 
         builder.setView(view).setNegativeButton(R.string.no_text, null);
         builder.setView(view).setPositiveButton(R.string.yes_text, (dialog, which) -> IterController.getInstance().deleteItinerary());
@@ -45,7 +47,8 @@ public class DeleteDialog extends AppCompatDialogFragment {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                deleteDialog.dismiss();
+                if(!isFirstOpen) deleteDialog.dismiss();
+                isFirstOpen = false;
             }
 
             @Override
