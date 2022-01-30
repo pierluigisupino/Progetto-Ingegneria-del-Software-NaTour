@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
@@ -24,6 +23,7 @@ import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.presentation.AdminDialog;
+import com.ingsw2122_n_03.natour.presentation.DeleteDialog;
 import com.ingsw2122_n_03.natour.presentation.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.GridSpacingItemDecoration;
@@ -147,14 +147,10 @@ public class ItineraryDetailActivity extends BaseActivity {
         }
 
 
-        deleteButton.setOnClickListener(v ->
-                new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_cancel)
-                .setMessage(R.string.itinerary_delete_confirm_text)
-                .setPositiveButton(R.string.yes_text, (dialog, which) -> iterController.deleteItinerary())
-                .setNegativeButton(R.string.no_text, null)
-                .show());
-
+        deleteButton.setOnClickListener(v -> {
+            DeleteDialog dialog = new DeleteDialog();
+            dialog.show(getSupportFragmentManager(), "DeleteDialog");
+        });
 
         editButton.setOnClickListener(v -> {
             Bundle args = new Bundle();
