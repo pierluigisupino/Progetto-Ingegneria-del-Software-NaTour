@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
