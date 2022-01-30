@@ -229,6 +229,8 @@ public class IterController extends NavigationController {
 
 
     public void onDeleteItinerarySuccess() {
+        itineraries.remove(currentIter);
+        mainFragment.updateItineraries(itineraries);
         detailActivity.finish();
         loadingDialog.dismissDialog();
         mainActivity.onSuccess(mainActivity.getString(R.string.itinerary_deleted_text));
