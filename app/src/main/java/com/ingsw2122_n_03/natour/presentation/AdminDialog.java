@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.presentation;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +18,7 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -102,6 +104,11 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
         dialog.setOnShowListener(dialogInterface -> {
 
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setTextSize(16);
+
+            Typeface typeface = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
+            button.setTypeface(typeface);
+
             button.setOnClickListener(view1 -> {
                 isFirstSubmit = false;
 
