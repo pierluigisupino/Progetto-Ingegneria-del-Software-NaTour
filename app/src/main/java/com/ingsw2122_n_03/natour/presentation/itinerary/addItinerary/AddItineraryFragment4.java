@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,10 +16,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -26,6 +29,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -33,6 +37,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding;
+import com.ingsw2122_n_03.natour.presentation.dialogs.DistanceDialog;
 import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
 import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 
@@ -80,6 +85,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     private final ArrayList<Marker> markers = new ArrayList<>();
     private final ArrayList<GeoPoint> waypoints = new ArrayList<>();
     private final ArrayList<PointOfInterest> pointOfInterests = new ArrayList<>();
+    private ArrayList<PointOfInterest> invalidPointOfInterests = new ArrayList<>();
     private ArrayList<byte[]> imagesBytes = new ArrayList<>();
     private HashMap<byte[], GeoPoint> rawPointOfInterests = new HashMap<>();
 
@@ -482,21 +488,22 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     private void showErrorDialog(String msg, ArrayList<PointOfInterest> invalidPointOfInterests){
 
-        new AlertDialog.Builder(requireContext())
-                .setIcon(R.drawable.ic_error)
-                .setTitle(requireContext().getString(R.string.warning_text))
-                .setMessage(msg)
-                .setNegativeButton(requireContext().getString(R.string.delete_photo_text), (dialogInterface, i) -> {
-                    for(PointOfInterest p : invalidPointOfInterests) {
-                        imagesBytes.remove(p.getBytes());
-                        pointOfInterests.remove(p);
-                        map.getOverlays().remove(p);
-                        map.invalidate();
-                    }
+        this.invalidPointOfInterests = invalidPointOfInterests;
 
-                })
-                .setPositiveButton(requireContext().getString(R.string.ok_text), null)
-                .show();
+        DistanceDialog dialog = new DistanceDialog();
+        Bundle args = new Bundle();
+        args.putString("msg", msg);
+        dialog.setArguments(args);
+        dialog.show(getChildFragmentManager(), "DistanceDialog");
+    }
+
+    public void removeInvalidPointOfInterests(){
+        for(PointOfInterest p : invalidPointOfInterests) {
+            imagesBytes.remove(p.getBytes());
+            pointOfInterests.remove(p);
+            map.getOverlays().remove(p);
+            map.invalidate();
+        }
     }
 
     public boolean isStartPointInserted() {

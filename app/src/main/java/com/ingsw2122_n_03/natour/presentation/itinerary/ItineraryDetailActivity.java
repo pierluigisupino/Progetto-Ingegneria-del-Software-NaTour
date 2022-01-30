@@ -22,7 +22,7 @@ import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
-import com.ingsw2122_n_03.natour.presentation.AdminDialog;
+import com.ingsw2122_n_03.natour.presentation.dialogs.AdminDialog;
 import com.ingsw2122_n_03.natour.presentation.dialogs.DeleteDialog;
 import com.ingsw2122_n_03.natour.presentation.dialogs.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
