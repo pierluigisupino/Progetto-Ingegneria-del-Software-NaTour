@@ -212,17 +212,4 @@ public class AddItineraryActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-
-        new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_cancel)
-                .setTitle(R.string.cancel_operation_title)
-                .setMessage(R.string.cancel_operation_msgText)
-                .setPositiveButton(R.string.yes_text, (dialog, which) -> finish())
-                .setNegativeButton(R.string.no_text, null)
-                .show();
-
-    }
-
 }
