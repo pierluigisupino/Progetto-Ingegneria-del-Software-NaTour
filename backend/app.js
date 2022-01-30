@@ -50,14 +50,41 @@ app.get('/items/itineraries', function(req, res) {
     queryParams = 'SELECT * FROM ITINERARY WHERE ITERID < '+ lastIter +'ORDER BY iterID DESC LIMIT '+limitRows;
   }
   
-  client.query(queryParams, (err, data) => {
+  client.query(queryParams, async (err, data) => {
     
     client.end();
     
     if(err) 
       return res.json({Error: err.stack});
-    else 
-      return res.json({Result: data.rows});
+    else{
+      
+      const response = data.rows;
+      for(var i = 0; i < response.length; ++i) {
+        
+        var params = {
+          UserPoolId: process.env.USERPOOLID,
+          Username: response[i].creatorid
+        };
+  
+        try {
+          
+          var userAttributes = await (cognito.adminGetUser(params)).promise();
+          response[i].creatorname = userAttributes.UserAttributes[2].Value;
+          
+        }catch(e) {
+          
+          if((e.stack).includes('UserNotFoundException'))
+            response[i].creatorname = 'Unknown';
+          else
+            res.json({Error: e.stack});
+            
+        }  
+        
+      }
+      
+      return res.json({Result: response});
+      
+    }
     
   });
   
@@ -139,25 +166,6 @@ app.get('/items/admin', function(req, res) {
            
   });
     
-});
-
-
-app.get('/items/user', function(req, res) {
-  
-  var params = {
-    UserPoolId: process.env.USERPOOLID,
-    Username: req.query.uid
-  };
-    
-  cognito.adminGetUser(params, function(err, data) {
-    
-    if (err)
-      return res.json({Error: err.stack});
-    else
-      return res.json({Name: data.UserAttributes[2].Value});
-      
-  });
-  
 });
 
 

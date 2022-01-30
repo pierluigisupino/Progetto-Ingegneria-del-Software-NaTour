@@ -306,6 +306,8 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 String creatorID = jsonObject.getString("creatorid");
                 User creator = new User(creatorID);
 
+                creator.setName(jsonObject.getString("creatorname"));
+
                 DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
                 TemporalAccessor accessor;
 

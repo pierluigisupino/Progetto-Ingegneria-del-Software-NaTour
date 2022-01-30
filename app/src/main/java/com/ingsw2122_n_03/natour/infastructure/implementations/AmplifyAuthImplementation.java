@@ -7,15 +7,23 @@ import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.results.SignUpResult;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.auth.AuthProvider;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.AuthController;
+import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.AuthInterface;
+import com.ingsw2122_n_03.natour.model.Admin;
+import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
+import org.json.JSONException;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public final class AmplifyAuthImplementation implements AuthInterface {
@@ -25,6 +33,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     public AmplifyAuthImplementation(AuthController controller){
         this.controller = controller;
     }
+
 
     @Override
     public boolean configurePlugins(Activity callingActivity) {
@@ -40,6 +49,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
             return false;
         }
     }
+
 
     @Override
     public boolean checkUserLogged() {
@@ -70,6 +80,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         );
     }
 
+
     @Override
     public void signUp(String name, String email, String password) {
 
@@ -92,6 +103,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         );
     }
 
+
     @Override
     public void confirmSignUp(String email, String password, String confirmationCode) {
         Amplify.Auth.confirmSignUp(
@@ -113,6 +125,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 }
         );
     }
+
 
     @Override
     public void sendVerificationCode(String email) {
@@ -137,6 +150,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         });
     }
 
+
     @Override
     public void loginWithGoogle(BaseActivity callingActivity) {
         Amplify.Auth.signInWithSocialWebUI(AuthProvider.google(), callingActivity,
@@ -144,6 +158,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 error -> controller.onLoginWithGoogleFailure()
         );
     }
+
 
     public void resetPassword(String email){
 
@@ -189,6 +204,37 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 controller::onSignOutSuccess,
                 error -> controller.onSignOutFailure()
         );
+    }
+
+    @Override
+    public void getCurrentUser() {
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("uid", Amplify.Auth.getCurrentUser().getUserId());
+
+        RestOptions options = RestOptions.builder()
+                .addPath("/items/admin")
+                .addQueryParameters(queryParams)
+                .build();
+
+        Amplify.API.get(
+                options,
+                result -> {
+
+                    try {
+                        if (result.getData().asJSONObject().getBoolean("isAdmin"))
+                            IterController.getInstance().setUp(new Admin(Amplify.Auth.getCurrentUser().getUserId()));
+                        else
+                            IterController.getInstance().setUp(new User(Amplify.Auth.getCurrentUser().getUserId()));
+                    } catch (JSONException e) {
+                        IterController.getInstance().onSetUpError(false);
+                    }
+
+                },
+
+                error -> IterController.getInstance().onSetUpError(false)
+        );
+
     }
 
 }
