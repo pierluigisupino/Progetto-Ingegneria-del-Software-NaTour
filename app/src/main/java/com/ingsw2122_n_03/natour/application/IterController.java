@@ -4,15 +4,13 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageDownloader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageUploader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ItineraryDaoImplementation;
-import com.ingsw2122_n_03.natour.infastructure.implementations.UserDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.ItineraryDaoInterface;
-import com.ingsw2122_n_03.natour.infastructure.interfaces.UserDaoInterface;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
-import com.ingsw2122_n_03.natour.presentation.dialogs.LoadingDialog;
 import com.ingsw2122_n_03.natour.presentation.SplashActivity;
+import com.ingsw2122_n_03.natour.presentation.dialogs.LoadingDialog;
 import com.ingsw2122_n_03.natour.presentation.itinerary.FollowItineraryActivity;
 import com.ingsw2122_n_03.natour.presentation.itinerary.ItineraryDetailActivity;
 import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
@@ -41,7 +39,6 @@ public class IterController extends NavigationController {
     private LoadingDialog loadingDialog;
 
     private final ItineraryDaoInterface itineraryDao;
-    private final UserDaoInterface userDao;
 
     private final ImageUploader imageUploader;
     private final ImageDownloader imageDownloader;
@@ -58,7 +55,6 @@ public class IterController extends NavigationController {
     private IterController(){
 
         itineraryDao = new ItineraryDaoImplementation(this);
-        userDao = new UserDaoImplementation(this);
         imageUploader = new ImageUploader(this);
         imageDownloader = new ImageDownloader(this);
 
@@ -292,29 +288,15 @@ public class IterController extends NavigationController {
         currentIter = itineraries.get(position);
         photos.clear();
         imageDownloader.resetSession(currentIter.getIterId());
-
-        if(currentIter.getCreator().getName() != null)
-            onRetrieveUserSuccess();
-        else {
-            if(currentIter.getCreator().getUid().equals(currentUser.getUid())) {
-                currentIter.setCreator(currentUser);
-                onRetrieveUserSuccess();
-            }else {
-                userDao.setUserName(currentIter.getCreator());
-            }
-        }
-    }
-
-
-    public void onRetrieveUserSuccess() {
         retrieveItineraryPhotos();
+
+        if(currentIter.getCreator().getUid().equals(currentUser.getUid()))
+            currentIter.setCreator(currentUser);
+
         goToActivity(mainActivity, ItineraryDetailActivity.class, currentIter, currentUser);
+
     }
 
-
-    public void onRetrieveUserError() {
-        mainActivity.onFail(mainActivity.getString(R.string.retrieve_itinerary_error));
-    }
 
     //TODO : SHOW LOADING CIRCLE BAR
     public void retrieveItineraryPhotos() {

@@ -24,4 +24,20 @@ CREATE TABLE ITINERARY(
   CONSTRAINT check_duration CHECK
   ((hours = 0 AND minutes BETWEEN 1 AND 59) OR (hours > 0 AND minutes BETWEEN 0 AND 59))
 
+);
+
+CREATE TABLE MESSAGE(
+
+  body VARCHAR(2000) NOT NULL,
+  sendDate DATE NOT NULL,
+  sendTime TIME NOT NULL,
+  sender VARCHAR(100) NOT NULL,
+  receiver VARCHAR(100) NOT NULL,
+
+  CONSTRAINT check_body CHECK
+  (LENGTH(body) > 0),
+
+  CONSTRAINT check_send_rec CHECK
+  (sender IS DISTINCT FROM receiver)
+
 )

@@ -4,17 +4,16 @@ import android.app.Activity;
 
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyAuthImplementation;
-import com.ingsw2122_n_03.natour.infastructure.implementations.UserDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.AuthInterface;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
-import com.ingsw2122_n_03.natour.presentation.signIn.ForgotPasswordActivity;
+import com.ingsw2122_n_03.natour.presentation.SplashActivity;
+import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
+import com.ingsw2122_n_03.natour.presentation.signIn.ForgotPasswordActivity;
 import com.ingsw2122_n_03.natour.presentation.signIn.ResetPasswordActivity;
 import com.ingsw2122_n_03.natour.presentation.signIn.SignInActivity;
 import com.ingsw2122_n_03.natour.presentation.signUp.SignUpActivity;
-import com.ingsw2122_n_03.natour.presentation.SplashActivity;
 import com.ingsw2122_n_03.natour.presentation.signUp.VerifyAccountActivity;
-import com.ingsw2122_n_03.natour.presentation.WelcomeActivity;
 
 import java.util.HashMap;
 
@@ -52,7 +51,7 @@ public final class AuthController extends NavigationController {
         if(authInterface.configurePlugins(splashActivity)) {
 
             if (authInterface.checkUserLogged())
-                new UserDaoImplementation(IterController.getInstance()).getCurrentUser();
+                authInterface.getCurrentUser();
             else
                 goToActivityAndFinish(splashActivity, WelcomeActivity.class);
 
