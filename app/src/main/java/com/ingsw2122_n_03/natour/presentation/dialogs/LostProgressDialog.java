@@ -19,6 +19,9 @@ import com.ingsw2122_n_03.natour.R;
 
 public class LostProgressDialog extends AppCompatDialogFragment {
 
+    private Button btnPositive;
+    private Button btnNegative;
+
     private boolean wantsToDismiss = false;
     private boolean wantsToClose = false;
 
@@ -32,7 +35,7 @@ public class LostProgressDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_lost_progress, null);
 
         LottieAnimationView lottieAnimationView = view.findViewById(R.id.deleteAnimation);
-        lottieAnimationView.setMaxFrame(150);
+        lottieAnimationView.setFrame(150);
 
         builder.setView(view).setNegativeButton(R.string.no_text, null);
         builder.setView(view).setPositiveButton(R.string.yes_text, null);
@@ -47,6 +50,10 @@ public class LostProgressDialog extends AppCompatDialogFragment {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+
+                btnNegative.setClickable(true);
+                btnPositive.setClickable(true);
+
                 if(wantsToClose) {
                     deleteDialog.dismiss();
                     requireActivity().finish();
@@ -66,19 +73,21 @@ public class LostProgressDialog extends AppCompatDialogFragment {
 
         deleteDialog.setOnShowListener(dialog -> {
 
-            Button btnPositive = deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            btnPositive = deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE);
             btnPositive.setTextSize(16);
 
             Typeface typefacePositive = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             btnPositive.setTypeface(typefacePositive);
 
-            Button btnNegative = deleteDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            btnNegative = deleteDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
             btnNegative.setTextSize(16);
 
             Typeface typefaceNegative = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             btnPositive.setTypeface(typefaceNegative);
 
             btnNegative.setOnClickListener(view1 -> {
+                btnNegative.setClickable(false);
+                btnPositive.setClickable(false);
                 lottieAnimationView.setMaxFrame(150);
                 lottieAnimationView.setFrame(150);
                 lottieAnimationView.setSpeed(-1);
@@ -87,6 +96,8 @@ public class LostProgressDialog extends AppCompatDialogFragment {
             });
 
             btnPositive.setOnClickListener(view1 -> {
+                btnNegative.setClickable(false);
+                btnPositive.setClickable(false);
                 lottieAnimationView.setMinAndMaxFrame(150, 270);
                 lottieAnimationView.playAnimation();
                 wantsToClose = true;
