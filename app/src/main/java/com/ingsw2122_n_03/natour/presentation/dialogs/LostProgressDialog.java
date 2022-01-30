@@ -1,4 +1,4 @@
-package com.ingsw2122_n_03.natour.presentation;
+package com.ingsw2122_n_03.natour.presentation.dialogs;
 
 import android.animation.Animator;
 import android.app.AlertDialog;
@@ -16,11 +16,11 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.ingsw2122_n_03.natour.R;
-import com.ingsw2122_n_03.natour.application.IterController;
 
-public class DeleteDialog extends AppCompatDialogFragment {
+public class LostProgressDialog extends AppCompatDialogFragment {
 
-    private boolean isFirstOpen = true;
+    private boolean wantsToDismiss = false;
+    private boolean wantsToClose = false;
 
     @NonNull
     @Override
@@ -29,13 +29,13 @@ public class DeleteDialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        View view = inflater.inflate(R.layout.dialog_delete, null);
+        View view = inflater.inflate(R.layout.dialog_lost_progress, null);
 
         LottieAnimationView lottieAnimationView = view.findViewById(R.id.deleteAnimation);
-        lottieAnimationView.setMaxFrame(30);
+        lottieAnimationView.setMaxFrame(150);
 
         builder.setView(view).setNegativeButton(R.string.no_text, null);
-        builder.setView(view).setPositiveButton(R.string.yes_text, (dialog, which) -> IterController.getInstance().deleteItinerary());
+        builder.setView(view).setPositiveButton(R.string.yes_text, null);
 
         final AlertDialog deleteDialog = builder.create();
 
@@ -47,8 +47,12 @@ public class DeleteDialog extends AppCompatDialogFragment {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(!isFirstOpen) deleteDialog.dismiss();
-                isFirstOpen = false;
+                if(wantsToClose) {
+                    deleteDialog.dismiss();
+                    requireActivity().finish();
+                }else if(wantsToDismiss){
+                    deleteDialog.dismiss();
+                }
             }
 
             @Override
@@ -75,8 +79,17 @@ public class DeleteDialog extends AppCompatDialogFragment {
             btnPositive.setTypeface(typefaceNegative);
 
             btnNegative.setOnClickListener(view1 -> {
+                lottieAnimationView.setMaxFrame(150);
+                lottieAnimationView.setFrame(150);
                 lottieAnimationView.setSpeed(-1);
                 lottieAnimationView.playAnimation();
+                wantsToDismiss = true;
+            });
+
+            btnPositive.setOnClickListener(view1 -> {
+                lottieAnimationView.setMinAndMaxFrame(150, 270);
+                lottieAnimationView.playAnimation();
+                wantsToClose = true;
             });
 
         });

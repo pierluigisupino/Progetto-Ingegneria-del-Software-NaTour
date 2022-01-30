@@ -11,7 +11,7 @@ import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
-import com.ingsw2122_n_03.natour.presentation.LoadingDialog;
+import com.ingsw2122_n_03.natour.presentation.dialogs.LoadingDialog;
 import com.ingsw2122_n_03.natour.presentation.SplashActivity;
 import com.ingsw2122_n_03.natour.presentation.itinerary.FollowItineraryActivity;
 import com.ingsw2122_n_03.natour.presentation.itinerary.ItineraryDetailActivity;

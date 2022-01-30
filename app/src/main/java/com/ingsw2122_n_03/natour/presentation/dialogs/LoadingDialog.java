@@ -1,4 +1,4 @@
-package com.ingsw2122_n_03.natour.presentation;
+package com.ingsw2122_n_03.natour.presentation.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

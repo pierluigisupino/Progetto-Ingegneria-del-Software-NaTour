@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
+import com.ingsw2122_n_03.natour.presentation.dialogs.LostProgressDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.shuhart.stepview.StepView;
 
@@ -70,14 +71,10 @@ public class AddItineraryActivity extends BaseActivity {
         nextButton = binding.nextButton;
         linearProgressIndicator = binding.progressBar;
 
-        materialToolbar.setNavigationOnClickListener(v ->
-                new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_cancel)
-                .setTitle(R.string.cancel_operation_title)
-                .setMessage(R.string.cancel_operation_msgText)
-                .setPositiveButton(R.string.yes_text, (dialog, which) -> finish())
-                .setNegativeButton(R.string.no_text, null)
-                .show());
+        materialToolbar.setNavigationOnClickListener(v ->{
+            LostProgressDialog dialog = new LostProgressDialog();
+            dialog.show(getSupportFragmentManager(), "LostProgressDialog");
+        });
 
         stepView.getState()
                 .animationType(StepView.ANIMATION_CIRCLE)
