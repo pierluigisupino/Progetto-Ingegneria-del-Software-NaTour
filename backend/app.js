@@ -276,10 +276,10 @@ app.put('/items/photo', function(req, res) {
 ****************************/
 
 
-app.delete('/items/itineraries', function(req, res) {
+app.delete('/items/itineraries/:id', function(req, res) {
   
   const client = new Client(clientParams);
-  const iterid = req.body.iterid;
+  const iterid = Number(req.params.id);
   
   client.connect();
   
