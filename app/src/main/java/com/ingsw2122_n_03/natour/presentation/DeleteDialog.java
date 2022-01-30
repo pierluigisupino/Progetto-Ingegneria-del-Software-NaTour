@@ -72,7 +72,6 @@ public class DeleteDialog extends AppCompatDialogFragment {
             btnPositive.setTypeface(typefaceNegative);
 
             btnNegative.setOnClickListener(view1 -> {
-                int lastFrame = lottieAnimationView.getFrame();
                 lottieAnimationView.setSpeed(-1);
                 lottieAnimationView.playAnimation();
             });
