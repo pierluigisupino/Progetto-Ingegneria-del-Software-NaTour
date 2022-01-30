@@ -18,9 +18,13 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 
-public class DeleteDialog extends AppCompatDialogFragment {
+public class DeleteItineraryDialog extends AppCompatDialogFragment {
 
-    private boolean isFirstOpen = true;
+    private Button btnPositive;
+    private Button btnNegative;
+
+    private boolean shouldClose = false;
+    private boolean shouldDelete = false;
 
     @NonNull
     @Override
@@ -32,11 +36,11 @@ public class DeleteDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_delete, null);
 
         LottieAnimationView lottieAnimationView = view.findViewById(R.id.deleteAnimation);
-        lottieAnimationView.setMaxFrame(30);
+        lottieAnimationView.setFrame(150);
         lottieAnimationView.setSpeed(1.5F);
 
+        builder.setView(view).setPositiveButton(R.string.yes_text, null);
         builder.setView(view).setNegativeButton(R.string.no_text, null);
-        builder.setView(view).setPositiveButton(R.string.yes_text, (dialog, which) -> IterController.getInstance().deleteItinerary());
 
         final AlertDialog deleteDialog = builder.create();
 
@@ -48,8 +52,11 @@ public class DeleteDialog extends AppCompatDialogFragment {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(!isFirstOpen) deleteDialog.dismiss();
-                isFirstOpen = false;
+
+                btnNegative.setClickable(true);
+                btnPositive.setClickable(true);
+                if(shouldClose) deleteDialog.dismiss();
+                if(shouldDelete) IterController.getInstance().deleteItinerary();
             }
 
             @Override
@@ -63,20 +70,36 @@ public class DeleteDialog extends AppCompatDialogFragment {
 
         deleteDialog.setOnShowListener(dialog -> {
 
-            Button btnPositive = deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            btnPositive.setTextSize(16);
+            btnPositive = deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            btnPositive.setTextSize(14);
+            btnPositive.setTextColor(ResourcesCompat.getColor(getResources(), R.color.error, null));
 
             Typeface typefacePositive = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             btnPositive.setTypeface(typefacePositive);
 
-            Button btnNegative = deleteDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-            btnNegative.setTextSize(16);
+            btnNegative = deleteDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            btnNegative.setTextSize(14);
 
             Typeface typefaceNegative = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
-            btnPositive.setTypeface(typefaceNegative);
+            btnNegative.setTypeface(typefaceNegative);
+
+            btnPositive.setOnClickListener(view1 -> {
+                btnNegative.setClickable(false);
+                btnPositive.setClickable(false);
+                shouldClose = true;
+                lottieAnimationView.setMinAndMaxFrame(150, 270);
+                lottieAnimationView.setSpeed(1.5F);
+                lottieAnimationView.playAnimation();
+                shouldDelete = true;
+            });
 
             btnNegative.setOnClickListener(view1 -> {
-                lottieAnimationView.setSpeed(-1);
+                btnNegative.setClickable(false);
+                btnPositive.setClickable(false);
+                shouldClose = true;
+                lottieAnimationView.setMaxFrame(150);
+                lottieAnimationView.setFrame(150);
+                lottieAnimationView.setSpeed(-1.5F);
                 lottieAnimationView.playAnimation();
             });
 

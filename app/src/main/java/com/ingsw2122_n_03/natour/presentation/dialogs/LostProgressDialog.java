@@ -75,16 +75,17 @@ public class LostProgressDialog extends AppCompatDialogFragment {
         lostProgressDialog.setOnShowListener(dialog -> {
 
             btnPositive = lostProgressDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            btnPositive.setTextSize(16);
+            btnPositive.setTextSize(14);
 
             Typeface typefacePositive = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             btnPositive.setTypeface(typefacePositive);
 
             btnNegative = lostProgressDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-            btnNegative.setTextSize(16);
+            btnNegative.setTextSize(14);
 
             Typeface typefaceNegative = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             btnPositive.setTypeface(typefaceNegative);
+            btnPositive.setTextColor(ResourcesCompat.getColor(getResources(), R.color.error, null));
 
             btnNegative.setOnClickListener(view1 -> {
                 btnNegative.setClickable(false);

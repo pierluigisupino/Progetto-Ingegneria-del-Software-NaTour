@@ -32,7 +32,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding;
-import com.ingsw2122_n_03.natour.presentation.dialogs.DistanceDialog;
+import com.ingsw2122_n_03.natour.presentation.dialogs.PhotoPositionDialog;
 import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
 import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 
@@ -486,7 +486,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
         this.invalidPointOfInterests = invalidPointOfInterests;
 
-        DistanceDialog dialog = new DistanceDialog();
+        PhotoPositionDialog dialog = new PhotoPositionDialog();
         Bundle args = new Bundle();
         args.putString("msg", msg);
         dialog.setArguments(args);

@@ -23,7 +23,7 @@ import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.presentation.dialogs.AdminDialog;
-import com.ingsw2122_n_03.natour.presentation.dialogs.DeleteDialog;
+import com.ingsw2122_n_03.natour.presentation.dialogs.DeleteItineraryDialog;
 import com.ingsw2122_n_03.natour.presentation.dialogs.FeedBackDialog;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.GridSpacingItemDecoration;
@@ -148,7 +148,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
 
         deleteButton.setOnClickListener(v -> {
-            DeleteDialog dialog = new DeleteDialog();
+            DeleteItineraryDialog dialog = new DeleteItineraryDialog();
             dialog.show(getSupportFragmentManager(), "DeleteDialog");
         });
 

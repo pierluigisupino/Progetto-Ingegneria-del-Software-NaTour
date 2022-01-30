@@ -18,7 +18,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryFragment4;
 
-public class DistanceDialog extends AppCompatDialogFragment {
+public class PhotoPositionDialog extends AppCompatDialogFragment {
 
     @NonNull
     @Override
@@ -43,13 +43,14 @@ public class DistanceDialog extends AppCompatDialogFragment {
         distanceDialog.setOnShowListener(dialog -> {
 
             Button btnPositive = distanceDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            btnPositive.setTextSize(16);
+            btnPositive.setTextSize(14);
 
             Typeface typefacePositive = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             btnPositive.setTypeface(typefacePositive);
 
             Button btnNegative = distanceDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-            btnNegative.setTextSize(16);
+            btnNegative.setTextSize(14);
+            btnNegative.setTextColor(ResourcesCompat.getColor(getResources(), R.color.error, null));
 
             Typeface typefaceNegative = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             btnPositive.setTypeface(typefaceNegative);

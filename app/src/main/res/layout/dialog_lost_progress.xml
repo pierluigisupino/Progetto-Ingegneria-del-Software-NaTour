@@ -23,9 +23,9 @@
     <com.airbnb.lottie.LottieAnimationView
         android:layout_weight="1"
         android:id="@+id/deleteAnimation"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        app:lottie_rawRes="@raw/animation_discard_progress"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        app:lottie_rawRes="@raw/animation_delete"
         android:layout_marginTop="20dp"
         app:lottie_loop="false"/>
 
@@ -39,6 +39,6 @@
         android:textColor="@color/error"
         android:fontFamily="@font/euclid_circular_medium"
         android:text="@string/cancel_operation_msgText"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
 </LinearLayout>
