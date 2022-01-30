@@ -40,7 +40,7 @@ public class LostProgressDialog extends AppCompatDialogFragment {
         builder.setView(view).setNegativeButton(R.string.no_text, null);
         builder.setView(view).setPositiveButton(R.string.yes_text, null);
 
-        final AlertDialog deleteDialog = builder.create();
+        final AlertDialog lostProgressDialog = builder.create();
 
         lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -55,10 +55,10 @@ public class LostProgressDialog extends AppCompatDialogFragment {
                 btnPositive.setClickable(true);
 
                 if(wantsToClose) {
-                    deleteDialog.dismiss();
+                    lostProgressDialog.dismiss();
                     requireActivity().finish();
                 }else if(wantsToDismiss){
-                    deleteDialog.dismiss();
+                    lostProgressDialog.dismiss();
                 }
             }
 
@@ -71,15 +71,15 @@ public class LostProgressDialog extends AppCompatDialogFragment {
             }
         });
 
-        deleteDialog.setOnShowListener(dialog -> {
+        lostProgressDialog.setOnShowListener(dialog -> {
 
-            btnPositive = deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            btnPositive = lostProgressDialog.getButton(AlertDialog.BUTTON_POSITIVE);
             btnPositive.setTextSize(16);
 
             Typeface typefacePositive = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             btnPositive.setTypeface(typefacePositive);
 
-            btnNegative = deleteDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            btnNegative = lostProgressDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
             btnNegative.setTextSize(16);
 
             Typeface typefaceNegative = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
@@ -105,8 +105,8 @@ public class LostProgressDialog extends AppCompatDialogFragment {
 
         });
 
-        deleteDialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog);
-        return deleteDialog;
+        lostProgressDialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog);
+        return lostProgressDialog;
 
     }
 

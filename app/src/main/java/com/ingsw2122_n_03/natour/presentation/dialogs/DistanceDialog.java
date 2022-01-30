@@ -38,17 +38,17 @@ public class DistanceDialog extends AppCompatDialogFragment {
         builder.setView(view).setNegativeButton(R.string.delete_photo_text, (d, w) -> ((AddItineraryFragment4) getParentFragment()).removeInvalidPointOfInterests());
         builder.setView(view).setPositiveButton(R.string.ok_text, null);
 
-        final AlertDialog deleteDialog = builder.create();
+        final AlertDialog distanceDialog = builder.create();
 
-        deleteDialog.setOnShowListener(dialog -> {
+        distanceDialog.setOnShowListener(dialog -> {
 
-            Button btnPositive = deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            Button btnPositive = distanceDialog.getButton(AlertDialog.BUTTON_POSITIVE);
             btnPositive.setTextSize(16);
 
             Typeface typefacePositive = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             btnPositive.setTypeface(typefacePositive);
 
-            Button btnNegative = deleteDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            Button btnNegative = distanceDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
             btnNegative.setTextSize(16);
 
             Typeface typefaceNegative = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
@@ -56,8 +56,8 @@ public class DistanceDialog extends AppCompatDialogFragment {
 
         });
 
-        deleteDialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog);
-        return deleteDialog;
+        distanceDialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog);
+        return distanceDialog;
 
     }
 
