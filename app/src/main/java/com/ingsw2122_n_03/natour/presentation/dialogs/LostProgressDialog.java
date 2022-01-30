@@ -36,6 +36,7 @@ public class LostProgressDialog extends AppCompatDialogFragment {
 
         LottieAnimationView lottieAnimationView = view.findViewById(R.id.deleteAnimation);
         lottieAnimationView.setFrame(150);
+        lottieAnimationView.setSpeed(1.5F);
 
         builder.setView(view).setNegativeButton(R.string.no_text, null);
         builder.setView(view).setPositiveButton(R.string.yes_text, null);
@@ -90,7 +91,7 @@ public class LostProgressDialog extends AppCompatDialogFragment {
                 btnPositive.setClickable(false);
                 lottieAnimationView.setMaxFrame(150);
                 lottieAnimationView.setFrame(150);
-                lottieAnimationView.setSpeed(-1);
+                lottieAnimationView.setSpeed(-1.5F);
                 lottieAnimationView.playAnimation();
                 wantsToDismiss = true;
             });
@@ -99,6 +100,7 @@ public class LostProgressDialog extends AppCompatDialogFragment {
                 btnNegative.setClickable(false);
                 btnPositive.setClickable(false);
                 lottieAnimationView.setMinAndMaxFrame(150, 270);
+                lottieAnimationView.setSpeed(1.5F);
                 lottieAnimationView.playAnimation();
                 wantsToClose = true;
             });

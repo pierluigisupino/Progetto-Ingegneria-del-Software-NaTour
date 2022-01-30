@@ -33,6 +33,7 @@ public class DeleteDialog extends AppCompatDialogFragment {
 
         LottieAnimationView lottieAnimationView = view.findViewById(R.id.deleteAnimation);
         lottieAnimationView.setMaxFrame(30);
+        lottieAnimationView.setSpeed(1.5F);
 
         builder.setView(view).setNegativeButton(R.string.no_text, null);
         builder.setView(view).setPositiveButton(R.string.yes_text, (dialog, which) -> IterController.getInstance().deleteItinerary());
