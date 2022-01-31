@@ -554,10 +554,13 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
         if(itineraryWaypoints.size() > 1) {
 
-            float tolerance = map.getProjection().metersToPixels(100);
-            GeoPoint closest = roadOverlay.getCloseTo(position, tolerance, map);
+            /* Vecchio codice non funziona lo stesso - roadOverlay è null
+            return roadOverlay.isCloseTo(position, 100, map); */
 
-            return closest != null;
+           float tolerance = map.getProjection().metersToPixels(100);
+           GeoPoint closest = roadOverlay.getCloseTo(position, tolerance, map);
+
+           return closest != null;
 
         }else
             return !(position.distanceToAsDouble(itineraryWaypoints.get(0)) > 10000);

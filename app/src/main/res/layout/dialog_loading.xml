@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="@drawable/rounded_dialog"
-    android:padding="20dp">
+    android:padding="40dp">
 
     <com.airbnb.lottie.LottieAnimationView
         android:layout_weight="1"
