@@ -87,7 +87,8 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
     private MapView map;
     private RoadManager roadManager;
-    private Polyline roadOverlay;
+    private Polyline itineraryRoadOverlay;
+    private Polyline myroadOverlay;
     private MyLocationNewOverlay myLocationNewOverlay;
 
     private Itinerary itinerary;
@@ -104,6 +105,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     private boolean wantsRoadsToStart = false;
     private boolean wantsDirections = false;
     private boolean isFirstRun = true;
+    private boolean isAddingPhoto = false;
 
     private ProgressBar progressBar;
     private LinearProgressIndicator bottomProgressBar;
@@ -131,7 +133,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                             double[] photoPosition = imageUtilities.getImageLocation(photoByte);
                             if(photoPosition != null) {
                                 GeoPoint photoPoint = new GeoPoint(photoPosition[0], photoPosition[1]);
-                                if(isPositionsCorrect(photoPoint)){
+                                if(arePositionsCorrect(photoPoint)){
                                     uploadingPhoto.put(photoByte, photoPoint);
                                     iterController.uploadPhoto(photoByte);
                                 }else{
@@ -231,13 +233,14 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
             }else{
                 wantsRoadsToStart = false;
                 map.getController().animateTo(itineraryWaypoints.get(0));
-                map.getOverlays().remove(roadOverlay);
+                map.getOverlays().remove(myroadOverlay);
                 map.getOverlays().removeAll(myRoadIndications);
                 bottomProgressBar.setVisibility(View.INVISIBLE);
             }
         });
 
         addPhotoButton.setOnClickListener(view1 -> {
+            isAddingPhoto = true;
             uploadingPhoto.clear();
             Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent1.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
@@ -252,12 +255,15 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     public void onResume() {
         super.onResume();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && toStartSwitchMaterial.isChecked()){
-            toStartSwitchMaterial.setChecked(false);
-        }else if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && !toStartSwitchMaterial.isChecked() && !isFirstRun){
-            toStartSwitchMaterial.setChecked(true);
+        if(!isAddingPhoto) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && toStartSwitchMaterial.isChecked()) {
+                toStartSwitchMaterial.setChecked(false);
+            } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && !toStartSwitchMaterial.isChecked() && !isFirstRun) {
+                toStartSwitchMaterial.setChecked(true);
+            }
         }
 
+        if(isAddingPhoto) isAddingPhoto = false;
         isFirstRun = false;
 
         if(map != null) map.onResume();
@@ -417,11 +423,11 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         new Thread(()-> {
 
             Road road = roadManager.getRoad(itineraryWaypoints);
-            Polyline polyline = RoadManager.buildRoadOverlay(road);
-            polyline.getOutlinePaint().setStrokeWidth(8);
+            itineraryRoadOverlay = RoadManager.buildRoadOverlay(road);
+            itineraryRoadOverlay.getOutlinePaint().setStrokeWidth(8);
 
             makeDirections(road, itineraryIndications);
-            map.getOverlays().add(polyline);
+            map.getOverlays().add(itineraryRoadOverlay);
 
             cardView.post(() -> {
                 progressBar.setVisibility(View.GONE);
@@ -446,12 +452,12 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                 myRoadWaypoints.add(0, myLocationNewOverlay.getMyLocation());
 
             Road road = roadManager.getRoad(myRoadWaypoints);
-            roadOverlay = RoadManager.buildRoadOverlay(road);
-            roadOverlay.getOutlinePaint().setStrokeWidth(8);
+            myroadOverlay = RoadManager.buildRoadOverlay(road);
+            myroadOverlay.getOutlinePaint().setStrokeWidth(8);
 
             if(wantsRoadsToStart) {
                 makeDirections(road, myRoadIndications);
-                map.getOverlays().add(roadOverlay);
+                map.getOverlays().add(myroadOverlay);
             }
 
             cardView.post(() -> {
@@ -550,15 +556,12 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
      * PHOTO UPLOAD UTILS
      *******************/
 
-    public boolean isPositionsCorrect(GeoPoint position) {
+    public boolean arePositionsCorrect(GeoPoint position) {
 
         if(itineraryWaypoints.size() > 1) {
 
-            /* Vecchio codice non funziona lo stesso - roadOverlay è null
-            return roadOverlay.isCloseTo(position, 100, map); */
-
            float tolerance = map.getProjection().metersToPixels(100);
-           GeoPoint closest = roadOverlay.getCloseTo(position, tolerance, map);
+           GeoPoint closest = itineraryRoadOverlay.getCloseTo(position, tolerance, map);
 
            return closest != null;
 
