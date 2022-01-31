@@ -78,7 +78,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     private final ArrayList<Marker> markers = new ArrayList<>();
     private final ArrayList<PointOfInterest> pointOfInterests = new ArrayList<>();
-    private ArrayList<PointOfInterest> invalidPointOfInterests = new ArrayList<>();
+    private final ArrayList<PointOfInterest> invalidPointOfInterests = new ArrayList<>();
     private ArrayList<byte[]> imagesBytes = new ArrayList<>();
     private HashMap<byte[], GeoPoint> rawPointOfInterests = new HashMap<>();
 
@@ -479,10 +479,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
      * ACTIVITY UTILS
      ****************/
 
-    private void showErrorDialog(String msg, ArrayList<PointOfInterest> invalidPointOfInterests){
-
-        this.invalidPointOfInterests = invalidPointOfInterests;
-
+    private void showErrorDialog(String msg){
         PhotoPositionDialog dialog = new PhotoPositionDialog();
         Bundle args = new Bundle();
         args.putString("msg", msg);
@@ -509,13 +506,13 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     }
 
     public boolean arePositionsCorrect() {
+
+        invalidPointOfInterests.clear();
         boolean ret = true;
-        ArrayList<PointOfInterest> invalidPointOfInterests = new ArrayList<>();
 
         if(markers.size() > 1) {
 
             for (PointOfInterest p : pointOfInterests) {
-
                 float tolerance =  map.getProjection().metersToPixels(100);
                 GeoPoint closest = roadOverlay.getCloseTo(p.getPosition(), tolerance, map);
 
@@ -526,13 +523,12 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             }
 
             if(!ret) {
-                showErrorDialog(requireContext().getString(R.string.position_error), invalidPointOfInterests);
+                showErrorDialog(requireContext().getString(R.string.position_error));
             }
 
         }else {
 
             for (PointOfInterest p : pointOfInterests) {
-
                 if (p.getPosition().distanceToAsDouble(markers.get(0).getPosition()) > 10000) {
                     invalidPointOfInterests.add(p);
                     ret = false;
@@ -540,7 +536,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
             }
 
             if(!ret) {
-                showErrorDialog(requireContext().getString(R.string.position_error_point), invalidPointOfInterests);
+                showErrorDialog(requireContext().getString(R.string.position_error_point));
             }
 
         }

@@ -219,7 +219,7 @@ public class IterController extends NavigationController {
 
 
     public void deleteItinerary() {
-        loadingDialog = new LoadingDialog(mainActivity, mainActivity.getString(R.string.loading_text_delete_itinerary));
+        loadingDialog = new LoadingDialog(detailActivity, mainActivity.getString(R.string.loading_text_delete_itinerary));
         loadingDialog.startLoading();
         itineraryDao.deleteItinerary(currentIter.getIterId());
     }
