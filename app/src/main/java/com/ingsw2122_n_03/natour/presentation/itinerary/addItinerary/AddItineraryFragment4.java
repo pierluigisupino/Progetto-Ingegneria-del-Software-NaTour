@@ -248,6 +248,9 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
         for(Marker marker : markers){
 
+            marker.setOnMarkerClickListener(this);
+            marker.setOnMarkerDragListener(this);
+            
             if(markers.indexOf(marker) == 0){
                 marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
             }else if(markers.indexOf(marker) == markers.size() - 1){
