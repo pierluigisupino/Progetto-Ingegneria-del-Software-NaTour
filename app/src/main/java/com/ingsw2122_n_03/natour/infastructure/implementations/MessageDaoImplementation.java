@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class MessageDaoImplementation implements MessageDaoInterface {
 
-    private MessageController messageController;
+    private final MessageController messageController;
 
     public MessageDaoImplementation(MessageController controller) {
         messageController = controller;
