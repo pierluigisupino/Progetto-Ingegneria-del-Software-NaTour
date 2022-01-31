@@ -84,6 +84,7 @@ public class IterController extends NavigationController {
     public void onSetUpSuccess(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
         goToActivityAndFinish(splashActivity, MainActivity.class, itineraries);
+        MessageController.getInstance().setUpMessages(currentUser);
     }
 
 
