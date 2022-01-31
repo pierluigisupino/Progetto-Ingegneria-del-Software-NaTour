@@ -57,7 +57,6 @@ import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.WayPoint;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
-import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
 import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -335,7 +334,8 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
 
     private void addMarker(WayPoint wayPoint, boolean isFirst){
-        NaTourMarker marker = new NaTourMarker(map);
+        Marker marker = new Marker(map);
+        GeoPoint position = new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
 
         if(isFirst){
             marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
@@ -346,13 +346,12 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         }
 
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-        marker.setPosition(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
+        marker.setPosition(position);
 
         map.getOverlays().add(marker);
         map.invalidate();
 
-        NaTourMarker.NaTourGeoPoint naTourWaypoint = marker.new NaTourGeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
-        this.itineraryWaypoints.add(naTourWaypoint);
+        this.itineraryWaypoints.add(position);
 
     }
 
