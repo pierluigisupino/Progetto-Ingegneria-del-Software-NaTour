@@ -16,7 +16,7 @@ public class MessageController extends NavigationController{
     private final MessageDaoInterface messageDaoInterface;
 
     private User currentUser;
-    private final ArrayList<User> chats = new ArrayList<>();
+    private ArrayList<User> chats = new ArrayList<>();
 
     private MainActivity mainActivity;
     private MessagesFragment messagesFragment;
@@ -39,7 +39,6 @@ public class MessageController extends NavigationController{
 
     public void setUpMessages(User currentUser) {
         this.currentUser = currentUser;
-        //SHOW LOADING BACKGROUND IN MESSAGE FRAGMENT
         messageDaoInterface.getChatsByUser(currentUser.getUid());
     }
 
@@ -49,31 +48,64 @@ public class MessageController extends NavigationController{
      ***********/
 
     public void updateChats() {
-        //SHOW LOADING BACKGROUND IN MESSAGE FRAGMENT
         messageDaoInterface.getChatsByUser(currentUser.getUid());
     }
 
 
     public void onRetrieveChatsSuccess(ArrayList<User> chats) {
-        this.chats.addAll(chats);
-        //UPDATE MESSAGE FRAGMENT
-        //DISMISS LOADING BACKGROUND
+        this.chats = chats;
+        messagesFragment.updateChats(chats);
     }
 
 
     public void onRetrieveChatsError() {
         //SHOW ERROR ON MESSAGE FRAGMENT
-        //DISMISS LOADING BACKGROUND
+    }
+
+
+    /***************
+     * GET MESSAGES
+     **************/
+
+    public void retrieveMessages(String user) {
+        messageDaoInterface.getMessagesByChat(user, currentUser.getUid());
+    }
+
+
+    public void onRetrieveMessagesSuccess() {
+
+
+    }
+
+
+    public void onRetrieveMessagesError() {
+
+
+    }
+
+
+    /***************
+     * SEND MESSAGE
+     **************/
+
+    public void sendMessage() {
+        //messageDaoInterface.sendMessage(...);
+    }
+
+
+    public void onMessageSentSuccess() {
+
+    }
+
+
+    public void onMessageSentError() {
+
     }
 
 
     /*********
      * SETTERS
      *********/
-
-    public void setMainActivity(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-    }
 
     public void setMessagesFragment(MessagesFragment messagesFragment) {
         this.messagesFragment = messagesFragment;

@@ -104,7 +104,6 @@ public class IterController extends NavigationController {
 
 
     public void onUpdateItinerariesSuccess(ArrayList<Itinerary> iters){
-        itineraries.clear();
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
         mainFragment.onSuccess();
@@ -125,7 +124,6 @@ public class IterController extends NavigationController {
             itineraries.addAll(iters);
             mainFragment.updateItineraries(itineraries);
         }
-        mainFragment.onSuccess();
     }
 
 

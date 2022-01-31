@@ -5,11 +5,11 @@ import org.joda.time.LocalTime;
 
 public class Message {
 
-    private String body;
-    private LocalDate sendDate;
-    private LocalTime sendTime;
-    private User sender;
-    private User receiver;
+    private final String     body;
+    private final LocalDate  sendDate;
+    private final LocalTime  sendTime;
+    private final User       sender;
+    private final User       receiver;
 
 
     /**CONSTRUCTOR
@@ -22,5 +22,21 @@ public class Message {
         this.sender = sender;
         this.receiver = receiver;
     }
+
+
+    /**GETTERS
+     &
+     SETTERS
+     */
+
+    public String getBody() { return body; }
+
+    public LocalDate getSendDate() { return sendDate; }
+
+    public LocalTime getSendTime() { return sendTime; }
+
+    public User getSender() { return sender; }
+
+    public User getReceiver() { return receiver; }
 
 }
