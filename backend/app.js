@@ -76,7 +76,7 @@ app.get('/items/itineraries', function(req, res) {
           if((e.stack).includes('UserNotFoundException'))
             response[i].creatorname = 'Unknown';
           else
-            res.json({Error: e.stack});
+            return res.json({Error: e.stack});
             
         }  
         
@@ -85,7 +85,6 @@ app.get('/items/itineraries', function(req, res) {
       return res.json({Result: response});
       
     }
-    
   });
   
 });
@@ -166,6 +165,57 @@ app.get('/items/admin', function(req, res) {
            
   });
     
+});
+
+
+app.get('/items/chats', function(req, res) {
+  
+  const client = new Client(clientParams);
+  
+  client.connect();
+  
+  const query = 'SELECT DISTINCT sender AS userID\
+                 FROM Message \
+                 WHERE receiver = $1 \
+                 UNION \
+                 SELECT DISTINCT receiver AS userID \
+                 FROM Message \
+                 WHERE sender = $1';
+                
+                                      
+  client.query(query, [req.query.userid], async (err, data) => {
+    
+    if(err)
+      return res.json({Error: err.stack});
+    else{
+      
+      const result = data.rows;
+      for(var i = 0; i < result.length; ++i) {
+        
+        var params = {
+          UserPoolId: process.env.USERPOOLID,
+          Username: result[i].userid
+        };
+  
+        try {
+          
+          var userAttributes = await (cognito.adminGetUser(params)).promise();
+          result[i].name = userAttributes.UserAttributes[2].Value;
+          
+        }catch(e) {
+          
+          if((e.stack).includes('UserNotFoundException'))
+            result[i].name = 'Unknown';
+          else
+            return res.json({Error: e.stack});
+            
+        } 
+      }
+      
+      return res.json({Result: result});
+      
+    }
+  });
 });
 
 
