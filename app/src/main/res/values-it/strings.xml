@@ -96,7 +96,7 @@
     <string name="start_point_error">Inserisci almeno un punto</string>
     <string name="photo_limit">Limite di 6 foto superato</string>
     <string name="explicit_content">Contenuto esplicito eliminato</string>
-    <string name="position_error">Sembra che la posizione ricavata da alcune foto sia fuori linea col percorso. Per continuare elimina le foto o modifica il tracciato.</string>
+    <string name="position_error">Sembra che la posizione ricavata da alcune foto sia troppo lontana dal tracciato (> 100m). Per continuare elimina le foto o modifica il tracciato.</string>
     <string name="position_error_point">Sembra che la posizione di alcune foto siano in un raggio maggiore di 10 km dal punto iniziale. Per continuare elimina le foto o modifica il punto d\'inizio.</string>
 
     <string name="retrieve_itinerary_error">Non siamo riusciti a recuperare le informazioni, riprova.</string>
@@ -171,7 +171,7 @@
     <string name="directions_text">Indicazioni</string>
     <string name="to_start_text">Al Punto Iniziale</string>
     <string name="info_directions_text">Clicca sui punti per le indicazioni</string>
-    <string name="photo_position_error">Non puoi inserire la foto, è troppo distante dall\'itinerario</string>
+    <string name="photo_position_error">Non puoi inserire la foto, è troppo distante dall\'itinerario (> 100m)</string>
     <string name="photo_upload_success">Foto condivisa</string>
     <string name="photo_upload_error">Errore durante l\'upload, riprova.</string>
 

@@ -552,10 +552,14 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
     public boolean isPositionsCorrect(GeoPoint position) {
 
-        if(itineraryWaypoints.size() > 1)
-            return roadOverlay.isCloseTo(position, 100, map);
+        if(itineraryWaypoints.size() > 1) {
 
-        else
+            float tolerance = map.getProjection().metersToPixels(100);
+            GeoPoint closest = roadOverlay.getCloseTo(position, tolerance, map);
+
+            return closest != null;
+
+        }else
             return !(position.distanceToAsDouble(itineraryWaypoints.get(0)) > 10000);
 
     }

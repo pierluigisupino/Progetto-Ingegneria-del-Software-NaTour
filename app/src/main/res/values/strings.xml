@@ -96,7 +96,7 @@
     <string name="start_point_error">Insert at least one point</string>
     <string name="photo_limit">Limit of 6 photos exceeded</string>
     <string name="explicit_content">Explicit content deleted</string>
-    <string name="position_error">It seems the positions obtained from some photos are far away from the route. To continue delete these photos or change the route.</string>
+    <string name="position_error">It seems the positions obtained from some photos are far away from the route (> 100m). To continue delete these photos or change the route.</string>
     <string name="position_error_point">It seems the positions of some photos are in a radius greater than 10 km from the starting point. To continue, delete the photos or change the starting point.</string>
 
     <string name="retrieve_itinerary_error">Failed to retrieve Itinerary details, try again.</string>
@@ -170,7 +170,7 @@
     <string name="directions_text">Directions</string>
     <string name="to_start_text">To Start Point</string>
     <string name="info_directions_text">Click on the dots for directions</string>
-    <string name="photo_position_error">Cannot insert the photo because is too away from the Itinerary.</string>
+    <string name="photo_position_error">Cannot insert the photo because is too away from the Itinerary (> 100m).</string>
     <string name="photo_upload_success">Success to upload the photo.</string>
     <string name="photo_upload_error">Failed to upload the photo, try again.</string>
 

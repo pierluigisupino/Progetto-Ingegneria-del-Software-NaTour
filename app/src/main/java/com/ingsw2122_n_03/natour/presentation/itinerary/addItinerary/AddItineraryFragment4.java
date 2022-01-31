@@ -33,7 +33,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.databinding.Fragment4AddItineraryBinding;
 import com.ingsw2122_n_03.natour.presentation.dialogs.PhotoPositionDialog;
-import com.ingsw2122_n_03.natour.presentation.support.NaTourMarker;
 import com.ingsw2122_n_03.natour.presentation.support.PointOfInterest;
 
 import org.osmdroid.api.IMapController;
@@ -322,7 +321,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     }
 
     private void makeRoads(){
-
         addItineraryActivity.showProgressBar();
         new Thread(()-> {
             if(markers.size() > 1){
@@ -382,9 +380,6 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-
-        //((NaTourMarker) marker).getGeoPoint().setLatitude(marker.getPosition().getLatitude());
-        //((NaTourMarker) marker).getGeoPoint().setLongitude(marker.getPosition().getLongitude());
         makeRoads();
     }
 
@@ -502,14 +497,13 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     public boolean isStartPointInserted() {
         if(!markers.isEmpty())
             return true;
-        else{
+        else {
             addItineraryActivity.onFail(getString(R.string.start_point_error));
             return false;
         }
     }
 
     public boolean arePositionsCorrect() {
-
         boolean ret = true;
         ArrayList<PointOfInterest> invalidPointOfInterests = new ArrayList<>();
 
@@ -517,7 +511,10 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
             for (PointOfInterest p : pointOfInterests) {
 
-                if(!roadOverlay.isCloseTo(p.getPosition(), 100, map)) {
+                float tolerance =  map.getProjection().metersToPixels(100);
+                GeoPoint closest = roadOverlay.getCloseTo(p.getPosition(), tolerance, map);
+
+                if(closest == null) {
                     invalidPointOfInterests.add(p);
                     ret = false;
                 }
