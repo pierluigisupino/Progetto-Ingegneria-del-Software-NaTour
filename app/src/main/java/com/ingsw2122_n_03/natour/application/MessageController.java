@@ -40,7 +40,7 @@ public class MessageController extends NavigationController{
     public void setUpMessages(User currentUser) {
         this.currentUser = currentUser;
         //SHOW LOADING BACKGROUND IN MESSAGE FRAGMENT
-        //messageDaoInterface.getChatsByUser(currentUser.getUid());
+        messageDaoInterface.getChatsByUser(currentUser.getUid());
     }
 
 

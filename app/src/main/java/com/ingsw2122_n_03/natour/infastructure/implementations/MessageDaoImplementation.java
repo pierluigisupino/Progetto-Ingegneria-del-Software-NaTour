@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.util.Log;
+
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.MessageController;
@@ -24,18 +26,16 @@ public class MessageDaoImplementation implements MessageDaoInterface {
         queryParams.put("userid", uid);
 
         RestOptions options = RestOptions.builder()
-                .addPath("/items/messages")
+                .addPath("/items/chats")
                 .addQueryParameters(queryParams)
                 .build();
 
         Amplify.API.get(
                 options,
                 response -> {
-
+                    Log.i("RESP", response.getData().asString());
                 },
-                error -> {
-
-                }
+                error -> messageController.onRetrieveChatsError()
         );
 
     }
