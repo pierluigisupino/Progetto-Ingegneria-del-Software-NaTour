@@ -77,6 +77,7 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
     private Polyline roadOverlay;
 
     private final ArrayList<Marker> markers = new ArrayList<>();
+    private final ArrayList<GeoPoint> gpxWaypoints = new ArrayList<>();
     private final ArrayList<PointOfInterest> pointOfInterests = new ArrayList<>();
     private ArrayList<PointOfInterest> invalidPointOfInterests = new ArrayList<>();
     private ArrayList<byte[]> imagesBytes = new ArrayList<>();
@@ -447,13 +448,23 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
     private void addGpxWaypoints(Gpx gpx){
 
+        addItineraryActivity.showProgressBar();
+
         List<WayPoint> wayPoints = gpx.getWayPoints();
         List<Track> tracks = gpx.getTracks();
 
-        if(wayPoints.size() > 0){
+        if(wayPoints.size() > 0) {
             WayPoint startWayPoint = wayPoints.get(0);
-            addWaypoint(new GeoPoint(startWayPoint.getLatitude(), startWayPoint.getLongitude()));
+            GeoPoint startPosition = new GeoPoint(startWayPoint.getLatitude(), startWayPoint.getLongitude());
+            Marker startMarker = new Marker(map);
+            startMarker.setPosition(startPosition);
+            startMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+            map.getOverlays().add(startMarker);
+            map.invalidate();
+            gpxWaypoints.add(startPosition);
         }
+
 
         for (int i = 0; i < tracks.size(); i++) {
             Track track = tracks.get(i);
@@ -462,15 +473,33 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                 TrackSegment segment = segments.get(j);
 
                 for (TrackPoint trackPoint : segment.getTrackPoints()) {
-                    //this.waypoints.add(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
+                    gpxWaypoints.add(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
                 }
             }
         }
 
-        if (wayPoints.size() == 2) {
-            WayPoint endWayPoint = wayPoints.get(wayPoints.size() - 1);
-            addWaypoint(new GeoPoint(endWayPoint.getLatitude(), endWayPoint.getLongitude()));
+        if(wayPoints.size() > 1) {
+            WayPoint endWayPoint = wayPoints.get(1);
+            GeoPoint endPosition = new GeoPoint(endWayPoint.getLatitude(), endWayPoint.getLongitude());
+            Marker endMarker = new Marker(map);
+            endMarker.setPosition(endPosition);
+            endMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_finish, null));
+            endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+            map.getOverlays().add(endMarker);
+            map.invalidate();
+            gpxWaypoints.add(endPosition);
         }
+
+
+        new Thread(()-> {
+                Road road = roadManager.getRoad(gpxWaypoints);
+                map.getOverlays().remove(roadOverlay);
+                roadOverlay = RoadManager.buildRoadOverlay(road);
+                map.getOverlays().add(roadOverlay);
+                map.invalidate();
+            requireView().post(addItineraryActivity::hideProgressBar);
+        }).start();
+
     }
 
     /*****************
@@ -558,10 +587,15 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
 
 
     public ArrayList<GeoPoint> getWaypoints(){
+
+        if(gpxWaypoints.size() > 0)
+            return  gpxWaypoints;
+
         ArrayList<GeoPoint> waypoints = new ArrayList<>();
         for(Marker m : markers)
             waypoints.add(m.getPosition());
         return waypoints;
+
     }
 
 }
