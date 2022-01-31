@@ -462,13 +462,15 @@ public class AddItineraryFragment4 extends Fragment implements Marker.OnMarkerCl
                 TrackSegment segment = segments.get(j);
 
                 for (TrackPoint trackPoint : segment.getTrackPoints()) {
-                    //this.waypoints.add(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
+                    Marker m = new Marker(map);
+                    m.setPosition(new GeoPoint(trackPoint.getLatitude(), trackPoint.getLongitude()));
+                    m.setVisible(false);
                 }
             }
         }
 
-        if (wayPoints.size() == 2) {
-            WayPoint endWayPoint = wayPoints.get(wayPoints.size() - 1);
+        if (wayPoints.size() > 1) {
+            WayPoint endWayPoint = wayPoints.get(1);
             addWaypoint(new GeoPoint(endWayPoint.getLatitude(), endWayPoint.getLongitude()));
         }
     }
