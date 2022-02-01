@@ -57,23 +57,12 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         textView = binding.emptyText;
         recyclerView = binding.chats;
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(requireActivity() ,"Getting messages", Toast.LENGTH_SHORT).show();
-                swipeRefreshLayout.setRefreshing(false);
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            Toast.makeText(requireActivity() ,"Getting messages", Toast.LENGTH_SHORT).show();
+            swipeRefreshLayout.setRefreshing(false);
         });
 
         lottieAnimationView.setSpeed(0.5F);
-
-        if(chats.isEmpty()){
-            //SEMBRA CHE NON CI SIA NIENTE TEXT
-            //recycle view invisible
-        }else {
-            //SEMBRA CHE NON CI SIA NIENTE INVISIBLE
-            //recycle view visible
-        }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         chatAdapter = new ChatAdapter(requireActivity(), chats);
