@@ -34,9 +34,6 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     private ArrayList<User> chats = new ArrayList<>();
 
-    private boolean isChatUpdate = false;
-    private boolean isUiUpdate = false;
-
     public ChatFragment() {
         MessageController messageController = MessageController.getInstance();
         messageController.setMessagesFragment(this); }
