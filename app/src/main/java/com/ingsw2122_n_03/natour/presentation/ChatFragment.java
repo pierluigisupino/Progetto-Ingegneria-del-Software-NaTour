@@ -48,7 +48,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        com.ingsw2122_n_03.natour.databinding.FragmentChatBinding binding = FragmentChatBinding.inflate(inflater, container, false);
+        FragmentChatBinding binding = FragmentChatBinding.inflate(inflater, container, false);
 
         swipeRefreshLayout = binding.update;
         lottieAnimationView = binding.loadingAnimation;
