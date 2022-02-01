@@ -2,36 +2,45 @@ package com.ingsw2122_n_03.natour.presentation;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ingsw2122_n_03.natour.R;
+import com.airbnb.lottie.LottieAnimationView;
 import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.FragmentChatBinding;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.support.ChatAdapter;
-import com.ingsw2122_n_03.natour.presentation.support.ItineraryAdapter;
 
 import java.util.ArrayList;
 
+import com.ingsw2122_n_03.natour.R;
+
 public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListener {
 
-    private FragmentChatBinding binding;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private LottieAnimationView lottieAnimationView;
+    private TextView textView;
     private RecyclerView recyclerView;
     private ChatAdapter chatAdapter;
 
-    private final MessageController messageController = MessageController.getInstance();
-
     private ArrayList<User> chats = new ArrayList<>();
 
-    public ChatFragment() { messageController.setMessagesFragment(this); }
+    private boolean isChatUpdate = false;
+    private boolean isUiUpdate = false;
+
+    public ChatFragment() {
+        MessageController messageController = MessageController.getInstance();
+        messageController.setMessagesFragment(this); }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,11 +48,24 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentChatBinding.inflate(inflater, container, false);
+        com.ingsw2122_n_03.natour.databinding.FragmentChatBinding binding = FragmentChatBinding.inflate(inflater, container, false);
 
+        swipeRefreshLayout = binding.update;
+        lottieAnimationView = binding.loadingAnimation;
+        textView = binding.emptyText;
         recyclerView = binding.chats;
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(requireActivity() ,"Getting messages", Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        lottieAnimationView.setSpeed(0.5F);
 
         if(chats.isEmpty()){
             //SEMBRA CHE NON CI SIA NIENTE TEXT
@@ -61,15 +83,36 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUi();
+    }
+
     public void updateChats(ArrayList<User> chats) {
         this.chats = chats;
+        isChatUpdate = true;
+        if(isVisible()) updateUi();
+    }
 
-        if(this.isVisible()) {
-            //SEMBRA CHE NON CI SIA NIENTE INVISIBLE
-            
-            chatAdapter = new ChatAdapter(requireActivity(), chats);
-            chatAdapter.setClickListener(this);
-            recyclerView.setAdapter(chatAdapter);
+    private void updateUi(){
+
+        if(!isUiUpdate && isChatUpdate) {
+
+            if(chats.isEmpty()){
+                lottieAnimationView.setAnimation(R.raw.animation_empty);
+                textView.setVisibility(View.VISIBLE);
+            }else{
+                lottieAnimationView.setVisibility(View.GONE);
+                textView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
+                chatAdapter = new ChatAdapter(requireActivity(), chats);
+                chatAdapter.setClickListener(this);
+                recyclerView.setAdapter(chatAdapter);
+            }
+
+            isUiUpdate = true;
         }
     }
 
