@@ -45,11 +45,6 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
         recyclerView = binding.chats;
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        chatAdapter = new ChatAdapter(requireActivity(), chats);
-        chatAdapter.setClickListener(this);
-        recyclerView.setAdapter(chatAdapter);
-
         if(chats.isEmpty()){
             //SEMBRA CHE NON CI SIA NIENTE TEXT
             //recycle view invisible
@@ -58,20 +53,23 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
             //recycle view visible
         }
 
-        //SET RECYCLE VIEW ADAPTER
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        chatAdapter = new ChatAdapter(requireActivity(), chats);
+        chatAdapter.setClickListener(this);
+        recyclerView.setAdapter(chatAdapter);
 
         return binding.getRoot();
     }
 
     public void updateChats(ArrayList<User> chats) {
         this.chats = chats;
-        chatAdapter = new ChatAdapter(requireActivity(), chats);
-        chatAdapter.setClickListener(this);
-        recyclerView.setAdapter(chatAdapter);
 
         if(this.isVisible()) {
             //SEMBRA CHE NON CI SIA NIENTE INVISIBLE
-            //set recycle view adapter
+            
+            chatAdapter = new ChatAdapter(requireActivity(), chats);
+            chatAdapter.setClickListener(this);
+            recyclerView.setAdapter(chatAdapter);
         }
     }
 
