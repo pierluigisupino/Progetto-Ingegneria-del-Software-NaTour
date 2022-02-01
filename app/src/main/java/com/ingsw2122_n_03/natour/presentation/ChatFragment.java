@@ -36,9 +36,10 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     private ArrayList<User> chats = new ArrayList<>();
 
-    public ChatFragment() {
-        MessageController messageController = MessageController.getInstance();
-        messageController.setMessagesFragment(this); }
+    private final MessageController messageController = MessageController.getInstance();
+
+
+    public ChatFragment() { messageController.setChatFragment(this); }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         recyclerView = binding.chats;
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
+            messageController.updateChats();
             Toast.makeText(requireActivity() ,"Getting messages", Toast.LENGTH_SHORT).show();
             swipeRefreshLayout.setRefreshing(false);
         });
