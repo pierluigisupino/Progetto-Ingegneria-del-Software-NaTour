@@ -2,6 +2,7 @@ package com.ingsw2122_n_03.natour.application;
 
 import com.ingsw2122_n_03.natour.infastructure.implementations.MessageDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
+import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.ChatFragment;
 
@@ -65,12 +66,12 @@ public class MessageController extends NavigationController{
      * GET MESSAGES
      **************/
 
-    public void retrieveMessages(String user) {
-        messageDaoInterface.getMessagesByChat(user, currentUser.getUid());
+    public void retrieveMessages(User endUser) {
+        messageDaoInterface.getMessagesByChat(currentUser, endUser);
     }
 
 
-    public void onRetrieveMessagesSuccess() {
+    public void onRetrieveMessagesSuccess(ArrayList<Message> messages) {
 
 
     }

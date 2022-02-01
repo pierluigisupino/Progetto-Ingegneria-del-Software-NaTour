@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
+import android.annotation.SuppressLint;
+
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.MessageController;
@@ -7,11 +9,18 @@ import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,22 +71,56 @@ public class MessageDaoImplementation implements MessageDaoInterface {
     }
 
 
+    @SuppressLint("NewApi")
     @Override
-    public void getMessagesByChat(String uid1, String uid2) {
+    public void getMessagesByChat(User user1, User user2) {
 
         Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("user1", uid1);
-        queryParams.put("user2", uid2);
+        queryParams.put("user1", user1.getUid());
+        queryParams.put("user2", user1.getUid());
 
         RestOptions options = RestOptions.builder()
-                .addPath("/items/message")
+                .addPath("/items/messages")
                 .addQueryParameters(queryParams)
                 .build();
 
         Amplify.API.get(
                 options,
-                response -> {},
-                error -> {}
+                response -> {
+
+                    try {
+
+                        JSONArray jsonArray = response.getData().asJSONObject().getJSONArray("Result");
+                        ArrayList<Message> messages = new ArrayList<>();
+
+                        for(int i = 0; i < jsonArray.length(); ++i) {
+
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String body = jsonObject.getString("body");
+
+                            DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
+                            TemporalAccessor accessor = timeFormatter.parse(jsonObject.getString("senddate"));
+
+                            LocalDate sendDate = LocalDate.fromDateFields(Date.from(Instant.from(accessor)));
+
+                            org.joda.time.format.DateTimeFormatter fmt = DateTimeFormat.forPattern("HH:mm");
+                            LocalTime sendTime = fmt.parseLocalTime(jsonObject.getString("sendtime"));
+
+                            if(jsonObject.getString("sender").equals(user1.getUid()))
+                                messages.add(new Message(body, sendDate, sendTime, user1, user2));
+                            else
+                                messages.add(new Message(body, sendDate, sendTime, user2, user1));
+
+                        }
+
+                        messageController.onRetrieveMessagesSuccess(messages);
+
+                    } catch (JSONException e) {
+                        messageController.onRetrieveMessagesError();
+                    }
+
+                },
+                error -> messageController.onRetrieveMessagesError()
         );
 
     }
@@ -88,7 +131,7 @@ public class MessageDaoImplementation implements MessageDaoInterface {
 
         JSONObject jsonObject = new JSONObject();
         try{
-            jsonObject.put("body", message.getBody());
+            jsonObject.put("text", message.getBody());
             jsonObject.put("sender", message.getSender().getUid());
             jsonObject.put("receiver", message.getReceiver().getUid());
             jsonObject.put("sendDate", message.getSendDate());
@@ -104,8 +147,19 @@ public class MessageDaoImplementation implements MessageDaoInterface {
 
         Amplify.API.post(
                 options,
-                response -> {},
-                error -> { messageController.onMessageSentError(); }
+                response -> {
+
+                    try {
+                        if(response.getData().asJSONObject().getInt("Code") == 200)
+                            messageController.onMessageSentSuccess();
+                        else
+                            messageController.onMessageSentError();
+                    } catch (JSONException e) {
+                        messageController.onMessageSentError();
+                    }
+
+                },
+                error -> messageController.onMessageSentError()
         );
 
     }
