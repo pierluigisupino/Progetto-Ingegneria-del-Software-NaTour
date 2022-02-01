@@ -219,6 +219,27 @@ app.get('/items/chats', function(req, res) {
 });
 
 
+app.get('/items/messages', function(req, res) {
+  
+  const client = new Client(clientParams);
+  
+  const query = 'SELECT * FROM MESSAGE WHERE (sender = $1 AND receiver = $2) OR (sender = $2 AND receiver = $1)';
+  
+  client.connect();
+  
+  client.query(query, [req.query.user1, req.query.user2], (err, data) => {
+    
+    if(err)
+      return res.json({Error: err.stack});
+    else
+      return res.json({Result: data.rows});
+    
+  });
+  
+    
+});
+
+
 /****************************
 * post methods *
 ****************************/
@@ -251,6 +272,25 @@ app.post('/items/itineraries', function(req, res) {
   
 });
 
+
+app.post('/items/message', function(req, res) {
+  
+  const client = new Client(clientParams);
+  
+  client.connect();
+  
+  const query = 'INSERT INTO MESSAGE VALUES ($1, $2, $3, $4, $5)';
+  
+  client.query(query, [req.body.text, req.body.sendDate, req.body.sendTime, req.body.sender, req.body.receiver], (err, data) => {
+    
+    if(err)
+      return res.json({Code: 500, Error: err.stack});
+    else
+      return res.json({Code: 200});
+    
+  });
+  
+});
 
 
 /****************************
