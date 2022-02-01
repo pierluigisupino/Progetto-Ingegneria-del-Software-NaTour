@@ -11,22 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ingsw2122_n_03.natour.application.MessageController;
-import com.ingsw2122_n_03.natour.databinding.FragmentMessagesBinding;
+import com.ingsw2122_n_03.natour.databinding.FragmentChatBinding;
 import com.ingsw2122_n_03.natour.model.User;
 
 import java.util.ArrayList;
 
-public class MessagesFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
-    private FragmentMessagesBinding binding;
+    private FragmentChatBinding binding;
     private RecyclerView recyclerView;
 
     private final MessageController messageController = MessageController.getInstance();
 
-    private ArrayList<User> chats = new ArrayList<>();
+    private ArrayList<User> chats = new ArrayList<>(); //utenti con cui ho avuto chat
 
 
-    public MessagesFragment() { messageController.setMessagesFragment(this); }
+    public ChatFragment() { messageController.setMessagesFragment(this); }
 
 
     @Override
@@ -37,7 +37,7 @@ public class MessagesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentMessagesBinding.inflate(inflater, container, false);
+        binding = FragmentChatBinding.inflate(inflater, container, false);
 
         //binding recycle view
 
@@ -64,5 +64,4 @@ public class MessagesFragment extends Fragment {
             //set recycle view adapter
         }
     }
-
 }

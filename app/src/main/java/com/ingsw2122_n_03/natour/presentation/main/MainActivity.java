@@ -27,7 +27,7 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityMainBinding;
-import com.ingsw2122_n_03.natour.presentation.MessagesFragment;
+import com.ingsw2122_n_03.natour.presentation.ChatFragment;
 import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 
@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private Snackbar waitingSnackbar;
 
     private final MainFragment mainFragment = new MainFragment();
-    private final MessagesFragment messagesFragment = new MessagesFragment();
+    private final ChatFragment chatFragment = new ChatFragment();
 
 
     @Override
@@ -164,8 +164,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.messages:
-                if (!messagesFragment.isVisible()) {
-                    fragmentTransaction.replace(R.id.fragmentContainer, messagesFragment);
+                if (!chatFragment.isVisible()) {
+                    fragmentTransaction.replace(R.id.fragmentContainer, chatFragment);
                     fragmentTransaction.commit();
                 }
                 break;

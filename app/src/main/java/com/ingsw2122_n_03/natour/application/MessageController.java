@@ -3,7 +3,7 @@ package com.ingsw2122_n_03.natour.application;
 import com.ingsw2122_n_03.natour.infastructure.implementations.MessageDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.model.User;
-import com.ingsw2122_n_03.natour.presentation.MessagesFragment;
+import com.ingsw2122_n_03.natour.presentation.ChatFragment;
 import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class MessageController extends NavigationController{
     private ArrayList<User> chats = new ArrayList<>();
 
     private MainActivity mainActivity;
-    private MessagesFragment messagesFragment;
+    private ChatFragment messagesFragment;
 
     private MessageController(){
         messageDaoInterface = new MessageDaoImplementation(this);
@@ -107,7 +107,7 @@ public class MessageController extends NavigationController{
      * SETTERS
      *********/
 
-    public void setMessagesFragment(MessagesFragment messagesFragment) {
+    public void setMessagesFragment(ChatFragment messagesFragment) {
         this.messagesFragment = messagesFragment;
     }
 
