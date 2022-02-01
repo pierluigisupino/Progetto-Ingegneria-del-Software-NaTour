@@ -87,6 +87,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         if(isChatUpdate) {
             if (chats.isEmpty()) {
                 lottieAnimationView.setAnimation(R.raw.animation_empty);
+                lottieAnimationView.playAnimation();
                 textView.setVisibility(View.VISIBLE);
             } else {
                 lottieAnimationView.setVisibility(View.GONE);
