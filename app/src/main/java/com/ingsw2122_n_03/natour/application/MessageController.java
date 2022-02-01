@@ -4,7 +4,6 @@ import com.ingsw2122_n_03.natour.infastructure.implementations.MessageDaoImpleme
 import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.ChatFragment;
-import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 
 import java.util.ArrayList;
 
@@ -18,8 +17,7 @@ public class MessageController extends NavigationController{
     private User currentUser;
     private ArrayList<User> chats = new ArrayList<>();
 
-    private MainActivity mainActivity;
-    private ChatFragment messagesFragment;
+    private ChatFragment chatFragment;
 
     private MessageController(){
         messageDaoInterface = new MessageDaoImplementation(this);
@@ -54,7 +52,7 @@ public class MessageController extends NavigationController{
 
     public void onRetrieveChatsSuccess(ArrayList<User> chats) {
         this.chats = chats;
-        messagesFragment.updateChats(chats);
+        chatFragment.updateChats(chats);
     }
 
 
@@ -107,8 +105,8 @@ public class MessageController extends NavigationController{
      * SETTERS
      *********/
 
-    public void setMessagesFragment(ChatFragment messagesFragment) {
-        this.messagesFragment = messagesFragment;
+    public void setChatFragment(ChatFragment chatFragment) {
+        this.chatFragment = chatFragment;
     }
 
 }
