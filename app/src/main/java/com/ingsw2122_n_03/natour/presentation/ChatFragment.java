@@ -32,6 +32,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     private RecyclerView recyclerView;
     private ChatAdapter chatAdapter;
 
+    private boolean isChatUpdate = false;
+
     private ArrayList<User> chats = new ArrayList<>();
 
     public ChatFragment() {
@@ -76,12 +78,13 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     public void updateChats(ArrayList<User> chats) {
         this.chats = chats;
+        isChatUpdate = true;
         if(this.isVisible()) updateUi();
     }
 
     private void updateUi(){
 
-        if(chats.isEmpty()){
+        if(isChatUpdate && chats.isEmpty()){
             lottieAnimationView.setAnimation(R.raw.animation_empty);
             textView.setVisibility(View.VISIBLE);
         }else{
