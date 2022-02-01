@@ -77,7 +77,7 @@ public class MessageDaoImplementation implements MessageDaoInterface {
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("user1", user1.getUid());
-        queryParams.put("user2", user1.getUid());
+        queryParams.put("user2", user2.getUid());
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/messages")
@@ -104,7 +104,7 @@ public class MessageDaoImplementation implements MessageDaoInterface {
                             LocalDate sendDate = LocalDate.fromDateFields(Date.from(Instant.from(accessor)));
 
                             org.joda.time.format.DateTimeFormatter fmt = DateTimeFormat.forPattern("HH:mm");
-                            LocalTime sendTime = fmt.parseLocalTime(jsonObject.getString("sendtime"));
+                            LocalTime sendTime = fmt.parseLocalTime(jsonObject.getString("sendtime").substring(0,5));
 
                             if(jsonObject.getString("sender").equals(user1.getUid()))
                                 messages.add(new Message(body, sendDate, sendTime, user1, user2));
