@@ -6,28 +6,32 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.FragmentChatBinding;
 import com.ingsw2122_n_03.natour.model.User;
+import com.ingsw2122_n_03.natour.presentation.support.ChatAdapter;
+import com.ingsw2122_n_03.natour.presentation.support.ItineraryAdapter;
 
 import java.util.ArrayList;
 
-public class ChatFragment extends Fragment {
+public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListener {
 
     private FragmentChatBinding binding;
     private RecyclerView recyclerView;
+    private ChatAdapter chatAdapter;
 
     private final MessageController messageController = MessageController.getInstance();
 
-    private ArrayList<User> chats = new ArrayList<>(); //utenti con cui ho avuto chat
-
+    private ArrayList<User> chats = new ArrayList<>();
 
     public ChatFragment() { messageController.setMessagesFragment(this); }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,10 +43,12 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentChatBinding.inflate(inflater, container, false);
 
-        //binding recycle view
+        recyclerView = binding.chats;
 
-        LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        chatAdapter = new ChatAdapter(requireActivity(), chats);
+        chatAdapter.setClickListener(this);
+        recyclerView.setAdapter(chatAdapter);
 
         if(chats.isEmpty()){
             //SEMBRA CHE NON CI SIA NIENTE TEXT
@@ -59,9 +65,18 @@ public class ChatFragment extends Fragment {
 
     public void updateChats(ArrayList<User> chats) {
         this.chats = chats;
+        chatAdapter = new ChatAdapter(requireActivity(), chats);
+        chatAdapter.setClickListener(this);
+        recyclerView.setAdapter(chatAdapter);
+
         if(this.isVisible()) {
             //SEMBRA CHE NON CI SIA NIENTE INVISIBLE
             //set recycle view adapter
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(view.getContext(),"Uid: " + chatAdapter.getItem(position).getUid() + " Name: " + chatAdapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
     }
 }
