@@ -74,34 +74,23 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     @Override
     public void onResume() {
         super.onResume();
-        updateUi();
+
+        if(chats.isEmpty()){
+            lottieAnimationView.setAnimation(R.raw.animation_empty);
+            textView.setVisibility(View.VISIBLE);
+        }else{
+            lottieAnimationView.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+
+            chatAdapter = new ChatAdapter(requireActivity(), chats);
+            chatAdapter.setClickListener(this);
+            recyclerView.setAdapter(chatAdapter);
+        }
     }
 
     public void updateChats(ArrayList<User> chats) {
         this.chats = chats;
-        isChatUpdate = true;
-        if(isVisible()) updateUi();
-    }
-
-    private void updateUi(){
-
-        if(!isUiUpdate && isChatUpdate) {
-
-            if(chats.isEmpty()){
-                lottieAnimationView.setAnimation(R.raw.animation_empty);
-                textView.setVisibility(View.VISIBLE);
-            }else{
-                lottieAnimationView.setVisibility(View.GONE);
-                textView.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-
-                chatAdapter = new ChatAdapter(requireActivity(), chats);
-                chatAdapter.setClickListener(this);
-                recyclerView.setAdapter(chatAdapter);
-            }
-
-            isUiUpdate = true;
-        }
     }
 
     @Override
