@@ -5,6 +5,7 @@ import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.ChatFragment;
+import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 
 import java.util.ArrayList;
 
@@ -57,8 +58,12 @@ public class MessageController extends NavigationController{
     }
 
 
-    public void onRetrieveChatsError() {
-        //SHOW ERROR ON MESSAGE FRAGMENT
+    public void onRetrieveChatsError(boolean isResolvableError) {
+        if(isResolvableError) {
+            chatFragment.onResolvableError();
+        }else {
+            goToActivityAndFinish(chatFragment.requireActivity(), ErrorActivity.class);
+        }
     }
 
 
@@ -109,5 +114,7 @@ public class MessageController extends NavigationController{
     public void setChatFragment(ChatFragment chatFragment) {
         this.chatFragment = chatFragment;
     }
+
+
 
 }

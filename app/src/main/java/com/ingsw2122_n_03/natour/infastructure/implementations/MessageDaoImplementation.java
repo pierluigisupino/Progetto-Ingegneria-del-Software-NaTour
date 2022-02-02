@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MessageDaoImplementation implements MessageDaoInterface {
 
@@ -61,11 +62,11 @@ public class MessageDaoImplementation implements MessageDaoInterface {
                         messageController.onRetrieveChatsSuccess(chats);
 
                     } catch (JSONException e) {
-                        messageController.onRetrieveChatsError();
+                        messageController.onRetrieveChatsError(false);
                     }
 
                 },
-                error -> messageController.onRetrieveChatsError()
+                error -> messageController.onRetrieveChatsError(Objects.requireNonNull(error.getCause()).toString().contains("timeout"))
         );
 
     }
