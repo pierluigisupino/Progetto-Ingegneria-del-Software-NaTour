@@ -54,11 +54,12 @@ public class NavigationController {
     }
 
 
-    public void goToActivity(Activity source, Class<?> destination, ArrayList<Message> messages, User currentUser) {
+    public void goToActivity(Activity source, Class<?> destination, ArrayList<Message> messages, User currentUser, User endUser) {
 
         Intent intent = new Intent(source, destination);
         intent.putExtra("messages", messages);
-        intent.putExtra("user", currentUser);
+        intent.putExtra("currentUser", currentUser);
+        intent.putExtra("endUser", endUser);
         source.startActivity(intent);
 
     }

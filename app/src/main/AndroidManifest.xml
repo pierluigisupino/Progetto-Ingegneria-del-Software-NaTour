@@ -27,9 +27,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
         <activity
-            android:name=".presentation.LoadingActivity"
+            android:name=".presentation.MessagesActivity"
             android:exported="false"
             android:theme="@style/NoActionBar"/>
+        <activity
+            android:name=".presentation.LoadingActivity"
+            android:exported="false"
+            android:theme="@style/NoActionBar" />
         <activity
             android:name="com.amplifyframework.auth.cognito.activities.HostedUIRedirectActivity"
             android:exported="true"
@@ -46,11 +50,11 @@
         <activity
             android:name=".presentation.WelcomeActivity"
             android:exported="true"
-            android:theme="@style/NoActionBar"/>
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true"
-            android:theme="@style/NoActionBar"/>
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".presentation.itinerary.FollowItineraryActivity"
             android:exported="false"

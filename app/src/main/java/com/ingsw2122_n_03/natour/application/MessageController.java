@@ -7,6 +7,7 @@ import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.ChatFragment;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
+import com.ingsw2122_n_03.natour.presentation.MessagesActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class MessageController extends NavigationController{
     private final MessageDaoInterface messageDaoInterface;
 
     private User currentUser;
+    private User endUser;
     private ArrayList<User> chats = new ArrayList<>();
 
     private ChatFragment chatFragment;
@@ -81,12 +83,13 @@ public class MessageController extends NavigationController{
      **************/
 
     public void retrieveMessages(User endUser) {
+        this.endUser = endUser;
         messageDaoInterface.getMessagesByChat(currentUser, endUser);
     }
 
 
     public void onRetrieveMessagesSuccess(ArrayList<Message> messages) {
-        goToActivity(mainActivity, /*CHATPAGE*/, messages, currentUser);
+        goToActivity(mainActivity, MessagesActivity.class, messages, currentUser, endUser);
         //SHOW MESSAGE ACTIVITY TO VIEW MESSAGES WITH END USER
         //if enduser not in chats: add end user to chats
     }
