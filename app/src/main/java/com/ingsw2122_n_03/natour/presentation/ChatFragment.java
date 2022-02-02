@@ -86,14 +86,22 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     private void updateUi(){
 
-        if(isChatUpdateOnError) {
-            onError();
-            return;
-        }
-
-        requireActivity().runOnUiThread(()-> {
+        requireActivity().runOnUiThread(() -> {
 
             swipeRefreshLayout.setRefreshing(false);
+
+            if(isChatUpdateOnError) {
+                lottieAnimationView.setAnimation(R.raw.animation_error);
+                lottieAnimationView.setSpeed(1F);
+                lottieAnimationView.playAnimation();
+                topTextView.setText(ChatFragment.this.getString(R.string.resolvable_error));
+                bottomTextView.setText(ChatFragment.this.getString(R.string.resolve_error));
+                bottomTextView.setTextColor(ContextCompat.getColor(ChatFragment.this.requireActivity(), R.color.error));
+                topTextView.setVisibility(View.VISIBLE);
+                bottomTextView.setVisibility(View.VISIBLE);
+                return;
+            }
+
 
             if (chats.isEmpty()) {
                 lottieAnimationView.setAnimation(R.raw.animation_empty);
@@ -121,22 +129,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
 
     public void onError(){
-
         isChatUpdateOnError = true;
-        if(this.isVisible()) {
-            requireActivity().runOnUiThread(() -> {
-                swipeRefreshLayout.setRefreshing(false);
-                lottieAnimationView.setAnimation(R.raw.animation_error);
-                lottieAnimationView.setSpeed(1F);
-                lottieAnimationView.playAnimation();
-                topTextView.setText(ChatFragment.this.getString(R.string.resolvable_error));
-                bottomTextView.setText(ChatFragment.this.getString(R.string.resolve_error));
-                bottomTextView.setTextColor(ContextCompat.getColor(ChatFragment.this.requireActivity(), R.color.error));
-                topTextView.setVisibility(View.VISIBLE);
-                bottomTextView.setVisibility(View.VISIBLE);
-            });
-        }
-
+        if(this.isVisible()) updateUi();
     }
 
 
