@@ -86,6 +86,7 @@ public class MessageController extends NavigationController{
 
 
     public void onRetrieveMessagesSuccess(ArrayList<Message> messages) {
+        goToActivity(mainActivity, /*CHATPAGE*/, messages, currentUser);
         //SHOW MESSAGE ACTIVITY TO VIEW MESSAGES WITH END USER
         //if enduser not in chats: add end user to chats
     }
