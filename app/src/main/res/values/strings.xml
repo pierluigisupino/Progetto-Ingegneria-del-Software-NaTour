@@ -193,8 +193,9 @@
     <string name="open_settings">Open settings</string>
     <string name="cancel">Cancel</string>
 
-    <!--CHAT FRAGMNET-->
+    <!--CHAT FRAGMENT-->
     <string name="empty">Wow such empty\nPull to get new messages</string>
+    <string name="messages_updated">Messages updated</string>
 
 
 </resources>

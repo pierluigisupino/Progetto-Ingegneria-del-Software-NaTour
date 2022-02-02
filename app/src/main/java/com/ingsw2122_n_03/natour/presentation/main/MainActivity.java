@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.application.IterController;
+import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.ActivityMainBinding;
 import com.ingsw2122_n_03.natour.presentation.ChatFragment;
 import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
@@ -55,6 +56,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         iterController = IterController.getInstance();
         iterController.setMainActivity(this);
+        MessageController.getInstance().setMainActivity(this);
 
         Intent intent = getIntent();
 

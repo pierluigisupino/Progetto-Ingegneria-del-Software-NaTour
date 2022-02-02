@@ -1,11 +1,13 @@
 package com.ingsw2122_n_03.natour.application;
 
+import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.implementations.MessageDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.ChatFragment;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
+import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 
 import java.util.ArrayList;
 
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 public class MessageController extends NavigationController{
 
     private static MessageController instance = null;
+
+    private MainActivity mainActivity;
 
     private final MessageDaoInterface messageDaoInterface;
 
@@ -55,12 +59,14 @@ public class MessageController extends NavigationController{
     public void onRetrieveChatsSuccess(ArrayList<User> chats) {
         this.chats = chats;
         chatFragment.updateChats(chats);
+        mainActivity.onFail(mainActivity.getString(R.string.messages_updated));
     }
 
 
     public void onRetrieveChatsError(boolean isResolvableError) {
         if(isResolvableError) {
             chatFragment.onResolvableError();
+            mainActivity.onFail(mainActivity.getString(R.string.generic_error));
         }else {
             goToActivityAndFinish(chatFragment.requireActivity(), ErrorActivity.class);
         }
@@ -113,6 +119,10 @@ public class MessageController extends NavigationController{
 
     public void setChatFragment(ChatFragment chatFragment) {
         this.chatFragment = chatFragment;
+    }
+
+    public void setMainActivity(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
     }
 
 

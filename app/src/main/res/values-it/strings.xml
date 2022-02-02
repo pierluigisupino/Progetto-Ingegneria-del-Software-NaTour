@@ -196,5 +196,6 @@
 
     <!--CHAT FRAGMNET-->
     <string name="empty">Wow che vuoto!\nTrascina per aggiornare</string>
+    <string name="messages_updated">Messaggi aggiornati</string>
 
 </resources>
