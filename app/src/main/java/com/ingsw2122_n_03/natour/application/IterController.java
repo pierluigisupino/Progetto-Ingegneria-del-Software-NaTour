@@ -89,10 +89,12 @@ public class IterController extends NavigationController {
 
 
     public void onSetUpError(boolean isResolvableError) {
-        if(isResolvableError)
+        if(isResolvableError) {
             goToActivityAndFinish(splashActivity, MainActivity.class);
-        else
+            MessageController.getInstance().setUpMessages(currentUser);
+        }else {
             goToActivityAndFinish(splashActivity, ErrorActivity.class);
+        }
     }
 
 
