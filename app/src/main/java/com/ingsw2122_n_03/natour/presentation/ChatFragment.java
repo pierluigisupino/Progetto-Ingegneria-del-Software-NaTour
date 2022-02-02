@@ -40,6 +40,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     public ChatFragment() { messageController.setChatFragment(this); }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         return binding.getRoot();
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -84,22 +86,26 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     private void updateUi(){
 
-        swipeRefreshLayout.setRefreshing(false);
-
         if(isChatUpdateOnError) {
-            onResolvableError();
+            onError();
             return;
         }
 
-        if (chats.isEmpty()) {
-            lottieAnimationView.setAnimation(R.raw.animation_empty);
-            lottieAnimationView.setSpeed(1F);
-            lottieAnimationView.playAnimation();
-            bottomTextView.setText(getString(R.string.empty));
-            bottomTextView.setTextColor(ContextCompat.getColor(requireActivity(), R.color.primary));
-            bottomTextView.setVisibility(View.VISIBLE);
-            topTextView.setVisibility(View.GONE);
-        } else {
+        requireActivity().runOnUiThread(()-> {
+
+            swipeRefreshLayout.setRefreshing(false);
+
+            if (chats.isEmpty()) {
+                lottieAnimationView.setAnimation(R.raw.animation_empty);
+                lottieAnimationView.setSpeed(1F);
+                lottieAnimationView.playAnimation();
+                bottomTextView.setText(getString(R.string.empty));
+                bottomTextView.setTextColor(ContextCompat.getColor(requireActivity(), R.color.primary));
+                bottomTextView.setVisibility(View.VISIBLE);
+                topTextView.setVisibility(View.GONE);
+                return;
+            }
+
             lottieAnimationView.setVisibility(View.GONE);
             topTextView.setVisibility(View.GONE);
             bottomTextView.setVisibility(View.GONE);
@@ -107,14 +113,19 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
             chatAdapter = new ChatAdapter(requireActivity(), chats);
             chatAdapter.setClickListener(this);
-            recyclerView.setAdapter(chatAdapter); //qui crasha
-        }
+            recyclerView.setAdapter(chatAdapter);
+
+        });
 
     }
 
-    public void onResolvableError(){
+
+    public void onError(){
+
+        isChatUpdateOnError = true;
         if(this.isVisible()) {
             requireActivity().runOnUiThread(() -> {
+                swipeRefreshLayout.setRefreshing(false);
                 lottieAnimationView.setAnimation(R.raw.animation_error);
                 lottieAnimationView.setSpeed(1F);
                 lottieAnimationView.playAnimation();
@@ -125,11 +136,13 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
                 bottomTextView.setVisibility(View.VISIBLE);
             });
         }
+
     }
+
 
     @Override
     public void onItemClick(View view, int position) {
-        //messageController.retrieveMessages(chatAdapter.getItem(position));
+        messageController.retrieveMessages(chatAdapter.getItem(position));
         //SHOW LOADING
     }
 

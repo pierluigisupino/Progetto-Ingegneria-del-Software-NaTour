@@ -66,11 +66,12 @@ public class MessageController extends NavigationController{
 
     public void onRetrieveChatsError(boolean isResolvableError) {
         if(isResolvableError) {
-            chatFragment.onResolvableError();
-            mainActivity.onFail(mainActivity.getString(R.string.generic_error));
+            chatFragment.onError();
+            if(chatFragment.isVisible())
+                mainActivity.onFail(mainActivity.getString(R.string.generic_error)); //INUTILE?
         }else {
-            // AVRO ERROR ACTIVITY DUPLICATE SE ANCHE PER GLI ITINERARI ANDRO' IN ERROR ACTIVITY OPPURE CRASHERA
-            goToActivityAndFinish(chatFragment.requireActivity(), ErrorActivity.class);
+            // AVRO ERROR ACTIVITY DUPLICATE OPPURE CRASHERA?
+            goToActivityAndFinish(mainActivity, ErrorActivity.class);
         }
     }
 

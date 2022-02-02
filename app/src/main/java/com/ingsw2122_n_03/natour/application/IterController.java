@@ -109,7 +109,8 @@ public class IterController extends NavigationController {
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
         mainFragment.onSuccess();
-        mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
+        if(mainFragment.isVisible())
+            mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
     }
 
 
@@ -131,7 +132,8 @@ public class IterController extends NavigationController {
 
     public void onUpdateError(){
         mainFragment.onError();
-        mainActivity.onFail(mainActivity.getString(R.string.generic_error));
+        if(mainFragment.isVisible())
+            mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 
 
