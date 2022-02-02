@@ -19,9 +19,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
+import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
 import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
+import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.dialogs.AdminDialog;
 import com.ingsw2122_n_03.natour.presentation.dialogs.DeleteItineraryDialog;
 import com.ingsw2122_n_03.natour.presentation.dialogs.FeedBackDialog;
@@ -61,6 +63,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         setContentView(view);
 
         itinerary = (Itinerary) getIntent().getSerializableExtra("itinerary");
+        User currentUser = (User) getIntent().getSerializableExtra("user");
 
         iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
@@ -89,6 +92,14 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         textViewName.setText(itinerary.getName());
         textViewCreator.setText(getResources().getString(R.string.by_text)+" "+itinerary.getCreator().getName());
+
+        if(!itinerary.getCreator().getName().equals("Unknown") && !itinerary.getCreator().getUid().equals(currentUser.getUid())) {
+            textViewCreator.setClickable(true);
+            textViewCreator.setOnClickListener(v -> {
+                MessageController.getInstance().retrieveMessages(itinerary.getCreator());
+                //SHOW LOADING AND BLOCK BUTTONS
+            });
+        }
 
         String description = itinerary.getDescription();
         if(description != null)
@@ -138,7 +149,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         });
 
 
-        if(getIntent().getSerializableExtra("user") instanceof Admin){
+        if(currentUser instanceof Admin){
             editButton.setClickable(true);
             editButton.setVisibility(View.VISIBLE);
 
