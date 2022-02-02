@@ -32,6 +32,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     private ChatAdapter chatAdapter;
 
     private boolean isOnError = false;
+    private boolean isLoading = true;
 
     private ArrayList<User> chats = new ArrayList<>();
 
@@ -77,18 +78,18 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     }
 
 
-    public void updateChats(ArrayList<User> chats) {
-        this.chats = chats;
-        isOnError = false;
-        if(this.isVisible()) updateUi();
-    }
-
-
     private void updateUi(){
 
         requireActivity().runOnUiThread(() -> {
 
             swipeRefreshLayout.setRefreshing(false);
+
+            if(isLoading) {
+                swipeRefreshLayout.setEnabled(false);
+                return;
+            }
+
+            swipeRefreshLayout.setEnabled(true);
 
             if(isOnError) {
                 lottieAnimationView.setAnimation(R.raw.animation_error);
@@ -128,8 +129,17 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     }
 
 
+    public void updateChats(ArrayList<User> chats) {
+        this.chats = chats;
+        isOnError = false;
+        isLoading = false;
+        if(this.isVisible()) updateUi();
+    }
+
+
     public void onError(){
         isOnError = true;
+        isLoading = false;
         if(this.isVisible()) updateUi();
     }
 
