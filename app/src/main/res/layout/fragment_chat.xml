@@ -36,7 +36,7 @@
             android:textSize="18sp"
             android:textAlignment="center"
             android:lineSpacingExtra="8dp"
-            android:text="Wow such empty\nPull to get new messages"/>
+            android:text="@string/empty"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chats"

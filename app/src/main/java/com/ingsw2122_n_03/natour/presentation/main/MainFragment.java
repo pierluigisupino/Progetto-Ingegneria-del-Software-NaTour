@@ -32,7 +32,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private Parcelable recyclerViewState;
 
     private TextView textViewError1;
-    private TextView textViewError2;
     private LottieAnimationView lottieAnimationView;
     private TextView textViewError3;
 
@@ -66,7 +65,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         super.onViewCreated(view, savedInstanceState);
 
         textViewError1 = binding.error1;
-        textViewError2 = binding.error2;
         textViewError3 = binding.error4;
 
         pullToRefresh = binding.update;
@@ -82,7 +80,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         else{
             recyclerView.setVisibility(View.GONE);
             textViewError1.setVisibility(View.VISIBLE);
-            textViewError2.setVisibility(View.VISIBLE);
             lottieAnimationView.setVisibility(View.VISIBLE);
             textViewError3.setVisibility(View.VISIBLE);
         }
@@ -136,7 +133,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         requireActivity().runOnUiThread(()-> {
             recyclerView.setVisibility(View.VISIBLE);
             textViewError1.setVisibility(View.GONE);
-            textViewError2.setVisibility(View.GONE);
             lottieAnimationView.setVisibility(View.GONE);
             textViewError3.setVisibility(View.GONE);
             pullToRefresh.setRefreshing(false);
@@ -148,7 +144,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         requireActivity().runOnUiThread(()-> {
             recyclerView.setVisibility(View.GONE);
             textViewError1.setVisibility(View.VISIBLE);
-            textViewError2.setVisibility(View.VISIBLE);
             lottieAnimationView.setVisibility(View.VISIBLE);
             textViewError3.setVisibility(View.VISIBLE);
             pullToRefresh.setRefreshing(false);

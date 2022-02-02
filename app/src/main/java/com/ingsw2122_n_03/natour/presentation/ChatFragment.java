@@ -33,6 +33,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     private ChatAdapter chatAdapter;
 
     private boolean isChatUpdate = false;
+    private boolean isChatUpdateOnError = false;
 
     private ArrayList<User> chats = new ArrayList<>();
 
@@ -86,11 +87,12 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     private void updateUi(){
 
-        if(isChatUpdate) {
+        if(isChatUpdate && !isChatUpdateOnError) {
             if (chats.isEmpty()) {
                 lottieAnimationView.setAnimation(R.raw.animation_empty);
                 lottieAnimationView.setSpeed(1F);
                 lottieAnimationView.playAnimation();
+                textView.setText(getString(R.string.empty));
                 textView.setVisibility(View.VISIBLE);
             } else {
                 lottieAnimationView.setVisibility(View.GONE);
@@ -102,10 +104,21 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
                 recyclerView.setAdapter(chatAdapter);
             }
         }
+
+        if(isChatUpdateOnError){
+            lottieAnimationView.setAnimation(R.raw.animation_error);
+            lottieAnimationView.setSpeed(1F);
+            lottieAnimationView.playAnimation();
+            textView.setText(getString(R.string.resolvable_error));
+            textView.setVisibility(View.VISIBLE);
+        }
     }
 
     public void onResolvableError(){
-        //TODO SHOW PULL TO TRY AGAIN
+        isChatUpdateOnError = true;
+        requireActivity().runOnUiThread(() -> {
+            if(this.isVisible()) updateUi();
+        });
     }
 
     @Override

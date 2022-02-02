@@ -90,6 +90,8 @@
     <string name="warning_text">Warning</string>
 
     <string name="generic_error">Something went wrong, try again later.</string>
+    <string name="resolvable_error">Oh no!\nSomething went wrong</string>
+    <string name="resolve_error">Pull to try again</string>
 
     <string name="duration_error">Insert a valid duration.</string>
     <string name="search_error">No place found</string>
@@ -190,6 +192,9 @@
     <string name="required_permission_description">We need to access your location to provide our service.</string>
     <string name="open_settings">Open settings</string>
     <string name="cancel">Cancel</string>
+
+    <!--CHAT FRAGMNET-->
+    <string name="empty">Wow such empty\nPull to get new messages</string>
 
 
 </resources>

@@ -90,6 +90,8 @@
     <string name="warning_text">Attenzione</string>
 
     <string name="generic_error">Something went wrong, try again later.</string>
+    <string name="resolvable_error">Oh no!\nQualcosa e\' andato storto</string>
+    <string name="resolve_error">Pull to try again</string>
 
     <string name="duration_error">Inserisci una durata valida.</string>
     <string name="search_error">Nessun luogo trovato</string>
@@ -192,5 +194,7 @@
     <string name="open_settings">Apri impostazioni</string>
     <string name="cancel">Annulla</string>
 
+    <!--CHAT FRAGMNET-->
+    <string name="empty">Wow che vuoto!\nTrascina per aggiornare</string>
 
 </resources>
