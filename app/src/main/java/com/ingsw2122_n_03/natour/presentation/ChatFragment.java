@@ -143,6 +143,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(view.getContext(),"Uid: " + chatAdapter.getItem(position).getUid() + " Name: " + chatAdapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
+        messageController.retrieveMessages(chatAdapter.getItem(position));
+        //SHOW LOADING
     }
+
 }

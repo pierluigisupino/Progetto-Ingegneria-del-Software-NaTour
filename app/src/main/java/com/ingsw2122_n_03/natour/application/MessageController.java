@@ -59,7 +59,7 @@ public class MessageController extends NavigationController{
     public void onRetrieveChatsSuccess(ArrayList<User> chats) {
         this.chats = chats;
         chatFragment.updateChats(chats);
-        mainActivity.onFail(mainActivity.getString(R.string.messages_updated));
+        mainActivity.onSuccess(mainActivity.getString(R.string.messages_updated));
     }
 
 
@@ -83,33 +83,32 @@ public class MessageController extends NavigationController{
 
 
     public void onRetrieveMessagesSuccess(ArrayList<Message> messages) {
-
-
+        //SHOW MESSAGE ACTIVITY TO VIEW MESSAGES WITH END USER
+        //if enduser not in chats: add end user to chats
     }
 
 
     public void onRetrieveMessagesError() {
-
-
+        //SHOW ERROR ON CHAT FRAGMENT (EVEN IN ITINERARY DETAIL?)
     }
 
 
     /***************
      * SEND MESSAGE
      **************/
-
-    public void sendMessage() {
-        //messageDaoInterface.sendMessage(...);
+    //CALL FROM MESSAGE FRAGMENT ON SENT PRESSED
+    public void sendMessage(Message message) {
+        messageDaoInterface.sendMessage(message);
     }
 
 
     public void onMessageSentSuccess() {
-
+        //SHOW MESSAGE IN MESSAGE ACTIVITY
     }
 
 
     public void onMessageSentError() {
-
+        //SHOW ERROR IN MESSAGE ACTIVITY
     }
 
 

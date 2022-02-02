@@ -7,7 +7,7 @@ import com.ingsw2122_n_03.natour.presentation.support.FormChecker;
 
 public class PasswordTester {
 
-    FormChecker checker = new FormChecker();
+    private FormChecker checker = new FormChecker();
 
     @Test
     public void checkPasswordLengthLessThanMinimum() {
@@ -20,18 +20,8 @@ public class PasswordTester {
     }
 
     @Test
-    public void checkPasswordWithStartingSpace() {
-        assertFalse(checker.isPasswordValid(" STARTIN_space123"));
-    }
-
-    @Test
-    public void checkPasswordWithEndingSpace() {
-        assertFalse(checker.isPasswordValid("FINAL_space123 "));
-    }
-
-    @Test
-    public void checkPasswordWithMiddleSpaces() {
-        assertFalse(checker.isPasswordValid("MIDDLE_ - spaces1"));
+    public void checkPasswordWithSpaces() {
+        assertFalse(checker.isPasswordValid(" String space123 "));
     }
 
     @Test
@@ -84,7 +74,7 @@ public class PasswordTester {
 
     @Test
     public void checkPasswordFullValid() {
-        assertTrue(checker.isPasswordValid("ThisIsValid123"));
+        assertTrue(checker.isPasswordValid("ThisIsValid276"));
         assertTrue(checker.isPasswordValid("123one2THREE"));
     }
 
