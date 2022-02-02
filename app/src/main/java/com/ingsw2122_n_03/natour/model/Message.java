@@ -3,7 +3,9 @@ package com.ingsw2122_n_03.natour.model;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
 
     private final String     body;
     private final LocalDate  sendDate;
