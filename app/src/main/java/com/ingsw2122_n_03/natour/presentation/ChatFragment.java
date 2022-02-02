@@ -82,14 +82,13 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
         requireActivity().runOnUiThread(() -> {
 
-            swipeRefreshLayout.setRefreshing(false);
-
             if(isLoading) {
                 swipeRefreshLayout.setEnabled(false);
                 return;
             }
 
             swipeRefreshLayout.setEnabled(true);
+            swipeRefreshLayout.setRefreshing(false);
 
             if(isOnError) {
                 lottieAnimationView.setAnimation(R.raw.animation_error);
@@ -102,7 +101,6 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
                 bottomTextView.setVisibility(View.VISIBLE);
                 return;
             }
-
 
             if (chats.isEmpty()) {
                 lottieAnimationView.setAnimation(R.raw.animation_empty);
