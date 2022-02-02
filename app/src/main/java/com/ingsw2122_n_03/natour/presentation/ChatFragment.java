@@ -89,6 +89,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     public void updateChats(ArrayList<User> chats) {
         this.chats = chats;
         isChatUpdate = true;
+        isChatUpdateOnError = false;
         if(this.isVisible()) updateUi();
     }
 
@@ -134,9 +135,10 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     public void onResolvableError(){
         isChatUpdateOnError = true;
-        requireActivity().runOnUiThread(() -> {
-            if(this.isVisible()) updateUi();
-        });
+
+        if(this.isVisible()) {
+            requireActivity().runOnUiThread(this::updateUi);
+        }
     }
 
     @Override
