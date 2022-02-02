@@ -5,9 +5,9 @@ import com.ingsw2122_n_03.natour.infastructure.implementations.MessageDaoImpleme
 import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
-import com.ingsw2122_n_03.natour.presentation.ChatFragment;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
-import com.ingsw2122_n_03.natour.presentation.MessagesActivity;
+import com.ingsw2122_n_03.natour.presentation.chat.ChatFragment;
+import com.ingsw2122_n_03.natour.presentation.chat.MessagesActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 
 import java.util.ArrayList;
