@@ -1,6 +1,10 @@
 package com.ingsw2122_n_03.natour.presentation;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -9,21 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.airbnb.lottie.LottieAnimationView;
+import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.FragmentChatBinding;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.support.ChatAdapter;
 
 import java.util.ArrayList;
-
-import com.ingsw2122_n_03.natour.R;
 
 public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListener {
 
@@ -34,9 +31,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     private RecyclerView recyclerView;
     private ChatAdapter chatAdapter;
 
-    private boolean isChatUpdate = false;
-    private boolean isChatUpdateOnError = false;
-    private boolean isLoading = false;
+    private boolean isOnError = false;
 
     private ArrayList<User> chats = new ArrayList<>();
 
@@ -44,6 +39,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
 
     public ChatFragment() { messageController.setChatFragment(this); }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,14 +57,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         bottomTextView = binding.bottomTextView;
         recyclerView = binding.chats;
 
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            if(isChatUpdate || isChatUpdateOnError) {
-                isLoading = true;
-                messageController.updateChats();
-            }else{
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(messageController::updateChats);
 
         lottieAnimationView.setSpeed(0.5F);
 
@@ -80,27 +69,40 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         return binding.getRoot();
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
         updateUi();
     }
 
+
     public void updateChats(ArrayList<User> chats) {
         this.chats = chats;
-        isChatUpdate = true;
-        isChatUpdateOnError = false;
+        isOnError = false;
         if(this.isVisible()) updateUi();
     }
 
+
     private void updateUi(){
 
-        if(isLoading){
-            swipeRefreshLayout.setRefreshing(false);
-            isLoading = false;
-        }
+        requireActivity().runOnUiThread(() -> {
 
-        if(isChatUpdate && !isChatUpdateOnError) {
+            swipeRefreshLayout.setRefreshing(false);
+
+            if(isOnError) {
+                lottieAnimationView.setAnimation(R.raw.animation_error);
+                lottieAnimationView.setSpeed(1F);
+                lottieAnimationView.playAnimation();
+                topTextView.setText(ChatFragment.this.getString(R.string.resolvable_error));
+                bottomTextView.setText(ChatFragment.this.getString(R.string.resolve_error));
+                bottomTextView.setTextColor(ContextCompat.getColor(ChatFragment.this.requireActivity(), R.color.error));
+                topTextView.setVisibility(View.VISIBLE);
+                bottomTextView.setVisibility(View.VISIBLE);
+                return;
+            }
+
+
             if (chats.isEmpty()) {
                 lottieAnimationView.setAnimation(R.raw.animation_empty);
                 lottieAnimationView.setSpeed(1F);
@@ -109,41 +111,33 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
                 bottomTextView.setTextColor(ContextCompat.getColor(requireActivity(), R.color.primary));
                 bottomTextView.setVisibility(View.VISIBLE);
                 topTextView.setVisibility(View.GONE);
-            } else {
-                lottieAnimationView.setVisibility(View.GONE);
-                topTextView.setVisibility(View.GONE);
-                bottomTextView.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-
-                chatAdapter = new ChatAdapter(requireActivity(), chats);
-                chatAdapter.setClickListener(this);
-                recyclerView.setAdapter(chatAdapter);
+                return;
             }
-        }
 
-        if(isChatUpdateOnError){
-            lottieAnimationView.setAnimation(R.raw.animation_error);
-            lottieAnimationView.setSpeed(1F);
-            lottieAnimationView.playAnimation();
-            topTextView.setText(getString(R.string.resolvable_error));
-            bottomTextView.setText(getString(R.string.resolve_error));
-            bottomTextView.setTextColor(ContextCompat.getColor(requireActivity(), R.color.error));
-            topTextView.setVisibility(View.VISIBLE);
-            bottomTextView.setVisibility(View.VISIBLE);
-        }
+            lottieAnimationView.setVisibility(View.GONE);
+            topTextView.setVisibility(View.GONE);
+            bottomTextView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+
+            chatAdapter = new ChatAdapter(requireActivity(), chats);
+            chatAdapter.setClickListener(this);
+            recyclerView.setAdapter(chatAdapter);
+
+        });
+
     }
 
-    public void onResolvableError(){
-        isChatUpdateOnError = true;
 
-        if(this.isVisible()) {
-            requireActivity().runOnUiThread(this::updateUi);
-        }
+    public void onError(){
+        isOnError = true;
+        if(this.isVisible()) updateUi();
     }
+
 
     @Override
     public void onItemClick(View view, int position) {
         messageController.retrieveMessages(chatAdapter.getItem(position));
         //SHOW LOADING
     }
+
 }
