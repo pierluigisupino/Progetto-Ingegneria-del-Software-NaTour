@@ -31,7 +31,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     private RecyclerView recyclerView;
     private ChatAdapter chatAdapter;
 
-    private boolean isChatUpdateOnError = false;
+    private boolean isOnError = false;
 
     private ArrayList<User> chats = new ArrayList<>();
 
@@ -79,7 +79,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     public void updateChats(ArrayList<User> chats) {
         this.chats = chats;
-        isChatUpdateOnError = false;
+        isOnError = false;
         if(this.isVisible()) updateUi();
     }
 
@@ -90,7 +90,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
             swipeRefreshLayout.setRefreshing(false);
 
-            if(isChatUpdateOnError) {
+            if(isOnError) {
                 lottieAnimationView.setAnimation(R.raw.animation_error);
                 lottieAnimationView.setSpeed(1F);
                 lottieAnimationView.playAnimation();
@@ -129,7 +129,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
 
     public void onError(){
-        isChatUpdateOnError = true;
+        isOnError = true;
         if(this.isVisible()) updateUi();
     }
 
