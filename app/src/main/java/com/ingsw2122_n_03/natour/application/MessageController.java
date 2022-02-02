@@ -59,7 +59,8 @@ public class MessageController extends NavigationController{
     public void onRetrieveChatsSuccess(ArrayList<User> chats) {
         this.chats = chats;
         chatFragment.updateChats(chats);
-        mainActivity.onSuccess(mainActivity.getString(R.string.messages_updated));
+        if(chatFragment.isVisible())
+            mainActivity.onSuccess(mainActivity.getString(R.string.messages_updated));
     }
 
 
@@ -68,6 +69,7 @@ public class MessageController extends NavigationController{
             chatFragment.onResolvableError();
             mainActivity.onFail(mainActivity.getString(R.string.generic_error));
         }else {
+            // AVRO ERROR ACTIVITY DUPLICATE SE ANCHE PER GLI ITINERARI ANDRO' IN ERROR ACTIVITY OPPURE CRASHERA
             goToActivityAndFinish(chatFragment.requireActivity(), ErrorActivity.class);
         }
     }
