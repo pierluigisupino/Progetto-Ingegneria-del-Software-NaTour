@@ -34,6 +34,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     private boolean isChatUpdate = false;
     private boolean isChatUpdateOnError = false;
+    private boolean isLoading = false;
 
     private ArrayList<User> chats = new ArrayList<>();
 
@@ -58,9 +59,12 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         recyclerView = binding.chats;
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            messageController.updateChats();
-            Toast.makeText(requireActivity() ,"Getting messages", Toast.LENGTH_SHORT).show();
-            swipeRefreshLayout.setRefreshing(false);
+            if(isChatUpdate || isChatUpdateOnError) {
+                isLoading = true;
+                messageController.updateChats();
+            }else{
+                swipeRefreshLayout.setRefreshing(false);
+            }
         });
 
         lottieAnimationView.setSpeed(0.5F);
@@ -86,6 +90,11 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     }
 
     private void updateUi(){
+
+        if(isLoading){
+            swipeRefreshLayout.setRefreshing(false);
+            isLoading = false;
+        }
 
         if(isChatUpdate && !isChatUpdateOnError) {
             if (chats.isEmpty()) {
