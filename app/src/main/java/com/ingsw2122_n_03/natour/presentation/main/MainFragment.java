@@ -35,6 +35,8 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private LottieAnimationView lottieAnimationView;
     private TextView textViewError3;
 
+    private boolean onError = false;
+
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
     private final IterController iterController = IterController.getInstance();
@@ -75,14 +77,11 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
         bundle = getArguments();
 
-        if(bundle != null && bundle.containsKey("itineraries"))
+        if(bundle != null && bundle.containsKey("itineraries")) {
             itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
-        else{
-            recyclerView.setVisibility(View.GONE);
-            textViewError1.setVisibility(View.VISIBLE);
-            lottieAnimationView.setVisibility(View.VISIBLE);
-            textViewError3.setVisibility(View.VISIBLE);
-        }
+            onError = false;
+        }else
+            onError = true;
 
 
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
@@ -107,12 +106,45 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUi();
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         if(bundle != null && bundle.containsKey("itineraries"))
             bundle.putSerializable("itineraries", itineraries);
     }
+
+
+    private void updateUi() {
+
+        requireActivity().runOnUiThread(()-> {
+
+            pullToRefresh.setRefreshing(false);
+
+            if(onError) {
+                recyclerView.setVisibility(View.GONE);
+                textViewError1.setVisibility(View.VISIBLE);
+                lottieAnimationView.setVisibility(View.VISIBLE);
+                textViewError3.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            recyclerView.setVisibility(View.VISIBLE);
+            textViewError1.setVisibility(View.GONE);
+            lottieAnimationView.setVisibility(View.GONE);
+            textViewError3.setVisibility(View.GONE);
+
+        });
+
+    }
+
 
     public void updateItineraries(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
@@ -122,12 +154,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        pullToRefresh.setRefreshing(false);
-        //TODO UPDATE UI
-    }
 
     @Override
     public void onItineraryClick(int position) {
@@ -136,26 +162,14 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
     
     public void onSuccess(){
-        requireActivity().runOnUiThread(()-> {
-            recyclerView.setVisibility(View.VISIBLE);
-            textViewError1.setVisibility(View.GONE);
-            lottieAnimationView.setVisibility(View.GONE);
-            textViewError3.setVisibility(View.GONE);
-            pullToRefresh.setRefreshing(false);
-        });
+        onError = false;
+        if(this.isVisible()) updateUi();
     }
 
 
     public void onError() {
-        if (this.isVisible()) {
-            requireActivity().runOnUiThread(() -> {
-                recyclerView.setVisibility(View.GONE);
-                textViewError1.setVisibility(View.VISIBLE);
-                lottieAnimationView.setVisibility(View.VISIBLE);
-                textViewError3.setVisibility(View.VISIBLE);
-                pullToRefresh.setRefreshing(false);
-            });
-        }
+        onError = true;
+        if(this.isVisible()) updateUi();
     }
 
 }
