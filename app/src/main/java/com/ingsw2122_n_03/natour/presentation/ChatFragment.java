@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.presentation;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +29,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private LottieAnimationView lottieAnimationView;
-    private TextView textView;
+    private TextView topTextView;
+    private TextView bottomTextView;
     private RecyclerView recyclerView;
     private ChatAdapter chatAdapter;
 
@@ -55,7 +57,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
         swipeRefreshLayout = binding.update;
         lottieAnimationView = binding.loadingAnimation;
-        textView = binding.emptyText;
+        topTextView = binding.topTexView;
+        bottomTextView = binding.bottomTextView;
         recyclerView = binding.chats;
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -101,11 +104,14 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
                 lottieAnimationView.setAnimation(R.raw.animation_empty);
                 lottieAnimationView.setSpeed(1F);
                 lottieAnimationView.playAnimation();
-                textView.setText(getString(R.string.empty));
-                textView.setVisibility(View.VISIBLE);
+                bottomTextView.setText(getString(R.string.empty));
+                bottomTextView.setTextColor(ContextCompat.getColor(requireActivity(), R.color.primary));
+                bottomTextView.setVisibility(View.VISIBLE);
+                topTextView.setVisibility(View.GONE);
             } else {
                 lottieAnimationView.setVisibility(View.GONE);
-                textView.setVisibility(View.GONE);
+                topTextView.setVisibility(View.GONE);
+                bottomTextView.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
 
                 chatAdapter = new ChatAdapter(requireActivity(), chats);
@@ -118,8 +124,11 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
             lottieAnimationView.setAnimation(R.raw.animation_error);
             lottieAnimationView.setSpeed(1F);
             lottieAnimationView.playAnimation();
-            textView.setText(getString(R.string.resolvable_error));
-            textView.setVisibility(View.VISIBLE);
+            topTextView.setText(getString(R.string.resolvable_error));
+            bottomTextView.setText(getString(R.string.resolve_error));
+            bottomTextView.setTextColor(ContextCompat.getColor(requireActivity(), R.color.error));
+            topTextView.setVisibility(View.VISIBLE);
+            bottomTextView.setVisibility(View.VISIBLE);
         }
     }
 

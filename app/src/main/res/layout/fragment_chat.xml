@@ -17,6 +17,18 @@
             android:orientation="vertical"
             android:gravity="center">
 
+            <TextView
+                android:id="@+id/topTexView"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/error"
+                android:fontFamily="@font/euclid_circular_medium"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:lineSpacingExtra="8dp"
+                android:text="@string/resolvable_error"/>
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loadingAnimation"
             android:layout_width="200dp"
@@ -26,7 +38,7 @@
             app:lottie_loop="true"/>
 
         <TextView
-            android:id="@+id/emptyText"
+            android:id="@+id/bottomTextView"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
