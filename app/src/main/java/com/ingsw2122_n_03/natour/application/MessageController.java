@@ -66,7 +66,7 @@ public class MessageController extends NavigationController{
 
     public void onRetrieveChatsError(boolean isResolvableError) {
         if(isResolvableError) {
-            chatFragment.onError();
+            chatFragment.onResolvableError();
             if(chatFragment.isVisible())
                 mainActivity.onFail(mainActivity.getString(R.string.generic_error)); //INUTILE?
         }else {

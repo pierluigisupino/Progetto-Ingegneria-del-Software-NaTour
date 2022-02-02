@@ -122,6 +122,12 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        pullToRefresh.setRefreshing(false);
+        //TODO UPDATE UI
+    }
 
     @Override
     public void onItineraryClick(int position) {
@@ -140,14 +146,16 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     }
 
 
-    public void onError(){
-        requireActivity().runOnUiThread(()-> {
-            recyclerView.setVisibility(View.GONE);
-            textViewError1.setVisibility(View.VISIBLE);
-            lottieAnimationView.setVisibility(View.VISIBLE);
-            textViewError3.setVisibility(View.VISIBLE);
-            pullToRefresh.setRefreshing(false);
-        });
+    public void onError() {
+        if (this.isVisible()) {
+            requireActivity().runOnUiThread(() -> {
+                recyclerView.setVisibility(View.GONE);
+                textViewError1.setVisibility(View.VISIBLE);
+                lottieAnimationView.setVisibility(View.VISIBLE);
+                textViewError3.setVisibility(View.VISIBLE);
+                pullToRefresh.setRefreshing(false);
+            });
+        }
     }
 
 }
