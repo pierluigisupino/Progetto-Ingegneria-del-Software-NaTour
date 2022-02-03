@@ -198,4 +198,8 @@
     <string name="empty">Wow che vuoto!\nTrascina per aggiornare</string>
     <string name="messages_updated">Messaggi aggiornati</string>
 
+    <!--TIME-->
+    <string name="today">Oggi</string>
+    <string name="yesterday">Ieri</string>
+
 </resources>

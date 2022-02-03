@@ -9,11 +9,9 @@
         android:id="@+id/text_message_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:textColor="#C0C0C0"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -24,8 +24,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private final List<Message> mMessageList;
     private final User mUser;
 
-    private LocalDate lastMessageDate;
-
     public MessageAdapter(List<Message> messageList, User currentUser) {
         mMessageList = messageList;
         mUser = currentUser;
@@ -78,26 +76,45 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void checkDate(LocalDate date, TextView dateTextView){
+    private void handleDate(TextView dateTextView, LocalDate sendDate, int itemPosition){
+        if (itemPosition != 0) {
+            processDate(dateTextView, sendDate, mMessageList.get(mMessageList.size() - 2).getSendDate(), false);
+        } else {
+            processDate(dateTextView,sendDate, null, true);
+        }
+    }
+
+    private void processDate(@NonNull TextView tv, LocalDate date1
+            , LocalDate date2
+            , boolean isFirstItem) {
 
         DateTimeFormatter dateFormatter  = DateTimeFormatter.ofPattern("MMMM dd yyyy");
-        String sentDate = dateFormatter.format(date);
+        String sentDate = dateFormatter.format(date1);
 
-        if(lastMessageDate != null){
+        if (isFirstItem) {
+                if (date1.equals(LocalDate.now()))
+                    tv.setText(R.string.today);
+                else if (date1.equals(LocalDate.now().minusDays(1)))
+                    tv.setText(R.string.yesterday);
+                else
+                    tv.setText(sentDate);
 
-            if(date.isAfter(lastMessageDate)){
-                dateTextView.setVisibility(View.VISIBLE);
-                dateTextView.setText(sentDate);
-            }else{
-                dateTextView.setVisibility(View.GONE);
-            }
+                tv.setPadding(0, 0, 0,0);
+                tv.setVisibility(View.VISIBLE);
 
-        }else{
-            lastMessageDate = date;
-            dateTextView.setVisibility(View.VISIBLE);
-            dateTextView.setText(sentDate);
+        } else if (!date1.equals(date2)) {
+            if (date1.equals(LocalDate.now()))
+                tv.setText(R.string.today);
+            else if (date1.equals(LocalDate.now().minusDays(1)))
+                tv.setText(R.string.yesterday);
+            else
+                tv.setText(sentDate);
+
+            tv.setPadding(0, 32, 0, 0);
+            tv.setVisibility(View.VISIBLE);
+        } else {
+            tv.setVisibility(View.GONE);
         }
-
     }
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
@@ -114,7 +131,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getBody());
 
-            checkDate(message.getSendDate(), dateText);
+            int position = mMessageList.indexOf(message);
+            handleDate(dateText, message.getSendDate(), position);
 
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
             String sentTime = formatter.format(message.getSendTime());
@@ -136,7 +154,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getBody());
 
-            checkDate(message.getSendDate(), dateText);
+            int position = mMessageList.indexOf(message);
+            handleDate(dateText, message.getSendDate(), position);
 
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
             String sentTime = formatter.format(message.getSendTime());

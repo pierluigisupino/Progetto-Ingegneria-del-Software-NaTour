@@ -197,5 +197,9 @@
     <string name="empty">Wow such empty\nPull to get new messages</string>
     <string name="messages_updated">Messages updated</string>
 
+    <!--TIME-->
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+
 
 </resources>
