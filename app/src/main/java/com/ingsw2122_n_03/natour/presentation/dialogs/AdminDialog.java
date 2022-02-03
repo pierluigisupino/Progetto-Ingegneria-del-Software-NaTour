@@ -98,7 +98,7 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
 
         builder.setView(view)
-                .setNegativeButton(getString(R.string.cancel), (dialog, which) -> {dialog.dismiss();});
+                .setNegativeButton(getString(R.string.cancel), ());
 
         builder.setView(view)
                 .setPositiveButton("Ok", (dialog, which) -> {});
@@ -124,7 +124,6 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
                 InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(buttonPositive.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(buttonNegative.getWindowToken(), 0);
 
                 String name = Objects.requireNonNull(nameEditText.getText()).toString();
                 String description = Objects.requireNonNull(descriptionEditText.getText()).toString();
@@ -139,6 +138,13 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
                     dialog.dismiss();
                 }
 
+            });
+
+            buttonNegative.setOnClickListener(view1 -> {
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(buttonNegative.getWindowToken(), 0);
+
+                dialog.dismiss();
             });
         });
 
