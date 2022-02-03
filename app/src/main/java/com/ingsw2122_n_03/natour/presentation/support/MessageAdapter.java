@@ -83,8 +83,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     }
 
     private void checkDate(LocalDate date, TextView dateTextView){
-
-        @SuppressLint("SimpleDateFormat")
+        
         DateTimeFormatter dateFormatter  = DateTimeFormatter.ofPattern("MMMM dd yyyy");
         String sentDate = dateFormatter.format(date);
 
