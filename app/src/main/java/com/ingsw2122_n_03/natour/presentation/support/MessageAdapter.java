@@ -119,7 +119,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getBody());
 
             checkDate(message.getSendDate(), dateText);
-            
+
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
             String sentTime = formatter.format(message.getSendTime());
             timeText.setText(sentTime);
@@ -142,7 +142,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             checkDate(message.getSendDate(), dateText);
 
-            @SuppressLint("SimpleDateFormat")
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
             String sentTime = formatter.format(message.getSendTime());
             timeText.setText(sentTime);
