@@ -102,6 +102,10 @@ public class MessageController extends NavigationController{
         //SHOW ERROR ON CHAT FRAGMENT (EVEN IN ITINERARY DETAIL?)
     }
 
+    public void onMessageReceived() {
+
+    }
+
 
     /***************
      * SEND MESSAGE
@@ -133,7 +137,6 @@ public class MessageController extends NavigationController{
     public void setMainActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
     }
-
 
 
 }
