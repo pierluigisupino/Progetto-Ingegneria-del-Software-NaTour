@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NaTour">
         <activity
-            android:name=".presentation.MessagesActivity"
+            android:name=".presentation.chat.MessagesActivity"
             android:exported="false"
             android:theme="@style/NoActionBar"/>
         <activity
