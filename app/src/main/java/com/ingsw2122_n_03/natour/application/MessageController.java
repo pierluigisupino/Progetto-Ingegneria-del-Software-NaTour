@@ -19,6 +19,7 @@ public class MessageController extends NavigationController{
     private static MessageController instance = null;
 
     private MainActivity mainActivity;
+    private MessagesActivity messageActivity;
 
     private final MessageDaoInterface messageDaoInterface;
     private final WebSocketSingleton webSocket;
@@ -63,7 +64,7 @@ public class MessageController extends NavigationController{
 
     public void onRetrieveChatsSuccess(ArrayList<User> chats) {
         this.chats = chats;
-        chatFragment.updateChats(chats);
+        chatFragment.updateChats(chats); //TODO possibile crash
         if(chatFragment.isVisible())
             mainActivity.onSuccess(mainActivity.getString(R.string.messages_updated));
     }
@@ -103,6 +104,7 @@ public class MessageController extends NavigationController{
 
 
     public void onMessageReceived(Message message) {
+        messageActivity.updateChat(message);
         //CHAT IS VISIBLE? ADD MESSAGE
         //ADD SENDER USER TO CHAT FRAGMENT IF NOT PRESENT
     }
@@ -134,6 +136,8 @@ public class MessageController extends NavigationController{
     public void setChatFragment(ChatFragment chatFragment) {
         this.chatFragment = chatFragment;
     }
+
+    public void setMessageActivity(MessagesActivity messageActivity) { this.messageActivity = messageActivity; }
 
     public void setMainActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;

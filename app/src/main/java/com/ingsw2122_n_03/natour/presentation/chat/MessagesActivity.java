@@ -17,6 +17,7 @@ import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.ActivityMessagesBinding;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
+import com.ingsw2122_n_03.natour.presentation.support.ItineraryAdapter;
 import com.ingsw2122_n_03.natour.presentation.support.MessageAdapter;
 
 import java.time.LocalDate;
@@ -28,6 +29,10 @@ public class MessagesActivity extends AppCompatActivity {
     private User currentUser;
     private User endUser;
 
+    private RecyclerView recyclerView;
+
+    private ArrayList<Message> messages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +40,16 @@ public class MessagesActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        MessageController.getInstance().setMessageActivity(this);
+
         Intent intent = getIntent();
 
-        ArrayList<Message> messages = (ArrayList<Message>) intent.getSerializableExtra("messages");
+        messages = (ArrayList<Message>) intent.getSerializableExtra("messages");
         currentUser = (User) intent.getSerializableExtra("currentUser");
         endUser = (User) intent.getSerializableExtra("endUser");
 
         MaterialToolbar materialToolbar = binding.topAppBar;
-        RecyclerView recyclerView = binding.recyclerView;
+        recyclerView = binding.recyclerView;
         EditText editMessage = binding.editMessage;
         ImageButton buttonSend = binding.buttonSend;
 
@@ -70,5 +77,10 @@ public class MessagesActivity extends AppCompatActivity {
 
         materialToolbar.setNavigationOnClickListener(v -> finish());
 
+    }
+
+    public void updateChat(Message message){
+        messages.add(message);
+        recyclerView.setAdapter(new MessageAdapter(messages, currentUser));
     }
 }
