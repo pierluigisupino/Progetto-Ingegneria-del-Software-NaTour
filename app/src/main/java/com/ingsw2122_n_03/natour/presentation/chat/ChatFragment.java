@@ -92,6 +92,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
             if(isOnError) {
                 lottieAnimationView.setAnimation(R.raw.animation_error);
+                lottieAnimationView.setMaxFrame(70);
                 lottieAnimationView.setSpeed(1F);
                 lottieAnimationView.playAnimation();
                 topTextView.setText(ChatFragment.this.getString(R.string.resolvable_error));
@@ -104,6 +105,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
             if (chats.isEmpty()) {
                 lottieAnimationView.setAnimation(R.raw.animation_empty);
+                lottieAnimationView.setMaxFrame(null);
                 lottieAnimationView.setSpeed(1F);
                 lottieAnimationView.playAnimation();
                 bottomTextView.setText(getString(R.string.empty));
