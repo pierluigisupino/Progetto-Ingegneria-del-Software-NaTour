@@ -50,9 +50,11 @@ public class MessagesActivity extends AppCompatActivity {
         materialToolbar.setTitle(endUser.getName());
 
         MessageAdapter messageAdapter = new MessageAdapter(messages, currentUser);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(messageAdapter);
-        recyclerView.scrollToPosition(messages.size() - 1);
+        recyclerView.scrollToPosition(messages.size());
 
         buttonSend.setOnClickListener(view1 -> {
             String body = editMessage.getText().toString();
