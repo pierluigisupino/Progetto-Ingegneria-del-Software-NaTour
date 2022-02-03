@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -57,6 +59,11 @@ public class MessagesActivity extends AppCompatActivity {
             if(body.length() > 0){
                 Message message = new Message(body, LocalDate.now(), LocalTime.now(), currentUser, endUser);
                 MessageController.getInstance().sendMessage(message);
+
+                editMessage.getText().clear();
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(buttonSend.getWindowToken(), 0);
             }
         });
 
