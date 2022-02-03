@@ -23,14 +23,12 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
-    private Context mContext;
-    private List<Message> mMessageList;
-    private User mUser;
+    private final List<Message> mMessageList;
+    private final User mUser;
 
     private LocalDate lastMessageDate;
 
-    public MessageAdapter(Context context, List<Message> messageList, User currentUser) {
-        mContext = context;
+    public MessageAdapter(List<Message> messageList, User currentUser) {
         mMessageList = messageList;
         mUser = currentUser;
     }
