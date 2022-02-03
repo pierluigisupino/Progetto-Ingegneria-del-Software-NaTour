@@ -59,7 +59,7 @@ public class WebSocketSingleton {
             jsonObject.put("action", "sendMessage");
             jsonObject.put("sender", subClient);
             jsonObject.put("receiver", message.getReceiver().getUid());
-            jsonObject.put("body", message.getBody());
+            jsonObject.put("text", message.getBody());
             jsonObject.put("senddate", message.getSendDate());
             jsonObject.put("sendtime", message.getSendTime());
             webSocket.send(jsonObject.toString());
