@@ -223,7 +223,7 @@ app.get('/items/messages', function(req, res) {
   
   const client = new Client(clientParams);
   
-  const query = 'SELECT * FROM MESSAGE WHERE (sender = $1 AND receiver = $2) OR (sender = $2 AND receiver = $1)';
+  const query = 'SELECT * FROM MESSAGE WHERE (sender = $1 AND receiver = $2) OR (sender = $2 AND receiver = $1) ORDER BY sendDate ASC, sendTime ASC';
   
   client.connect();
   
