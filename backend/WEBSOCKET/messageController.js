@@ -61,17 +61,17 @@ const sendMessage = async (mId, body) => {
     
     try {
         
-        await db.query('INSERT INTO MESSAGE VALUES($1, $2, $3, $4)', [body.text, body.senddate, body.sendtime, body.sender, body.receiver]);
+        await db.query('INSERT INTO MESSAGE VALUES($1, $2, $3, $4, $5)', [body.text, body.senddate, body.sendtime, body.sender, body.receiver]);
         let id = await db.query('SELECT connectionId FROM ONLINEUSER WHERE sub = $1', [body.receiver]);
         if(id != null) {
-            
-            body.sendername = await db.query('SELECT name FROM ONLINEUSER WHERE connectionId = $1', [mId]);
+            id = id.rows[0].connectionid;
+            let name = await db.query('SELECT username FROM ONLINEUSER WHERE connectionId = $1', [mId]);
+            body.sendername = name.rows[0].username;
             
             await client.postToConnection({
                 'ConnectionId': id,
                 'Data': Buffer.from(JSON.stringify(body))
             }).promise();
-           
         }
         
     } catch (err) {
