@@ -94,7 +94,6 @@ public class MessageController extends NavigationController{
     public void onRetrieveMessagesSuccess(ArrayList<Message> messages) {
         goToActivity(mainActivity, MessagesActivity.class, messages, currentUser, endUser);
         //SHOW MESSAGE ACTIVITY TO VIEW MESSAGES WITH END USER
-        //if enduser not in chats: add end user to chats
     }
 
 
@@ -102,15 +101,17 @@ public class MessageController extends NavigationController{
         //SHOW ERROR ON CHAT FRAGMENT (EVEN IN ITINERARY DETAIL?)
     }
 
-    public void onMessageReceived(Message message) {
 
+    public void onMessageReceived(Message message) {
+        //CHAT IS VISIBLE? ADD MESSAGE
+        //ADD SENDER USER TO CHAT FRAGMENT IF NOT PRESENT
     }
 
 
     /***************
      * SEND MESSAGE
      **************/
-    //CALL FROM MESSAGE FRAGMENT ON SENT PRESSED
+
     public void sendMessage(Message message) {
         messageDaoInterface.sendMessage(message);
     }
