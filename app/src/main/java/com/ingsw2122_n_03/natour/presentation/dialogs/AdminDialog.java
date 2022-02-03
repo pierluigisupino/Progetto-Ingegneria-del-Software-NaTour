@@ -107,17 +107,24 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
         dialog.setOnShowListener(dialogInterface -> {
 
-            Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            button.setTextSize(16);
+            Button buttonPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            buttonPositive.setTextSize(16);
 
-            Typeface typeface = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
-            button.setTypeface(typeface);
+            Typeface typefacePositive = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
+            buttonPositive.setTypeface(typefacePositive);
 
-            button.setOnClickListener(view1 -> {
+            Button buttonNegative = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            buttonNegative.setTextSize(16);
+
+            Typeface typefaceNegative = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
+            buttonNegative.setTypeface(typefaceNegative);
+
+            buttonPositive.setOnClickListener(view1 -> {
                 isFirstSubmit = false;
 
                 InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(button.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(buttonPositive.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(buttonNegative.getWindowToken(), 0);
 
                 String name = Objects.requireNonNull(nameEditText.getText()).toString();
                 String description = Objects.requireNonNull(descriptionEditText.getText()).toString();
