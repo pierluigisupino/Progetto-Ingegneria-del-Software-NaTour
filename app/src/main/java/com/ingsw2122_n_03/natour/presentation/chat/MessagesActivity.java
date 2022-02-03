@@ -52,6 +52,7 @@ public class MessagesActivity extends AppCompatActivity {
         MessageAdapter messageAdapter = new MessageAdapter(messages, currentUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(messageAdapter);
+        recyclerView.scrollToPosition(messages.size() - 1);
 
         buttonSend.setOnClickListener(view1 -> {
             String body = editMessage.getText().toString();
