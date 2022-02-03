@@ -79,7 +79,9 @@ public class WebSocketSingleton {
             LocalDate sendDate = LocalDate.from(DateTimeFormatter.ISO_DATE_TIME.parse(jsonObject.getString("senddate")));
             LocalTime sendTime = LocalTime.parse(jsonObject.getString("sendtime").substring(0,5), DateTimeFormatter.ofPattern("HH:mm"));
             MessageController.getInstance().onMessageReceived(new Message(body, sendDate, sendTime, sender, new User(subClient)));
-        } catch (JSONException ignored) {}
+        } catch (JSONException e) {
+            Log.e("test", e.toString()); //TODO FIX
+        }
 
     }
 
