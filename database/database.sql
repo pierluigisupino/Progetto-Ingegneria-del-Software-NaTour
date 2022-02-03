@@ -41,3 +41,11 @@ CREATE TABLE MESSAGE(
   (sender IS DISTINCT FROM receiver)
 
 )
+
+CREATE TABLE ONLINEUSER(
+
+  connectionid VARCHAR(200) NOT NULL,
+  sub VARCHAR(100) NOT NULL,
+  username VARCHAR(30) NOT NULL
+
+)
