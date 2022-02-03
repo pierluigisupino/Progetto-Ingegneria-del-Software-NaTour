@@ -83,7 +83,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     }
 
     private void checkDate(LocalDate date, TextView dateTextView){
-        
+
         DateTimeFormatter dateFormatter  = DateTimeFormatter.ofPattern("MMMM dd yyyy");
         String sentDate = dateFormatter.format(date);
 
@@ -119,8 +119,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getBody());
 
             checkDate(message.getSendDate(), dateText);
-
-            @SuppressLint("SimpleDateFormat")
+            
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
             String sentTime = formatter.format(message.getSendTime());
             timeText.setText(sentTime);
