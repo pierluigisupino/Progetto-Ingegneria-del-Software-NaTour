@@ -14,16 +14,20 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
+import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.BuildConfig;
+import com.ingsw2122_n_03.natour.model.Message;
 
 
 public class WebSocketSingleton {
 
     private static WebSocketSingleton instance = null;
     private final WebSocket webSocket;
+    private final String subClient;
 
 
     private WebSocketSingleton() {
+        subClient = Amplify.Auth.getCurrentUser().getUserId();
         OkHttpClient mClient = new OkHttpClient();
         Request request = new Request.Builder().url(BuildConfig.URL_WEB_SOCKET).build();
         EchoWebSocketListener listener = new EchoWebSocketListener();
@@ -32,48 +36,73 @@ public class WebSocketSingleton {
     }
 
 
-        public static WebSocketSingleton getInstance() {
-            if(instance == null)
-                instance = new WebSocketSingleton();
-            return  instance;
-        }
+    public static WebSocketSingleton getInstance() {
+        if(instance == null)
+            instance = new WebSocketSingleton();
+        return  instance;
+    }
 
 
-        private static final class EchoWebSocketListener extends WebSocketListener {
+    public void sendMessage(Message message) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("sender", subClient);
+            jsonObject.put("receiver", message.getReceiver().getUid());
+            jsonObject.put("body", message.getBody());
+            jsonObject.put("senddate", message.getSendDate());
+            jsonObject.put("sendtime", message.getSendTime());
+            webSocket.send(jsonObject.toString());
+        } catch (JSONException ignored) {}
+
+    }
+
+
+    private void retrieveMessage(String message) {
+        Log.i("MSG", message);
+        //HANDLE IN UI
+    }
+
+
+        private final class EchoWebSocketListener extends WebSocketListener {
 
             private static final int CLOSE_STATUS = 1000;
 
             @Override
             public void onOpen(WebSocket webSocket, @NonNull Response response) {
-                Log.i("CONNECT", response.toString());
-                JSONObject a = new JSONObject();
+
                 try {
-                    a.put("action", "sendMessage");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                webSocket.send(a.toString());
+                    JSONObject body = new JSONObject();
+                    body.put("action", "$connect");
+                    body.put("subclient", subClient);
+                    webSocket.send(body.toString());
+                } catch (JSONException ignored) {}
+
             }
 
             @Override
             public void onMessage(@NonNull WebSocket webSocket, @NonNull String message) {
-                Log.i("MSG", message);
+                retrieveMessage(message);
             }
 
             @Override
-            public void onMessage(@NonNull WebSocket webSocket, @NonNull ByteString bytes) {
-                Log.i("MSG", String.valueOf(bytes));
-            }
+            public void onMessage(@NonNull WebSocket webSocket, @NonNull ByteString bytes) {}
 
             @Override
             public void onClosing(WebSocket webSocket, int code, @NonNull String reason) {
+
+                try {
+                    JSONObject body = new JSONObject();
+                    body.put("action", "$disconnect");
+                    body.put("subclient", subClient);
+                    webSocket.send(body.toString());
+                } catch (JSONException ignored) {}
                 webSocket.close(CLOSE_STATUS, null);
+
             }
 
             @Override
-            public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable throwable, Response response) {
-                Log.i("ERR", response.toString());
-            }
+            public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable throwable, Response response) {}
 
         }
 

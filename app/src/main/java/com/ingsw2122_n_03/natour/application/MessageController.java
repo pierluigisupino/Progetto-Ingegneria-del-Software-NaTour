@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.application;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.implementations.MessageDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
+import com.ingsw2122_n_03.natour.infastructure.webSocket.WebSocketSingleton;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
@@ -20,6 +21,7 @@ public class MessageController extends NavigationController{
     private MainActivity mainActivity;
 
     private final MessageDaoInterface messageDaoInterface;
+    private final WebSocketSingleton webSocket;
 
     private User currentUser;
     private User endUser;
@@ -29,6 +31,7 @@ public class MessageController extends NavigationController{
 
     private MessageController(){
         messageDaoInterface = new MessageDaoImplementation(this);
+        webSocket = WebSocketSingleton.getInstance();
     }
 
     public static MessageController getInstance() {
