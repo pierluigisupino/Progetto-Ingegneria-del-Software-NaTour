@@ -120,7 +120,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();

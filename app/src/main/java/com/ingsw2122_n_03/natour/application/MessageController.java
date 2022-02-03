@@ -71,7 +71,7 @@ public class MessageController extends NavigationController{
 
     public void onRetrieveChatsError(boolean isResolvableError) {
         if(isResolvableError) {
-            chatFragment.onError();
+            chatFragment.onError(); //TODO possibile crash
             if(chatFragment.isVisible())
                 mainActivity.onFail(mainActivity.getString(R.string.generic_error)); //INUTILE?
         }else {
@@ -112,7 +112,7 @@ public class MessageController extends NavigationController{
      **************/
     //CALL FROM MESSAGE FRAGMENT ON SENT PRESSED
     public void sendMessage(Message message) {
-        messageDaoInterface.sendMessage(message);
+        webSocket.sendMessage(message);
     }
 
 
