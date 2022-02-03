@@ -96,6 +96,10 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
         timePicker.setOnTimeChangedListener((timePicker1, i, i1) -> isChanged = true);
 
+
+        builder.setView(view)
+                .setNegativeButton(getString(R.string.cancel), (dialog, which) -> {dialog.dismiss();});
+
         builder.setView(view)
                 .setPositiveButton("Ok", (dialog, which) -> {});
 
