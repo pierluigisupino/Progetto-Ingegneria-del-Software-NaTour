@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 public class MessagesActivity extends AppCompatActivity {
 
-    private ArrayList<Message> messages;
     private User currentUser;
     private User endUser;
 
@@ -38,7 +37,7 @@ public class MessagesActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        messages = (ArrayList<Message>) intent.getSerializableExtra("messages");
+        ArrayList<Message> messages = (ArrayList<Message>) intent.getSerializableExtra("messages");
         currentUser = (User) intent.getSerializableExtra("currentUser");
         endUser = (User) intent.getSerializableExtra("endUser");
 
@@ -51,10 +50,9 @@ public class MessagesActivity extends AppCompatActivity {
 
         MessageAdapter messageAdapter = new MessageAdapter(messages, currentUser);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(messageAdapter);
-        recyclerView.scrollToPosition(messages.size());
+        recyclerView.scrollToPosition(messages.size() - 1);
 
         buttonSend.setOnClickListener(view1 -> {
             String body = editMessage.getText().toString();
