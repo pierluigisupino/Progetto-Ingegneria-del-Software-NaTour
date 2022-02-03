@@ -102,7 +102,7 @@ public class MessageController extends NavigationController{
         //SHOW ERROR ON CHAT FRAGMENT (EVEN IN ITINERARY DETAIL?)
     }
 
-    public void onMessageReceived() {
+    public void onMessageReceived(Message message) {
 
     }
 

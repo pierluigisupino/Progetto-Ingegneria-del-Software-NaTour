@@ -32,6 +32,8 @@ public class WebSocketSingleton {
     private final WebSocket webSocket;
     private final String subClient;
 
+    private final int CLOSE_STATUS = 1000;
+
 
     private WebSocketSingleton() {
         subClient = Amplify.Auth.getCurrentUser().getUserId();
@@ -73,17 +75,22 @@ public class WebSocketSingleton {
             JSONObject jsonObject = new JSONObject(message);
             String body = jsonObject.getString("body");
             User sender = new User(jsonObject.getString("sender"));
+            sender.setName(jsonObject.getString("sendername"));
             LocalDate sendDate = LocalDate.from(DateTimeFormatter.ISO_DATE_TIME.parse(jsonObject.getString("senddate")));
             LocalTime sendTime = LocalTime.parse(jsonObject.getString("sendtime").substring(0,5), DateTimeFormatter.ofPattern("HH:mm"));
-            MessageController.getInstance().onMessageReceived();
+            MessageController.getInstance().onMessageReceived(new Message(body, sendDate, sendTime, sender, new User(subClient)));
         } catch (JSONException ignored) {}
 
     }
 
 
-        private final class EchoWebSocketListener extends WebSocketListener {
+    public void closeConnection() {
+        webSocket.close(CLOSE_STATUS, null);
+    }
 
-            private static final int CLOSE_STATUS = 1000;
+
+
+        private final class EchoWebSocketListener extends WebSocketListener {
 
             @Override
             public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {

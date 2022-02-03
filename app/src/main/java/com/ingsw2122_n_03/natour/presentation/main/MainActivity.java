@@ -28,6 +28,7 @@ import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.ActivityMainBinding;
+import com.ingsw2122_n_03.natour.infastructure.webSocket.WebSocketSingleton;
 import com.ingsw2122_n_03.natour.presentation.chat.ChatFragment;
 import com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary.AddItineraryActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
@@ -109,6 +110,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+
     @Override
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -117,6 +119,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             super.onBackPressed();
         }
     }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        WebSocketSingleton.getInstance().closeConnection();
+    }
+
 
     @Override
     public void onSuccess(String msg) {
