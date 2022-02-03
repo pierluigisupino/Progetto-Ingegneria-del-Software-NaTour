@@ -56,7 +56,6 @@ public class MessagesActivity extends AppCompatActivity {
         materialToolbar.setTitle(endUser.getName());
 
         MessageAdapter messageAdapter = new MessageAdapter(messages, currentUser);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(messageAdapter);
         recyclerView.scrollToPosition(messages.size() - 1);
