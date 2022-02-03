@@ -98,7 +98,7 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
 
         builder.setView(view)
-                .setNegativeButton(getString(R.string.cancel), ());
+                .setNegativeButton(getString(R.string.cancel), (dialog, which) -> {});
 
         builder.setView(view)
                 .setPositiveButton("Ok", (dialog, which) -> {});
