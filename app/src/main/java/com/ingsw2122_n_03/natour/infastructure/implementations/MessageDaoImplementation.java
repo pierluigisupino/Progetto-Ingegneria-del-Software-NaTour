@@ -9,14 +9,14 @@ import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
@@ -102,10 +102,9 @@ public class MessageDaoImplementation implements MessageDaoInterface {
                             DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
                             TemporalAccessor accessor = timeFormatter.parse(jsonObject.getString("senddate"));
 
-                            LocalDate sendDate = LocalDate.fromDateFields(Date.from(Instant.from(accessor)));
+                            LocalDate sendDate = LocalDate.from(accessor);
 
-                            org.joda.time.format.DateTimeFormatter fmt = DateTimeFormat.forPattern("HH:mm");
-                            LocalTime sendTime = fmt.parseLocalTime(jsonObject.getString("sendtime").substring(0,5));
+                            LocalTime sendTime = LocalTime.parse(jsonObject.getString("sendtime").substring(0,5), DateTimeFormatter.ofPattern("HH:mm"));
 
                             if(jsonObject.getString("sender").equals(user1.getUid()))
                                 messages.add(new Message(body, sendDate, sendTime, user1, user2));

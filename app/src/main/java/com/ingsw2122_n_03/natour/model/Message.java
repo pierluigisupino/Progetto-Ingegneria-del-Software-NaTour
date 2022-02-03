@@ -1,9 +1,9 @@
 package com.ingsw2122_n_03.natour.model;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Message implements Serializable {
 
