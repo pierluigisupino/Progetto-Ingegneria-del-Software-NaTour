@@ -14,21 +14,22 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
+import com.ingsw2122_n_03.natour.BuildConfig;
+
 
 public class WebSocketSingleton {
 
+    private static WebSocketSingleton instance = null;
+    private final WebSocket webSocket;
 
-        private static WebSocketSingleton instance = null;
-        private final WebSocket webSocket;
 
-
-        private WebSocketSingleton() {
-            OkHttpClient mClient = new OkHttpClient();
-            Request request = new Request.Builder().url("YOUR SOCKET ENDPOINT").build();
-            EchoWebSocketListener listener = new EchoWebSocketListener();
-            webSocket = mClient.newWebSocket(request, listener);
-            mClient.dispatcher().executorService().shutdown();
-        }
+    private WebSocketSingleton() {
+        OkHttpClient mClient = new OkHttpClient();
+        Request request = new Request.Builder().url(BuildConfig.URL_WEB_SOCKET).build();
+        EchoWebSocketListener listener = new EchoWebSocketListener();
+        webSocket = mClient.newWebSocket(request, listener);
+        mClient.dispatcher().executorService().shutdown();
+    }
 
 
         public static WebSocketSingleton getInstance() {
