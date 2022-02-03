@@ -108,7 +108,6 @@ public class IterController extends NavigationController {
     public void onUpdateItinerariesSuccess(ArrayList<Itinerary> iters){
         itineraries = iters;
         mainFragment.updateItineraries(itineraries);
-        mainFragment.onSuccess();
         if(mainFragment.isVisible())
             mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
     }

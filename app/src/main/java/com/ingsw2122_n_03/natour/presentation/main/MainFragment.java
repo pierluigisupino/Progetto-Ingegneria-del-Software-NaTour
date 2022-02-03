@@ -140,6 +140,8 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             textViewError1.setVisibility(View.GONE);
             lottieAnimationView.setVisibility(View.GONE);
             textViewError3.setVisibility(View.GONE);
+            recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
+            Objects.requireNonNull(recyclerView.getLayoutManager()).onRestoreInstanceState(recyclerViewState);
 
         });
 
@@ -147,22 +149,8 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
 
     public void updateItineraries(ArrayList<Itinerary> itineraries) {
-        this.itineraries = itineraries;
-        requireActivity().runOnUiThread(()->{
-            recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
-            Objects.requireNonNull(recyclerView.getLayoutManager()).onRestoreInstanceState(recyclerViewState);
-        });
-    }
-
-
-    @Override
-    public void onItineraryClick(int position) {
-        iterController.onItineraryClick(position);
-    }
-
-    
-    public void onSuccess(){
         onError = false;
+        this.itineraries = itineraries;
         if(this.isVisible()) updateUi();
     }
 
@@ -170,6 +158,12 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     public void onError() {
         onError = true;
         if(this.isVisible()) updateUi();
+    }
+    
+
+    @Override
+    public void onItineraryClick(int position) {
+        iterController.onItineraryClick(position);
     }
 
 }
