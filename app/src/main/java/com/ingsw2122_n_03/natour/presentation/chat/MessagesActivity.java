@@ -1,16 +1,18 @@
 package com.ingsw2122_n_03.natour.presentation.chat;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.ingsw2122_n_03.natour.application.MessageController;
@@ -34,6 +36,8 @@ public class MessagesActivity extends AppCompatActivity {
 
     private ArrayList<Message> messages;
 
+    @SuppressLint("NewApi")
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +84,10 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
     public void updateChat(Message message){
-        messages.add(message);
-        recyclerView.setAdapter(new MessageAdapter(messages, currentUser));
+        Log.i("MSG", message.getBody());
+        runOnUiThread(()->{
+            messages.add(message);
+            recyclerView.setAdapter(new MessageAdapter(messages, currentUser));
+        });
     }
 }
