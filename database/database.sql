@@ -41,7 +41,7 @@ CREATE TABLE MESSAGE(
   CONSTRAINT check_send_rec CHECK
   (sender IS DISTINCT FROM receiver)
 
-)
+);
 
 CREATE TABLE ONLINEUSER(
 

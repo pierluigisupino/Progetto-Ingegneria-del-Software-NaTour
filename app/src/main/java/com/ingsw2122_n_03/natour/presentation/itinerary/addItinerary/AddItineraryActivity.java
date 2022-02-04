@@ -119,6 +119,12 @@ public class AddItineraryActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        LostProgressDialog dialog = new LostProgressDialog();
+        dialog.show(getSupportFragmentManager(), "LostProgressDialog");
+    }
+
     private void addFragment(){
 
         FragmentManager fragmentManager = getSupportFragmentManager();
