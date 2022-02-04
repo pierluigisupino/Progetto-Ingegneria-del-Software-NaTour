@@ -6,7 +6,6 @@ import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.infastructure.webSocket.WebSocketSingleton;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
-import com.ingsw2122_n_03.natour.presentation.ErrorActivity;
 import com.ingsw2122_n_03.natour.presentation.chat.ChatFragment;
 import com.ingsw2122_n_03.natour.presentation.chat.MessagesActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
@@ -28,6 +27,7 @@ public class MessageController extends NavigationController{
     private User endUser;
     private ArrayList<User> chats = new ArrayList<>();
     private Message sentMessage;
+
 
     private ChatFragment chatFragment;
 
@@ -65,7 +65,7 @@ public class MessageController extends NavigationController{
 
     public void onRetrieveChatsSuccess(ArrayList<User> chats) {
         this.chats = chats;
-        chatFragment.updateChats(chats); //TODO possibile crash
+        chatFragment.updateChats(chats);
         if(chatFragment.isVisible())
             mainActivity.onSuccess(mainActivity.getString(R.string.messages_updated));
     }
@@ -73,12 +73,9 @@ public class MessageController extends NavigationController{
 
     public void onRetrieveChatsError(boolean isResolvableError) {
         if(isResolvableError) {
-            chatFragment.onError(); //TODO possibile crash
+            chatFragment.onError();
             if(chatFragment.isVisible())
-                mainActivity.onFail(mainActivity.getString(R.string.generic_error)); //INUTILE?
-        }else {
-            // AVRO ERROR ACTIVITY DUPLICATE OPPURE CRASHERA?
-            goToActivityAndFinish(mainActivity, ErrorActivity.class);
+                mainActivity.onFail(mainActivity.getString(R.string.generic_error));
         }
     }
 
@@ -95,19 +92,34 @@ public class MessageController extends NavigationController{
 
     public void onRetrieveMessagesSuccess(ArrayList<Message> messages) {
         goToActivity(mainActivity, MessagesActivity.class, messages, currentUser, endUser);
-        //SHOW MESSAGE ACTIVITY TO VIEW MESSAGES WITH END USER
     }
 
 
     public void onRetrieveMessagesError() {
-        //SHOW ERROR ON CHAT FRAGMENT (EVEN IN ITINERARY DETAIL?)
+        mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 
 
     public void onMessageReceived(Message message) {
-        messageActivity.updateChat(message);
-        //CHAT IS VISIBLE? ADD MESSAGE
-        //ADD SENDER USER TO CHAT FRAGMENT IF NOT PRESENT
+
+        String senderSub = message.getSender().getUid();
+
+        boolean isNewChat = true;
+        for (User user : chats) {
+            if(user.getUid().equals(senderSub)) {
+                isNewChat = false;
+                break;
+            }
+        }
+
+        if(isNewChat) {
+            chats.add(message.getSender());
+            chatFragment.updateChats(chats);
+        }
+
+        if(!messageActivity.isDestroyed())
+            messageActivity.updateChat(message);
+
     }
 
 
@@ -122,7 +134,22 @@ public class MessageController extends NavigationController{
 
 
     public void onMessageSentSuccess() {
+
         messageActivity.updateChat(sentMessage);
+
+        boolean isNewChat = true;
+        for(User user : chats){
+            if(user.getUid().equals(endUser.getUid())){
+                isNewChat = false;
+                break;
+            }
+        }
+
+        if(isNewChat){
+            chats.add(sentMessage.getReceiver());
+            chatFragment.updateChats(chats);
+        }
+
     }
 
 

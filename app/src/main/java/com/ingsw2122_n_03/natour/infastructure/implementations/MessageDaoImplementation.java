@@ -13,9 +13,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -96,12 +97,13 @@ public class MessageDaoImplementation implements MessageDaoInterface {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             String body = jsonObject.getString("body");
 
-                            long time = Long.parseLong(jsonObject.getString("time"));
+                            long millis = Long.parseLong(jsonObject.getString("time"));
+                            LocalDateTime sendTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
 
                             if(jsonObject.getString("sender").equals(user1.getUid()))
-                                messages.add(new Message(body, time, user1, user2));
+                                messages.add(new Message(body, sendTime, user1, user2));
                             else
-                                messages.add(new Message(body, time, user2, user1));
+                                messages.add(new Message(body, sendTime, user2, user1));
 
                         }
 

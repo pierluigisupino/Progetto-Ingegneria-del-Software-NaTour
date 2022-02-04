@@ -13,9 +13,9 @@ import com.ingsw2122_n_03.natour.model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,6 +51,7 @@ public class WebSocketSingleton {
     }
 
 
+    @SuppressLint("NewApi")
     public void sendMessage(Message message) {
 
         try {
@@ -59,7 +60,7 @@ public class WebSocketSingleton {
             jsonObject.put("sender", subClient);
             jsonObject.put("receiver", message.getReceiver().getUid());
             jsonObject.put("text", message.getBody());
-            jsonObject.put("time", message.getTime());
+            jsonObject.put("time", message.getTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
             webSocket.send(jsonObject.toString());
         } catch (JSONException ignored) {}
 
@@ -109,9 +110,10 @@ public class WebSocketSingleton {
                     User sender = new User(jsonObject.getString("sender"));
                     sender.setName(jsonObject.getString("sendername"));
 
-                    long time = Long.parseLong(jsonObject.getString("time"));
+                    long millis = Long.parseLong(jsonObject.getString("time"));
+                    LocalDateTime sendTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
 
-                    MessageController.getInstance().onMessageReceived(new Message(body, time, sender, new User(subClient)));
+                    MessageController.getInstance().onMessageReceived(new Message(body, sendTime, sender, new User(subClient)));
 
                 } catch (JSONException ignored) {}
             }

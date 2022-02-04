@@ -18,12 +18,13 @@ import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.support.MessageAdapter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
 import com.ingsw2122_n_03.natour.R;
+
+
 
 public class MessagesActivity extends AppCompatActivity {
 
@@ -69,7 +70,7 @@ public class MessagesActivity extends AppCompatActivity {
             String body = editMessage.getText().toString();
 
             if(body.length() > 0){
-                Message message = new Message(body, System.currentTimeMillis(), currentUser, endUser);
+                Message message = new Message(body, LocalDateTime.now(), currentUser, endUser);
                 MessageController.getInstance().sendMessage(message);
 
                 editMessage.getText().clear();
