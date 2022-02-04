@@ -1,6 +1,5 @@
 package com.ingsw2122_n_03.natour.presentation.support;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -80,47 +76,30 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
     }
 
-    @SuppressLint("NewApi")
-    private LocalDateTime milliToLocalDateTime(long time){
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault());
-    }
-
-    @SuppressLint("NewApi")
-    private LocalDate milliToLocalDate(long time){
-        return Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-
-    @SuppressLint("NewApi")
-    private void handleDate(TextView dateTextView, long milli, int itemPosition){
+    private void handleDate(TextView dateTextView, LocalDate sendDate, int itemPosition){
 
         if (itemPosition != 0) {
-            processDate(dateTextView, milli, mMessageList.get(itemPosition - 1).getTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), false);
+            processDate(dateTextView, sendDate, mMessageList.get(itemPosition - 1).getTime().toLocalDate(), false);
         } else {
-            processDate(dateTextView, milli, 0, true);
+            processDate(dateTextView, sendDate, null, true);
         }
     }
 
-    @SuppressLint("NewApi")
-    private void processDate(@NonNull TextView tv, long milli
-            , long lastMessageMilli
-            , boolean isFirstItem) {
-
-        LocalDate date1 = milliToLocalDate(milli);
-        LocalDate date2 = lastMessageMilli == 0 ? null : milliToLocalDate(lastMessageMilli);
+    private void processDate(@NonNull TextView tv, LocalDate date1, LocalDate date2, boolean isFirstItem) {
 
         DateTimeFormatter dateFormatter  = DateTimeFormatter.ofPattern("MMMM dd yyyy");
         String sentDate = dateFormatter.format(date1);
 
         if (isFirstItem) {
-                if (date1.equals(LocalDate.now()))
-                    tv.setText(R.string.today);
-                else if (date1.equals(LocalDate.now().minusDays(1)))
-                    tv.setText(R.string.yesterday);
-                else
-                    tv.setText(sentDate);
+            if (date1.equals(LocalDate.now()))
+                tv.setText(R.string.today);
+            else if (date1.equals(LocalDate.now().minusDays(1)))
+                tv.setText(R.string.yesterday);
+            else
+                tv.setText(sentDate);
 
-                tv.setPadding(0, 0, 0,0);
-                tv.setVisibility(View.VISIBLE);
+            tv.setPadding(0, 0, 0,0);
+            tv.setVisibility(View.VISIBLE);
 
         } else if (!date1.equals(date2)) {
             if (date1.equals(LocalDate.now()))
@@ -148,11 +127,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
             timeText = itemView.findViewById(R.id.text_message_time);
         }
 
-        @SuppressLint("NewApi")
         void bind(Message message, int position) {
             messageText.setText(message.getBody());
 
-            handleDate(dateText, message.getTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), position);
+            handleDate(dateText, message.getTime().toLocalDate(), position);
 
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
             String sentTime = formatter.format(message.getTime());
@@ -171,14 +149,13 @@ public class MessageAdapter extends RecyclerView.Adapter {
             timeText = itemView.findViewById(R.id.text_message_time);
         }
 
-        @SuppressLint("NewApi")
         void bind(Message message, int position) {
             messageText.setText(message.getBody());
 
-            handleDate(dateText, message.getTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), position);
+            handleDate(dateText, message.getTime().toLocalDate(), position);
 
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
-            String sentTime = formatter.format(milliToLocalDateTime(message.getTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
+            String sentTime = formatter.format(message.getTime());
             timeText.setText(sentTime);
         }
     }
