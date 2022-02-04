@@ -10,14 +10,15 @@ import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
 
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
             if(!iter.getWayPoints().isEmpty())
                 jsonObject.put("waypoints", iter.getWayPoints());
             jsonObject.put("date", iter.getShareDate());
+            jsonObject.put("modifiedsince", iter.getModifiedSince());
 
         } catch (JSONException e) {
             controller.onItineraryInsertError();
@@ -165,9 +167,11 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
     }
 
 
+    @SuppressLint("NewApi")
     @Override
     public void putItineraryFromFeedback(Itinerary iter) {
 
+        LocalDateTime newModifiedSince = LocalDateTime.now();
         JSONObject jsonObject = new JSONObject();
         try {
 
@@ -175,9 +179,11 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
             jsonObject.put("difficulty", iter.getDifficulty());
             jsonObject.put("hours", iter.getDuration().getHourOfDay());
             jsonObject.put("minutes", iter.getDuration().getMinuteOfHour());
+            jsonObject.put("modifiedsince", iter.getModifiedSince());
+            jsonObject.put("newmodifiedsince", newModifiedSince);
 
         } catch (JSONException e) {
-            controller.onItineraryUpdateError();
+            controller.onItineraryUpdateError(false);
             return;
         }
 
@@ -191,24 +197,33 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 response ->{
 
                     try {
-                        if(response.getData().asJSONObject().getInt("Code") == 200)
+
+                        int statusCode = response.getData().asJSONObject().getInt("Code");
+
+                        if(statusCode == 200) {
+                            iter.setModifiedSince(newModifiedSince);
                             controller.onItineraryUpdateSuccess();
-                        else
-                            controller.onItineraryUpdateError();
+                            return;
+                        }
+
+                        controller.onItineraryUpdateError(statusCode == 100);
+
                     } catch (JSONException e) {
-                        controller.onItineraryUpdateError();
+                        controller.onItineraryUpdateError(false);
                     }
 
                 },
-                error -> controller.onItineraryUpdateError()
+                error -> controller.onItineraryUpdateError(false)
         );
 
     }
 
 
+    @SuppressLint("NewApi")
     @Override
     public void putItineraryByAdmin(Itinerary iter) {
 
+        LocalDateTime newModifiedSince = LocalDateTime.now();
         JSONObject jsonObject = new JSONObject();
         try {
 
@@ -219,9 +234,11 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
             jsonObject.put("hours", iter.getDuration().getHourOfDay());
             jsonObject.put("minutes", iter.getDuration().getMinuteOfHour());
             jsonObject.put("updateDate", iter.getEditDate());
+            jsonObject.put("modifiedsince", iter.getModifiedSince());
+            jsonObject.put("newmodifiedsince", newModifiedSince);
 
         } catch (JSONException e) {
-            controller.onItineraryUpdateError();
+            controller.onItineraryUpdateError(false);
             return;
         }
 
@@ -235,16 +252,23 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 response ->{
 
                     try {
-                        if(response.getData().asJSONObject().getInt("Code") == 200)
+
+                        int statusCode = response.getData().asJSONObject().getInt("Code");
+
+                        if(statusCode == 200) {
+                            iter.setModifiedSince(newModifiedSince);
                             controller.onItineraryUpdateSuccess();
-                        else
-                            controller.onItineraryUpdateError();
+                            return;
+                        }
+
+                        controller.onItineraryUpdateError(statusCode == 100);
+
                     } catch (JSONException e) {
-                        controller.onItineraryUpdateError();
+                        controller.onItineraryUpdateError(false);
                     }
 
                 },
-                error -> controller.onItineraryUpdateError()
+                error -> controller.onItineraryUpdateError(false)
         );
 
     }
@@ -308,17 +332,12 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                 creator.setName(jsonObject.getString("creatorname"));
 
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
-                TemporalAccessor accessor;
-
-                accessor = timeFormatter.parse(jsonObject.getString("sharedate"));
-                Date shareDate = Date.from(Instant.from(accessor));
+                Date shareDate = Date.from(Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(jsonObject.getString("sharedate"))));
+                LocalDateTime modifiedSince = LocalDateTime.parse(jsonObject.getString("modifiedsince"), ISODateTimeFormat.dateTimeParser());
 
                 Date editDate = null;
-                if(!jsonObject.isNull("updatedate")) {
-                    accessor = timeFormatter.parse(jsonObject.getString("updatedate"));
-                    editDate = Date.from(Instant.from(accessor));
-                }
+                if(!jsonObject.isNull("updatedate"))
+                    editDate = Date.from(Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(jsonObject.getString("updatedate"))));
 
                 JSONObject startPointJSON = jsonObject.getJSONObject("startpoint");
                 double x = startPointJSON.getDouble("x");
@@ -345,6 +364,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 iter.setWayPoints(iterWaypoints);
                 iter.setDescription(description);
                 iter.setEditDate(editDate);
+                iter.setModifiedSince(modifiedSince);
                 
                 iters.add(iter);
 

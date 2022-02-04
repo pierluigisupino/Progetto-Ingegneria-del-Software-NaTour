@@ -94,7 +94,17 @@ public class WebSocketSingleton {
             public void onMessage(@NonNull WebSocket webSocket, @NonNull String message) {
 
                 try {
+
                     JSONObject jsonObject = new JSONObject(message);
+
+                    if(jsonObject.has("statusCode")) {
+                        if(jsonObject.getInt("statusCode") == 200)
+                            MessageController.getInstance().onMessageSentSuccess();
+                        else
+                            MessageController.getInstance().onMessageSentError();
+                        return;
+                    }
+
                     String body = jsonObject.getString("text");
 
                     User sender = new User(jsonObject.getString("sender"));
@@ -104,6 +114,7 @@ public class WebSocketSingleton {
                     LocalTime sendTime = LocalTime.parse(jsonObject.getString("sendtime").substring(0,5), DateTimeFormatter.ofPattern("HH:mm"));
 
                     MessageController.getInstance().onMessageReceived(new Message(body, sendDate, sendTime, sender, new User(subClient)));
+
                 } catch (JSONException ignored) {}
             }
 

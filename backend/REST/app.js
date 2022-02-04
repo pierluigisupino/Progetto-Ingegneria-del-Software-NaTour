@@ -256,10 +256,10 @@ app.post('/items/itineraries', function(req, res) {
   
   client.connect();
   
-  const query = 'INSERT INTO ITINERARY(iterName, description, difficulty, hours, minutes, startPoint, waypoints, creatorID, shareDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING IterID';
+  const query = 'INSERT INTO ITINERARY(iterName, description, difficulty, hours, minutes, startPoint, waypoints, creatorID, shareDate, modifiedsince) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING IterID';
   
   client.query(query, [req.body.name, req.body.iterDescription, req.body.difficulty, req.body.hours, req.body.minutes, 
-  '('+startPoint.Latitude+','+startPoint.Longitude+')', waypoints, req.body.creator, req.body.date] ,(err, suc) => {
+  '('+startPoint.Latitude+','+startPoint.Longitude+')', waypoints, req.body.creator, req.body.date, req.body.modifiedsince] ,(err, suc) => {
     
     client.end();
     
@@ -273,40 +273,37 @@ app.post('/items/itineraries', function(req, res) {
 });
 
 
-app.post('/items/message', function(req, res) {
-  
-  const client = new Client(clientParams);
-  
-  client.connect();
-  
-  const query = 'INSERT INTO MESSAGE VALUES ($1, $2, $3, $4, $5)';
-  
-  client.query(query, [req.body.text, req.body.sendDate, req.body.sendTime, req.body.sender, req.body.receiver], (err, data) => {
-    
-    if(err)
-      return res.json({Code: 500, Error: err.stack});
-    else
-      return res.json({Code: 200});
-    
-  });
-  
-});
-
-
 /****************************
 * put methods *
 ****************************/
 
 
-app.put('/items/feedback', function(req,res) {
+app.put('/items/feedback', async function(req,res) {
   
   const client = new Client(clientParams);
-  
+  const id = req.body.iterid;
   client.connect();
   
-  const query = 'UPDATE ITINERARY SET difficulty = $1, hours = $2, minutes = $3 WHERE iterid = $4';
+  try{
+    
+    let response = await client.query('SELECT modifiedsince FROM ITINERARY WHERE iterID = $1', [id]);
+    if(response.rows[0] != null) {
+      let date1 = new Date(String(response.rows[0].modifiedsince));
+      let date2 = new Date(String(req.body.modifiedsince).substring(0,19));
+      if(date1.getTime() != date2.getTime()) {
+        return res.json({Code:100, Informational: 'Trying to modify a resource never updated'});
+      }
+    }else{
+      return res.json({Code:100, Informational: 'Trying to modify a deleted resource'});
+    }
+    
+  }catch(err){
+    return res.json({Code:500, Error: err.stack});
+  }
   
-  client.query(query, [req.body.difficulty, req.body.hours, req.body.minutes, req.body.iterid], (err, suc) => {
+  const query = 'UPDATE ITINERARY SET difficulty = $1, hours = $2, minutes = $3, modifiedSince = $4 WHERE iterid = $5';
+  
+  client.query(query, [req.body.difficulty, req.body.hours, req.body.minutes, req.body.newmodifiedsince, id], (err, suc) => {
     
     client.end();
     
@@ -320,15 +317,32 @@ app.put('/items/feedback', function(req,res) {
 });
 
 
-app.put('/items/itineraries', function(req, res) {
+app.put('/items/itineraries', async function(req, res) {
   
   const client = new Client(clientParams);
-  
+  const id = req.body.iterid;
   client.connect();
   
-  const query = 'UPDATE ITINERARY SET iterName = $1, description = $2, difficulty = $3, hours = $4, minutes = $5, updateDate = $6 WHERE iterid = $7';
+  try{
+    
+    let response = await client.query('SELECT modifiedsince FROM ITINERARY WHERE iterID = $1', [id]);
+    if(response.rows[0] != null) {
+      let date1 = new Date(String(response.rows[0].modifiedsince));
+      let date2 = new Date(String(req.body.modifiedsince).substring(0,19));
+      if(date1.getTime() != date2.getTime()) {
+        return res.json({Code:100, Informational: 'Trying to modify a resource never updated'});
+      }
+    }else{
+      return res.json({Code:100, Informational: 'Trying to modify a deleted resource'});
+    }
+    
+  }catch(err){
+    return res.json({Code:500, Error: err.stack});
+  }
   
-  client.query(query, [req.body.name, req.body.iterDescription, req.body.difficulty, req.body.hours, req.body.minutes, req.body.updateDate, req.body.iterid], (err, suc) => {
+  const query = 'UPDATE ITINERARY SET iterName = $1, description = $2, difficulty = $3, hours = $4, minutes = $5, updateDate = $6, modifiedSince = $7 WHERE iterid = $8';
+  
+  client.query(query, [req.body.name, req.body.iterDescription, req.body.difficulty, req.body.hours, req.body.minutes, req.body.updateDate, req.body.newmodifiedsince, id], (err, suc) => {
     
     client.end();
     

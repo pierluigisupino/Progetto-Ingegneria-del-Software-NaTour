@@ -1,8 +1,10 @@
 package com.ingsw2122_n_03.natour.model;
 
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +21,7 @@ public class Itinerary implements Serializable {
     private        User            creator;
     private final  Date            shareDate;
     private        Date            editDate;
+    private        LocalDateTime modifiedSince;
     private        int             iterId;
 
 
@@ -45,6 +48,7 @@ public class Itinerary implements Serializable {
         this.shareDate = itinerary.getShareDate();
         this.editDate = itinerary.getEditDate();
         this.iterId = itinerary.getIterId();
+        this.modifiedSince = itinerary.getModifiedSince();
     }
 
     /**GETTERS
@@ -126,6 +130,13 @@ public class Itinerary implements Serializable {
 
 
     public Date getShareDate() { return shareDate; }
+
+
+    public LocalDateTime getModifiedSince() { return modifiedSince; }
+
+    public void setModifiedSince(LocalDateTime modifiedSince) {
+        this.modifiedSince = modifiedSince;
+    }
 
 
     /**

@@ -32,7 +32,7 @@ const setConnection = async (id, sub) => {
     try {
         await db.query('INSERT INTO ONLINEUSER VALUES($1, $2, $3)', [id, sub, clientName]);
     } catch (err) {
-        console.log(err.stack);
+        console.log(err.stack); 
     }
     
 };
@@ -62,8 +62,12 @@ const sendMessage = async (mId, body) => {
     try {
         
         await db.query('INSERT INTO MESSAGE VALUES($1, $2, $3, $4, $5)', [body.text, body.senddate, body.sendtime, body.sender, body.receiver]);
+        await client.postToConnection({
+            'ConnectionId': mId,
+            'Data': Buffer.from(JSON.stringify({'statusCode': 200}))
+        }).promise();
         let id = await db.query('SELECT connectionId FROM ONLINEUSER WHERE sub = $1', [body.receiver]);
-        if(id != null) {
+        if(id.rows[0] != null) {
             id = id.rows[0].connectionid;
             let name = await db.query('SELECT username FROM ONLINEUSER WHERE connectionId = $1', [mId]);
             body.sendername = name.rows[0].username;
@@ -75,7 +79,10 @@ const sendMessage = async (mId, body) => {
         }
         
     } catch (err) {
-        console.log(err.stack);
+        await client.postToConnection({
+            'ConnectionId': mId,
+            'Data': Buffer.from(JSON.stringify({'statusCode': 500}))
+        }).promise();
     }
     
 };
@@ -116,6 +123,7 @@ exports.handler = async (event) => {
             break;
             
             default:
+            break;
             
         }
         

@@ -11,6 +11,7 @@ CREATE TABLE ITINERARY(
   creatorID VARCHAR(100) NOT NULL,
   shareDate DATE NOT NULL,
   updateDate DATE,
+  modifiedSince TIMESTAMP NOT NULL
 
   CONSTRAINT check_iterName CHECK
   (LENGTH(iterName) > 3),

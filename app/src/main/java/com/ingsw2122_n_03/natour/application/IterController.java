@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.application;
 
+import android.annotation.SuppressLint;
+
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageDownloader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageUploader;
@@ -18,6 +20,7 @@ import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainFragment;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.osmdroid.util.GeoPoint;
 
@@ -83,8 +86,8 @@ public class IterController extends NavigationController {
 
     public void onSetUpSuccess(ArrayList<Itinerary> itineraries) {
         this.itineraries = itineraries;
-        goToActivityAndFinish(splashActivity, MainActivity.class, itineraries);
         MessageController.getInstance().setUpMessages(currentUser);
+        goToActivityAndFinish(splashActivity, MainActivity.class, itineraries);
     }
 
 
@@ -140,6 +143,7 @@ public class IterController extends NavigationController {
      * POST ITINERARY
      ****************/
 
+    @SuppressLint("NewApi")
     public void insertItinerary(String name, String description, int difficulty, LocalTime duration, ArrayList<byte[]> imagesBytes, ArrayList<GeoPoint> waypoints) {
 
         loadingDialog = new LoadingDialog(addItineraryActivity, addItineraryActivity.getString(R.string.loading_text_add_itinerary));
@@ -152,6 +156,7 @@ public class IterController extends NavigationController {
             wayPointArrayList.add(new WayPoint(g.getLatitude(), g.getLongitude()));
         }
         currentIter = new Itinerary(name, difficulty, duration, wayPointArrayList.get(0), currentUser, new Date());
+        currentIter.setModifiedSince(LocalDateTime.now());
         wayPointArrayList.remove(0);
 
         if(description.length() > 0)
@@ -275,9 +280,13 @@ public class IterController extends NavigationController {
     }
 
 
-    public void onItineraryUpdateError() {
+    public void onItineraryUpdateError(boolean itemChanged) {
         loadingDialog.dismissDialog();
-        detailActivity.onFail(detailActivity.getString(R.string.generic_error));
+        if(itemChanged) {
+            detailActivity.onFail("Sembra che l'itinerario sia stato aggiornato da altri, ricarica"); //@TODO
+            //SHOW REFRESH HINT ON MAIN FRAGMENT
+        }else
+            detailActivity.onFail(detailActivity.getString(R.string.generic_error));
     }
 
 
@@ -290,7 +299,7 @@ public class IterController extends NavigationController {
         currentIter = itineraries.get(position);
         photos.clear();
         imageDownloader.resetSession(currentIter.getIterId());
-        retrieveItineraryPhotos();
+        //retrieveItineraryPhotos();
 
         if(currentIter.getCreator().getUid().equals(currentUser.getUid()))
             currentIter.setCreator(currentUser);
