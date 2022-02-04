@@ -27,6 +27,7 @@ public class MessageController extends NavigationController{
     private User currentUser;
     private User endUser;
     private ArrayList<User> chats = new ArrayList<>();
+    private Message sentMessage;
 
     private ChatFragment chatFragment;
 
@@ -115,19 +116,18 @@ public class MessageController extends NavigationController{
      **************/
 
     public void sendMessage(Message message) {
+        sentMessage = message;
         webSocket.sendMessage(message);
-        //TODO siamo sicuri che il messaggio è sempre inviato?
-        messageActivity.updateChat(message);
     }
 
 
     public void onMessageSentSuccess() {
-        //SHOW MESSAGE IN MESSAGE ACTIVITY
+        messageActivity.updateChat(sentMessage);
     }
 
 
     public void onMessageSentError() {
-        //SHOW ERROR IN MESSAGE ACTIVITY
+        //SHOW ERROR
     }
 
 

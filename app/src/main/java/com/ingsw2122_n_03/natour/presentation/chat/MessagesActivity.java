@@ -89,4 +89,5 @@ public class MessagesActivity extends AppCompatActivity {
             recyclerView.scrollToPosition(messages.size() - 1);
         });
     }
+
 }
