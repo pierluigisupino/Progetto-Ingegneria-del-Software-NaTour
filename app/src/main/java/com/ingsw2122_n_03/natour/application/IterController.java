@@ -20,7 +20,6 @@ import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainFragment;
 import com.ingsw2122_n_03.natour.presentation.support.ImageUtilities;
 
-import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.osmdroid.util.GeoPoint;
 
@@ -156,7 +155,7 @@ public class IterController extends NavigationController {
             wayPointArrayList.add(new WayPoint(g.getLatitude(), g.getLongitude()));
         }
         currentIter = new Itinerary(name, difficulty, duration, wayPointArrayList.get(0), currentUser, new Date());
-        currentIter.setModifiedSince(LocalDateTime.now());
+        currentIter.setModifiedSince(System.currentTimeMillis());
         wayPointArrayList.remove(0);
 
         if(description.length() > 0)

@@ -11,7 +11,7 @@ CREATE TABLE ITINERARY(
   creatorID VARCHAR(100) NOT NULL,
   shareDate DATE NOT NULL,
   updateDate DATE,
-  modifiedSince TIMESTAMP NOT NULL
+  modifiedSince BIGINT NOT NULL
 
   CONSTRAINT check_iterName CHECK
   (LENGTH(iterName) > 3),
@@ -30,7 +30,7 @@ CREATE TABLE ITINERARY(
 CREATE TABLE MESSAGE(
 
   body VARCHAR(2000) NOT NULL,
-  time bigint NOT NULL,
+  time BIGINT NOT NULL,
   sender VARCHAR(100) NOT NULL,
   receiver VARCHAR(100) NOT NULL,
 

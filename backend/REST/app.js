@@ -288,9 +288,7 @@ app.put('/items/feedback', async function(req,res) {
     
     let response = await client.query('SELECT modifiedsince FROM ITINERARY WHERE iterID = $1', [id]);
     if(response.rows[0] != null) {
-      let date1 = new Date(String(response.rows[0].modifiedsince));
-      let date2 = new Date(String(req.body.modifiedsince).substring(0,19));
-      if(date1.getTime() != date2.getTime()) {
+      if(response.rows[0].modifiedsince != req.body.modifiedsince) {
         return res.json({Code:100, Informational: 'Trying to modify a resource never updated'});
       }
     }else{
@@ -327,9 +325,7 @@ app.put('/items/itineraries', async function(req, res) {
     
     let response = await client.query('SELECT modifiedsince FROM ITINERARY WHERE iterID = $1', [id]);
     if(response.rows[0] != null) {
-      let date1 = new Date(String(response.rows[0].modifiedsince));
-      let date2 = new Date(String(req.body.modifiedsince).substring(0,19));
-      if(date1.getTime() != date2.getTime()) {
+      if(response.rows[0].modifiedsince != req.body.modifiedsince) {
         return res.json({Code:100, Informational: 'Trying to modify a resource never updated'});
       }
     }else{

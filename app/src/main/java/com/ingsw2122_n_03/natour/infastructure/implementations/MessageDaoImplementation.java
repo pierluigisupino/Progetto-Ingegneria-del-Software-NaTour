@@ -97,7 +97,7 @@ public class MessageDaoImplementation implements MessageDaoInterface {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             String body = jsonObject.getString("body");
 
-                            long millis = Long.parseLong(jsonObject.getString("time"));
+                            long millis = jsonObject.getLong("time");
                             LocalDateTime sendTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
 
                             if(jsonObject.getString("sender").equals(user1.getUid()))

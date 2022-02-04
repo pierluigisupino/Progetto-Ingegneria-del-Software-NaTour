@@ -10,9 +10,7 @@ import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
 
-import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
-import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -171,7 +169,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
     @Override
     public void putItineraryFromFeedback(Itinerary iter) {
 
-        LocalDateTime newModifiedSince = LocalDateTime.now();
+        long newModifiedSince = System.currentTimeMillis();
         JSONObject jsonObject = new JSONObject();
         try {
 
@@ -223,7 +221,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
     @Override
     public void putItineraryByAdmin(Itinerary iter) {
 
-        LocalDateTime newModifiedSince = LocalDateTime.now();
+        long newModifiedSince = System.currentTimeMillis();
         JSONObject jsonObject = new JSONObject();
         try {
 
@@ -333,7 +331,6 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 creator.setName(jsonObject.getString("creatorname"));
 
                 Date shareDate = Date.from(Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(jsonObject.getString("sharedate"))));
-                LocalDateTime modifiedSince = LocalDateTime.parse(jsonObject.getString("modifiedsince"), ISODateTimeFormat.dateTimeParser());
 
                 Date editDate = null;
                 if(!jsonObject.isNull("updatedate"))
@@ -357,6 +354,8 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                     }
 
                 }
+
+                long modifiedSince = jsonObject.getLong("modifiedsince");
 
                 Itinerary iter = new Itinerary(name, difficulty, duration, startPoint, creator, shareDate);
 
