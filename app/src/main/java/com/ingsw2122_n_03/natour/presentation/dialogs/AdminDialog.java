@@ -113,7 +113,7 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
             Typeface typefacePositive = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
             buttonPositive.setTypeface(typefacePositive);
 
-            Button buttonNegative = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            Button buttonNegative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
             buttonNegative.setTextSize(16);
 
             Typeface typefaceNegative = ResourcesCompat.getFont(requireContext(), R.font.euclid_circular_medium);
