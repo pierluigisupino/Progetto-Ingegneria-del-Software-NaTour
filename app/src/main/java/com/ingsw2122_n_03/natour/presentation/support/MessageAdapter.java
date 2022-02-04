@@ -69,18 +69,18 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
-                ((SentMessageHolder) holder).bind(message);
+                ((SentMessageHolder) holder).bind(message, position);
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
-                ((ReceivedMessageHolder) holder).bind(message);
+                ((ReceivedMessageHolder) holder).bind(message, position);
         }
     }
 
     private void handleDate(TextView dateTextView, LocalDate sendDate, int itemPosition){
         if (itemPosition != 0) {
-            processDate(dateTextView, sendDate, mMessageList.get(mMessageList.size() - 2).getSendDate(), false);
+            processDate(dateTextView, sendDate, mMessageList.get(itemPosition - 1).getSendDate(), false);
         } else {
-            processDate(dateTextView,sendDate, null, true);
+            processDate(dateTextView, sendDate, null, true);
         }
     }
 
@@ -123,15 +123,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
         SentMessageHolder(View itemView) {
             super(itemView);
 
-            messageText = (TextView) itemView.findViewById(R.id.text_message_body);
-            dateText = (TextView) itemView.findViewById(R.id.text_message_date);
-            timeText = (TextView) itemView.findViewById(R.id.text_message_time);
+            messageText = itemView.findViewById(R.id.text_message_body);
+            dateText = itemView.findViewById(R.id.text_message_date);
+            timeText = itemView.findViewById(R.id.text_message_time);
         }
 
-        void bind(Message message) {
+        void bind(Message message, int position) {
             messageText.setText(message.getBody());
 
-            int position = mMessageList.indexOf(message);
             handleDate(dateText, message.getSendDate(), position);
 
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
@@ -146,15 +145,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
         ReceivedMessageHolder(View itemView) {
             super(itemView);
 
-            messageText = (TextView) itemView.findViewById(R.id.text_message_body);
-            dateText = (TextView) itemView.findViewById(R.id.text_message_date);
-            timeText = (TextView) itemView.findViewById(R.id.text_message_time);
+            messageText = itemView.findViewById(R.id.text_message_body);
+            dateText = itemView.findViewById(R.id.text_message_date);
+            timeText = itemView.findViewById(R.id.text_message_time);
         }
 
-        void bind(Message message) {
+        void bind(Message message, int position) {
             messageText.setText(message.getBody());
 
-            int position = mMessageList.indexOf(message);
             handleDate(dateText, message.getSendDate(), position);
 
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");

@@ -24,6 +24,7 @@ import com.ingsw2122_n_03.natour.presentation.support.MessageAdapter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import com.ingsw2122_n_03.natour.R;
 
@@ -83,11 +84,12 @@ public class MessagesActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void updateChat(Message message){
         Log.i("MSG", message.getBody());
         runOnUiThread(()->{
             messages.add(message);
-            recyclerView.setAdapter(new MessageAdapter(messages, currentUser));
+            Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
         });
     }
 }
