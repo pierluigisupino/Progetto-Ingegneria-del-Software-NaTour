@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.webSocket;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -68,26 +67,10 @@ public class WebSocketSingleton {
     }
 
 
-    @SuppressLint("NewApi")
-    private void retrieveMessage(String message) {
-        Log.i("MSG", message);
-        try {
-            JSONObject jsonObject = new JSONObject(message);
-            String body = jsonObject.getString("body");
-            User sender = new User(jsonObject.getString("sender"));
-            sender.setName(jsonObject.getString("sendername"));
-            LocalDate sendDate = LocalDate.from(DateTimeFormatter.ISO_DATE_TIME.parse(jsonObject.getString("senddate")));
-            LocalTime sendTime = LocalTime.parse(jsonObject.getString("sendtime").substring(0,5), DateTimeFormatter.ofPattern("HH:mm"));
-            MessageController.getInstance().onMessageReceived(new Message(body, sendDate, sendTime, sender, new User(subClient)));
-        } catch (JSONException e) {
-            Log.e("test", e.toString()); //TODO FIX
-        }
-
-    }
-
 
     public void closeConnection() {
         webSocket.close(CLOSE_STATUS, null);
+        instance = null;
     }
 
 
@@ -107,8 +90,21 @@ public class WebSocketSingleton {
             }
 
             @Override
+            @SuppressLint("NewApi")
             public void onMessage(@NonNull WebSocket webSocket, @NonNull String message) {
-                retrieveMessage(message);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(message);
+                    String body = jsonObject.getString("text");
+
+                    User sender = new User(jsonObject.getString("sender"));
+                    sender.setName(jsonObject.getString("sendername"));
+
+                    LocalDate sendDate = LocalDate.parse(jsonObject.getString("senddate"));
+                    LocalTime sendTime = LocalTime.parse(jsonObject.getString("sendtime").substring(0,5), DateTimeFormatter.ofPattern("HH:mm"));
+
+                    MessageController.getInstance().onMessageReceived(new Message(body, sendDate, sendTime, sender, new User(subClient)));
+                } catch (JSONException ignored) {}
             }
 
             @Override

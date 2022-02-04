@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+
 public class MessageDaoImplementation implements MessageDaoInterface {
 
     private final MessageController messageController;
@@ -113,45 +114,6 @@ public class MessageDaoImplementation implements MessageDaoInterface {
 
                 },
                 error -> messageController.onRetrieveMessagesError()
-        );
-
-    }
-
-
-    @Override
-    public void sendMessage(Message message) {
-
-        JSONObject jsonObject = new JSONObject();
-        try{
-            jsonObject.put("text", message.getBody());
-            jsonObject.put("sender", message.getSender().getUid());
-            jsonObject.put("receiver", message.getReceiver().getUid());
-            jsonObject.put("sendDate", message.getSendDate());
-            jsonObject.put("sendTime", message.getSendTime());
-        }catch(JSONException e) {
-            messageController.onMessageSentError();
-        }
-
-        RestOptions options = RestOptions.builder()
-                .addPath("/items/message")
-                .addBody(jsonObject.toString().getBytes())
-                .build();
-
-        Amplify.API.post(
-                options,
-                response -> {
-
-                    try {
-                        if(response.getData().asJSONObject().getInt("Code") == 200)
-                            messageController.onMessageSentSuccess();
-                        else
-                            messageController.onMessageSentError();
-                    } catch (JSONException e) {
-                        messageController.onMessageSentError();
-                    }
-
-                },
-                error -> messageController.onMessageSentError()
         );
 
     }
