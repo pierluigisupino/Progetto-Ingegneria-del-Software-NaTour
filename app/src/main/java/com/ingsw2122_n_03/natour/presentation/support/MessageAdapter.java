@@ -11,9 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.ingsw2122_n_03.natour.R;
 
@@ -76,18 +80,29 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void handleDate(TextView dateTextView, LocalDate sendDate, int itemPosition){
+    private LocalDateTime milliToLocalDateTime(long time){
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault());
+    }
+
+    private LocalDate milliToLocalDate(long time){
+        return Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    private void handleDate(TextView dateTextView, long milli, int itemPosition){
 
         if (itemPosition != 0) {
-            processDate(dateTextView, sendDate, mMessageList.get(itemPosition - 1).getSendDate(), false);
+            processDate(dateTextView, milli, mMessageList.get(itemPosition - 1).getTime(), false);
         } else {
-            processDate(dateTextView, sendDate, null, true);
+            processDate(dateTextView, milli, 0, true);
         }
     }
 
-    private void processDate(@NonNull TextView tv, LocalDate date1
-            , LocalDate date2
+    private void processDate(@NonNull TextView tv, long milli
+            , long lastMessageMilli
             , boolean isFirstItem) {
+
+        LocalDate date1 = milliToLocalDate(milli);
+        LocalDate date2 = lastMessageMilli == 0 ? null : milliToLocalDate(lastMessageMilli);
 
         DateTimeFormatter dateFormatter  = DateTimeFormatter.ofPattern("MMMM dd yyyy");
         String sentDate = dateFormatter.format(date1);
@@ -132,10 +147,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
         void bind(Message message, int position) {
             messageText.setText(message.getBody());
 
-            handleDate(dateText, message.getSendDate(), position);
+            handleDate(dateText, message.getTime(), position);
 
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
-            String sentTime = formatter.format(message.getSendTime());
+            String sentTime = formatter.format(milliToLocalDateTime(message.getTime()));
             timeText.setText(sentTime);
         }
     }
@@ -154,10 +169,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
         void bind(Message message, int position) {
             messageText.setText(message.getBody());
 
-            handleDate(dateText, message.getSendDate(), position);
+            handleDate(dateText, message.getTime(), position);
 
             DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
-            String sentTime = formatter.format(message.getSendTime());
+            String sentTime = formatter.format(milliToLocalDateTime(message.getTime()));
             timeText.setText(sentTime);
         }
     }

@@ -8,8 +8,7 @@ import java.time.LocalTime;
 public class Message implements Serializable {
 
     private final String     body;
-    private final LocalDate  sendDate;
-    private final LocalTime  sendTime;
+    private final long       time;
     private final User       sender;
     private final User       receiver;
 
@@ -17,10 +16,9 @@ public class Message implements Serializable {
     /**CONSTRUCTOR
      */
 
-    public Message(String body, LocalDate sendDate, LocalTime sendTime, User sender, User receiver) {
+    public Message(String body, long time, User sender, User receiver) {
         this.body = body;
-        this.sendDate = sendDate;
-        this.sendTime = sendTime;
+        this.time = time;
         this.sender = sender;
         this.receiver = receiver;
     }
@@ -33,9 +31,7 @@ public class Message implements Serializable {
 
     public String getBody() { return body; }
 
-    public LocalDate getSendDate() { return sendDate; }
-
-    public LocalTime getSendTime() { return sendTime; }
+    public long getTime() { return time; }
 
     public User getSender() { return sender; }
 

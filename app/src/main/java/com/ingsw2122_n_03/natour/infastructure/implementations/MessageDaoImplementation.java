@@ -96,13 +96,12 @@ public class MessageDaoImplementation implements MessageDaoInterface {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             String body = jsonObject.getString("body");
 
-                            LocalDate sendDate = LocalDate.from(DateTimeFormatter.ISO_DATE_TIME.parse(jsonObject.getString("senddate")));
-                            LocalTime sendTime = LocalTime.parse(jsonObject.getString("sendtime").substring(0,5), DateTimeFormatter.ofPattern("HH:mm"));
+                            long time = Long.parseLong(jsonObject.getString("time"));
 
                             if(jsonObject.getString("sender").equals(user1.getUid()))
-                                messages.add(new Message(body, sendDate, sendTime, user1, user2));
+                                messages.add(new Message(body, time, user1, user2));
                             else
-                                messages.add(new Message(body, sendDate, sendTime, user2, user1));
+                                messages.add(new Message(body, time, user2, user1));
 
                         }
 

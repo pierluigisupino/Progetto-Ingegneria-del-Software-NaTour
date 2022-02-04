@@ -61,7 +61,7 @@ const sendMessage = async (mId, body) => {
     
     try {
         
-        await db.query('INSERT INTO MESSAGE VALUES($1, $2, $3, $4, $5)', [body.text, body.senddate, body.sendtime, body.sender, body.receiver]);
+        await db.query('INSERT INTO MESSAGE VALUES($1, $2, $3, $4)', [body.text, body.time, body.sender, body.receiver]);
         await client.postToConnection({
             'ConnectionId': mId,
             'Data': Buffer.from(JSON.stringify({'statusCode': 200}))

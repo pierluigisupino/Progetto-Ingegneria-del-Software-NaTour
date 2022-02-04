@@ -59,8 +59,7 @@ public class WebSocketSingleton {
             jsonObject.put("sender", subClient);
             jsonObject.put("receiver", message.getReceiver().getUid());
             jsonObject.put("text", message.getBody());
-            jsonObject.put("senddate", message.getSendDate());
-            jsonObject.put("sendtime", message.getSendTime());
+            jsonObject.put("time", message.getTime());
             webSocket.send(jsonObject.toString());
         } catch (JSONException ignored) {}
 
@@ -110,10 +109,9 @@ public class WebSocketSingleton {
                     User sender = new User(jsonObject.getString("sender"));
                     sender.setName(jsonObject.getString("sendername"));
 
-                    LocalDate sendDate = LocalDate.parse(jsonObject.getString("senddate"));
-                    LocalTime sendTime = LocalTime.parse(jsonObject.getString("sendtime").substring(0,5), DateTimeFormatter.ofPattern("HH:mm"));
+                    long time = Long.parseLong(jsonObject.getString("time"));
 
-                    MessageController.getInstance().onMessageReceived(new Message(body, sendDate, sendTime, sender, new User(subClient)));
+                    MessageController.getInstance().onMessageReceived(new Message(body, time, sender, new User(subClient)));
 
                 } catch (JSONException ignored) {}
             }

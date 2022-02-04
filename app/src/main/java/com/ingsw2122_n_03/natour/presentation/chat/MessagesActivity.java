@@ -69,7 +69,7 @@ public class MessagesActivity extends AppCompatActivity {
             String body = editMessage.getText().toString();
 
             if(body.length() > 0){
-                Message message = new Message(body, LocalDate.now(), LocalTime.now(), currentUser, endUser);
+                Message message = new Message(body, System.currentTimeMillis(), currentUser, endUser);
                 MessageController.getInstance().sendMessage(message);
 
                 editMessage.getText().clear();
