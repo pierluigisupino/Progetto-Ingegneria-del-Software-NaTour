@@ -116,7 +116,7 @@ public class MessageController extends NavigationController{
 
     public void sendMessage(Message message) {
         webSocket.sendMessage(message);
-        //TODO siamo sicuri che il messaggio è sempre inviato? (fix date)
+        //TODO siamo sicuri che il messaggio è sempre inviato?
         messageActivity.updateChat(message);
     }
 
