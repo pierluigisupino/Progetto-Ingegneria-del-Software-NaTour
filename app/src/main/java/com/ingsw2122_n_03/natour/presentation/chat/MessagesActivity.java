@@ -17,12 +17,13 @@ import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.ActivityMessagesBinding;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
-import com.ingsw2122_n_03.natour.presentation.support.ItineraryAdapter;
 import com.ingsw2122_n_03.natour.presentation.support.MessageAdapter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+
+import com.ingsw2122_n_03.natour.R;
 
 public class MessagesActivity extends AppCompatActivity {
 
@@ -53,7 +54,7 @@ public class MessagesActivity extends AppCompatActivity {
         EditText editMessage = binding.editMessage;
         ImageButton buttonSend = binding.buttonSend;
 
-        materialToolbar.setTitle(endUser.getName());
+        materialToolbar.setTitle(getString(R.string.chat_with) + " " + endUser.getName());
 
         MessageAdapter messageAdapter = new MessageAdapter(messages, currentUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

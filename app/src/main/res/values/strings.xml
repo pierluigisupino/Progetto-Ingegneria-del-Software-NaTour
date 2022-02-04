@@ -197,6 +197,10 @@
     <string name="empty">Wow such empty\nPull to get new messages</string>
     <string name="messages_updated">Messages updated</string>
 
+    <!--MESSAGES ACTIVITY-->
+    <string name="chat_with">Chat with:</string>
+    <string name="message">Message</string>
+
     <!--TIME-->
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
