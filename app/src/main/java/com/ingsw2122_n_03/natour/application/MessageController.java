@@ -11,6 +11,8 @@ import com.ingsw2122_n_03.natour.presentation.chat.MessagesActivity;
 import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 
 public class MessageController extends NavigationController{
@@ -19,21 +21,19 @@ public class MessageController extends NavigationController{
 
     private MainActivity mainActivity;
     private MessagesActivity messageActivity;
+    private ChatFragment chatFragment;
 
     private final MessageDaoInterface messageDaoInterface;
-    private final WebSocketSingleton webSocket;
+    private WebSocketSingleton webSocket;
 
     private User currentUser;
-    private User endUser;
-    private ArrayList<User> chats = new ArrayList<>();
+    private HashMap<User, ArrayList<Message>> chats = new HashMap<>();
     private Message sentMessage;
 
 
-    private ChatFragment chatFragment;
 
     private MessageController(){
         messageDaoInterface = new MessageDaoImplementation(this);
-        webSocket = WebSocketSingleton.getInstance();
     }
 
     public static MessageController getInstance() {
@@ -50,24 +50,19 @@ public class MessageController extends NavigationController{
 
     public void setUpMessages(User currentUser) {
         this.currentUser = currentUser;
-        messageDaoInterface.getChatsByUser(currentUser.getUid());
+        messageDaoInterface.getChatsByUser(currentUser);
     }
 
-
-    /************
-     * GET CHATS
-     ***********/
 
     public void updateChats() {
-        messageDaoInterface.getChatsByUser(currentUser.getUid());
+        messageDaoInterface.getChatsByUser(currentUser);
     }
 
 
-    public void onRetrieveChatsSuccess(ArrayList<User> chats) {
+    public void onRetrieveChatsSuccess(HashMap<User, ArrayList<Message>> chats) {
+        webSocket = WebSocketSingleton.getInstance();
         this.chats = chats;
-        chatFragment.updateChats(chats);
-        if(chatFragment.isVisible())
-            mainActivity.onSuccess(mainActivity.getString(R.string.messages_updated));
+        chatFragment.updateChats(new ArrayList<>(chats.keySet()));
     }
 
 
@@ -84,40 +79,22 @@ public class MessageController extends NavigationController{
      * GET MESSAGES
      **************/
 
+
     public void retrieveMessages(User endUser) {
-        this.endUser = endUser;
-        messageDaoInterface.getMessagesByChat(currentUser, endUser);
-    }
-
-
-    public void onRetrieveMessagesSuccess(ArrayList<Message> messages) {
-        goToActivity(mainActivity, MessagesActivity.class, messages, currentUser, endUser);
-    }
-
-
-    public void onRetrieveMessagesError() {
-        mainActivity.onFail(mainActivity.getString(R.string.generic_error));
+        goToActivity(mainActivity, MessagesActivity.class, chats.get(endUser), currentUser, endUser);
     }
 
 
     public void onMessageReceived(Message message) {
 
-        String senderSub = message.getSender().getUid();
-
-        boolean isNewChat = true;
-        for (User user : chats) {
-            if(user.getUid().equals(senderSub)) {
-                isNewChat = false;
-                break;
-            }
+        if(!chats.containsKey(message.getSender())) {
+            chats.put(message.getSender(), new ArrayList<>());
+            chatFragment.updateChats(new ArrayList<>(chats.keySet()));
         }
 
-        if(isNewChat) {
-            chats.add(message.getSender());
-            chatFragment.updateChats(chats);
-        }
+        Objects.requireNonNull(chats.get(message.getSender())).add(message);
 
-        if(!messageActivity.isDestroyed())
+        if(!messageActivity.isDestroyed() && messageActivity.getCurrentSession().equals(message.getSender().getUid()))
             messageActivity.updateChat(message);
 
     }
@@ -136,19 +113,7 @@ public class MessageController extends NavigationController{
     public void onMessageSentSuccess() {
 
         messageActivity.updateChat(sentMessage);
-
-        boolean isNewChat = true;
-        for(User user : chats){
-            if(user.getUid().equals(endUser.getUid())){
-                isNewChat = false;
-                break;
-            }
-        }
-
-        if(isNewChat){
-            chats.add(sentMessage.getReceiver());
-            chatFragment.updateChats(chats);
-        }
+        //VERIFY IF IS A NEW CHAT
 
     }
 

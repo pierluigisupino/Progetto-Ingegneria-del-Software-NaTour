@@ -16,7 +16,6 @@ import org.json.JSONObject;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,11 +31,12 @@ public class MessageDaoImplementation implements MessageDaoInterface {
     }
 
 
+    @SuppressLint("NewApi")
     @Override
-    public void getChatsByUser(String uid) {
+    public void getChatsByUser(User currentUser) {
 
         Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("userid", uid);
+        queryParams.put("userid", currentUser.getUid());
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/chats")
@@ -49,14 +49,36 @@ public class MessageDaoImplementation implements MessageDaoInterface {
 
                     try {
 
-                        ArrayList<User> chats = new ArrayList<>();
+                        HashMap<User, ArrayList<Message>> chats = new HashMap<>();
                         JSONArray jsonArray = response.getData().asJSONObject().getJSONArray("Result");
+
                         for(int i = 0; i < jsonArray.length(); ++i) {
+
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            User user = new User(jsonObject.getString("userid"));
-                            user.setName(jsonObject.getString("name"));
-                            chats.add(user);
+                            User endUser = new User(jsonObject.getString("userid"));
+                            endUser.setName(jsonObject.getString("name"));
+                            JSONArray chat = jsonObject.getJSONArray("chat");
+                            ArrayList<Message> messages = new ArrayList<>();
+
+                            for(int j = 0; j < chat.length(); ++j) {
+
+                                JSONObject message = chat.getJSONObject(j);
+                                String body = message.getString("body");
+
+                                long millis = message.getLong("time");
+                                LocalDateTime sendTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
+
+                                if(message.getString("sender").equals(currentUser.getUid()))
+                                    messages.add(new Message(body, sendTime, currentUser, endUser));
+                                else
+                                    messages.add(new Message(body, sendTime, endUser, currentUser));
+
+                            }
+
+                            chats.put(endUser, messages);
+
                         }
+
                         messageController.onRetrieveChatsSuccess(chats);
 
                     } catch (JSONException e) {
@@ -65,56 +87,6 @@ public class MessageDaoImplementation implements MessageDaoInterface {
 
                 },
                 error -> messageController.onRetrieveChatsError(Objects.requireNonNull(error.getCause()).toString().contains("timeout"))
-        );
-
-    }
-
-
-    @SuppressLint("NewApi")
-    @Override
-    public void getMessagesByChat(User user1, User user2) {
-
-        Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("user1", user1.getUid());
-        queryParams.put("user2", user2.getUid());
-
-        RestOptions options = RestOptions.builder()
-                .addPath("/items/messages")
-                .addQueryParameters(queryParams)
-                .build();
-
-        Amplify.API.get(
-                options,
-                response -> {
-
-                    try {
-
-                        JSONArray jsonArray = response.getData().asJSONObject().getJSONArray("Result");
-                        ArrayList<Message> messages = new ArrayList<>();
-
-                        for(int i = 0; i < jsonArray.length(); ++i) {
-
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String body = jsonObject.getString("body");
-
-                            long millis = jsonObject.getLong("time");
-                            LocalDateTime sendTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
-
-                            if(jsonObject.getString("sender").equals(user1.getUid()))
-                                messages.add(new Message(body, sendTime, user1, user2));
-                            else
-                                messages.add(new Message(body, sendTime, user2, user1));
-
-                        }
-
-                        messageController.onRetrieveMessagesSuccess(messages);
-
-                    } catch (JSONException e) {
-                        messageController.onRetrieveMessagesError();
-                    }
-
-                },
-                error -> messageController.onRetrieveMessagesError()
         );
 
     }

@@ -91,4 +91,6 @@ public class MessagesActivity extends AppCompatActivity {
         });
     }
 
+    public String getCurrentSession() { return endUser.getUid(); }
+
 }

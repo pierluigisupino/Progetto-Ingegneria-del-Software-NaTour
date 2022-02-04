@@ -171,10 +171,11 @@ app.get('/items/admin', function(req, res) {
 app.get('/items/chats', function(req, res) {
   
   const client = new Client(clientParams);
+  const currUser = req.query.userid;
   
   client.connect();
   
-  const query = 'SELECT DISTINCT sender AS userID\
+  const query = 'SELECT DISTINCT sender AS userID \
                  FROM Message \
                  WHERE receiver = $1 \
                  UNION \
@@ -183,11 +184,12 @@ app.get('/items/chats', function(req, res) {
                  WHERE sender = $1';
                 
                                       
-  client.query(query, [req.query.userid], async (err, data) => {
+  client.query(query, [currUser], async (err, data) => {
     
-    if(err)
+    if(err){
+      client.end();
       return res.json({Error: err.stack});
-    else{
+    }else{
       
       const result = data.rows;
       for(var i = 0; i < result.length; ++i) {
@@ -201,6 +203,8 @@ app.get('/items/chats', function(req, res) {
           
           var userAttributes = await (cognito.adminGetUser(params)).promise();
           result[i].name = userAttributes.UserAttributes[2].Value;
+          var msg = await client.query('SELECT * FROM MESSAGE WHERE (sender = $1 AND receiver = $2) OR (sender = $2 AND receiver = $1)', [currUser, result[i].userid]);
+          result[i].chat = msg.rows;
           
         }catch(e) {
           
@@ -212,6 +216,7 @@ app.get('/items/chats', function(req, res) {
         } 
       }
       
+      client.end();
       return res.json({Result: result});
       
     }
