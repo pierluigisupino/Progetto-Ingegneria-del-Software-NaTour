@@ -77,6 +77,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     }
 
     private void handleDate(TextView dateTextView, LocalDate sendDate, int itemPosition){
+
         if (itemPosition != 0) {
             processDate(dateTextView, sendDate, mMessageList.get(itemPosition - 1).getSendDate(), false);
         } else {

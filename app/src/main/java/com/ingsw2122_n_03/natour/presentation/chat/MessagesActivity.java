@@ -1,12 +1,9 @@
 package com.ingsw2122_n_03.natour.presentation.chat;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -62,7 +59,9 @@ public class MessagesActivity extends AppCompatActivity {
         materialToolbar.setTitle(getString(R.string.chat_with) + " " + endUser.getName());
 
         MessageAdapter messageAdapter = new MessageAdapter(messages, currentUser);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(messageAdapter);
         recyclerView.scrollToPosition(messages.size() - 1);
 
@@ -74,9 +73,6 @@ public class MessagesActivity extends AppCompatActivity {
                 MessageController.getInstance().sendMessage(message);
 
                 editMessage.getText().clear();
-
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(buttonSend.getWindowToken(), 0);
             }
         });
 
@@ -86,10 +82,11 @@ public class MessagesActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     public void updateChat(Message message){
-        Log.i("MSG", message.getBody());
+
         runOnUiThread(()->{
             messages.add(message);
             Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
+            recyclerView.scrollToPosition(messages.size() - 1);
         });
     }
 }
