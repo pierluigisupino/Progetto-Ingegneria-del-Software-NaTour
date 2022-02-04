@@ -105,7 +105,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
             if (chats.isEmpty()) {
                 lottieAnimationView.setAnimation(R.raw.animation_empty);
-                lottieAnimationView.setMaxFrame(null);
+                lottieAnimationView.setMaxFrame(150);
                 lottieAnimationView.setSpeed(1F);
                 lottieAnimationView.playAnimation();
                 bottomTextView.setText(getString(R.string.empty));
