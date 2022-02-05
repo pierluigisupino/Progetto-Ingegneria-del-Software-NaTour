@@ -89,16 +89,23 @@ public class MessageController extends NavigationController{
 
     public void onMessageReceived(Message message) {
 
+        boolean isNewChat = true;
+
         for(User endUser : chats.keySet()) {
             if(endUser.getUid().equals(message.getSender().getUid())) {
                 Objects.requireNonNull(chats.get(endUser)).add(message);
-                return;
+                isNewChat = false;
+                break;
             }
         }
 
-        ArrayList<Message> messages = new ArrayList<>();
-        messages.add(message);
-        chats.put(message.getSender(), messages);
+        if(isNewChat) {
+            ArrayList<Message> messages = new ArrayList<>();
+            messages.add(message);
+            chats.put(message.getSender(), messages);
+        }
+
+        chatFragment.updateChats(chats);
 
         if(!messageActivity.isDestroyed() && messageActivity.getCurrentSession().equals(message.getSender().getUid()))
             messageActivity.updateChat(message);

@@ -41,9 +41,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         User iUser = mUsers.get(position);
         String user =  iUser.getName();
-        holder.myTextView.setText(user);
+        holder.chatUser.setText(user);
         ArrayList<Message> messages = mChats.get(iUser);
-        holder.lastMessage.setText(messages.get(messages.size()-1).getBody());
+        assert messages != null;
+        holder.chatLastMessage.setText(messages.get(messages.size()-1).getBody());
     }
 
     @Override
@@ -53,12 +54,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView myTextView;
-        TextView lastMessage;
+        TextView chatUser;
+        TextView chatLastMessage;
+
 
         ViewHolder(View itemView) {
             super(itemView);
-            myTextView = itemView.findViewById(R.id.chat_user);
+            chatUser = itemView.findViewById(R.id.chat_user);
+            chatLastMessage = itemView.findViewById(R.id.chat_last_message);
             itemView.setOnClickListener(this);
         }
 
