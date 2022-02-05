@@ -63,10 +63,8 @@ public class MessageController extends NavigationController{
 
     public void onRetrieveChatsSuccess(HashMap<User, ArrayList<Message>> chats) {
         webSocket = WebSocketSingleton.getInstance();
-        if(!chats.isEmpty()) {
-            this.chats = chats;
-            chatFragment.updateChats(chats);
-        }
+        this.chats = chats;
+        chatFragment.updateChats(chats);
     }
 
 

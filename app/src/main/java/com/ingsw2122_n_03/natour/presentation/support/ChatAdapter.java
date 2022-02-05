@@ -39,8 +39,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String user =  mUsers.get(position).getName();
+        User iUser = mUsers.get(position);
+        String user =  iUser.getName();
         holder.myTextView.setText(user);
+        ArrayList<Message> messages = mChats.get(iUser);
+        holder.lastMessage.setText(messages.get(messages.size()-1).getBody());
     }
 
     @Override
@@ -49,7 +52,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         TextView myTextView;
+        TextView lastMessage;
 
         ViewHolder(View itemView) {
             super(itemView);
