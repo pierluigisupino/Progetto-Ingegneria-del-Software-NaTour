@@ -1,5 +1,6 @@
 package com.ingsw2122_n_03.natour.presentation.support;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,12 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
+    private final Context mContext;
     private final List<Message> mMessageList;
     private final User mUser;
 
-    public MessageAdapter(List<Message> messageList, User currentUser) {
+    public MessageAdapter(Context contex, List<Message> messageList, User currentUser) {
+        mContext = contex;
         mMessageList = messageList;
         mUser = currentUser;
     }
@@ -87,7 +90,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private void processDate(@NonNull TextView tv, LocalDate date1, LocalDate date2, boolean isFirstItem) {
 
-        DateTimeFormatter dateFormatter  = DateTimeFormatter.ofPattern("MMMM dd yyyy");
+        DateTimeFormatter dateFormatter  = DateTimeFormatter.ofPattern(mContext.getResources().getString(R.string.pattern_long_date));
         String sentDate = dateFormatter.format(date1);
 
         if (isFirstItem) {
@@ -132,7 +135,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             handleDate(dateText, message.getTime().toLocalDate(), position);
 
-            DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
+            DateTimeFormatter formatter  = DateTimeFormatter.ofPattern(mContext.getResources().getString(R.string.pattern_time));
             String sentTime = formatter.format(message.getTime());
             timeText.setText(sentTime);
         }
@@ -154,7 +157,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             handleDate(dateText, message.getTime().toLocalDate(), position);
 
-            DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("hh:mm a");
+            DateTimeFormatter formatter  = DateTimeFormatter.ofPattern(mContext.getResources().getString(R.string.pattern_time));
             String sentTime = formatter.format(message.getTime());
             timeText.setText(sentTime);
         }

@@ -59,7 +59,7 @@ public class MessagesActivity extends AppCompatActivity {
 
         materialToolbar.setTitle(getString(R.string.chat_with) + " " + endUser.getName());
 
-        MessageAdapter messageAdapter = new MessageAdapter(messages, currentUser);
+        MessageAdapter messageAdapter = new MessageAdapter(this, messages, currentUser);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);

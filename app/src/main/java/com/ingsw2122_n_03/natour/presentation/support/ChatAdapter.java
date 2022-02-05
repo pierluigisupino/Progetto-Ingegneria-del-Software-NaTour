@@ -13,12 +13,16 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
+    private final Context mContext;
     private final HashMap<User, ArrayList<Message>> mChats;
     private final ArrayList<User> mUsers;
     private final LayoutInflater mInflater;
@@ -27,6 +31,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public ChatAdapter(Context context, HashMap<User, ArrayList<Message>> chats) {
         this.mInflater = LayoutInflater.from(context);
         this.mChats = chats;
+        mContext = context;
         mUsers = new ArrayList<>(mChats.keySet());
     }
 
@@ -37,6 +42,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
+    private void processDate(@NonNull TextView tv, LocalDate date, LocalDateTime time) {
+
+        DateTimeFormatter dateFormatter  = DateTimeFormatter.ofPattern(mContext.getResources().getString(R.string.pattern_date));
+        String sentDate = dateFormatter.format(date);
+
+        if (date.equals(LocalDate.now()))
+            tv.setText(time.format(DateTimeFormatter.ofPattern(mContext.getResources().getString(R.string.pattern_time))));
+        else if (date.equals(LocalDate.now().minusDays(1)))
+            tv.setText(R.string.yesterday);
+        else
+            tv.setText(sentDate);
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         User iUser = mUsers.get(position);
@@ -45,6 +63,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         ArrayList<Message> messages = mChats.get(iUser);
         assert messages != null;
         holder.chatLastMessage.setText(messages.get(messages.size()-1).getBody());
+
+        LocalDate localDate = messages.get(messages.size()-1).getTime().toLocalDate();
+        LocalDateTime localDateTime = messages.get(messages.size()-1).getTime();
+        processDate(holder.chatTime, localDate, localDateTime);
     }
 
     @Override
@@ -55,12 +77,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView chatUser;
+        TextView chatTime;
         TextView chatLastMessage;
 
 
         ViewHolder(View itemView) {
             super(itemView);
             chatUser = itemView.findViewById(R.id.chat_user);
+            chatTime = itemView.findViewById(R.id.chat_time);
             chatLastMessage = itemView.findViewById(R.id.chat_last_message);
             itemView.setOnClickListener(this);
         }

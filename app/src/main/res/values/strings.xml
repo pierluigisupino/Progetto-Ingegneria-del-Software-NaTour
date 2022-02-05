@@ -204,6 +204,9 @@
     <!--TIME-->
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
+    <string name="pattern_time">hh:mm a</string>
+    <string name="pattern_date">MM/dd/yy</string>
+    <string name="pattern_long_date">MMMM dd yyyy</string>
 
 
 </resources>
