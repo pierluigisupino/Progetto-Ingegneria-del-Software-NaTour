@@ -62,7 +62,8 @@ public class MessageController extends NavigationController{
     public void onRetrieveChatsSuccess(HashMap<User, ArrayList<Message>> chats) {
         webSocket = WebSocketSingleton.getInstance();
         this.chats = chats;
-        chatFragment.updateChats(new ArrayList<>(chats.keySet()));
+        if(!chats.isEmpty() )
+            chatFragment.updateChats(chats);
     }
 
 
@@ -89,7 +90,7 @@ public class MessageController extends NavigationController{
 
         if(!chats.containsKey(message.getSender())) {
             chats.put(message.getSender(), new ArrayList<>());
-            chatFragment.updateChats(new ArrayList<>(chats.keySet()));
+            chatFragment.updateChats(chats);
         }
 
         Objects.requireNonNull(chats.get(message.getSender())).add(message);
@@ -113,6 +114,7 @@ public class MessageController extends NavigationController{
     public void onMessageSentSuccess() {
 
         messageActivity.updateChat(sentMessage);
+        chats.get(sentMessage.getReceiver()).add(sentMessage);
         //VERIFY IF IS A NEW CHAT
 
     }

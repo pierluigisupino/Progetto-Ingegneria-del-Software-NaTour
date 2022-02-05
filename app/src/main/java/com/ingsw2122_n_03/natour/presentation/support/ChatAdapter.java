@@ -10,21 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
-    private final List<User> mChats;
+    private final HashMap<User, ArrayList<Message>> mChats;
+    private User[] mKeys;
     private final LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
-    public ChatAdapter(Context context, ArrayList<User> chats) {
+    public ChatAdapter(Context context, HashMap<User, ArrayList<Message>> chats) {
         this.mInflater = LayoutInflater.from(context);
         this.mChats = chats;
+        mKeys = mChats.keySet().toArray(new User[mChats.size()]);
     }
 
     @NonNull
@@ -36,7 +40,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String user = mChats.get(position).getName();
+        String user =  mKeys[position].getName();
         holder.myTextView.setText(user);
     }
 
@@ -61,7 +65,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public User getItem(int id) {
-        return mChats.get(id);
+        return mKeys[id];
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {

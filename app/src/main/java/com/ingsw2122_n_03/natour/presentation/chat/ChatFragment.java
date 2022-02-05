@@ -17,10 +17,12 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.FragmentChatBinding;
+import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.presentation.support.ChatAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListener {
 
@@ -34,7 +36,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     private boolean isOnError = false;
     private boolean isLoading = true;
 
-    private ArrayList<User> chats = new ArrayList<>();
+    private HashMap<User, ArrayList<Message>> chats = new HashMap<>();
 
     private final MessageController messageController = MessageController.getInstance();
 
@@ -129,7 +131,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     }
 
 
-    public void updateChats(ArrayList<User> chats) {
+    public void updateChats(HashMap<User, ArrayList<Message>> chats) {
         this.chats = chats;
         isOnError = false;
         isLoading = false;
