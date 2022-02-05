@@ -114,14 +114,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     }
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(bundle != null && bundle.containsKey("itineraries"))
-            bundle.putSerializable("itineraries", itineraries);
-    }
-
-
     private void updateUi() {
 
         requireActivity().runOnUiThread(()-> {
@@ -151,6 +143,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     public void updateItineraries(ArrayList<Itinerary> itineraries) {
         onError = false;
         this.itineraries = itineraries;
+        bundle.putSerializable("itineraries", itineraries);
         if(this.isVisible()) updateUi();
     }
 

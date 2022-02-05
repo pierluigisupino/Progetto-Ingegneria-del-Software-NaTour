@@ -15,20 +15,19 @@ import com.ingsw2122_n_03.natour.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private final HashMap<User, ArrayList<Message>> mChats;
-    private User[] mKeys;
+    private final ArrayList<User> mUsers;
     private final LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     public ChatAdapter(Context context, HashMap<User, ArrayList<Message>> chats) {
         this.mInflater = LayoutInflater.from(context);
         this.mChats = chats;
-        mKeys = mChats.keySet().toArray(new User[mChats.size()]);
+        mUsers = new ArrayList<>(mChats.keySet());
     }
 
     @NonNull
@@ -40,7 +39,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String user =  mKeys[position].getName();
+        String user =  mUsers.get(position).getName();
         holder.myTextView.setText(user);
     }
 
@@ -65,7 +64,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public User getItem(int id) {
-        return mKeys[id];
+        return mUsers.get(id);
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {
