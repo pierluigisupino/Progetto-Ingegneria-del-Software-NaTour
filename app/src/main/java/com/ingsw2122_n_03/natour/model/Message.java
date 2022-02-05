@@ -11,6 +11,7 @@ public class Message implements Serializable {
     private final LocalDateTime time;
     private final User          sender;
     private final User          receiver;
+    private boolean             isRead = true;
 
 
     /**CONSTRUCTOR
@@ -36,5 +37,9 @@ public class Message implements Serializable {
     public User getSender() { return sender; }
 
     public User getReceiver() { return receiver; }
+
+    public boolean getIsRead() { return this.isRead; }
+
+    public void setIsRead(boolean isRead) { this.isRead = isRead; }
 
 }

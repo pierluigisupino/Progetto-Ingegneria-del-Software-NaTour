@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
@@ -60,12 +61,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         User iUser = mUsers.get(position);
         String user =  iUser.getName();
         holder.chatUser.setText(user);
+
         ArrayList<Message> messages = mChats.get(iUser);
         assert messages != null;
-        holder.chatLastMessage.setText(messages.get(messages.size()-1).getBody());
+        Message lastMessage = messages.get(messages.size()-1);
+        holder.chatLastMessage.setText(lastMessage.getBody());
 
-        LocalDate localDate = messages.get(messages.size()-1).getTime().toLocalDate();
-        LocalDateTime localDateTime = messages.get(messages.size()-1).getTime();
+        if(lastMessage.getIsRead()){
+            holder.lottieAnimationView.setVisibility(View.GONE);
+        }
+
+        LocalDate localDate = lastMessage.getTime().toLocalDate();
+        LocalDateTime localDateTime = lastMessage.getTime();
         processDate(holder.chatTime, localDate, localDateTime);
     }
 
@@ -79,6 +86,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         TextView chatUser;
         TextView chatTime;
         TextView chatLastMessage;
+        LottieAnimationView lottieAnimationView;
 
 
         ViewHolder(View itemView) {
@@ -86,6 +94,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             chatUser = itemView.findViewById(R.id.chat_user);
             chatTime = itemView.findViewById(R.id.chat_time);
             chatLastMessage = itemView.findViewById(R.id.chat_last_message);
+            lottieAnimationView = itemView.findViewById(R.id.animation_notify);
             itemView.setOnClickListener(this);
         }
 

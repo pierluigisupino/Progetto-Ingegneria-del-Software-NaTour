@@ -83,6 +83,7 @@ public class MessageController extends NavigationController{
 
 
     public void onChatClick(User endUser) {
+        chats.get(endUser).get(chats.get(endUser).size() - 1).setIsRead(true);
         goToActivity(mainActivity, MessagesActivity.class, chats.get(endUser), currentUser, endUser);
     }
 
@@ -91,24 +92,28 @@ public class MessageController extends NavigationController{
 
         boolean isNewChat = true;
 
-        for(User endUser : chats.keySet()) {
-            if(endUser.getUid().equals(message.getSender().getUid())) {
+        for (User endUser : chats.keySet()) {
+            if (endUser.getUid().equals(message.getSender().getUid())) {
                 Objects.requireNonNull(chats.get(endUser)).add(message);
                 isNewChat = false;
                 break;
             }
         }
 
-        if(isNewChat) {
+        if (isNewChat) {
             ArrayList<Message> messages = new ArrayList<>();
             messages.add(message);
             chats.put(message.getSender(), messages);
         }
 
-        chatFragment.updateChats(chats);
 
-        if(!messageActivity.isDestroyed() && messageActivity.getCurrentSession().equals(message.getSender().getUid()))
+        if (messageActivity != null && !messageActivity.isDestroyed() && messageActivity.getCurrentSession().equals(message.getSender().getUid())) {
             messageActivity.updateChat(message);
+        } else {
+            message.setIsRead(false);
+        }
+
+        chatFragment.updateChats(chats);
 
     }
 

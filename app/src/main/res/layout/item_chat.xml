@@ -68,8 +68,7 @@
                     android:layout_height="match_parent"
                     app:lottie_rawRes="@raw/animation_notify"
                     app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    android:visibility="gone"/>
+                    app:lottie_loop="true" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
