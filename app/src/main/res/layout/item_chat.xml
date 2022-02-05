@@ -61,6 +61,15 @@
                     android:fontFamily="@font/euclid_circular_regular"
                     android:textColor="@color/primary"
                     android:layout_weight="1"/>
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_notify"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    app:lottie_rawRes="@raw/animation_notify"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
