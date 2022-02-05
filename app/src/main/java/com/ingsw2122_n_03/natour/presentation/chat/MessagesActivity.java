@@ -57,7 +57,7 @@ public class MessagesActivity extends AppCompatActivity {
         EditText editMessage = binding.editMessage;
         ImageButton buttonSend = binding.buttonSend;
 
-        materialToolbar.setTitle(getString(R.string.chat_with) + " " + endUser.getName());
+        materialToolbar.setTitle(endUser.getName());
 
         MessageAdapter messageAdapter = new MessageAdapter(this, messages, currentUser);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
