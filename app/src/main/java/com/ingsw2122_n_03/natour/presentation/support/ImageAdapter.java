@@ -31,7 +31,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
         return new ImageViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.photo_item,
+                        R.layout.item_photo,
                         parent,
                         false
                 )

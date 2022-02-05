@@ -43,7 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbarThumbVertical="@color/primary"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical"
+                android:background="@drawable/no_focus"/>
 
             <TextView
                 android:id="@+id/error1"
@@ -72,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/euclid_circular_medium"
                 android:textSize="18sp"
+                android:layout_marginTop="10dp"
                 android:text="@string/resolve_error"
                 android:textColor="@color/error"
                 android:visibility="gone"/>

@@ -43,7 +43,7 @@ public class ItineraryAdapter extends RecyclerView .Adapter<ItineraryAdapter.Iti
 
         return new ItineraryViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.itinerary_item,
+                        R.layout.item_itinerary,
                         parent,
                         false
                 ),

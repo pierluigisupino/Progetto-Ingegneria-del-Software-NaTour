@@ -194,7 +194,7 @@
     <string name="cancel">Cancel</string>
 
     <!--CHAT FRAGMENT-->
-    <string name="empty">Wow such empty\nPull to get new messages</string>
+    <string name="empty">Wow such empty!</string>
     <string name="messages_updated">Messages updated</string>
 
     <!--MESSAGES ACTIVITY-->

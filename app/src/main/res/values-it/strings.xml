@@ -195,7 +195,7 @@
     <string name="cancel">Annulla</string>
 
     <!--CHAT FRAGMNET-->
-    <string name="empty">Wow che vuoto!\nTrascina per aggiornare</string>
+    <string name="empty">Wow che vuoto!</string>
     <string name="messages_updated">Messaggi aggiornati</string>
 
     <!--MESSAGES ACTIVITY-->
