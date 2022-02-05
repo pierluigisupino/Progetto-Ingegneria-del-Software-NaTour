@@ -1,5 +1,7 @@
 package com.ingsw2122_n_03.natour.application;
 
+import android.annotation.SuppressLint;
+
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.infastructure.implementations.MessageDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
@@ -89,12 +91,16 @@ public class MessageController extends NavigationController{
 
     public void onMessageReceived(Message message) {
 
-        if(!chats.containsKey(message.getSender())) {
-            chats.put(message.getSender(), new ArrayList<>());
-            chatFragment.updateChats(chats);
+        for(User endUser : chats.keySet()) {
+            if(endUser.getUid().equals(message.getSender().getUid())) {
+                Objects.requireNonNull(chats.get(endUser)).add(message);
+                return;
+            }
         }
 
-        Objects.requireNonNull(chats.get(message.getSender())).add(message);
+        ArrayList<Message> messages = new ArrayList<>();
+        messages.add(message);
+        chats.put(message.getSender(), messages);
 
         if(!messageActivity.isDestroyed() && messageActivity.getCurrentSession().equals(message.getSender().getUid()))
             messageActivity.updateChat(message);
@@ -112,14 +118,21 @@ public class MessageController extends NavigationController{
     }
 
 
+    @SuppressLint("NewApi")
     public void onMessageSentSuccess() {
 
         messageActivity.updateChat(sentMessage);
-        if(!chats.containsKey(sentMessage.getReceiver()))
-            chats.put(sentMessage.getReceiver(), new ArrayList<>());
 
-        Objects.requireNonNull(chats.get(sentMessage.getReceiver())).add(sentMessage);
-        chatFragment.updateChats(chats);
+        for(User endUser : chats.keySet()) {
+            if(endUser.getUid().equals(sentMessage.getReceiver().getUid())) {
+                Objects.requireNonNull(chats.get(endUser)).add(sentMessage);
+                return;
+            }
+        }
+
+        ArrayList<Message> messages = new ArrayList<>();
+        messages.add(sentMessage);
+        chats.put(sentMessage.getReceiver(), messages);
 
     }
 
