@@ -95,10 +95,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
         if(!itinerary.getCreator().getName().equals("Unknown") && !itinerary.getCreator().getUid().equals(currentUser.getUid())) {
             textViewCreator.setClickable(true);
-            textViewCreator.setOnClickListener(v -> {
-                MessageController.getInstance().retrieveMessages(itinerary.getCreator());
-                //SHOW LOADING AND BLOCK BUTTONS
-            });
+            textViewCreator.setOnClickListener(v -> MessageController.getInstance().retrieveMessages(itinerary.getCreator()));
         }
 
         String description = itinerary.getDescription();

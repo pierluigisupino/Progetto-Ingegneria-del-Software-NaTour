@@ -84,7 +84,7 @@ public class MessageController extends NavigationController{
      **************/
 
 
-    public void retrieveMessages(User endUser) {
+    public void onChatClick(User endUser) {
         goToActivity(mainActivity, MessagesActivity.class, chats.get(endUser), currentUser, endUser);
     }
 
@@ -104,6 +104,20 @@ public class MessageController extends NavigationController{
 
         if(!messageActivity.isDestroyed() && messageActivity.getCurrentSession().equals(message.getSender().getUid()))
             messageActivity.updateChat(message);
+
+    }
+
+
+    public void retrieveMessages(User endUser) {
+
+        for(User mUser : chats.keySet()) {
+            if(mUser.getUid().equals(endUser.getUid())) {
+                goToActivity(mainActivity, MessagesActivity.class, chats.get(mUser), currentUser, mUser);
+                return;
+            }
+        }
+
+        goToActivity(mainActivity, MessagesActivity.class, new ArrayList<>(), currentUser, endUser);
 
     }
 

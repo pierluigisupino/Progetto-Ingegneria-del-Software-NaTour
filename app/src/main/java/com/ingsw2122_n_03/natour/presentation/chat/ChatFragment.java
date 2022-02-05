@@ -148,7 +148,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     @Override
     public void onItemClick(View view, int position) {
-        messageController.retrieveMessages(chatAdapter.getItem(position));
+        messageController.onChatClick(chatAdapter.getItem(position));
     }
 
 }
