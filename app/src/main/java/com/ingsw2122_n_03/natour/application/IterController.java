@@ -298,7 +298,7 @@ public class IterController extends NavigationController {
         currentIter = itineraries.get(position);
         photos.clear();
         imageDownloader.resetSession(currentIter.getIterId());
-        //retrieveItineraryPhotos();
+        retrieveItineraryPhotos();
 
         if(currentIter.getCreator().getUid().equals(currentUser.getUid()))
             currentIter.setCreator(currentUser);
