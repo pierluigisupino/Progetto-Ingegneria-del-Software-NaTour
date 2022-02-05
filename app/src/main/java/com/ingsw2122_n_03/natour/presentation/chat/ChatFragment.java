@@ -148,7 +148,6 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
     @Override
     public void onItemClick(View view, int position) {
-        view.findViewById(R.id.animation_notify).setVisibility(View.GONE);
         messageController.onChatClick(chatAdapter.getItem(position));
     }
 
