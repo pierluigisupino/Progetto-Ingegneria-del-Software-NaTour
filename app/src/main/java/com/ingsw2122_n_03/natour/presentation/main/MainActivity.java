@@ -4,15 +4,18 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -130,9 +133,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onSuccess(String msg) {
 
-        Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ContextCompat.getColor(this, R.color.success))
-                .show();
+        Snackbar snackbar = Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_SHORT);
+        snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.success));
+
+        TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
+        tv.setTypeface(typeface);
+
+        snackbar.show();
 
     }
 
@@ -140,9 +148,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onFail(String msg) {
 
-        Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ContextCompat.getColor(this, R.color.error))
-                .show();
+        Snackbar snackbar = Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_SHORT);
+        snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.error));
+
+        TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
+        tv.setTypeface(typeface);
+
+        snackbar.show();
 
     }
 

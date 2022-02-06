@@ -1,11 +1,14 @@
 package com.ingsw2122_n_03.natour.presentation;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,20 +51,30 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     public void onSuccess(String msg) {
 
-        runOnUiThread(() ->
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.success))
-                    .show()
-        );
+        runOnUiThread(() -> {
+            Snackbar snackbar = Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT);
+            snackbar.setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.success));
+
+            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
+            tv.setTypeface(typeface);
+
+            snackbar.show();
+        });
     }
 
     @Override
     public void onFail(String msg) {
 
-        runOnUiThread(() ->
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.error))
-                    .show()
-        );
+        runOnUiThread(() -> {
+            Snackbar snackbar = Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT);
+            snackbar.setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.error));
+
+            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
+            tv.setTypeface(typeface);
+
+            snackbar.show();
+        });
     }
 }

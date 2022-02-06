@@ -1,12 +1,15 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary.addItinerary;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -198,9 +201,14 @@ public class AddItineraryActivity extends BaseActivity {
 
         runOnUiThread(() -> {
             linearProgressIndicator.setVisibility(View.INVISIBLE);
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.success))
-                    .show();
+            Snackbar snackbar = Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT);
+            snackbar.setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.success));
+
+            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
+            tv.setTypeface(typeface);
+
+            snackbar.show();
         });
 
     }
@@ -210,9 +218,14 @@ public class AddItineraryActivity extends BaseActivity {
 
         runOnUiThread(() -> {
             linearProgressIndicator.setVisibility(View.INVISIBLE);
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.error))
-                    .show();
+            Snackbar snackbar = Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT);
+            snackbar.setBackgroundTint(ContextCompat.getColor(AddItineraryActivity.this, R.color.error));
+
+            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
+            tv.setTypeface(typeface);
+
+            snackbar.show();
         });
 
     }

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import java.util.Objects;
 public class MainFragment extends Fragment implements ItineraryAdapter.OnItineraryListener {
 
     private FragmentMainBinding binding;
+    private LinearLayout mainLayout;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout pullToRefresh;
     private Parcelable recyclerViewState;
@@ -73,6 +75,8 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
         pullToRefresh = binding.update;
         recyclerView = binding.itinerary;
+
+        mainLayout = binding.mainLayout;
 
         errorAnimation = binding.errorAnimation;
         errorAnimation.setMaxFrame(70);
@@ -134,14 +138,14 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             pullToRefresh.setRefreshing(false);
 
             if(onError) {
-                recyclerView.setVisibility(View.GONE);
+                mainLayout.setVisibility(View.GONE);
                 textViewError1.setVisibility(View.VISIBLE);
                 errorAnimation.setVisibility(View.VISIBLE);
                 textViewError3.setVisibility(View.VISIBLE);
                 return;
             }
 
-            recyclerView.setVisibility(View.VISIBLE);
+            mainLayout.setVisibility(View.VISIBLE);
             textViewError1.setVisibility(View.GONE);
             errorAnimation.setVisibility(View.GONE);
             textViewError3.setVisibility(View.GONE);

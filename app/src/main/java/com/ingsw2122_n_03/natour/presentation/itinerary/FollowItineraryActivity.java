@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -589,9 +591,14 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
         runOnUiThread(() -> {
             bottomProgressBar.setVisibility(View.INVISIBLE);
-            Snackbar.make(mainLayout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.success))
-                    .show();
+            Snackbar snackbar = Snackbar.make(mainLayout, msg, Snackbar.LENGTH_SHORT);
+            snackbar.setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.success));
+
+            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
+            tv.setTypeface(typeface);
+
+            snackbar.show();
         });
     }
 
@@ -600,9 +607,14 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
         runOnUiThread(() -> {
             bottomProgressBar.setVisibility(View.INVISIBLE);
-            Snackbar.make(mainLayout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.error))
-                    .show();
+            Snackbar snackbar = Snackbar.make(mainLayout, msg, Snackbar.LENGTH_SHORT);
+            snackbar.setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.error));
+
+            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
+            tv.setTypeface(typeface);
+
+            snackbar.show();
         });
     }
 
