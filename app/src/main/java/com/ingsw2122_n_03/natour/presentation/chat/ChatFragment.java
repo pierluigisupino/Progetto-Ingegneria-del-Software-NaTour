@@ -93,6 +93,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
             swipeRefreshLayout.setRefreshing(false);
 
             if(isOnError) {
+                lottieAnimationView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
                 lottieAnimationView.setAnimation(R.raw.animation_error);
                 lottieAnimationView.setMaxFrame(70);
                 lottieAnimationView.setSpeed(1F);
@@ -107,6 +109,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
 
             if (chats.isEmpty()) {
+                lottieAnimationView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
                 lottieAnimationView.setAnimation(R.raw.animation_empty);
                 lottieAnimationView.setMaxFrame(150);
                 lottieAnimationView.setSpeed(1F);
