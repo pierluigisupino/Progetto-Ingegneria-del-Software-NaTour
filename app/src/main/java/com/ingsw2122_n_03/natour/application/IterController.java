@@ -282,8 +282,8 @@ public class IterController extends NavigationController {
     public void onItineraryUpdateError(boolean itemChanged) {
         loadingDialog.dismissDialog();
         if(itemChanged) {
-            detailActivity.onFail("Sembra che l'itinerario sia stato aggiornato da altri, ricarica"); //@TODO
-            //SHOW REFRESH HINT ON MAIN FRAGMENT
+            detailActivity.onFail(detailActivity.getString(R.string.itinerary_update_warning));
+            mainFragment.showUpdateHint();
         }else
             detailActivity.onFail(detailActivity.getString(R.string.generic_error));
     }

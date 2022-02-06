@@ -32,10 +32,12 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private Parcelable recyclerViewState;
 
     private TextView textViewError1;
-    private LottieAnimationView lottieAnimationView;
+    private LottieAnimationView errorAnimation;
+    private LottieAnimationView swipeAnimation;
     private TextView textViewError3;
 
     private boolean onError = false;
+    private boolean shouldUpdate = false;
 
     private ArrayList<Itinerary> itineraries = new ArrayList<>();
 
@@ -72,8 +74,10 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         pullToRefresh = binding.update;
         recyclerView = binding.itinerary;
 
-        lottieAnimationView = binding.errorAnimation;
-        lottieAnimationView.setMaxFrame(70);
+        errorAnimation = binding.errorAnimation;
+        errorAnimation.setMaxFrame(70);
+
+        swipeAnimation = binding.swipeAnimation;
 
         bundle = getArguments();
 
@@ -102,7 +106,10 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
         });
 
-        pullToRefresh.setOnRefreshListener(iterController::updateItineraries);
+        pullToRefresh.setOnRefreshListener(() -> {
+            iterController.updateItineraries();
+            shouldUpdate = false;
+        });
 
     }
 
@@ -118,19 +125,25 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
         requireActivity().runOnUiThread(()-> {
 
+            if(shouldUpdate) {
+                swipeAnimation.setVisibility(View.VISIBLE);
+            }else {
+                swipeAnimation.setVisibility(View.GONE);
+            }
+
             pullToRefresh.setRefreshing(false);
 
             if(onError) {
                 recyclerView.setVisibility(View.GONE);
                 textViewError1.setVisibility(View.VISIBLE);
-                lottieAnimationView.setVisibility(View.VISIBLE);
+                errorAnimation.setVisibility(View.VISIBLE);
                 textViewError3.setVisibility(View.VISIBLE);
                 return;
             }
 
             recyclerView.setVisibility(View.VISIBLE);
             textViewError1.setVisibility(View.GONE);
-            lottieAnimationView.setVisibility(View.GONE);
+            errorAnimation.setVisibility(View.GONE);
             textViewError3.setVisibility(View.GONE);
             recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
             Objects.requireNonNull(recyclerView.getLayoutManager()).onRestoreInstanceState(recyclerViewState);
@@ -139,6 +152,10 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
     }
 
+    public void showUpdateHint(){
+        shouldUpdate = true;
+        if(this.isVisible()) updateUi();
+    }
 
     public void updateItineraries(ArrayList<Itinerary> itineraries) {
         onError = false;

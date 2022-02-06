@@ -166,6 +166,7 @@
     <string name="itinerary_delete_failure">Eliminazione non riuscita, riprova</string>
     <string name="itinerary_deleted_text">Itinerario eliminato</string>
     <string name="itinerary_delete_confirm_text">Vuoi davvero eliminare questo itinerario?\nL\'azione sarà irreversibile.</string>
+    <string name="itinerary_update_warning">Sembra che l\'itinerario sia stato aggiornato, aggiorna i tuoi itinerary</string>
 
     <!--FOLLOW ITINERARY-->
     <string name="start_point_text">Punto iniziale</string>
