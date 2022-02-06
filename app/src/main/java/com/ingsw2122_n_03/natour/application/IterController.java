@@ -308,8 +308,8 @@ public class IterController extends NavigationController {
     }
 
 
-    //TODO : SHOW LOADING CIRCLE BAR
     public void retrieveItineraryPhotos() {
+        detailActivity.onWaitingBackgroundTask("sto scaricando le foto"); //TODO string / isDetail visibile?
         imageDownloader.downloadImages();
     }
 
@@ -321,12 +321,14 @@ public class IterController extends NavigationController {
 
 
     public void onRetrievePhotosError() {
-        detailActivity.onFail("Failed to retrieve photos");//TODO: SHOW ERROR ON DETAIL ACTIVITY & HIDE LOADING CIRCLE BAR
+        detailActivity.onFail("Failed to retrieve photos"); //TODO string
+        detailActivity.onBackgroundTaskEnd(); //TODO isDetail visibile?
     }
 
 
     public void onRetrievePhotosEnd() {
-        detailActivity.onSuccess("NO MORE PHOTOS!!!"); //TODO : CREATE STRING RES & HIDE LOADING CIRCLE BAR
+        detailActivity.onSuccess("NO MORE PHOTOS!!!"); //TODO string
+        detailActivity.onBackgroundTaskEnd(); //TODO isDetail visibile?
     }
 
 
