@@ -32,8 +32,13 @@ const setConnection = async (id, sub) => {
     try {
         await db.query('INSERT INTO ONLINEUSER VALUES($1, $2, $3)', [id, sub, clientName]);
     } catch (err) {
-        console.log(err.stack); 
+        await client.postToConnection({
+            'ConnectionId': id,
+            'Data': Buffer.from(JSON.stringify({'statusCode': 500}))
+        }).promise();
     }
+    
+    db.end();
     
 };
 
@@ -49,6 +54,8 @@ const deleteConnection = async (id) => {
     } catch (err) {
         console.log(err.stack);
     }
+    
+    db.end();
     
 };
 
@@ -66,23 +73,40 @@ const sendMessage = async (mId, body) => {
             'ConnectionId': mId,
             'Data': Buffer.from(JSON.stringify({'statusCode': 200}))
         }).promise();
-        let id = await db.query('SELECT connectionId FROM ONLINEUSER WHERE sub = $1', [body.receiver]);
-        if(id.rows[0] != null) {
-            id = id.rows[0].connectionid;
-            let name = await db.query('SELECT username FROM ONLINEUSER WHERE connectionId = $1', [mId]);
-            body.sendername = name.rows[0].username;
-            
-            await client.postToConnection({
-                'ConnectionId': id,
-                'Data': Buffer.from(JSON.stringify(body))
-            }).promise();
-        }
         
     } catch (err) {
+        
         await client.postToConnection({
             'ConnectionId': mId,
-            'Data': Buffer.from(JSON.stringify({'statusCode': 500}))
+            'Data': Buffer.from(JSON.stringify({'statusCode': 400}))
         }).promise();
+        db.end();
+        return;
+        
+    }
+    
+    try{
+        
+        let id = await db.query('SELECT connectionId FROM ONLINEUSER WHERE sub = $1', [body.receiver]);
+        
+        if(id.rows[0] != null) {
+            
+            let name = await db.query('SELECT username FROM ONLINEUSER WHERE connectionId = $1', [mId]);
+            body.sendername = name.rows[0].username;
+            db.end();
+            
+            for(let i = 0; i < id.rows.length; ++i) {
+                let endId = id.rows[i].connectionid;
+                await client.postToConnection({
+                  'ConnectionId': endId,
+                  'Data': Buffer.from(JSON.stringify(body))
+                }).promise();
+            }
+            
+        }
+        
+    }catch(err) {
+        db.end();
     }
     
 };

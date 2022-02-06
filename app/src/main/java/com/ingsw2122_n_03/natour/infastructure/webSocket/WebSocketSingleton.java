@@ -67,12 +67,10 @@ public class WebSocketSingleton {
     }
 
 
-
     public void closeConnection() {
         webSocket.close(CLOSE_STATUS, null);
         instance = null;
     }
-
 
 
         private final class EchoWebSocketListener extends WebSocketListener {
@@ -98,11 +96,20 @@ public class WebSocketSingleton {
                     JSONObject jsonObject = new JSONObject(message);
 
                     if(jsonObject.has("statusCode")) {
-                        if(jsonObject.getInt("statusCode") == 200)
+
+                        if(jsonObject.getInt("statusCode") == 200) {
                             MessageController.getInstance().onMessageSentSuccess();
-                        else
+                            return;
+                        }
+
+                        if(jsonObject.getInt("statusCode") == 400) {
                             MessageController.getInstance().onMessageSentError();
+                            return;
+                        }
+
+                        closeConnection();
                         return;
+
                     }
 
                     String body = jsonObject.getString("text");
@@ -116,6 +123,7 @@ public class WebSocketSingleton {
                     MessageController.getInstance().onMessageReceived(new Message(body, sendTime, sender, new User(subClient)));
 
                 } catch (JSONException ignored) {}
+
             }
 
             @Override
@@ -124,6 +132,7 @@ public class WebSocketSingleton {
             @Override
             public void onClosing(WebSocket webSocket, int code, @NonNull String reason) {
                 webSocket.close(CLOSE_STATUS, null);
+                instance = null;
             }
 
             @Override

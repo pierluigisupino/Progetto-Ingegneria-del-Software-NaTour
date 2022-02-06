@@ -26,7 +26,6 @@ public class MessageController extends NavigationController{
     private ChatFragment chatFragment;
 
     private final MessageDaoInterface messageDaoInterface;
-    private WebSocketSingleton webSocket;
 
     private User currentUser;
     private HashMap<User, ArrayList<Message>> chats = new HashMap<>();
@@ -62,7 +61,7 @@ public class MessageController extends NavigationController{
 
 
     public void onRetrieveChatsSuccess(HashMap<User, ArrayList<Message>> chats) {
-        webSocket = WebSocketSingleton.getInstance();
+        WebSocketSingleton.getInstance();
         this.chats = chats;
         chatFragment.updateChats(chats);
     }
@@ -83,7 +82,9 @@ public class MessageController extends NavigationController{
 
 
     public void onChatClick(User endUser) {
-        chats.get(endUser).get(chats.get(endUser).size() - 1).setIsRead(true);
+        ArrayList<Message> messages = chats.get(endUser);
+        assert messages != null;
+        messages.get(messages.size()-1).setIsRead(true);
         goToActivity(mainActivity, MessagesActivity.class, chats.get(endUser), currentUser, endUser);
     }
 
@@ -107,11 +108,11 @@ public class MessageController extends NavigationController{
         }
 
 
-        if (messageActivity != null && !messageActivity.isDestroyed() && messageActivity.getCurrentSession().equals(message.getSender().getUid())) {
+        if (messageActivity != null && !messageActivity.isDestroyed() && messageActivity.getCurrentSession().equals(message.getSender().getUid()))
             messageActivity.updateChat(message);
-        } else {
+        else
             message.setIsRead(false);
-        }
+
 
         chatFragment.updateChats(chats);
 
@@ -138,7 +139,7 @@ public class MessageController extends NavigationController{
 
     public void sendMessage(Message message) {
         sentMessage = message;
-        webSocket.sendMessage(message);
+        WebSocketSingleton.getInstance().sendMessage(message);
     }
 
 

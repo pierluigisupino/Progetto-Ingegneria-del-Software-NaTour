@@ -89,10 +89,10 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
                 return;
             }
 
+            swipeRefreshLayout.setEnabled(true);
             swipeRefreshLayout.setRefreshing(false);
 
             if(isOnError) {
-                swipeRefreshLayout.setEnabled(true);
                 lottieAnimationView.setAnimation(R.raw.animation_error);
                 lottieAnimationView.setMaxFrame(70);
                 lottieAnimationView.setSpeed(1F);
@@ -105,7 +105,6 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
                 return;
             }
 
-            swipeRefreshLayout.setEnabled(false);
 
             if (chats.isEmpty()) {
                 lottieAnimationView.setAnimation(R.raw.animation_empty);

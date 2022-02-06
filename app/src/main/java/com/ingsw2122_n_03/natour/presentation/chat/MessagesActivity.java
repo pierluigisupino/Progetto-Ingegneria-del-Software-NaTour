@@ -22,9 +22,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import com.ingsw2122_n_03.natour.R;
-
-
 
 public class MessagesActivity extends AppCompatActivity {
 
@@ -83,7 +80,6 @@ public class MessagesActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     public void updateChat(Message message){
-
         runOnUiThread(()->{
             messages.add(message);
             Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
