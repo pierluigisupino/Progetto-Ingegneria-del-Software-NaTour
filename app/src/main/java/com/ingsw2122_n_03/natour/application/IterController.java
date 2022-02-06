@@ -309,7 +309,7 @@ public class IterController extends NavigationController {
 
 
     public void retrieveItineraryPhotos() {
-        detailActivity.onWaitingBackgroundTask("sto scaricando le foto"); //TODO string / isDetail visibile?
+        detailActivity.onWaitingBackgroundTask("sto scaricando le foto"); //TODO string / isDetail visibile? (da verificare se esplode o no)
         imageDownloader.downloadImages();
     }
 
@@ -322,13 +322,13 @@ public class IterController extends NavigationController {
 
     public void onRetrievePhotosError() {
         detailActivity.onFail("Failed to retrieve photos"); //TODO string
-        detailActivity.onBackgroundTaskEnd(); //TODO isDetail visibile?
+        detailActivity.onBackgroundTaskEnd(); //TODO isDetail visibile? (da verificare se esplode o no)
     }
 
 
     public void onRetrievePhotosEnd() {
         detailActivity.onSuccess("NO MORE PHOTOS!!!"); //TODO string
-        detailActivity.onBackgroundTaskEnd(); //TODO isDetail visibile?
+        detailActivity.onBackgroundTaskEnd(); //TODO isDetail visibile? (da verificare se esplode o no)
     }
 
 
