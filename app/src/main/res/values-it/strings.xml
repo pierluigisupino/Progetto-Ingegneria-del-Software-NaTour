@@ -177,6 +177,7 @@
     <string name="photo_position_error">Non puoi inserire la foto, è troppo distante dall\'itinerario (> 100m)</string>
     <string name="photo_upload_success">Foto condivisa</string>
     <string name="photo_upload_error">Errore durante l\'upload, riprova.</string>
+    <string name="itinerary_photo_error">Download foto fallito</string>
 
     <!--DRAWER-->
     <string name="navigation_drawer_open">Apri il menu\' di navigazione</string>

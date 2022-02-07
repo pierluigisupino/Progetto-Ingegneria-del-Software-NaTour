@@ -166,6 +166,7 @@
     <string name="itinerary_deleted_text">Itinerary deleted</string>
     <string name="itinerary_delete_confirm_text">Do you want to delete this itinerary?</string>
     <string name="itinerary_update_warning">It seems that the itinerary has been updated, please update your itineraries</string>
+    <string name="itinerary_photo_error">Failed to retrieve photos</string>
 
     <!--FOLLOW ITINERARY-->
     <string name="start_point_text">Start Point</string>

@@ -51,10 +51,6 @@ public class ImageDownloader {
                         JSONObject result = response.getData().asJSONObject();
 
                         int photoCount = result.getInt("KeyCount");
-                        if(photoCount == 0){
-                            controller.onRetrievePhotosEnd();
-                            return;
-                        }
 
                         lastPhotoKey = result.getString("LastKey");
 

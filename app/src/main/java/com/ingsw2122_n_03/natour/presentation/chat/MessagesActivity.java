@@ -8,14 +8,20 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.snackbar.Snackbar;
+import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.ActivityMessagesBinding;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
+import com.ingsw2122_n_03.natour.presentation.signUp.SignUpActivity;
+import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.MessageAdapter;
 
 import java.time.LocalDateTime;
@@ -23,7 +29,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 
-public class MessagesActivity extends AppCompatActivity {
+public class MessagesActivity extends BaseActivity {
+
+    private ConstraintLayout constraintLayout;
 
     private User currentUser;
     private User endUser;
@@ -48,6 +56,8 @@ public class MessagesActivity extends AppCompatActivity {
         messages = (ArrayList<Message>) intent.getSerializableExtra("messages");
         currentUser = (User) intent.getSerializableExtra("currentUser");
         endUser = (User) intent.getSerializableExtra("endUser");
+
+        constraintLayout = binding.layout;
 
         MaterialToolbar materialToolbar = binding.topAppBar;
         recyclerView = binding.recyclerView;
@@ -89,4 +99,21 @@ public class MessagesActivity extends AppCompatActivity {
 
     public String getCurrentSession() { return endUser.getUid(); }
 
+    @Override
+    public void onSuccess(String msg) {
+        runOnUiThread(() -> {
+            Snackbar.make(constraintLayout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(MessagesActivity.this, R.color.success))
+                    .show();
+        });
+    }
+
+    @Override
+    public void onFail(String msg) {
+        runOnUiThread(() -> {
+            Snackbar.make(constraintLayout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(MessagesActivity.this, R.color.error))
+                    .show();
+        });
+    }
 }

@@ -136,7 +136,11 @@ public class WebSocketSingleton {
             }
 
             @Override
-            public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable throwable, Response response) {}
+            public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable throwable, Response response) {
+                MessageController.getInstance().onRetrieveChatsError(true);
+                MessageController.getInstance().onMessageSentError();
+                instance = null;
+            }
 
         }
 

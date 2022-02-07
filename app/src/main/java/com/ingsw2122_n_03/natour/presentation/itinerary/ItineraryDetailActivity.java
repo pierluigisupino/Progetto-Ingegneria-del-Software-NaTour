@@ -52,8 +52,6 @@ public class ItineraryDetailActivity extends BaseActivity {
     private TextView textViewDifficulty;
     private TextView textViewWarning;
 
-    private Snackbar waitingSnackbar;
-
     private Parcelable recyclerViewState;
 
     private Itinerary itinerary;
@@ -92,14 +90,6 @@ public class ItineraryDetailActivity extends BaseActivity {
         imagesRecyclerView = binding.imagesRecyclerView;
         FloatingActionButton editButton = binding.editButton;
         FloatingActionButton deleteButton = binding.deleteButton;
-
-        waitingSnackbar = Snackbar.make(layout, "null", Snackbar.LENGTH_INDEFINITE)
-                .setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
-
-        ViewGroup viewGroup = (ViewGroup) waitingSnackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text).getParent();
-        ProgressBar progressBar = new ProgressBar(this);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-        viewGroup.addView(progressBar);
 
         materialToolbar.setNavigationOnClickListener(v -> {
             finish();
@@ -184,16 +174,6 @@ public class ItineraryDetailActivity extends BaseActivity {
             dialog.show(getSupportFragmentManager(), "AdminDialog");
         });
 
-    }
-
-    public void onWaitingBackgroundTask(String msg) {
-        waitingSnackbar.setText(msg);
-        waitingSnackbar.show();
-    }
-
-
-    public void onBackgroundTaskEnd() {
-        waitingSnackbar.dismiss();
     }
 
 

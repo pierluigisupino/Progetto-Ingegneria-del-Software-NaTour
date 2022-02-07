@@ -163,7 +163,9 @@ public class MessageController extends NavigationController{
 
 
     public void onMessageSentError() {
-        //SHOW ERROR
+        if(!messageActivity.isDestroyed()){
+            messageActivity.onFail(messageActivity.getString(R.string.generic_error));
+        }
     }
 
 

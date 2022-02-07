@@ -298,7 +298,7 @@ public class IterController extends NavigationController {
         currentIter = itineraries.get(position);
         photos.clear();
         imageDownloader.resetSession(currentIter.getIterId());
-        //retrieveItineraryPhotos(); //TODO uncomment meglio non consumare le 2000 richieste
+        retrieveItineraryPhotos();
 
         if(currentIter.getCreator().getUid().equals(currentUser.getUid()))
             currentIter.setCreator(currentUser);
@@ -309,7 +309,6 @@ public class IterController extends NavigationController {
 
 
     public void retrieveItineraryPhotos() {
-        detailActivity.onWaitingBackgroundTask("sto scaricando le foto"); //TODO string / isDetail visibile? (da verificare se esplode o no)
         imageDownloader.downloadImages();
     }
 
@@ -321,16 +320,8 @@ public class IterController extends NavigationController {
 
 
     public void onRetrievePhotosError() {
-        detailActivity.onFail("Failed to retrieve photos"); //TODO string
-        detailActivity.onBackgroundTaskEnd(); //TODO isDetail visibile? (da verificare se esplode o no)
+        detailActivity.onFail(detailActivity.getString(R.string.itinerary_photo_error));
     }
-
-
-    public void onRetrievePhotosEnd() {
-        detailActivity.onSuccess("NO MORE PHOTOS!!!"); //TODO string
-        detailActivity.onBackgroundTaskEnd(); //TODO isDetail visibile? (da verificare se esplode o no)
-    }
-
 
     public void interruptDownloadSession(){
         imageDownloader.interruptSession();
