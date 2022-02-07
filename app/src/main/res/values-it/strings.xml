@@ -104,6 +104,8 @@
     <string name="retrieve_itinerary_error">Non siamo riusciti a recuperare le informazioni, riprova.</string>
     <string name="photo_upload_failed">Alcune foto non sono state caricate, riprova.</string>
 
+    <string name="internet_error">Controlla la tua connessione\ne riptova</string>
+
 
     <!--IMAGES DESCRIPTION-->
     <string name="splash_image_description">Splash Image </string>

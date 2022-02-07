@@ -104,6 +104,8 @@
     <string name="retrieve_itinerary_error">Failed to retrieve Itinerary details, try again.</string>
     <string name="photo_upload_failed">Some photos have not been uploaded, try again</string>
 
+    <string name="internet_error">Check your connection\nand try again</string>
+
     <!--IMAGES DESCRIPTION-->
     <string name="splash_image_description">Splash Image </string>
     <string name="welcome_page_image_description">Welcome page image</string>
