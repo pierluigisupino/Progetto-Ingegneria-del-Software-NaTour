@@ -222,6 +222,9 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                     askLocationPermission();
                 }else {
+
+                    //TODO IF GPS IS ON
+
                     bottomProgressBar.setVisibility(View.VISIBLE);
 
                     if(myLocationNewOverlay.getMyLocation() != null){
@@ -229,6 +232,8 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                     }else{
                         myLocationNewOverlay.runOnFirstFix(this::makeIndicationToStartingPoint);
                     }
+
+                    //TODO ELSE ASK GPS
                 }
 
             }else{

@@ -111,7 +111,7 @@ public class ItineraryDetailActivity extends BaseActivity {
             textViewDescription.setVisibility(View.GONE);
 
         if(itinerary.getEditDate() != null){
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd MMMM yyyy");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yy");
             String shareDate = dateFormat.format(itinerary.getEditDate());
             textViewWarning.setVisibility(View.VISIBLE);
             textViewWarning.setText(getString(R.string.edited_admin)+" "+shareDate);
@@ -251,7 +251,7 @@ public class ItineraryDetailActivity extends BaseActivity {
                 textViewDescription.setVisibility(View.GONE);
 
             if(itinerary.getEditDate() != null){
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd MMMM yyyy");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yy");
                 String shareDate = dateFormat.format(itinerary.getEditDate());
                 textViewWarning.setVisibility(View.VISIBLE);
                 textViewWarning.setText(getString(R.string.edited_admin)+" "+shareDate);

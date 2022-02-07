@@ -52,6 +52,10 @@ public class ImageDownloader {
 
                         int photoCount = result.getInt("KeyCount");
 
+                        if(photoCount == 0){
+                            return;
+                        }
+
                         lastPhotoKey = result.getString("LastKey");
 
                         for(int i = 0; i < photoCount; ++i) {
