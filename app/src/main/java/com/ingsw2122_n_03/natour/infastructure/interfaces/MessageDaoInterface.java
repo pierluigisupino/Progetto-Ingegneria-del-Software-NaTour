@@ -1,9 +1,13 @@
 package com.ingsw2122_n_03.natour.infastructure.interfaces;
 
+import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface MessageDaoInterface {
 
-    void getChatsByUser(User currentUser);
+    HashMap<User, ArrayList<Message>> getChats(User currentUser);
 
 }
