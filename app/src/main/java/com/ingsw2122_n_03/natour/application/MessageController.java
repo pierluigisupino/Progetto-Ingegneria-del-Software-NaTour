@@ -15,6 +15,7 @@ import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.TimeoutException;
 
 
 public class MessageController extends NavigationController{
@@ -34,7 +35,7 @@ public class MessageController extends NavigationController{
 
 
     private MessageController(){
-        messageDaoInterface = new MessageDaoImplementation(this);
+        messageDaoInterface = new MessageDaoImplementation();
     }
 
     public static MessageController getInstance() {
@@ -50,20 +51,21 @@ public class MessageController extends NavigationController{
      *********/
 
     public void setUpMessages(User currentUser) {
+
         this.currentUser = currentUser;
-        messageDaoInterface.getChatsByUser(currentUser);
+        try{
+            chats = messageDaoInterface.getChats(currentUser);
+            WebSocketSingleton.getInstance();
+            chatFragment.updateChats(chats);
+        }catch (Exception e) {
+            onRetrieveChatsError(e.getCause() instanceof TimeoutException);
+        }
+
     }
 
 
     public void updateChats() {
-        messageDaoInterface.getChatsByUser(currentUser);
-    }
-
-
-    public void onRetrieveChatsSuccess(HashMap<User, ArrayList<Message>> chats) {
-        WebSocketSingleton.getInstance();
-        this.chats = chats;
-        chatFragment.updateChats(chats);
+        messageDaoInterface.getChats(currentUser);
     }
 
 

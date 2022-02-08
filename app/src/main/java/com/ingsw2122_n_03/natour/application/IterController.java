@@ -26,6 +26,7 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
 
 public class IterController extends NavigationController {
@@ -77,16 +78,17 @@ public class IterController extends NavigationController {
      *********/
 
     public void setUp(User loggedUser) {
+
         currentUser = loggedUser;
         currentUser.setName(splashActivity.getResources().getString(R.string.current_user_name_text));
-        itineraryDao.getSetUpItineraries();
-    }
+        try {
+            itineraries = itineraryDao.getSetUpItineraries();
+            goToActivityAndFinish(splashActivity, MainActivity.class, itineraries);
+            MessageController.getInstance().setUpMessages(currentUser);
+        } catch (Exception e) {
+            onSetUpError(e.getCause() instanceof TimeoutException);
+        }
 
-
-    public void onSetUpSuccess(ArrayList<Itinerary> itineraries) {
-        this.itineraries = itineraries;
-        goToActivityAndFinish(splashActivity, MainActivity.class, itineraries);
-        MessageController.getInstance().setUpMessages(currentUser);
     }
 
 
@@ -104,30 +106,33 @@ public class IterController extends NavigationController {
      * GET ITINERARIES
      ******************/
 
-    public void updateItineraries(){ itineraryDao.getRecentItineraries(); }
 
+    public void updateItineraries(){
 
-    public void onUpdateItinerariesSuccess(ArrayList<Itinerary> iters){
-        itineraries = iters;
-        mainFragment.updateItineraries(itineraries);
-        if(mainFragment.isVisible())
-            mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
+        try{
+            itineraries = itineraryDao.getRecentItineraries();
+            mainFragment.updateItineraries(itineraries);
+            if(mainFragment.isVisible())
+                mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
+        }catch(Exception e) {
+            onUpdateError();
+        }
+
     }
 
 
     public void retrieveItineraries() {
-        int lastIndex = itineraries.size()-1;
-        if(lastIndex >= 0) {
-            itineraryDao.getOlderItineraries(itineraries.get(lastIndex).getIterId());
-        }
-    }
 
+        if(itineraries.isEmpty())
+            return;
 
-    public void onRetrieveItinerarySuccess(ArrayList<Itinerary> iters) {
-        if(iters.size() > 0){
-            itineraries.addAll(iters);
+        try{
+            itineraries.addAll(itineraryDao.getOlderItineraries(itineraries.get(itineraries.size()-1).getIterId()));
             mainFragment.updateItineraries(itineraries);
+        }catch(Exception e) {
+            onUpdateError();
         }
+
     }
 
 

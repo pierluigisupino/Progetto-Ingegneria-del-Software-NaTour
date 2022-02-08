@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeoutException;
 
 public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
@@ -80,8 +82,11 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
     }
 
 
+    @SuppressLint("NewApi")
     @Override
-    public void getSetUpItineraries() {
+    public ArrayList<Itinerary> getSetUpItineraries() {
+
+        CompletableFuture<ArrayList<Itinerary>> completableFuture = new CompletableFuture<>();
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/itineraries")
@@ -92,23 +97,34 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 response -> {
 
                     try {
-                        ArrayList<Itinerary> iters = parseItineraries(response.getData().asJSONObject().getJSONArray("Result"));
-                        controller.onSetUpSuccess(iters);
+                        completableFuture.complete(parseItineraries(response.getData().asJSONObject().getJSONArray("Result")));
                     } catch (JSONException e) {
-                        controller.onSetUpError(false);
+                        completableFuture.cancel(true);
                     }
 
                 },
 
-                error -> controller.onSetUpError(Objects.requireNonNull(error.getCause()).toString().contains("timeout"))
+                error -> {
+
+                    if(Objects.requireNonNull(error.getCause()).toString().contains("timeout"))
+                        completableFuture.completeExceptionally(new TimeoutException());
+                    else
+                        completableFuture.cancel(true);
+
+                }
 
         );
+
+        return completableFuture.join();
 
     }
 
 
+    @SuppressLint("NewApi")
     @Override
-    public void getRecentItineraries() {
+    public ArrayList<Itinerary> getRecentItineraries() {
+
+        CompletableFuture<ArrayList<Itinerary>> completableFuture = new CompletableFuture<>();
 
         RestOptions options = RestOptions.builder()
                 .addPath("/items/itineraries")
@@ -119,23 +135,27 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 response -> {
 
                     try {
-                        ArrayList<Itinerary> iters = parseItineraries(response.getData().asJSONObject().getJSONArray("Result"));
-                        controller.onUpdateItinerariesSuccess(iters);
+                        completableFuture.complete(parseItineraries(response.getData().asJSONObject().getJSONArray("Result")));
                     } catch (JSONException e) {
-                        controller.onUpdateError();
+                        completableFuture.completeExceptionally(new Exception());
                     }
 
                 },
 
-                error -> controller.onUpdateError()
+                error -> completableFuture.completeExceptionally(new Exception())
 
         );
+
+        return completableFuture.join();
 
     }
 
 
+    @SuppressLint("NewApi")
     @Override
-    public void getOlderItineraries(int iterId) {
+    public ArrayList<Itinerary> getOlderItineraries(int iterId) {
+
+        CompletableFuture<ArrayList<Itinerary>> completableFuture = new CompletableFuture<>();
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("iterid", String.valueOf(iterId));
@@ -150,17 +170,18 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                 response -> {
 
                     try {
-                        ArrayList<Itinerary> iters = parseItineraries(response.getData().asJSONObject().getJSONArray("Result"));
-                        controller.onRetrieveItinerarySuccess(iters);
+                        completableFuture.complete(parseItineraries(response.getData().asJSONObject().getJSONArray("Result")));
                     } catch (JSONException e) {
-                        controller.onUpdateError();
+                        completableFuture.completeExceptionally(new Exception());
                     }
 
                 },
 
-                error -> controller.onUpdateError()
+                error -> completableFuture.completeExceptionally(new Exception())
 
         );
+
+        return completableFuture.join();
 
     }
 
