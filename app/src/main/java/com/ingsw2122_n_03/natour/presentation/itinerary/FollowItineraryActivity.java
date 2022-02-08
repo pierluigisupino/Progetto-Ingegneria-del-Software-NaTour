@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -221,19 +222,22 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                     askLocationPermission();
+                    toStartSwitchMaterial.setChecked(false);
                 }else {
 
-                    //TODO IF GPS IS ON
+                    LocationManager lm = (LocationManager) context.getSystemService(Context. LOCATION_SERVICE);
 
-                    bottomProgressBar.setVisibility(View.VISIBLE);
+                    if(lm.isProviderEnabled(LocationManager. GPS_PROVIDER)){
+                        bottomProgressBar.setVisibility(View.VISIBLE);
 
-                    if(myLocationNewOverlay.getMyLocation() != null){
-                        makeIndicationToStartingPoint();
+                        if(myLocationNewOverlay.getMyLocation() != null){
+                            makeIndicationToStartingPoint();
+                        }else{
+                            myLocationNewOverlay.runOnFirstFix(this::makeIndicationToStartingPoint);
+                        }
                     }else{
-                        myLocationNewOverlay.runOnFirstFix(this::makeIndicationToStartingPoint);
+                        buildAlertMessageNoGps();
                     }
-
-                    //TODO ELSE ASK GPS
                 }
 
             }else{
@@ -260,18 +264,6 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     @Override
     public void onResume() {
         super.onResume();
-
-        if(!isAddingPhoto) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && toStartSwitchMaterial.isChecked()) {
-                toStartSwitchMaterial.setChecked(false);
-            } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && !toStartSwitchMaterial.isChecked() && !isFirstRun) {
-                toStartSwitchMaterial.setChecked(true);
-            }
-        }
-
-        if(isAddingPhoto) isAddingPhoto = false;
-        isFirstRun = false;
-
         if(map != null) map.onResume();
     }
 
@@ -599,7 +591,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
             Snackbar snackbar = Snackbar.make(mainLayout, msg, Snackbar.LENGTH_SHORT);
             snackbar.setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.success));
 
-            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            TextView tv = (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
             Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
             tv.setTypeface(typeface);
 
@@ -615,12 +607,28 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
             Snackbar snackbar = Snackbar.make(mainLayout, msg, Snackbar.LENGTH_SHORT);
             snackbar.setBackgroundTint(ContextCompat.getColor(FollowItineraryActivity.this, R.color.error));
 
-            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            TextView tv = (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
             Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
             tv.setTypeface(typeface);
 
             snackbar.show();
         });
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    toStartSwitchMaterial.setChecked(false);
+                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                })
+                .setNegativeButton("No", (dialog, id) -> {
+                    toStartSwitchMaterial.setChecked(false);
+                    dialog.cancel();
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }
