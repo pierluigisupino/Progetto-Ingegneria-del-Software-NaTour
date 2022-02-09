@@ -41,8 +41,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private boolean onError = false;
     private boolean shouldUpdate = false;
 
-    private ArrayList<Itinerary> itineraries = new ArrayList<>();
-
     private final IterController iterController = IterController.getInstance();
     private Bundle bundle;
 
@@ -65,7 +63,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
@@ -84,18 +81,11 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         swipeAnimation = binding.swipeAnimation;
 
         bundle = getArguments();
-
-        if(bundle != null && bundle.containsKey("itineraries")) {
-            itineraries = (ArrayList<Itinerary>) bundle.getSerializable("itineraries");
-            onError = false;
-        }else
+        if(bundle == null || !bundle.containsKey("itineraries"))
             onError = true;
-
 
         LinearLayoutManager layoutManager =  new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
-        recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -125,6 +115,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     }
 
 
+    @SuppressWarnings("unchecked")
     private void updateUi() {
 
         requireActivity().runOnUiThread(()-> {
@@ -149,7 +140,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
             textViewError1.setVisibility(View.GONE);
             errorAnimation.setVisibility(View.GONE);
             textViewError3.setVisibility(View.GONE);
-            recyclerView.setAdapter(new ItineraryAdapter(itineraries, this, getContext()));
+            recyclerView.setAdapter(new ItineraryAdapter((ArrayList<Itinerary>) bundle.getSerializable("itineraries"), this, getContext()));
             Objects.requireNonNull(recyclerView.getLayoutManager()).onRestoreInstanceState(recyclerViewState);
 
         });
@@ -163,7 +154,6 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
     public void updateItineraries(ArrayList<Itinerary> itineraries) {
         onError = false;
-        this.itineraries = itineraries;
         bundle.putSerializable("itineraries", itineraries);
         if(this.isVisible()) updateUi();
     }
