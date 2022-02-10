@@ -7,7 +7,7 @@ import com.ingsw2122_n_03.natour.presentation.support.FormChecker;
 
 public class PasswordTester {
 
-    private FormChecker checker = new FormChecker();
+    private final FormChecker checker = new FormChecker();
 
     @Test
     public void checkPasswordLengthLessThanMinimum() {
