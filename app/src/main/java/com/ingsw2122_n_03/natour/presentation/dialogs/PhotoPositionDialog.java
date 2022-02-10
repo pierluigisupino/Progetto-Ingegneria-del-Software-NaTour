@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +34,10 @@ public class PhotoPositionDialog extends AppCompatDialogFragment {
         TextView textView = view.findViewById(R.id.body);
         textView.setText(msg);
 
-        builder.setView(view).setNegativeButton(R.string.delete_photo_text, (d, w) -> ((AddItineraryFragment4) getParentFragment()).removeInvalidPointOfInterests());
+        builder.setView(view).setNegativeButton(R.string.delete_photo_text, (d, w) -> {
+            assert getParentFragment() != null;
+            ((AddItineraryFragment4) getParentFragment()).removeInvalidPointOfInterests();
+        });
         builder.setView(view).setPositiveButton(R.string.ok_text, null);
 
         final AlertDialog distanceDialog = builder.create();

@@ -23,7 +23,6 @@ public class DeleteItineraryDialog extends AppCompatDialogFragment {
     private Button btnPositive;
     private Button btnNegative;
 
-    private boolean shouldClose = false;
     private boolean shouldDelete = false;
 
     @NonNull
@@ -46,26 +45,22 @@ public class DeleteItineraryDialog extends AppCompatDialogFragment {
 
         lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
+            public void onAnimationStart(Animator animation) {}
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
                 btnNegative.setClickable(true);
                 btnPositive.setClickable(true);
-                if(shouldClose) deleteDialog.dismiss();
                 if(shouldDelete) IterController.getInstance().deleteItinerary();
+                deleteDialog.dismiss();
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
-            }
+            public void onAnimationCancel(Animator animation) {}
 
             @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
+            public void onAnimationRepeat(Animator animation) {}
+
         });
 
         deleteDialog.setOnShowListener(dialog -> {
@@ -86,7 +81,6 @@ public class DeleteItineraryDialog extends AppCompatDialogFragment {
             btnPositive.setOnClickListener(view1 -> {
                 btnNegative.setClickable(false);
                 btnPositive.setClickable(false);
-                shouldClose = true;
                 lottieAnimationView.setMinAndMaxFrame(150, 270);
                 lottieAnimationView.setSpeed(1.5F);
                 lottieAnimationView.playAnimation();
@@ -96,7 +90,6 @@ public class DeleteItineraryDialog extends AppCompatDialogFragment {
             btnNegative.setOnClickListener(view1 -> {
                 btnNegative.setClickable(false);
                 btnPositive.setClickable(false);
-                shouldClose = true;
                 lottieAnimationView.setMaxFrame(150);
                 lottieAnimationView.setFrame(150);
                 lottieAnimationView.setSpeed(-1.5F);

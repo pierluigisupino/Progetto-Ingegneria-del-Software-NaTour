@@ -22,7 +22,6 @@ public class LostProgressDialog extends AppCompatDialogFragment {
     private Button btnPositive;
     private Button btnNegative;
 
-    private boolean wantsToDismiss = false;
     private boolean wantsToClose = false;
 
     @NonNull
@@ -44,10 +43,9 @@ public class LostProgressDialog extends AppCompatDialogFragment {
         final AlertDialog lostProgressDialog = builder.create();
 
         lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
 
-            }
+            @Override
+            public void onAnimationStart(Animator animation) {}
 
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -55,21 +53,19 @@ public class LostProgressDialog extends AppCompatDialogFragment {
                 btnNegative.setClickable(true);
                 btnPositive.setClickable(true);
 
-                if(wantsToClose) {
-                    lostProgressDialog.dismiss();
+                lostProgressDialog.dismiss();
+
+                if(wantsToClose)
                     requireActivity().finish();
-                }else if(wantsToDismiss){
-                    lostProgressDialog.dismiss();
-                }
+
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
-            }
+            public void onAnimationCancel(Animator animation) {}
 
             @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
+            public void onAnimationRepeat(Animator animation) {}
+
         });
 
         lostProgressDialog.setOnShowListener(dialog -> {
@@ -94,7 +90,6 @@ public class LostProgressDialog extends AppCompatDialogFragment {
                 lottieAnimationView.setFrame(150);
                 lottieAnimationView.setSpeed(-1.5F);
                 lottieAnimationView.playAnimation();
-                wantsToDismiss = true;
             });
 
             btnPositive.setOnClickListener(view1 -> {
