@@ -202,7 +202,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
             jsonObject.put("newmodifiedsince", newModifiedSince);
 
         } catch (JSONException e) {
-            controller.onItineraryUpdateError(false);
+            controller.onUpdateItineraryError(false);
             return;
         }
 
@@ -221,18 +221,18 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                         if(statusCode == 200) {
                             iter.setModifiedSince(newModifiedSince);
-                            controller.onItineraryUpdateSuccess();
+                            controller.onUpdateItinerarySuccess();
                             return;
                         }
 
-                        controller.onItineraryUpdateError(statusCode == 100);
+                        controller.onUpdateItineraryError(statusCode == 100);
 
                     } catch (JSONException e) {
-                        controller.onItineraryUpdateError(false);
+                        controller.onUpdateItineraryError(false);
                     }
 
                 },
-                error -> controller.onItineraryUpdateError(false)
+                error -> controller.onUpdateItineraryError(false)
         );
 
     }
@@ -257,7 +257,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
             jsonObject.put("newmodifiedsince", newModifiedSince);
 
         } catch (JSONException e) {
-            controller.onItineraryUpdateError(false);
+            controller.onUpdateItineraryError(false);
             return;
         }
 
@@ -276,18 +276,18 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                         if(statusCode == 200) {
                             iter.setModifiedSince(newModifiedSince);
-                            controller.onItineraryUpdateSuccess();
+                            controller.onUpdateItinerarySuccess();
                             return;
                         }
 
-                        controller.onItineraryUpdateError(statusCode == 100);
+                        controller.onUpdateItineraryError(statusCode == 100);
 
                     } catch (JSONException e) {
-                        controller.onItineraryUpdateError(false);
+                        controller.onUpdateItineraryError(false);
                     }
 
                 },
-                error -> controller.onItineraryUpdateError(false)
+                error -> controller.onUpdateItineraryError(false)
         );
 
     }

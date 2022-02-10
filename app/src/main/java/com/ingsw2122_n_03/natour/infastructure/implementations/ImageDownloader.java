@@ -93,7 +93,7 @@ public class ImageDownloader {
             while ((inputLine = in.readLine()) != null) { imageEncoded.append(inputLine); }
             in.close();
 
-            controller.onRetrievePhotosSuccess(Base64.getDecoder().decode(imageEncoded.toString()));
+            controller.onRetrievePhotoSuccess(Base64.getDecoder().decode(imageEncoded.toString()));
 
         } catch (IOException ignored){}
 

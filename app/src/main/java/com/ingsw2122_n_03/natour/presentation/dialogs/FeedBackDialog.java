@@ -57,7 +57,7 @@ public class FeedBackDialog extends AppCompatDialogFragment {
                     int hours = timePicker.getHour();
                     int minutes = timePicker.getMinute();
                     if(hours !=0 || minutes !=0)
-                        IterController.getInstance().manageFeedback(new LocalTime(hours, minutes), arrayAdapter.getPosition(autoCompleteTextView.getText().toString()));
+                        IterController.getInstance().putItineraryByFeedback(new LocalTime(hours, minutes), arrayAdapter.getPosition(autoCompleteTextView.getText().toString()));
                     else
                         Toast.makeText(requireContext(), getString(R.string.duration_error), Toast.LENGTH_SHORT).show();
 

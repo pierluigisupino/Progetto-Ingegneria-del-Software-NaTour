@@ -107,7 +107,7 @@ public class AddItineraryActivity extends BaseActivity {
                 changeFragment();
             }else if(stepIndex == 2){
                 imagesBytes = addItineraryFragment3.getImagesBytes();
-                addItineraryFragment4.setRawPointOfInterests(iterController.calculatePhotoPosition(imagesBytes));
+                addItineraryFragment4.setRawPointOfInterests(iterController.calculatePhotosPosition(imagesBytes));
                 addItineraryFragment4.setImageBytes(imagesBytes);
                 stepIndex++;
                 changeFragment();

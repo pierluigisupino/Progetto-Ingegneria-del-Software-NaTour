@@ -254,7 +254,7 @@ public class IterController extends NavigationController {
      * PUT FEEDBACK
      **************/
 
-    public void manageFeedback(LocalTime newDuration, int newDifficulty) {
+    public void putItineraryByFeedback(LocalTime newDuration, int newDifficulty) {
 
         updatedIter = new Itinerary(currentIter);
 
@@ -272,7 +272,7 @@ public class IterController extends NavigationController {
     }
 
 
-    public void onItineraryUpdateSuccess() {
+    public void onUpdateItinerarySuccess() {
         int pos = itineraries.indexOf(currentIter);
         itineraries.remove(currentIter);
         currentIter = updatedIter;
@@ -284,7 +284,7 @@ public class IterController extends NavigationController {
     }
 
 
-    public void onItineraryUpdateError(boolean itemChanged) {
+    public void onUpdateItineraryError(boolean itemChanged) {
         loadingDialog.dismissDialog();
         if(itemChanged) {
             detailActivity.onFail(detailActivity.getString(R.string.itinerary_update_warning));
@@ -318,7 +318,7 @@ public class IterController extends NavigationController {
     }
 
 
-    public void onRetrievePhotosSuccess(byte[] image) {
+    public void onRetrievePhotoSuccess(byte[] image) {
         photos.add(image);
         detailActivity.updateImages(image);
     }
@@ -356,7 +356,7 @@ public class IterController extends NavigationController {
     }
 
 
-    public HashMap<byte[], GeoPoint> calculatePhotoPosition() {
+    public HashMap<byte[], GeoPoint> calculatePhotosPosition() {
 
         ImageUtilities imageUtilities = new ImageUtilities();
         HashMap<byte[], GeoPoint> pointOfInterests = new HashMap<>();
@@ -374,9 +374,9 @@ public class IterController extends NavigationController {
     }
 
 
-    public HashMap<byte[], GeoPoint> calculatePhotoPosition(ArrayList<byte[]> imagesBytes) {
+    public HashMap<byte[], GeoPoint> calculatePhotosPosition(ArrayList<byte[]> imagesBytes) {
         photos = imagesBytes;
-        return calculatePhotoPosition();
+        return calculatePhotosPosition();
     }
 
 

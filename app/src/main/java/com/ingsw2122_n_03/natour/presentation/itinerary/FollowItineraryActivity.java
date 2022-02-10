@@ -286,7 +286,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         if(itineraryWaypoints.size() > 1)
             addMarker(itineraryWaypoints.get(itineraryWaypoints.size()-1), false);
 
-        addPointOfInterests(iterController.calculatePhotoPosition());
+        addPointOfInterests(iterController.calculatePhotosPosition());
 
         makeRoads();
 
