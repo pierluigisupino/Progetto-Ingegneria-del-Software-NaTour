@@ -13,7 +13,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -92,7 +91,6 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     private Polyline myRoadOverlay;
     private MyLocationNewOverlay myLocationNewOverlay;
 
-    private Itinerary itinerary;
     private final HashMap<byte[], GeoPoint> uploadingPhoto = new HashMap<>();
 
     private final ArrayList<GeoPoint> itineraryWaypoints = new ArrayList<>();
@@ -103,9 +101,6 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     private IterController iterController;
     private LocationManager locationManager;
 
-    private boolean wantsRoadsToStart = false;
-    private boolean wantsDirections = false;
-
     private ProgressBar progressBar;
     private LinearProgressIndicator bottomProgressBar;
     private CardView cardView;
@@ -115,6 +110,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     private LinearLayout toStartLayout;
 
     private SwitchMaterial toStartSwitchMaterial;
+    private SwitchMaterial directionsSwitchMaterial;
 
     private final ActivityResultLauncher<Intent> getImages = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -178,7 +174,11 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         iterController = IterController.getInstance();
         iterController.setFollowItineraryActivity(this);
 
-        itinerary = (Itinerary) getIntent().getSerializableExtra("itinerary");
+        Itinerary itinerary = (Itinerary) getIntent().getSerializableExtra("itinerary");
+        itineraryWaypoints.add(new GeoPoint(itinerary.getStartPoint().getLatitude(), itinerary.getStartPoint().getLongitude()));
+        for(WayPoint w : itinerary.getWayPoints()) {
+            itineraryWaypoints.add(new GeoPoint(w.getLatitude(), w.getLongitude()));
+        }
 
         MaterialToolbar materialToolbar = binding.topAppBar;
         materialToolbar.setTitle(itinerary.getName());
@@ -187,7 +187,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         bottomProgressBar = binding.bottomProgressBar;
         cardView = binding.cardView;
 
-        SwitchMaterial directionsSwitchMaterial = binding.directionsSwitch;
+        directionsSwitchMaterial = binding.directionsSwitch;
         toStartSwitchMaterial = binding.toStartSwitch;
 
         mainLayout = binding.mainLayout;
@@ -200,11 +200,9 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         directionsSwitchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
                 Toast.makeText(view.getContext(), getString(R.string.info_directions_text), Toast.LENGTH_SHORT).show();
-                wantsDirections = true;
                 map.getOverlays().addAll(itineraryIndications);
-                if(wantsRoadsToStart) map.getOverlays().addAll(myRoadIndications);
+                if(toStartSwitchMaterial.isChecked()) map.getOverlays().addAll(myRoadIndications);
             }else{
-                wantsDirections = false;
                 map.getOverlays().removeAll(itineraryIndications);
                 map.getOverlays().removeAll(myRoadIndications);
             }
@@ -215,13 +213,10 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         toStartSwitchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
             if(isChecked){
-                wantsRoadsToStart = true;
-
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                     askLocationPermission();
                     toStartSwitchMaterial.setChecked(false);
                 }else {
-
                     LocationManager lm = (LocationManager) context.getSystemService(Context. LOCATION_SERVICE);
 
                     if(lm.isProviderEnabled(LocationManager. GPS_PROVIDER)){
@@ -238,7 +233,6 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                 }
 
             }else{
-                wantsRoadsToStart = false;
                 map.getController().animateTo(itineraryWaypoints.get(0));
                 map.getOverlays().remove(myRoadOverlay);
                 map.getOverlays().removeAll(myRoadIndications);
@@ -282,14 +276,18 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         map.setMultiTouchControls(true);
 
         map.getController().setZoom(12.0);
-        map.getController().animateTo(new GeoPoint(itinerary.getStartPoint().getLatitude(), itinerary.getStartPoint().getLongitude()));
+        map.getController().animateTo(itineraryWaypoints.get(0));
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
         roadManager = new OSRMRoadManager(this, null);
         ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
 
-        addWayPoints();
+        addMarker(itineraryWaypoints.get(0), true);
+        if(itineraryWaypoints.size() > 1)
+            addMarker(itineraryWaypoints.get(itineraryWaypoints.size()-1), false);
+
         addPointOfInterests(iterController.calculatePhotoPosition());
+
         makeRoads();
 
         GpsMyLocationProvider gpsMyLocationProvider = new GpsMyLocationProvider(this);
@@ -313,24 +311,9 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     }
 
 
-    private void addWayPoints() {
+    private void addMarker(GeoPoint point, boolean isFirst){
 
-        addMarker(itinerary.getStartPoint(), true);
-
-        ArrayList<WayPoint> mItineraryWaypoints = (ArrayList<WayPoint>) itinerary.getWayPoints();
-        for(WayPoint wayPoint : itinerary.getWayPoints()){
-            if(itinerary.getWayPoints().indexOf(wayPoint) == mItineraryWaypoints.size() -1)
-                addMarker(wayPoint, false);
-            else
-                itineraryWaypoints.add(new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude()));
-
-        }
-    }
-
-
-    private void addMarker(WayPoint wayPoint, boolean isFirst){
         Marker marker = new Marker(map);
-        GeoPoint position = new GeoPoint(wayPoint.getLatitude(), wayPoint.getLongitude());
 
         if(isFirst){
             marker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_start, null));
@@ -341,12 +324,10 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
         }
 
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-        marker.setPosition(position);
+        marker.setPosition(point);
 
         map.getOverlays().add(marker);
         map.invalidate();
-
-        this.itineraryWaypoints.add(position);
 
     }
 
@@ -378,32 +359,26 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     @Override
     public boolean onMarkerClick(Marker marker, MapView mapView) {
 
-        if(marker instanceof PointOfInterest)
-            showImage(marker.getImage());
+        if(marker instanceof PointOfInterest) {
+            Dialog builder = new Dialog(this);
+            builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+            builder.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            builder.setOnDismissListener(dialogInterface -> {});
+
+            ImageView imageView = new ImageView(this);
+            imageView.setImageDrawable(marker.getImage());
+            builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT)
+            );
+            builder.show();
+
+        }
 
         return true;
-
-    }
-
-
-    public void showImage(Drawable drawable) {
-
-        Dialog builder = new Dialog(this);
-        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        builder.getWindow().setBackgroundDrawable(
-                new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        builder.setOnDismissListener(dialogInterface -> {
-
-        });
-
-        ImageView imageView = new ImageView(this);
-        imageView.setImageDrawable(drawable);
-        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        builder.show();
 
     }
 
@@ -449,18 +424,18 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
             myRoadOverlay = RoadManager.buildRoadOverlay(road);
             myRoadOverlay.getOutlinePaint().setStrokeWidth(8);
 
-            if(wantsRoadsToStart) {
+            if(toStartSwitchMaterial.isChecked()) {
                 makeDirections(road, myRoadIndications);
                 map.getOverlays().add(myRoadOverlay);
             }
 
             cardView.post(() -> {
-                if(wantsRoadsToStart) {
+                if(toStartSwitchMaterial.isChecked()) {
                     map.getController().setZoom(16.50);
                     map.getController().animateTo(myLocationNewOverlay.getMyLocation());
                 }
 
-                if(wantsDirections) map.getOverlays().addAll(myRoadIndications);
+                if(directionsSwitchMaterial.isChecked()) map.getOverlays().addAll(myRoadIndications);
 
                 bottomProgressBar.setVisibility(View.INVISIBLE);
             });

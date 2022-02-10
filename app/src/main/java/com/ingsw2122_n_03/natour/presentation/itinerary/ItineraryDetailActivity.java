@@ -49,8 +49,8 @@ public class ItineraryDetailActivity extends BaseActivity {
     private TextView textViewWarning;
 
     private Parcelable recyclerViewState;
+    private Bundle bundle;
 
-    private Itinerary itinerary;
     private final ArrayList<byte[]> images = new ArrayList<>();
 
     private IterController iterController;
@@ -64,8 +64,11 @@ public class ItineraryDetailActivity extends BaseActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        itinerary = (Itinerary) getIntent().getSerializableExtra("itinerary");
+        Itinerary itinerary = (Itinerary) getIntent().getSerializableExtra("itinerary");
         User currentUser = (User) getIntent().getSerializableExtra("user");
+
+        bundle = new Bundle();
+        bundle.putSerializable("itinerary", itinerary);
 
         iterController = IterController.getInstance();
         iterController.setItineraryDetailActivity(this);
@@ -129,9 +132,8 @@ public class ItineraryDetailActivity extends BaseActivity {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 recyclerViewState = layoutManager.onSaveInstanceState();
-                if(newState == RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastCompletelyVisibleItemPosition() == Objects.requireNonNull(imagesRecyclerView.getAdapter()).getItemCount() - 1)) {
+                if(newState == RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastCompletelyVisibleItemPosition() == Objects.requireNonNull(imagesRecyclerView.getAdapter()).getItemCount() - 1))
                     iterController.retrieveItineraryPhotos();
-                }
             }
 
         });
@@ -140,10 +142,8 @@ public class ItineraryDetailActivity extends BaseActivity {
         startButton.setOnClickListener(v -> iterController.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary));
 
         textViewFeedback.setOnClickListener(v -> {
-            Bundle args = new Bundle();
-            args.putSerializable("itinerary", itinerary);
             FeedBackDialog dialog = new FeedBackDialog();
-            dialog.setArguments(args);
+            dialog.setArguments(bundle);
             dialog.show(getSupportFragmentManager(), "FeedbackDialog");
         });
 
@@ -163,10 +163,8 @@ public class ItineraryDetailActivity extends BaseActivity {
         });
 
         editButton.setOnClickListener(v -> {
-            Bundle args = new Bundle();
-            args.putSerializable("itinerary", itinerary);
             AdminDialog dialog = new AdminDialog();
-            dialog.setArguments(args);
+            dialog.setArguments(bundle);
             dialog.show(getSupportFragmentManager(), "AdminDialog");
         });
 
@@ -182,17 +180,7 @@ public class ItineraryDetailActivity extends BaseActivity {
 
     @Override
     public void onSuccess(String msg) {
-
         runOnUiThread(()->{
-            String description = itinerary.getDescription();
-
-            if(description != null && description.length() != 0) {
-                textViewDescription.setText(description);
-                textViewDescription.setVisibility(View.VISIBLE);
-            }else {
-                textViewDescription.setVisibility(View.GONE);
-            }
-
             Snackbar snackbar = Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT);
             snackbar.setBackgroundTint(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success));
 
@@ -236,8 +224,8 @@ public class ItineraryDetailActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     public void updateItineraryViews(Itinerary updatedItinerary) {
         runOnUiThread(()->{
-            itinerary = updatedItinerary;
 
+            bundle.putSerializable("itinerary", updatedItinerary);
             textViewName.setText(updatedItinerary.getName());
 
             String description = updatedItinerary.getDescription();
@@ -246,9 +234,9 @@ public class ItineraryDetailActivity extends BaseActivity {
             else
                 textViewDescription.setVisibility(View.GONE);
 
-            if(itinerary.getEditDate() != null){
+            if(updatedItinerary.getEditDate() != null){
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yy");
-                String shareDate = dateFormat.format(itinerary.getEditDate());
+                String shareDate = dateFormat.format(updatedItinerary.getEditDate());
                 textViewWarning.setVisibility(View.VISIBLE);
                 textViewWarning.setText(getString(R.string.edited_admin)+" "+shareDate);
             }
