@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -90,7 +89,7 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
     private MapView map;
     private RoadManager roadManager;
     private Polyline itineraryRoadOverlay;
-    private Polyline myroadOverlay;
+    private Polyline myRoadOverlay;
     private MyLocationNewOverlay myLocationNewOverlay;
 
     private Itinerary itinerary;
@@ -106,8 +105,6 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
     private boolean wantsRoadsToStart = false;
     private boolean wantsDirections = false;
-    private boolean isFirstRun = true;
-    private boolean isAddingPhoto = false;
 
     private ProgressBar progressBar;
     private LinearProgressIndicator bottomProgressBar;
@@ -243,14 +240,13 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
             }else{
                 wantsRoadsToStart = false;
                 map.getController().animateTo(itineraryWaypoints.get(0));
-                map.getOverlays().remove(myroadOverlay);
+                map.getOverlays().remove(myRoadOverlay);
                 map.getOverlays().removeAll(myRoadIndications);
                 bottomProgressBar.setVisibility(View.INVISIBLE);
             }
         });
 
         addPhotoButton.setOnClickListener(view1 -> {
-            isAddingPhoto = true;
             uploadingPhoto.clear();
             Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent1.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
@@ -450,12 +446,12 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
                 myRoadWaypoints.add(0, myLocationNewOverlay.getMyLocation());
 
             Road road = roadManager.getRoad(myRoadWaypoints);
-            myroadOverlay = RoadManager.buildRoadOverlay(road);
-            myroadOverlay.getOutlinePaint().setStrokeWidth(8);
+            myRoadOverlay = RoadManager.buildRoadOverlay(road);
+            myRoadOverlay.getOutlinePaint().setStrokeWidth(8);
 
             if(wantsRoadsToStart) {
                 makeDirections(road, myRoadIndications);
-                map.getOverlays().add(myroadOverlay);
+                map.getOverlays().add(myRoadOverlay);
             }
 
             cardView.post(() -> {

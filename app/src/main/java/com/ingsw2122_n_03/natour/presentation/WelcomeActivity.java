@@ -55,7 +55,7 @@ public class WelcomeActivity extends BaseActivity {
             Snackbar snackbar = Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT);
             snackbar.setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.success));
 
-            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            TextView tv = (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
             Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
             tv.setTypeface(typeface);
 
@@ -70,7 +70,7 @@ public class WelcomeActivity extends BaseActivity {
             Snackbar snackbar = Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT);
             snackbar.setBackgroundTint(ContextCompat.getColor(WelcomeActivity.this, R.color.error));
 
-            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            TextView tv = (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
             Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
             tv.setTypeface(typeface);
 

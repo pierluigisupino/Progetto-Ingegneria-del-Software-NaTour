@@ -1,15 +1,11 @@
 package com.ingsw2122_n_03.natour.presentation.itinerary;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -200,7 +196,7 @@ public class ItineraryDetailActivity extends BaseActivity {
             Snackbar snackbar = Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT);
             snackbar.setBackgroundTint(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.success));
 
-            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            TextView tv = (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
             Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
             tv.setTypeface(typeface);
 
@@ -215,7 +211,7 @@ public class ItineraryDetailActivity extends BaseActivity {
             Snackbar snackbar = Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT);
             snackbar.setBackgroundTint(ContextCompat.getColor(ItineraryDetailActivity.this, R.color.error));
 
-            TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+            TextView tv = (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
             Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
             tv.setTypeface(typeface);
             snackbar.show();
