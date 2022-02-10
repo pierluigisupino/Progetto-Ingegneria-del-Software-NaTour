@@ -68,13 +68,13 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                     String messageError = Objects.requireNonNull(error.getMessage());
 
                     if(messageError.contains("User not confirmed in the system")) {
-                        controller.onLoginAuthentication(email, password);
+                        controller.onSignInAuthentication(email, password);
                     }else if(messageError.contains("Failed since user is not authorized")){
-                        controller.onLoginFailure(0);
+                        controller.onSignInFailure(0);
                     }else if(messageError.contains("User not found in the system")){
-                        controller.onLoginFailure(0);
+                        controller.onSignInFailure(0);
                     }else {
-                        controller.onLoginFailure(1);
+                        controller.onSignInFailure(1);
                     }
                 }
         );

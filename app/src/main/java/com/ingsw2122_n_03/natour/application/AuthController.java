@@ -90,7 +90,7 @@ public final class AuthController extends NavigationController {
 
     }
 
-    public void onLoginFailure(int errorCode) {
+    public void onSignInFailure(int errorCode) {
         if(errorCode == 0) {
             signInActivity.onFail(signInActivity.getResources().getString(R.string.wrong_credential_error));
         }else {
@@ -98,7 +98,7 @@ public final class AuthController extends NavigationController {
         }
     }
 
-    public void onLoginAuthentication(String email, String password) {
+    public void onSignInAuthentication(String email, String password) {
         HashMap<String, String> extras = new HashMap<String, String>() {{
             put("email", email);
             put("password", password);
@@ -189,8 +189,8 @@ public final class AuthController extends NavigationController {
      * RESET PASSWORD
      ****************/
 
-    public void resetPassword(String username){
-        authInterface.resetPassword(username);
+    public void resetPassword(String email){
+        authInterface.resetPassword(email);
     }
 
     public void onResetPasswordSuccess(String email){
