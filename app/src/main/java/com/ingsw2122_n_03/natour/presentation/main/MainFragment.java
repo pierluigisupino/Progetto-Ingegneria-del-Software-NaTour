@@ -30,7 +30,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private FragmentMainBinding binding;
     private LinearLayout mainLayout;
     private RecyclerView recyclerView;
-    private SwipeRefreshLayout pullToRefresh;
+    private SwipeRefreshLayout refreshLayout;
     private Parcelable recyclerViewState;
 
     private TextView textViewError1;
@@ -39,7 +39,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     private TextView textViewError3;
 
     private boolean onError = false;
-    private boolean shouldUpdate = false;
+    private boolean shouldRefresh = false;
 
     private final IterController iterController = IterController.getInstance();
     private Bundle bundle;
@@ -70,7 +70,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
         textViewError1 = binding.error1;
         textViewError3 = binding.error4;
 
-        pullToRefresh = binding.update;
+        refreshLayout = binding.update;
         recyclerView = binding.itinerary;
 
         mainLayout = binding.mainLayout;
@@ -100,9 +100,9 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
         });
 
-        pullToRefresh.setOnRefreshListener(() -> {
+        refreshLayout.setOnRefreshListener(() -> {
             iterController.updateItineraries();
-            shouldUpdate = false;
+            shouldRefresh = false;
         });
 
     }
@@ -120,13 +120,13 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
 
         requireActivity().runOnUiThread(()-> {
 
-            if(shouldUpdate) {
+            if(shouldRefresh) {
                 swipeAnimation.setVisibility(View.VISIBLE);
             }else {
                 swipeAnimation.setVisibility(View.GONE);
             }
 
-            pullToRefresh.setRefreshing(false);
+            refreshLayout.setRefreshing(false);
 
             if(onError) {
                 mainLayout.setVisibility(View.GONE);
@@ -148,7 +148,7 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
     }
 
     public void showUpdateHint(){
-        shouldUpdate = true;
+        shouldRefresh = true;
         if(this.isVisible()) updateUi();
     }
 

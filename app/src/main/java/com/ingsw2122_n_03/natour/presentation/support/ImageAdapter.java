@@ -18,7 +18,7 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
     private final List<byte[]> bytes;
-    private boolean wantsToDelete;
+    private final boolean wantsToDelete;
 
     public ImageAdapter(List<byte[]> bitmaps, Boolean wantsToDelete) {
         this.bytes = bitmaps;
