@@ -60,7 +60,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         bottomTextView = binding.bottomTextView;
         recyclerView = binding.chats;
 
-        swipeRefreshLayout.setOnRefreshListener(messageController::updateChats);
+        swipeRefreshLayout.setOnRefreshListener(() -> new Thread(messageController::updateChats).start());
 
         lottieAnimationView.setSpeed(0.5F);
 

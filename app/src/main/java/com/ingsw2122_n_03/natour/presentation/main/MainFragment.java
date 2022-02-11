@@ -94,14 +94,14 @@ public class MainFragment extends Fragment implements ItineraryAdapter.OnItinera
                 super.onScrollStateChanged(recyclerView, newState);
                 recyclerViewState = Objects.requireNonNull(recyclerView.getLayoutManager()).onSaveInstanceState();
                 if(newState==RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastCompletelyVisibleItemPosition() == Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() - 1)) {
-                    iterController.retrieveItineraries();
+                    new Thread(iterController::retrieveItineraries).start();
                 }
             }
 
         });
 
         refreshLayout.setOnRefreshListener(() -> {
-            iterController.updateItineraries();
+            new Thread(iterController::updateItineraries).start();
             shouldRefresh = false;
         });
 
