@@ -51,7 +51,6 @@ public class MessageController extends NavigationController{
      *********/
 
     public void setUpMessages(User currentUser) {
-
         this.currentUser = currentUser;
         try{
             chats = messageDaoInterface.getChats(currentUser);
@@ -60,12 +59,17 @@ public class MessageController extends NavigationController{
         }catch (Exception e) {
             onRetrieveChatsError(e.getCause() instanceof TimeoutException);
         }
-
     }
 
 
     public void updateChats() {
-        messageDaoInterface.getChats(currentUser);
+        try{
+            chats = messageDaoInterface.getChats(currentUser);
+            WebSocketSingleton.getInstance();
+            chatFragment.updateChats(chats);
+        }catch (Exception e) {
+            onRetrieveChatsError(e.getCause() instanceof TimeoutException);
+        }
     }
 
 
