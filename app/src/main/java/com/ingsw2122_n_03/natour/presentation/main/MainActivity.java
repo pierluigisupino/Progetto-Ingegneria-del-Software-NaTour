@@ -123,12 +123,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        WebSocketSingleton.getInstance().closeConnection();
-    }
-
 
     @Override
     public void onSuccess(String msg) {
@@ -136,7 +130,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Snackbar snackbar = Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_SHORT);
         snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.success));
 
-        TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+        TextView tv = (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
         tv.setTypeface(typeface);
 
@@ -151,7 +145,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Snackbar snackbar = Snackbar.make(drawerLayout, msg, Snackbar.LENGTH_SHORT);
         snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.error));
 
-        TextView tv = (TextView) (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
+        TextView tv = (snackbar.getView()).findViewById(com.google.android.material.R.id.snackbar_text);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.euclid_circular_regular);
         tv.setTypeface(typeface);
 
@@ -195,6 +189,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.logout:
+                WebSocketSingleton.getInstance().closeConnection();
                 authController.signOut();
                 break;
 

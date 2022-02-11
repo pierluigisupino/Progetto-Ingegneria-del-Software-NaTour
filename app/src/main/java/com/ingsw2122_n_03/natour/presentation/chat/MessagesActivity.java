@@ -1,13 +1,11 @@
 package com.ingsw2122_n_03.natour.presentation.chat;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +18,6 @@ import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.ActivityMessagesBinding;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
-import com.ingsw2122_n_03.natour.presentation.signUp.SignUpActivity;
 import com.ingsw2122_n_03.natour.presentation.support.BaseActivity;
 import com.ingsw2122_n_03.natour.presentation.support.MessageAdapter;
 
@@ -32,13 +29,9 @@ import java.util.Objects;
 public class MessagesActivity extends BaseActivity {
 
     private ConstraintLayout constraintLayout;
-
-    private User currentUser;
-    private User endUser;
-
     private RecyclerView recyclerView;
+    private Bundle bundle  = new Bundle();
 
-    private ArrayList<Message> messages;
 
     @SuppressLint("NewApi")
     @SuppressWarnings("unchecked")
@@ -51,13 +44,14 @@ public class MessagesActivity extends BaseActivity {
 
         MessageController.getInstance().setMessageActivity(this);
 
-        Intent intent = getIntent();
-
-        messages = (ArrayList<Message>) intent.getSerializableExtra("messages");
-        currentUser = (User) intent.getSerializableExtra("currentUser");
-        endUser = (User) intent.getSerializableExtra("endUser");
-
         constraintLayout = binding.layout;
+
+        bundle = getIntent().getExtras();
+
+        ArrayList<Message> messages = (ArrayList<Message>) bundle.getSerializable("messages");
+        User currentUser = (User) bundle.getSerializable("currentUser");
+        User endUser = (User) bundle.getSerializable("endUser");
+
 
         MaterialToolbar materialToolbar = binding.topAppBar;
         recyclerView = binding.recyclerView;
@@ -88,32 +82,34 @@ public class MessagesActivity extends BaseActivity {
 
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+
+    @SuppressWarnings("unchecked")
     public void updateChat(Message message){
-        runOnUiThread(()->{
+        runOnUiThread(()-> {
+            ArrayList<Message> messages = (ArrayList<Message>) bundle.getSerializable("messages");
             messages.add(message);
-            Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
+            Objects.requireNonNull(recyclerView.getAdapter()).notifyItemInserted(messages.size() - 1);
             recyclerView.scrollToPosition(messages.size() - 1);
         });
     }
 
-    public String getCurrentSession() { return endUser.getUid(); }
+
+    public String getCurrentSession() {
+        return ((User) bundle.getSerializable("endUser")).getUid();
+    }
+
 
     @Override
-    public void onSuccess(String msg) {
-        runOnUiThread(() -> {
-            Snackbar.make(constraintLayout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(MessagesActivity.this, R.color.success))
-                    .show();
-        });
-    }
+    public void onSuccess(String msg) {}
+
 
     @Override
     public void onFail(String msg) {
-        runOnUiThread(() -> {
-            Snackbar.make(constraintLayout, msg, Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(ContextCompat.getColor(MessagesActivity.this, R.color.error))
-                    .show();
-        });
+        runOnUiThread(() ->
+                Snackbar.make(constraintLayout, msg, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(MessagesActivity.this, R.color.error))
+                .show()
+        );
     }
+
 }
