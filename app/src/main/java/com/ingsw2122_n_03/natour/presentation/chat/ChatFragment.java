@@ -36,7 +36,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     private boolean isOnError = false;
     private boolean isLoading = true;
 
-    private HashMap<User, ArrayList<Message>> chats = new HashMap<>();
+    private final Bundle bundle = new Bundle();
 
     private final MessageController messageController = MessageController.getInstance();
 
@@ -65,11 +65,9 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
         lottieAnimationView.setSpeed(0.5F);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        chatAdapter = new ChatAdapter(requireActivity(), chats);
-        chatAdapter.setClickListener(this);
-        recyclerView.setAdapter(chatAdapter);
 
         return binding.getRoot();
+
     }
 
 
@@ -80,6 +78,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
     }
 
 
+    @SuppressWarnings("unchecked")
     private void updateUi(){
 
         requireActivity().runOnUiThread(() -> {
@@ -106,6 +105,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
                 bottomTextView.setVisibility(View.VISIBLE);
                 return;
             }
+
+            HashMap<User, ArrayList<Message>> chats = (HashMap<User, ArrayList<Message>>) bundle.getSerializable("chats");
 
 
             if (chats.isEmpty()) {
@@ -137,7 +138,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClickListe
 
 
     public void updateChats(HashMap<User, ArrayList<Message>> chats) {
-        this.chats = chats;
+        bundle.putSerializable("chats", chats);
         isOnError = false;
         isLoading = false;
         if(this.isVisible()) updateUi();
