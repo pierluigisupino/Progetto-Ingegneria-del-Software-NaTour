@@ -99,6 +99,7 @@ public class ItineraryDetailActivity extends BaseActivity {
         textViewCreator.setText(getResources().getString(R.string.by_text)+" "+itinerary.getCreator().getName());
 
         if(!itinerary.getCreator().getName().equals("Unknown") && !itinerary.getCreator().getUid().equals(currentUser.getUid())) {
+            textViewCreator.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_chat, 0);
             textViewCreator.setClickable(true);
             textViewCreator.setOnClickListener(v -> MessageController.getInstance().retrieveMessages(itinerary.getCreator()));
         }
