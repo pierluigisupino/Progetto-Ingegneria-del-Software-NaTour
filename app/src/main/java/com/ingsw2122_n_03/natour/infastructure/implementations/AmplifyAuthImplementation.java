@@ -42,7 +42,6 @@ public final class AmplifyAuthImplementation implements AuthInterface {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(callingActivity.getApplicationContext());
-            FirebaseAnalytics.getInstance(callingActivity);
             return true;
         }catch (Amplify.AlreadyConfiguredException ignored){
             return true;
