@@ -51,7 +51,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityFollowItineraryBinding;
@@ -250,17 +249,6 @@ public class FollowItineraryActivity extends BaseActivity implements Marker.OnMa
 
         setupMap();
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(map != null) map.onResume();
-
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "FollowItineraryActivity");
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "FollowItineraryActivity");
-        FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 
     @Override

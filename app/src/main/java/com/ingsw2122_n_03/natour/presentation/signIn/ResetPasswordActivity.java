@@ -21,7 +21,6 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.databinding.ActivityResetPasswordBinding;
@@ -135,15 +134,6 @@ public class ResetPasswordActivity extends BaseActivity {
 
             snackbar.show();
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "ResetPasswordActivity");
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "ResetPasswordActivity");
-        FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 
     private boolean areInputValid() {

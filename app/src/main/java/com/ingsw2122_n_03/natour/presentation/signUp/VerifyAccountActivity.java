@@ -15,7 +15,6 @@ import com.chaos.view.PinView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.AuthController;
 import com.ingsw2122_n_03.natour.databinding.ActivityVerifyAccountBinding;
@@ -76,15 +75,6 @@ public class VerifyAccountActivity extends BaseActivity {
                 authController.confirmSignUp(email, password, String.valueOf(verificationCodePinView.getText()));
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "VerifyAccountActivity");
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "VerifyAccountActivity");
-        FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 
     @Override

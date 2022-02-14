@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.databinding.ActivityAddItineraryBinding;
@@ -121,15 +120,6 @@ public class AddItineraryActivity extends BaseActivity {
 
         addFragment();
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "AddItineraryActivity");
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "AddItineraryActivity");
-        FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 
     @Override

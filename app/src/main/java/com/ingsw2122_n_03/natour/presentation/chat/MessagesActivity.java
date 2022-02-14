@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.ActivityMessagesBinding;
@@ -101,18 +100,7 @@ public class MessagesActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "MessagesActivity");
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "MessagesActivity");
-        FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-    }
-
-
-    @Override
     public void onSuccess(String msg) {}
-
 
     @Override
     public void onFail(String msg) {
