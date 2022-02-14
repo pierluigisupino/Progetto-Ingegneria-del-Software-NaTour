@@ -30,6 +30,7 @@ public class MessagesActivity extends BaseActivity {
 
     private ConstraintLayout constraintLayout;
     private RecyclerView recyclerView;
+    private ImageButton buttonSend;
     private Bundle bundle  = new Bundle();
 
 
@@ -56,7 +57,7 @@ public class MessagesActivity extends BaseActivity {
         MaterialToolbar materialToolbar = binding.topAppBar;
         recyclerView = binding.recyclerView;
         EditText editMessage = binding.editMessage;
-        ImageButton buttonSend = binding.buttonSend;
+        buttonSend = binding.buttonSend;
 
         materialToolbar.setTitle(endUser.getName());
 
@@ -69,12 +70,11 @@ public class MessagesActivity extends BaseActivity {
 
         buttonSend.setOnClickListener(view1 -> {
             String body = editMessage.getText().toString();
-
             if(body.length() > 0){
                 Message message = new Message(body, LocalDateTime.now(), currentUser, endUser);
                 MessageController.getInstance().sendMessage(message);
-
                 editMessage.getText().clear();
+                buttonSend.setEnabled(false);
             }
         });
 
@@ -86,6 +86,7 @@ public class MessagesActivity extends BaseActivity {
     @SuppressWarnings("unchecked")
     public void updateChat(Message message){
         runOnUiThread(()-> {
+            buttonSend.setEnabled(true);
             ArrayList<Message> messages = (ArrayList<Message>) bundle.getSerializable("messages");
             messages.add(message);
             Objects.requireNonNull(recyclerView.getAdapter()).notifyItemInserted(messages.size() - 1);
@@ -105,11 +106,12 @@ public class MessagesActivity extends BaseActivity {
 
     @Override
     public void onFail(String msg) {
-        runOnUiThread(() ->
-                Snackbar.make(constraintLayout, msg, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(ContextCompat.getColor(MessagesActivity.this, R.color.error))
-                .show()
-        );
+        runOnUiThread(() -> {
+            buttonSend.setEnabled(true);
+            Snackbar.make(constraintLayout, msg, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(MessagesActivity.this, R.color.error))
+                    .show();
+        });
     }
 
 }
