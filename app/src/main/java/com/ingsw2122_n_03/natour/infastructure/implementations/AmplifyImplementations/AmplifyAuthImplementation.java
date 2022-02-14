@@ -1,4 +1,4 @@
-package com.ingsw2122_n_03.natour.infastructure.implementations;
+package com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyImplementations;
 
 import android.app.Activity;
 
@@ -6,6 +6,7 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.results.SignUpResult;
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.analytics.pinpoint.AWSPinpointAnalyticsPlugin;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.auth.AuthProvider;
@@ -40,6 +41,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         try {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
+            Amplify.addPlugin(new AWSPinpointAnalyticsPlugin(callingActivity.getApplication()));
             Amplify.configure(callingActivity.getApplicationContext());
             return true;
         }catch (Amplify.AlreadyConfiguredException ignored){
@@ -62,18 +64,25 @@ public final class AmplifyAuthImplementation implements AuthInterface {
         Amplify.Auth.signIn(
                 email,
                 password,
-                result -> controller.onSignInSuccess(),
+                result -> {
+                    Analytics.recordPositiveEvent("SignIn");
+                    controller.onSignInSuccess();
+                },
                 error -> {
 
                     String messageError = Objects.requireNonNull(error.getMessage());
 
                     if(messageError.contains("User not confirmed in the system")) {
+                        Analytics.recordNegativeEvent("SignIn", messageError);
                         controller.onSignInAuthentication(email, password);
                     }else if(messageError.contains("Failed since user is not authorized")){
+                        Analytics.recordNegativeEvent("SignIn", messageError);
                         controller.onSignInFailure(0);
                     }else if(messageError.contains("User not found in the system")){
+                        Analytics.recordNegativeEvent("SignIn", messageError);
                         controller.onSignInFailure(0);
                     }else {
+                        Analytics.recordNegativeEvent("SignIn", messageError);
                         controller.onSignInFailure(1);
                     }
                 }
@@ -89,14 +98,19 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 .build();
 
         Amplify.Auth.signUp(email, password, options,
-                result -> controller.onSignUpSuccess(email, password),
+                result -> {
+                    Analytics.recordPositiveEvent("SignUp");
+                    controller.onSignUpSuccess(email, password);
+                },
                 error -> {
 
                     String messageError = Objects.requireNonNull(error.getMessage());
 
                     if(messageError.contains("Username already exists in the system")) {
+                        Analytics.recordNegativeEvent("SignUp", messageError);
                         controller.onSignUpFailure(0);
                     }else {
+                        Analytics.recordNegativeEvent("SignUp", messageError);
                         controller.onSignUpFailure(1);
                     }
                 }
@@ -110,6 +124,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 email,
                 confirmationCode,
                 result -> {
+                    Analytics.recordPositiveEvent("ConfirmAccount");
                     controller.onConfirmSignUpSuccess();
                     if(result.isSignUpComplete()){
                         signIn(email, password);
@@ -120,6 +135,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                     String messageError = Objects.requireNonNull(error.getMessage());
 
                     if(messageError.contains("Confirmation code entered is not correct")) {
+                        Analytics.recordNegativeEvent("ConfirmAccount", messageError);
                         controller.onConfirmSignUpFailure(0);
                     }
                 }
@@ -133,6 +149,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
 
             @Override
             public void onResult(SignUpResult signUpResult) {
+                Analytics.recordPositiveEvent("SendVerificationCode");
                 controller.onSendVerificationCodeSuccess();
             }
 
@@ -142,8 +159,10 @@ public final class AmplifyAuthImplementation implements AuthInterface {
                 String messageError = Objects.requireNonNull(e.getMessage());
 
                 if(messageError.contains("Attempt limit exceeded")) {
+                    Analytics.recordNegativeEvent("SendVerificationCode", messageError);
                     controller.onSendVerificationCodeFailure(0);
                 }else {
+                    Analytics.recordNegativeEvent("SendVerificationCode", messageError);
                     controller.onSendVerificationCodeFailure(1);
                 }
             }
@@ -154,8 +173,14 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     @Override
     public void loginWithGoogle(BaseActivity callingActivity) {
         Amplify.Auth.signInWithSocialWebUI(AuthProvider.google(), callingActivity,
-                result -> controller.onLoginWithGoogleSuccess(),
-                error -> controller.onLoginWithGoogleFailure()
+                result -> {
+                    Analytics.recordPositiveEvent("LoginWithGoogle");
+                    controller.onLoginWithGoogleSuccess();
+                },
+                error -> {
+                    Analytics.recordNegativeEvent("LoginWithGoogle", error.getMessage());
+                    controller.onLoginWithGoogleFailure();
+                }
         );
     }
 
@@ -164,16 +189,22 @@ public final class AmplifyAuthImplementation implements AuthInterface {
 
         Amplify.Auth.resetPassword(
                 email,
-                result -> controller.onResetPasswordSuccess(email),
+                result -> {
+                    Analytics.recordPositiveEvent("ResetPassword");
+                    controller.onResetPasswordSuccess(email);
+                },
                 error -> {
 
                     String messageError = Objects.requireNonNull(error.getMessage());
 
                     if(messageError.contains("User not found in the system")) {
+                        Analytics.recordNegativeEvent("ResetPassword", messageError);
                         controller.onResetPasswordFailure(0);
                     }else if(messageError.contains("Number of allowed operation has exceeded")){
+                        Analytics.recordNegativeEvent("ResetPassword", messageError);
                         controller.onResetPasswordFailure(1);
                     }else {
+                        Analytics.recordNegativeEvent("ResetPassword", messageError);
                         controller.onResetPasswordFailure(2);
                     }
                 }
