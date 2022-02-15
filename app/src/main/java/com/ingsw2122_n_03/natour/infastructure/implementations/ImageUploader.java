@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
+import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyImplementations.Analytics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,6 +106,12 @@ public class ImageUploader {
                         out.write(Base64.getEncoder().encodeToString(photo));
                         out.close();
 
+                        if(connection.getResponseCode() == 200){
+                            Analytics.recordPositiveEvent("UploadPhoto");
+                        }else {
+                            Analytics.recordNegativeEvent("UploadPhoto", "Something went wrong");
+                        }
+
                         controller.onUploadPhotoFinish(connection.getResponseCode() == 200);
 
                     } catch (IOException | JSONException e) {
@@ -113,7 +120,10 @@ public class ImageUploader {
 
                 },
 
-                error -> controller.onUploadPhotoFinish(false)
+                error -> {
+                    Analytics.recordNegativeEvent("UploadPhoto", error.getMessage());
+                    controller.onUploadPhotoFinish(false);
+                }
         );
 
     }

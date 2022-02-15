@@ -13,8 +13,6 @@ public class Analytics {
                 .build();
 
         Amplify.Analytics.recordEvent(event);
-
-        Amplify.Analytics.flushEvents();
     }
 
     public static void recordNegativeEvent(String eventName, String error){
@@ -26,8 +24,6 @@ public class Analytics {
                 .build();
 
         Amplify.Analytics.recordEvent(event);
-
-        Amplify.Analytics.flushEvents();
     }
 
 }

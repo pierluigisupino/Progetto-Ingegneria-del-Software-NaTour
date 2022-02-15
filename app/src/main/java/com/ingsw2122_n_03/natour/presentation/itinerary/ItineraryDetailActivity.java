@@ -23,6 +23,7 @@ import com.ingsw2122_n_03.natour.R;
 import com.ingsw2122_n_03.natour.application.IterController;
 import com.ingsw2122_n_03.natour.application.MessageController;
 import com.ingsw2122_n_03.natour.databinding.ActivityItineraryDetailBinding;
+import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyImplementations.Analytics;
 import com.ingsw2122_n_03.natour.model.Admin;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
@@ -140,7 +141,10 @@ public class ItineraryDetailActivity extends BaseActivity {
         });
 
 
-        startButton.setOnClickListener(v -> iterController.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary));
+        startButton.setOnClickListener(v -> {
+            Analytics.recordPositiveEvent("FollowItinerary");
+            iterController.goToActivity(ItineraryDetailActivity.this, FollowItineraryActivity.class, itinerary);
+        });
 
         textViewFeedback.setOnClickListener(v -> {
             FeedBackDialog dialog = new FeedBackDialog();

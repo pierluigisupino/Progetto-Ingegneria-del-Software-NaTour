@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.application;
 import android.annotation.SuppressLint;
 
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyImplementations.Analytics;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageDownloader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageUploader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ItineraryDaoImplementation;
