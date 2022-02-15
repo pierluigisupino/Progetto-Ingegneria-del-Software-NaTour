@@ -50,8 +50,18 @@ public class PasswordTester {
      * **/
 
     @Test
-    public void checkPasswordWithSpaces() {
-        assertFalse(checker.isPasswordValid(" String space123 "));
+    public void checkPasswordWithoutSpaces() {
+        assertTrue(checker.isPasswordValid("MyPassword123"));
+    }
+
+    @Test
+    public void checkPasswordWithOneSpace() {
+        assertFalse(checker.isPasswordValid("String space123"));
+    }
+
+    @Test
+    public void checkPasswordWithMultipleSpaces() {
+        assertFalse(checker.isPasswordValid(" String - space123 "));
     }
 
 
