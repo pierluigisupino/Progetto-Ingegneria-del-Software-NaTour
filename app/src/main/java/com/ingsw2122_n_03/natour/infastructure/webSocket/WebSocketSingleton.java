@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.BuildConfig;
 import com.ingsw2122_n_03.natour.application.MessageController;
+import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyImplementations.Analytics;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
 
@@ -62,6 +63,7 @@ public class WebSocketSingleton {
             jsonObject.put("text", message.getBody());
             jsonObject.put("time", message.getTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
             webSocket.send(jsonObject.toString());
+            Analytics.recordPositiveEvent("SendMessage");
         } catch (JSONException ignored) {}
 
     }

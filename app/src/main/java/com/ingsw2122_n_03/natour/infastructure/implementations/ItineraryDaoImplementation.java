@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
+import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyImplementations.Analytics;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.ItineraryDaoInterface;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
@@ -70,13 +71,18 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                        try {
                            int i = Integer.parseInt(response.getData().asString());
+                           Analytics.recordPositiveEvent("InsertItinerary");
                            controller.onItineraryInsertSuccess(i);
                        }catch(NumberFormatException e) {
+                           Analytics.recordNegativeEvent("InsertItinerary", "Something went wrong");
                            controller.onItineraryInsertError();
                        }
                     },
 
-                error -> controller.onItineraryInsertError()
+                error -> {
+                    Analytics.recordNegativeEvent("InsertItinerary", error.getMessage());
+                    controller.onItineraryInsertError();
+                }
         );
 
     }
@@ -221,18 +227,24 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
                         if(statusCode == 200) {
                             iter.setModifiedSince(newModifiedSince);
+                            Analytics.recordPositiveEvent("ItineraryFeedback");
                             controller.onUpdateItinerarySuccess();
                             return;
                         }
 
+                        Analytics.recordNegativeEvent("ItineraryFeedback", String.valueOf(statusCode));
                         controller.onUpdateItineraryError(statusCode == 100);
 
                     } catch (JSONException e) {
+                        Analytics.recordNegativeEvent("ItineraryFeedback", "Something went wrong");
                         controller.onUpdateItineraryError(false);
                     }
 
                 },
-                error -> controller.onUpdateItineraryError(false)
+                error -> {
+                    Analytics.recordNegativeEvent("ItineraryFeedback", error.getMessage());
+                    controller.onUpdateItineraryError(false);
+                }
         );
 
     }
