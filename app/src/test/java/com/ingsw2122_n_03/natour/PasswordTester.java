@@ -9,20 +9,55 @@ public class PasswordTester {
 
     private final FormChecker checker = new FormChecker();
 
+
+    /**
+     * LENGTH
+     * **/
+
+    @Test
+    public void checkPasswordLengthZero() {
+        assertFalse(checker.isPasswordValid(""));
+    }
+
     @Test
     public void checkPasswordLengthLessThanMinimum() {
         assertFalse(checker.isPasswordValid("LE4GTh7"));
     }
 
     @Test
-    public void checkPasswordLengthMoreThanMaximum() {
-        assertFalse(checker.isPasswordValid("STRINGS_LUNCH1DISMISS1MA_SAENZ'S_SENS8"));
+    public void checkPasswordLengthEight() {
+        assertTrue(checker.isPasswordValid("Ad123f-8"));
     }
+
+    @Test
+    public void checkPasswordLengthMiddle() {
+        assertTrue(checker.isPasswordValid("Ad12345fPi_w14"));
+    }
+
+    @Test
+    public void checkPasswordLengthTwenty() {
+        assertTrue(checker.isPasswordValid("Ad12345fksJ-du469dhJ"));
+    }
+
+    @Test
+    public void checkPasswordLengthMoreThanMaximum() {
+        assertFalse(checker.isPasswordValid("STRINGS_lengthA231.21"));
+    }
+
+
+    /**
+     * SPACES
+     * **/
 
     @Test
     public void checkPasswordWithSpaces() {
         assertFalse(checker.isPasswordValid(" String space123 "));
     }
+
+
+    /**
+     * REGEX
+     * **/
 
     @Test
     public void checkPasswordWithoutNumber() {
@@ -39,19 +74,6 @@ public class PasswordTester {
         assertFalse(checker.isPasswordValid("NO-LOWER.HER3"));
     }
 
-    /**
-     * LIMIT CASES
-     * **/
-
-    @Test
-    public void checkPasswordLength8() {
-        assertTrue(checker.isPasswordValid("Ad12345f"));
-    }
-
-    @Test
-    public void checkPasswordLength20() {
-        assertTrue(checker.isPasswordValid("Ad12345fksJ-du469dhJ"));
-    }
 
     @Test
     public void checkPasswordOneNumeric() {
@@ -68,14 +90,5 @@ public class PasswordTester {
         assertTrue(checker.isPasswordValid("oNE-LOWER-H3R3"));
     }
 
-    /**
-     * FULL VALID
-     * **/
-
-    @Test
-    public void checkPasswordFullValid() {
-        assertTrue(checker.isPasswordValid("ThisIsValid276"));
-        assertTrue(checker.isPasswordValid("123one2THREE"));
-    }
 
 }
