@@ -30,7 +30,7 @@ public class DurationTester {
      * **/
 
     @Test /* (expected = IllegalArgumentException.class) */
-    public void testWithNewDurationEqualsZero() {
+    public void testAverageWithDurationEqualsZero() {
         LocalTime newDuration = new LocalTime(0, 0);
         assertThrows(IllegalArgumentException.class, ()-> itinerary.calculateAverageDuration(newDuration));
     }
@@ -42,15 +42,33 @@ public class DurationTester {
     }
 
 
+    /**
+     * TEST CASES
+     */
+
     @Test
-    public void testWithNewDurationGreater() {
+    public void testAverageWithMinDuration() {
+        LocalTime newDuration = new LocalTime(0, 1);
+        assertEquals(new LocalTime(1, 15), itinerary.calculateAverageDuration(newDuration));
+    }
+
+
+    @Test
+    public void testAverageWithMaxDuration() {
+        LocalTime newDuration = new LocalTime(23, 59);
+        assertEquals(new LocalTime(13, 14), itinerary.calculateAverageDuration(newDuration));
+    }
+
+
+    @Test
+    public void testAverageWithDurationLonger() {
         LocalTime newDuration = new LocalTime(3, 0);
         assertEquals(new LocalTime(2, 45), itinerary.calculateAverageDuration(newDuration));
     }
 
 
     @Test
-    public void testWithNewDurationSmaller() {
+    public void testAverageWithDurationShorter() {
         LocalTime newDuration = new LocalTime(2, 0);
         assertEquals(new LocalTime(2, 15), itinerary.calculateAverageDuration(newDuration));
     }
