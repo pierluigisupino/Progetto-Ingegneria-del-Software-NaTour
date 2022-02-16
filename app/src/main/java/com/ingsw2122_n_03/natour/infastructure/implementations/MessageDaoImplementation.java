@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
+import com.ingsw2122_n_03.natour.infastructure.exceptions.RetrieveMessagesException;
+import com.ingsw2122_n_03.natour.infastructure.exceptions.SetUpException;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.model.Message;
 import com.ingsw2122_n_03.natour.model.User;
@@ -28,7 +30,7 @@ public class MessageDaoImplementation implements MessageDaoInterface {
 
     @SuppressLint("NewApi")
     @Override
-    public HashMap<User, ArrayList<Message>> getChats(User currentUser) {
+    public HashMap<User, ArrayList<Message>> getChats(User currentUser) throws RetrieveMessagesException {
 
         CompletableFuture<HashMap<User, ArrayList<Message>>> completableFuture = new CompletableFuture<>();
 
@@ -50,7 +52,7 @@ public class MessageDaoImplementation implements MessageDaoInterface {
                         completableFuture.complete(parseChats(jsonArray, currentUser));
 
                     } catch (JSONException e) {
-                        completableFuture.cancel(true);
+                        completableFuture.completeExceptionally(new SetUpException());
                     }
 
                 },
@@ -59,12 +61,17 @@ public class MessageDaoImplementation implements MessageDaoInterface {
                     if(Objects.requireNonNull(error.getCause()).toString().contains("timeout"))
                         completableFuture.completeExceptionally(new TimeoutException());
                     else
-                        completableFuture.cancel(true);
+                        completableFuture.completeExceptionally(new SetUpException());
                 }
 
         );
 
-        return completableFuture.join();
+
+        try{
+            return completableFuture.join();
+        }catch(Exception e) {
+            throw new RetrieveMessagesException();
+        }
 
     }
 

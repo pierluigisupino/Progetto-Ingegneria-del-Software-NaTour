@@ -3,7 +3,8 @@ package com.ingsw2122_n_03.natour.application;
 import android.annotation.SuppressLint;
 
 import com.ingsw2122_n_03.natour.R;
-import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyImplementations.Analytics;
+import com.ingsw2122_n_03.natour.infastructure.exceptions.RetrieveItinerariesException;
+import com.ingsw2122_n_03.natour.infastructure.exceptions.SetUpException;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageDownloader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ImageUploader;
 import com.ingsw2122_n_03.natour.infastructure.implementations.ItineraryDaoImplementation;
@@ -27,7 +28,6 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
 
 
 public class IterController extends NavigationController {
@@ -86,8 +86,10 @@ public class IterController extends NavigationController {
             itineraries = itineraryDao.getSetUpItineraries();
             goToActivityAndFinish(splashActivity, MainActivity.class, itineraries);
             MessageController.getInstance().setUpMessages(currentUser);
-        } catch (Exception e) {
-            onSetUpError(e.getCause() instanceof TimeoutException);
+        } catch (RetrieveItinerariesException e) {
+            onSetUpError(true);
+        } catch (SetUpException e) {
+            onSetUpError(false);
         }
 
     }
@@ -115,7 +117,7 @@ public class IterController extends NavigationController {
             mainFragment.updateItineraries(itineraries);
             if(mainFragment.isVisible())
                 mainActivity.onSuccess(mainActivity.getResources().getString(R.string.update));
-        }catch(Exception e) {
+        }catch(RetrieveItinerariesException e) {
             onUpdateError();
         }
 
@@ -130,7 +132,7 @@ public class IterController extends NavigationController {
         try{
             itineraries.addAll(itineraryDao.getOlderItineraries(itineraries.get(itineraries.size()-1).getIterId()));
             mainFragment.updateItineraries(itineraries);
-        }catch(Exception e) {
+        }catch(RetrieveItinerariesException e) {
             onUpdateError();
         }
 

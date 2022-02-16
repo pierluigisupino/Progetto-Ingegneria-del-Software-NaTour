@@ -3,6 +3,7 @@ package com.ingsw2122_n_03.natour.application;
 import android.annotation.SuppressLint;
 
 import com.ingsw2122_n_03.natour.R;
+import com.ingsw2122_n_03.natour.infastructure.exceptions.RetrieveMessagesException;
 import com.ingsw2122_n_03.natour.infastructure.implementations.MessageDaoImplementation;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.MessageDaoInterface;
 import com.ingsw2122_n_03.natour.infastructure.webSocket.WebSocketSingleton;
@@ -15,7 +16,6 @@ import com.ingsw2122_n_03.natour.presentation.main.MainActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.concurrent.TimeoutException;
 
 
 public class MessageController extends NavigationController{
@@ -56,29 +56,21 @@ public class MessageController extends NavigationController{
             chats = messageDaoInterface.getChats(currentUser);
             WebSocketSingleton.getInstance();
             chatFragment.updateChats(chats);
-        }catch (Exception e) {
-            onRetrieveChatsError(e.getCause() instanceof TimeoutException);
+        }catch (RetrieveMessagesException e) {
+            onRetrieveChatsError();
         }
     }
 
 
     public void updateChats() {
-        try{
-            chats = messageDaoInterface.getChats(currentUser);
-            WebSocketSingleton.getInstance();
-            chatFragment.updateChats(chats);
-        }catch (Exception e) {
-            onRetrieveChatsError(e.getCause() instanceof TimeoutException);
-        }
+        setUpMessages(currentUser);
     }
 
 
-    public void onRetrieveChatsError(boolean isResolvableError) {
-        if(isResolvableError) {
-            chatFragment.onError();
-            if(chatFragment.isVisible())
-                mainActivity.onFail(mainActivity.getString(R.string.generic_error));
-        }
+    public void onRetrieveChatsError() {
+        chatFragment.onError();
+        if(chatFragment.isVisible())
+            mainActivity.onFail(mainActivity.getString(R.string.generic_error));
     }
 
 

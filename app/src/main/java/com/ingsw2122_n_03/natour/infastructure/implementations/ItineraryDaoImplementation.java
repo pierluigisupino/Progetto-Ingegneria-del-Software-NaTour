@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.ingsw2122_n_03.natour.application.IterController;
+import com.ingsw2122_n_03.natour.infastructure.exceptions.RetrieveItinerariesException;
+import com.ingsw2122_n_03.natour.infastructure.exceptions.SetUpException;
 import com.ingsw2122_n_03.natour.infastructure.implementations.AmplifyImplementations.Analytics;
 import com.ingsw2122_n_03.natour.infastructure.interfaces.ItineraryDaoInterface;
 import com.ingsw2122_n_03.natour.model.Itinerary;
@@ -90,7 +92,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
 
     @SuppressLint("NewApi")
     @Override
-    public ArrayList<Itinerary> getSetUpItineraries() {
+    public ArrayList<Itinerary> getSetUpItineraries() throws RetrieveItinerariesException, SetUpException {
 
         CompletableFuture<ArrayList<Itinerary>> completableFuture = new CompletableFuture<>();
 
@@ -105,7 +107,7 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                     try {
                         completableFuture.complete(parseItineraries(response.getData().asJSONObject().getJSONArray("Result")));
                     } catch (JSONException e) {
-                        completableFuture.cancel(true);
+                        completableFuture.completeExceptionally(new SetUpException());
                     }
 
                 },
@@ -115,20 +117,27 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                     if(Objects.requireNonNull(error.getCause()).toString().contains("timeout"))
                         completableFuture.completeExceptionally(new TimeoutException());
                     else
-                        completableFuture.cancel(true);
+                        completableFuture.completeExceptionally(new SetUpException());
 
                 }
 
         );
 
-        return completableFuture.join();
+        try {
+            return completableFuture.join();
+        }catch(Exception e) {
+            if(e.getCause() instanceof TimeoutException)
+                throw new RetrieveItinerariesException();
+            else
+                throw new SetUpException();
+        }
 
     }
 
 
     @SuppressLint("NewApi")
     @Override
-    public ArrayList<Itinerary> getRecentItineraries() {
+    public ArrayList<Itinerary> getRecentItineraries() throws RetrieveItinerariesException {
 
         CompletableFuture<ArrayList<Itinerary>> completableFuture = new CompletableFuture<>();
 
@@ -143,23 +152,27 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                     try {
                         completableFuture.complete(parseItineraries(response.getData().asJSONObject().getJSONArray("Result")));
                     } catch (JSONException e) {
-                        completableFuture.completeExceptionally(new Exception());
+                        completableFuture.completeExceptionally(new RetrieveItinerariesException());
                     }
 
                 },
 
-                error -> completableFuture.completeExceptionally(new Exception())
+                error -> completableFuture.completeExceptionally(new RetrieveItinerariesException())
 
         );
 
-        return completableFuture.join();
+        try{
+            return completableFuture.join();
+        }catch (Exception e) {
+            throw new RetrieveItinerariesException();
+        }
 
     }
 
 
     @SuppressLint("NewApi")
     @Override
-    public ArrayList<Itinerary> getOlderItineraries(int iterId) {
+    public ArrayList<Itinerary> getOlderItineraries(int iterId) throws RetrieveItinerariesException {
 
         CompletableFuture<ArrayList<Itinerary>> completableFuture = new CompletableFuture<>();
 
@@ -178,16 +191,20 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
                     try {
                         completableFuture.complete(parseItineraries(response.getData().asJSONObject().getJSONArray("Result")));
                     } catch (JSONException e) {
-                        completableFuture.completeExceptionally(new Exception());
+                        completableFuture.completeExceptionally(new RetrieveItinerariesException());
                     }
 
                 },
 
-                error -> completableFuture.completeExceptionally(new Exception())
+                error -> completableFuture.completeExceptionally(new RetrieveItinerariesException())
 
         );
 
-        return completableFuture.join();
+        try{
+            return completableFuture.join();
+        }catch (Exception e) {
+            throw new RetrieveItinerariesException();
+        }
 
     }
 
