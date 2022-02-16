@@ -20,9 +20,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeoutException;
 
 
 public class MessageDaoImplementation implements MessageDaoInterface {
@@ -57,12 +55,7 @@ public class MessageDaoImplementation implements MessageDaoInterface {
 
                 },
 
-                error -> {
-                    if(Objects.requireNonNull(error.getCause()).toString().contains("timeout"))
-                        completableFuture.completeExceptionally(new TimeoutException());
-                    else
-                        completableFuture.completeExceptionally(new SetUpException());
-                }
+                error -> completableFuture.completeExceptionally(new SetUpException())
 
         );
 

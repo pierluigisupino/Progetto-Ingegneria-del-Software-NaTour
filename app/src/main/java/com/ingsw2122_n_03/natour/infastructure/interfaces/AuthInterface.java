@@ -16,6 +16,6 @@ public interface AuthInterface {
      void resetPassword(String email);
      void confirmResetPassword(String newPassword, String confirmationCode);
      void signOut();
-     void getCurrentUser();
+     void initialize();
 
 }

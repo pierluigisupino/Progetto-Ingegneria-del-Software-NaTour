@@ -51,7 +51,7 @@ public final class AuthController extends NavigationController {
         if(authInterface.configurePlugins(splashActivity)) {
 
             if (authInterface.checkUserLogged())
-                authInterface.getCurrentUser();
+                authInterface.initialize();
             else
                 goToActivityAndFinish(splashActivity, WelcomeActivity.class);
 

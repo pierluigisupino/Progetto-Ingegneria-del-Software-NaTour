@@ -238,7 +238,7 @@ public final class AmplifyAuthImplementation implements AuthInterface {
     }
 
     @Override
-    public void getCurrentUser() {
+    public void initialize() {
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("uid", Amplify.Auth.getCurrentUser().getUserId());
