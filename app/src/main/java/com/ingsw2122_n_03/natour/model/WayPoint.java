@@ -3,7 +3,7 @@ package com.ingsw2122_n_03.natour.model;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
-import java.util.Objects;
+
 
 public class WayPoint implements Serializable {
 
@@ -30,6 +30,10 @@ public class WayPoint implements Serializable {
     public double getLongitude() {
         return longitude;
     }
+
+    /**
+     * SERVICES
+     */
 
     @Override
     public boolean equals(Object o) {

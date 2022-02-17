@@ -15,19 +15,11 @@ public class User implements Serializable {
         userId = uid;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(userId, user.userId) && Objects.equals(name, user.name);
-    }
 
     /**GETTERS
        &
     SETTERS
     */
-
 
 
     public String getUid() {
@@ -41,6 +33,19 @@ public class User implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    /**
+     * SERVICES
+     */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userId, user.userId) && Objects.equals(name, user.name);
     }
 
 }

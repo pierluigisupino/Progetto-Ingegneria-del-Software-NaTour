@@ -1,7 +1,6 @@
 package com.ingsw2122_n_03.natour.infastructure.implementations;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
@@ -104,8 +103,6 @@ public final class ItineraryDaoImplementation implements ItineraryDaoInterface {
         Amplify.API.get(
                 options,
                 response -> {
-
-                    Log.e("test", response.getData().asString());
 
                     try {
                         completableFuture.complete(parseItineraries(response.getData().asJSONObject().getJSONArray("Result")));

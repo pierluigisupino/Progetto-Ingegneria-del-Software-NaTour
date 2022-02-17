@@ -224,6 +224,10 @@ public class IterController extends NavigationController {
         updatedIter.setDescription(description);
         updatedIter.setDifficulty(difficulty);
         updatedIter.setDuration(duration);
+        if(currentIter.equals(updatedIter)) {
+            detailActivity.onSuccess(detailActivity.getString(R.string.feedback_no_changes));
+            return;
+        }
         updatedIter.setEditDate(new Date());
         loadingDialog = new LoadingDialog(detailActivity, detailActivity.getString(R.string.loading_text_update_itinerary));
         loadingDialog.startLoading();
@@ -264,7 +268,7 @@ public class IterController extends NavigationController {
         updatedIter.setDuration(currentIter.calculateAverageDuration(newDuration));
         updatedIter.setDifficulty(currentIter.calculateAverageDifficulty(newDifficulty));
 
-        if((currentIter.getDifficulty() == updatedIter.getDifficulty()) && (currentIter.getDuration().compareTo(updatedIter.getDuration()) == 0))
+        if(currentIter.equals(updatedIter))
             detailActivity.onSuccess(detailActivity.getString(R.string.feedback_no_changes));
         else {
             itineraryDao.putItineraryFromFeedback(updatedIter);

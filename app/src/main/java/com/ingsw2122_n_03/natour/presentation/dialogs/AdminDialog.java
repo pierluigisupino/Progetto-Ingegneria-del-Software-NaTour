@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,15 +31,15 @@ import org.joda.time.LocalTime;
 
 import java.util.Objects;
 
-public class AdminDialog extends AppCompatDialogFragment implements TextWatcher {
+public class AdminDialog extends AppCompatDialogFragment {
 
     private TextInputEditText nameEditText;
     private TextInputLayout nameLayout;
+    private TimePicker timePicker;
 
     private TextInputEditText descriptionEditText;
 
     private boolean isFirstSubmit = true;
-    private boolean isChanged = false;
 
     @NonNull
     @Override
@@ -49,7 +50,7 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
         View view = inflater.inflate(R.layout.dialog_admin, null);
 
-        TimePicker timePicker = view.findViewById(R.id.timePicker);
+        timePicker = view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
         assert getArguments() != null;
@@ -82,7 +83,6 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                isChanged = true;
                 if(!isFirstSubmit) isNameValid();
             }
 
@@ -90,12 +90,6 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
             public void afterTextChanged(Editable editable) {}
 
         });
-
-        descriptionEditText.addTextChangedListener(this);
-        autoCompleteTextView.addTextChangedListener(this);
-
-        timePicker.setOnTimeChangedListener((timePicker1, i, i1) -> isChanged = true);
-
 
         builder.setView(view)
                 .setNegativeButton(getString(R.string.cancel), (dialog, which) -> {});
@@ -121,7 +115,6 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
             buttonPositive.setOnClickListener(view1 -> {
                 isFirstSubmit = false;
-
                 InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(buttonPositive.getWindowToken(), 0);
 
@@ -131,19 +124,15 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
                 int hours = timePicker.getHour();
                 int minutes = timePicker.getMinute();
 
-                if(isChanged & isNameValid()) {
+                if(isNameValid() & isDurationValid()) {
                     IterController.getInstance().putItineraryByAdmin(name, description, difficulty, new LocalTime(hours, minutes));
                     dialog.dismiss();
-                }else if(!isChanged){
-                    dialog.dismiss();
                 }
-
             });
 
             buttonNegative.setOnClickListener(view1 -> {
                 InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(buttonNegative.getWindowToken(), 0);
-
                 dialog.dismiss();
             });
         });
@@ -151,6 +140,14 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog);
         return dialog;
 
+    }
+
+    private boolean isDurationValid() {
+        if(timePicker.getHour() == 0 && timePicker.getMinute() == 0) {
+            Toast.makeText(getContext(), R.string.duration_error, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     public boolean isNameValid(){
@@ -170,15 +167,5 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
         return true;
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        isChanged = true;
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {}
 
 }

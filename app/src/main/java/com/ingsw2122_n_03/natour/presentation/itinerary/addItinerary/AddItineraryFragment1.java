@@ -136,8 +136,6 @@ public class AddItineraryFragment1 extends Fragment {
         if(description.length() > 0) {
             description = description.trim();
             description = description.substring(0,1).toUpperCase()+description.substring(1);
-            if(description.charAt(description.length() - 1) != '.')
-                description = description + ".";
         }
 
         return description;
