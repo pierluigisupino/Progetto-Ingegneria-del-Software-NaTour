@@ -77,7 +77,7 @@ public class Itinerary implements Serializable {
 
     public void setDifficulty(int difficulty) {
         if(difficulty < 0)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Difficulty must be positive");
         this.difficulty = difficulty;
     }
 
@@ -86,7 +86,7 @@ public class Itinerary implements Serializable {
 
     public void setDuration(LocalTime duration) {
         if(duration.getHourOfDay() == 0 && duration.getMinuteOfHour() == 0)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Duration must not be Zero");
         this.duration = duration;
     }
 
@@ -138,6 +138,10 @@ public class Itinerary implements Serializable {
     }
 
 
+    /**
+     * SERVICES
+     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -145,10 +149,6 @@ public class Itinerary implements Serializable {
         Itinerary itinerary = (Itinerary) o;
         return difficulty == itinerary.difficulty && modifiedSince == itinerary.modifiedSince && iterId == itinerary.iterId && Objects.equals(name, itinerary.name) && Objects.equals(description, itinerary.description) && Objects.equals(duration, itinerary.duration) && Objects.equals(startPoint, itinerary.startPoint) && Objects.equals(wayPoints, itinerary.wayPoints) && Objects.equals(creator, itinerary.creator) && Objects.equals(shareDate, itinerary.shareDate) && Objects.equals(editDate, itinerary.editDate);
     }
-    /**
-     * SERVICES
-     */
-
 
 
     public LocalTime calculateAverageDuration(LocalTime duration) {
@@ -157,7 +157,7 @@ public class Itinerary implements Serializable {
         int newMinutes = duration.getMinuteOfHour();
 
         if(newHours == 0 && newMinutes == 0)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Duration must not be Zero");
 
         int newAccumulatedMinutes = newMinutes + (newHours * 60);
         int currAccumulatedMinutes = this.duration.getMinuteOfHour() + (this.duration.getHourOfDay() * 60);

@@ -18,6 +18,7 @@ import java.util.Date;
 
 public class ParseItinerariesMock {
 
+
     @SuppressLint("NewApi")
     public ArrayList<Itinerary> parseItineraries(JSONArray result) throws JSONException {
 
@@ -86,4 +87,5 @@ public class ParseItinerariesMock {
         return iters;
 
     }
+
 }
