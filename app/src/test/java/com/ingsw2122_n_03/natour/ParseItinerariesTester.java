@@ -1,6 +1,6 @@
 package com.ingsw2122_n_03.natour;
 
-import com.ingsw2122_n_03.natour.mock.ParseItineriesMock;
+import com.ingsw2122_n_03.natour.mock.ParseItinerariesMock;
 import com.ingsw2122_n_03.natour.model.Itinerary;
 import com.ingsw2122_n_03.natour.model.User;
 import com.ingsw2122_n_03.natour.model.WayPoint;
@@ -19,16 +19,16 @@ import java.util.ArrayList;
 
 public class ParseItinerariesTester {
 
-    ParseItineriesMock parseItineriesMock;
+    ParseItinerariesMock parseItinerariesMock;
 
     @Before
     public void setUp(){
-        parseItineriesMock = new ParseItineriesMock();
+        parseItinerariesMock = new ParseItinerariesMock();
     }
 
     @Test
     public void parseItineraryWithEmptyJSONArray() throws JSONException {
-        ArrayList<Itinerary> result = parseItineriesMock.parseItineraries(new JSONArray());
+        ArrayList<Itinerary> result = parseItinerariesMock.parseItineraries(new JSONArray());
         assertTrue(result.isEmpty());
     }
 
@@ -42,7 +42,7 @@ public class ParseItinerariesTester {
                 "\"updatedate\":null,\"modifiedsince\":\"1644923584176\",\"creatorname\":\"User1\"}]";
 
         JSONArray jsonArray = new JSONArray(wrongItineraryJson);
-        assertThrows(JSONException.class, () -> parseItineriesMock.parseItineraries(jsonArray));
+        assertThrows(JSONException.class, () -> parseItinerariesMock.parseItineraries(jsonArray));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ParseItinerariesTester {
         itineraries.add(itinerary);
 
         JSONArray jsonArray = new JSONArray(correctItineraryJson);
-        ArrayList<Itinerary> result =  parseItineriesMock.parseItineraries(jsonArray);
+        ArrayList<Itinerary> result =  parseItinerariesMock.parseItineraries(jsonArray);
 
         assertEquals(itineraries, result);
     }
@@ -82,7 +82,7 @@ public class ParseItinerariesTester {
     @Test
     public void parseItineraryWithEmptyItineraryJSON(){
         String emptyItineraryJson = "[{}]";
-        assertThrows(JSONException.class, () -> parseItineriesMock.parseItineraries(new JSONArray(emptyItineraryJson)));
+        assertThrows(JSONException.class, () -> parseItinerariesMock.parseItineraries(new JSONArray(emptyItineraryJson)));
     }
 
 }

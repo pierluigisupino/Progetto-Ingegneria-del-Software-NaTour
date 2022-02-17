@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ParseItineriesMock {
+public class ParseItinerariesMock {
 
     @SuppressLint("NewApi")
     public ArrayList<Itinerary> parseItineraries(JSONArray result) throws JSONException {
