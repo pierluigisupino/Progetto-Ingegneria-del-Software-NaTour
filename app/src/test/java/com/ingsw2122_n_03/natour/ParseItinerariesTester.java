@@ -123,7 +123,7 @@ public class ParseItinerariesTester {
     @Test
     public void parseItineraryWithLessThan11Fields() {
 
-        String itineraryJson = "[{\"iteriddd\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
+        String itineraryJson = "[{\"iterid\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
                 "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
                 "\"waypoints\":[{\"Latitude\":\"41.90795968255628\",\"Longitude\":\"12.493655406267607\"}]," +
                 "\"creatorid\":\"7bba5c72-7fbe-45ad-996a-686c8685a9b8\",\"sharedate\":\"2022A-02-15T00:00:00.000Z\"," +
