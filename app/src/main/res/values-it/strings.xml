@@ -89,7 +89,7 @@
 
     <string name="warning_text">Attenzione</string>
 
-    <string name="generic_error">Something went wrong, try again later.</string>
+    <string name="generic_error">Qualcosa è andato storto, riprova più tardi.</string>
     <string name="resolvable_error">Oh no!\nQualcosa e\' andato storto</string>
     <string name="resolve_error">Pull to try again</string>
 
@@ -168,7 +168,7 @@
     <string name="itinerary_delete_failure">Eliminazione non riuscita, riprova</string>
     <string name="itinerary_deleted_text">Itinerario eliminato</string>
     <string name="itinerary_delete_confirm_text">Vuoi davvero eliminare questo itinerario?\nL\'azione sarà irreversibile.</string>
-    <string name="itinerary_update_warning">Sembra che l\'itinerario sia stato aggiornato, aggiorna i tuoi itinerary</string>
+    <string name="itinerary_update_warning">Sembra che l\'itinerario sia stato aggiornato, aggiorna i tuoi itinerari</string>
 
     <!--FOLLOW ITINERARY-->
     <string name="start_point_text">Punto iniziale</string>

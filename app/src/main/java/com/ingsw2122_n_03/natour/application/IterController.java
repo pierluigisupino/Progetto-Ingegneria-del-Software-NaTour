@@ -268,7 +268,7 @@ public class IterController extends NavigationController {
         updatedIter.setDuration(currentIter.calculateAverageDuration(newDuration));
         updatedIter.setDifficulty(currentIter.calculateAverageDifficulty(newDifficulty));
 
-        if((currentIter.getDifficulty() == updatedIter.getDifficulty()) && (currentIter.getDuration().compareTo(updatedIter.getDuration()) == 0))
+        if(currentIter.equals(updatedIter))
             detailActivity.onSuccess(detailActivity.getString(R.string.feedback_no_changes));
         else {
             itineraryDao.putItineraryFromFeedback(updatedIter);

@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ public class AdminDialog extends AppCompatDialogFragment {
 
     private TextInputEditText nameEditText;
     private TextInputLayout nameLayout;
+    private TimePicker timePicker;
 
     private TextInputEditText descriptionEditText;
 
@@ -48,7 +50,7 @@ public class AdminDialog extends AppCompatDialogFragment {
 
         View view = inflater.inflate(R.layout.dialog_admin, null);
 
-        TimePicker timePicker = view.findViewById(R.id.timePicker);
+        timePicker = view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
         assert getArguments() != null;
@@ -122,7 +124,7 @@ public class AdminDialog extends AppCompatDialogFragment {
                 int hours = timePicker.getHour();
                 int minutes = timePicker.getMinute();
 
-                if(isNameValid()) {
+                if(isNameValid() & isDurationValid()) {
                     IterController.getInstance().putItineraryByAdmin(name, description, difficulty, new LocalTime(hours, minutes));
                     dialog.dismiss();
                 }
@@ -138,6 +140,14 @@ public class AdminDialog extends AppCompatDialogFragment {
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog);
         return dialog;
 
+    }
+
+    private boolean isDurationValid() {
+        if(timePicker.getHour() == 0 && timePicker.getMinute() == 0) {
+            Toast.makeText(getContext(), R.string.duration_error, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     public boolean isNameValid(){
