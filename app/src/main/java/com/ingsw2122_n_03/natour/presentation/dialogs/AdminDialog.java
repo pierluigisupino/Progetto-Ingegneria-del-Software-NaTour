@@ -30,7 +30,7 @@ import org.joda.time.LocalTime;
 
 import java.util.Objects;
 
-public class AdminDialog extends AppCompatDialogFragment implements TextWatcher {
+public class AdminDialog extends AppCompatDialogFragment {
 
     private TextInputEditText nameEditText;
     private TextInputLayout nameLayout;
@@ -38,7 +38,6 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
     private TextInputEditText descriptionEditText;
 
     private boolean isFirstSubmit = true;
-    private boolean isChanged = false;
 
     @NonNull
     @Override
@@ -82,7 +81,6 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                isChanged = true;
                 if(!isFirstSubmit) isNameValid();
             }
 
@@ -90,12 +88,6 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
             public void afterTextChanged(Editable editable) {}
 
         });
-
-        descriptionEditText.addTextChangedListener(this);
-        autoCompleteTextView.addTextChangedListener(this);
-
-        timePicker.setOnTimeChangedListener((timePicker1, i, i1) -> isChanged = true);
-
 
         builder.setView(view)
                 .setNegativeButton(getString(R.string.cancel), (dialog, which) -> {});
@@ -121,7 +113,6 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
 
             buttonPositive.setOnClickListener(view1 -> {
                 isFirstSubmit = false;
-
                 InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(buttonPositive.getWindowToken(), 0);
 
@@ -131,19 +122,15 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
                 int hours = timePicker.getHour();
                 int minutes = timePicker.getMinute();
 
-                if(isChanged & isNameValid()) {
+                if(isNameValid()) {
                     IterController.getInstance().putItineraryByAdmin(name, description, difficulty, new LocalTime(hours, minutes));
                     dialog.dismiss();
-                }else if(!isChanged){
-                    dialog.dismiss();
                 }
-
             });
 
             buttonNegative.setOnClickListener(view1 -> {
                 InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(buttonNegative.getWindowToken(), 0);
-
                 dialog.dismiss();
             });
         });
@@ -170,15 +157,5 @@ public class AdminDialog extends AppCompatDialogFragment implements TextWatcher 
         return true;
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        isChanged = true;
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {}
 
 }

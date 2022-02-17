@@ -224,6 +224,10 @@ public class IterController extends NavigationController {
         updatedIter.setDescription(description);
         updatedIter.setDifficulty(difficulty);
         updatedIter.setDuration(duration);
+        if(currentIter.equals(updatedIter)) {
+            detailActivity.onSuccess(detailActivity.getString(R.string.feedback_no_changes));
+            return;
+        }
         updatedIter.setEditDate(new Date());
         loadingDialog = new LoadingDialog(detailActivity, detailActivity.getString(R.string.loading_text_update_itinerary));
         loadingDialog.startLoading();
