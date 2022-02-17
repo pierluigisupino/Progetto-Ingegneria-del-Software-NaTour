@@ -80,9 +80,10 @@ public class ParseItinerariesTester {
     }
 
     @Test
-    public void parseItineraryWithEmptyItineraryJSON(){
-        String emptyItineraryJson = "[{}]";
-        assertThrows(JSONException.class, () -> parseItinerariesMock.parseItineraries(new JSONArray(emptyItineraryJson)));
+    public void parseItineraryWithEmptyItineraryJSON() throws JSONException{
+        String emptyItineraryJson = "[]";
+        ArrayList<Itinerary> result =  parseItinerariesMock.parseItineraries(new JSONArray(emptyItineraryJson));
+        assertTrue(result.isEmpty());
     }
 
 }
