@@ -73,4 +73,17 @@ public class DurationTester {
         assertEquals(new LocalTime(2, 15), itinerary.calculateAverageDuration(newDuration));
     }
 
+    @Test
+    public void testAverageWithDurationMinusOne() {
+        LocalTime newDuration = itinerary.getDuration().minusMinutes(1);
+        assertEquals(newDuration, itinerary.calculateAverageDuration(newDuration));
+    }
+
+    @Test
+    public void testAverageWithDurationPlusOne() {
+        LocalTime newDuration = itinerary.getDuration().plusMinutes(1);
+        assertEquals(itinerary.getDuration(), itinerary.calculateAverageDuration(newDuration));
+    }
+
+
 }
