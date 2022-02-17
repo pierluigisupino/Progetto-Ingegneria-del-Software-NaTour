@@ -27,28 +27,9 @@ public class ParseItinerariesTester {
     }
 
     @Test
-    public void parseItineraryWithEmptyJSONArray() throws JSONException {
-        ArrayList<Itinerary> result = parseItinerariesMock.parseItineraries(new JSONArray());
-        assertTrue(result.isEmpty());
-    }
+    public void parseItineraryWithCorrectInput() throws JSONException{
 
-    @Test
-    public void parseItineraryWithWrongItineraryJSON() throws JSONException{
-
-        String wrongItineraryJson = "[{\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
-                "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
-                "\"waypoints\":[{\"Latitude\":\"41.90795968255628\",\"Longitude\":\"12.493655406267607\"}]," +
-                "\"creatorid\":\"7bba5c72-7fbe-45ad-996a-686c8685a9b8\",\"sharedate\":\"2022-02-15T00:00:00.000Z\"," +
-                "\"updatedate\":null,\"modifiedsince\":\"1644923584176\",\"creatorname\":\"User1\"}]";
-
-        JSONArray jsonArray = new JSONArray(wrongItineraryJson);
-        assertThrows(JSONException.class, () -> parseItinerariesMock.parseItineraries(jsonArray));
-    }
-
-    @Test
-    public void parseItineraryWithCorrectItineraryJSON() throws JSONException {
-
-        String correctItineraryJson = "[{\"iterid\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
+        String itineraryJson = "[{\"iterid\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
                 "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
                 "\"waypoints\":[{\"Latitude\":\"41.90795968255628\",\"Longitude\":\"12.493655406267607\"}]," +
                 "\"creatorid\":\"7bba5c72-7fbe-45ad-996a-686c8685a9b8\",\"sharedate\":\"2022-02-15T00:00:00.000Z\"," +
@@ -73,17 +54,81 @@ public class ParseItinerariesTester {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         itineraries.add(itinerary);
 
-        JSONArray jsonArray = new JSONArray(correctItineraryJson);
-        ArrayList<Itinerary> result =  parseItinerariesMock.parseItineraries(jsonArray);
-
+        ArrayList<Itinerary> result =  parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson));
         assertEquals(itineraries, result);
     }
 
     @Test
-    public void parseItineraryWithEmptyItineraryJSON() throws JSONException{
-        String emptyItineraryJson = "[]";
-        ArrayList<Itinerary> result =  parseItinerariesMock.parseItineraries(new JSONArray(emptyItineraryJson));
-        assertTrue(result.isEmpty());
+    public void parseItineraryWithWrongFieldRepresentation() {
+
+        String itineraryJson = "[{\"iterid\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
+                "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
+                "\"waypoints\":[{\"Latitude\":\"41.90795968255628\",\"Longitude\":\"12.493655406267607\"}]," +
+                "\"creatorid\":\"7bba5c72-7fbe-45ad-996a-686c8685a9b8\",\"sharedate\":\"2022A-02-15T00:00:00.000Z\"," +
+                "\"updatedate\":null,\"modifiedsince\":\"1644923584176\",\"creatorname\":\"User1\"}]";
+
+        assertThrows(Exception.class, () -> parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson)));
+
     }
 
+    @Test
+    public void parseItineraryWithWrongNomination() {
+
+        String itineraryJson = "[{\"iteriddd\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
+                "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
+                "\"waypoints\":[{\"Latitude\":\"41.90795968255628\",\"Longitude\":\"12.493655406267607\"}]," +
+                "\"creatorid\":\"7bba5c72-7fbe-45ad-996a-686c8685a9b8\",\"sharedate\":\"2022-02-15T00:00:00.000Z\"," +
+                "\"updatedate\":null,\"modifiedsince\":\"1644923584176\",\"creatorname\":\"User1\"}]";
+
+        assertThrows(JSONException.class, () -> parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson)));
+    }
+
+    @Test
+    public void parseItineraryWithMoreThan11Fields() throws JSONException{
+
+        String itineraryJson = "[{\"iterid\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
+                "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
+                "\"waypoints\":[{\"Latitude\":\"41.90795968255628\",\"Longitude\":\"12.493655406267607\"}]," +
+                "\"creatorid\":\"7bba5c72-7fbe-45ad-996a-686c8685a9b8\",\"sharedate\":\"2022-02-15T00:00:00.000Z\"," +
+                "\"updatedate\":null,\"modifiedsince\":\"1644923584176\",\"creatorname\":\"User1\",\"extraField\":\"Extra\"}]";
+
+        ArrayList<Itinerary> result =  parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson));
+        assertFalse(result.isEmpty());
+    }
+
+    @Test
+    public void parseItineraryWithMoreThan11FieldsAndWrongRepresentation() {
+
+        String itineraryJson = "[{\"iterid\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
+                "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
+                "\"waypoints\":[{\"Latitude\":\"41.90795968255628\",\"Longitude\":\"12.493655406267607\"}]," +
+                "\"creatorid\":\"7bba5c72-7fbe-45ad-996a-686c8685a9b8\",\"sharedate\":\"2022A-02-15T00:00:00.000Z\"," +
+                "\"updatedate\":null,\"modifiedsince\":\"1644923584176\",\"creatorname\":\"User1\",\"extraField\":\"Extra\"}]";
+
+        assertThrows(Exception.class, () -> parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson)));
+    }
+
+    @Test
+    public void parseItineraryWithMoreThan11FieldsAndWrongNomination() {
+
+        String itineraryJson = "[{\"iteriddd\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
+                "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
+                "\"waypoints\":[{\"Latitude\":\"41.90795968255628\",\"Longitude\":\"12.493655406267607\"}]," +
+                "\"creatorid\":\"7bba5c72-7fbe-45ad-996a-686c8685a9b8\",\"sharedate\":\"2022-02-15T00:00:00.000Z\"," +
+                "\"updatedate\":null,\"modifiedsince\":\"1644923584176\",\"creatorname\":\"User1\",\"extraField\":\"Extra\"}]";
+
+        assertThrows(JSONException.class, () -> parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson)));
+    }
+
+    @Test
+    public void parseItineraryWithLessThan11Fields() {
+
+        String itineraryJson = "[{\"iteriddd\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
+                "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
+                "\"waypoints\":[{\"Latitude\":\"41.90795968255628\",\"Longitude\":\"12.493655406267607\"}]," +
+                "\"creatorid\":\"7bba5c72-7fbe-45ad-996a-686c8685a9b8\",\"sharedate\":\"2022A-02-15T00:00:00.000Z\"," +
+                "\"updatedate\":null,\"modifiedsince\":\"1644923584176\"}]";
+
+        assertThrows(JSONException.class, () -> parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson)));
+    }
 }
