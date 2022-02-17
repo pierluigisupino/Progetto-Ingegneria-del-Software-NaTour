@@ -84,7 +84,7 @@ public class ParseItinerariesTester {
     }
 
     @Test
-    public void parseItineraryWithMoreThan11Fields() throws JSONException{
+    public void parseItineraryWithMoreThan13Fields() throws JSONException{
 
         String itineraryJson = "[{\"iterid\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
                 "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
@@ -97,7 +97,7 @@ public class ParseItinerariesTester {
     }
 
     @Test
-    public void parseItineraryWithMoreThan11FieldsAndWrongRepresentation() {
+    public void parseItineraryWithMoreThan13FieldsAndWrongRepresentation() {
 
         String itineraryJson = "[{\"iterid\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
                 "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
@@ -109,7 +109,7 @@ public class ParseItinerariesTester {
     }
 
     @Test
-    public void parseItineraryWithMoreThan11FieldsAndWrongNomination() {
+    public void parseItineraryWithMoreThan13FieldsAndWrongNomination() {
 
         String itineraryJson = "[{\"iteriddd\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
                 "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
@@ -121,7 +121,7 @@ public class ParseItinerariesTester {
     }
 
     @Test
-    public void parseItineraryWithLessThan11Fields() {
+    public void parseItineraryWithLessThan13Fields() {
 
         String itineraryJson = "[{\"iterid\":5,\"itername\":\"Roma\",\"description\":null,\"difficulty\":0,\"hours\":1,\"minutes\":0," +
                 "\"startpoint\":{\"x\":41.91215825489158,\"y\":12.492356197611912}," +
@@ -130,5 +130,14 @@ public class ParseItinerariesTester {
                 "\"updatedate\":null,\"modifiedsince\":\"1644923584176\"}]";
 
         assertThrows(JSONException.class, () -> parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson)));
+    }
+
+    @Test
+    public void parseItineraryWithEmptyJson() throws JSONException{
+
+        String itineraryJson = "[]";
+
+        ArrayList<Itinerary> result =  parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson));
+        assertTrue(result.isEmpty());
     }
 }
