@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Itinerary implements Serializable {
@@ -137,9 +138,18 @@ public class Itinerary implements Serializable {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Itinerary itinerary = (Itinerary) o;
+        return difficulty == itinerary.difficulty && modifiedSince == itinerary.modifiedSince && iterId == itinerary.iterId && Objects.equals(name, itinerary.name) && Objects.equals(description, itinerary.description) && Objects.equals(duration, itinerary.duration) && Objects.equals(startPoint, itinerary.startPoint) && Objects.equals(wayPoints, itinerary.wayPoints) && Objects.equals(creator, itinerary.creator) && Objects.equals(shareDate, itinerary.shareDate) && Objects.equals(editDate, itinerary.editDate);
+    }
     /**
      * SERVICES
      */
+
+
 
     public LocalTime calculateAverageDuration(LocalTime duration) {
 
