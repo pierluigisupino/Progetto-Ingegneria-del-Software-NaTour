@@ -107,4 +107,13 @@ public class ParseItinerariesTesterWhiteBox {
         assertTrue(result.get(0).getWayPoints().isEmpty());
     }
 
+    @Test
+    public void parseItineraryWithEmptyJson() throws JSONException{
+
+        String itineraryJson = "[]";
+
+        ArrayList<Itinerary> result =  parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson));
+        assertTrue(result.isEmpty());
+    }
+
 }
