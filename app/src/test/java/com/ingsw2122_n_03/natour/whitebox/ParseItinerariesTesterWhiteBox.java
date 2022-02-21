@@ -1,9 +1,6 @@
 package com.ingsw2122_n_03.natour.whitebox;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import com.ingsw2122_n_03.natour.mock.ParseItinerariesMock;
 import com.ingsw2122_n_03.natour.model.Itinerary;
@@ -129,4 +126,5 @@ public class ParseItinerariesTesterWhiteBox {
         ArrayList<Itinerary> result = parseItinerariesMock.parseItineraries(new JSONArray(itineraryJson));
         assertEquals(itineraries, result);
     }
+
 }
